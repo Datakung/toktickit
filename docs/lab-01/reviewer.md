@@ -11,7 +11,7 @@
 | PR | Branch | Reviewer verdict |
 |----|--------|------------------|
 | [PR #5](https://github.com/Datakung/toktickit/pull/5) | `feature/1-project-foundation` | Approved and merged into `lab1-staging` |
-| TODO | `feature/2-health-check` | Pending |
+| [PR #6](https://github.com/Datakung/toktickit/pull/6) | `feature/2-health-check` | Pending review |
 | TODO | `feature/3-category-seed` | Pending |
 | TODO | `feature/4-category-list` | Pending |
 
