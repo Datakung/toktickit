@@ -122,8 +122,17 @@ cd client
 npm run dev
 ```
 
-Open `http://localhost:5173` in a browser. During the starter stage, feature
-TODOs remain intentionally incomplete and are implemented through Issues 2-4.
+Open `http://localhost:5173` in a browser. The **Check System** button calls
+`GET /api/health` and displays an Online or Offline state. The category list
+remains intentionally empty until Issues 3 and 4 add the database model, seed,
+API route, and UI rendering.
+
+## API endpoints
+
+| Method | Endpoint | Current behavior |
+|--------|----------|------------------|
+| `GET` | `/api/health` | Returns `200` with `{ "status": "ok", "service": "TokTickIT API" }` |
+| `GET` | `/api/categories` | Planned for Issue 4 |
 
 ## Database commands
 
