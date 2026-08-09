@@ -17,9 +17,9 @@
 
 ## Review evidence from my partner
 
-**Reviewer comment I received:** TODO - add a real comment and PR link.
+**Reviewer comment I received:** On [PR #5](https://github.com/Datakung/toktickit/pull/5), Phanuwit requested changes because he believed a clean backend checkout could not build before the Prisma schema contained a model. He asked me to verify `npm ci`, `npm run build`, and `npm run dev` from a clean installation.
 
-**How I responded:** TODO - describe the response or correction.
+**How I responded:** I reproduced the review scenario in a fresh clone using Node v24.14.0 and npm 11.9.0. Installation, build, and startup succeeded, and the API returned the expected Issue 2 stub response. I posted the evidence in the PR and asked for re-review or the exact error and tool versions if the failure remained reproducible.
 
 ## Pull Requests I reviewed for my partner
 
