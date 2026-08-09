@@ -1,13 +1,51 @@
-# Lab 1 — Test Plan and Evidence  (fill this in)
+# Lab 1 - Test Plan and Evidence
 
 All test files live under server/tests/lab-01/ and client/tests/lab-01/.
 
-| # | Tool | Test | Result |
-|---|------|------|--------|
-| 1 | Supertest | GET /api/health returns 200, status=ok | |
-| 2 | Supertest | GET /api/categories returns 4 seeded categories in id order | |
-| 3 | Vitest | Heading renders | |
-| 4 | Vitest | Success state shows Online + category list | |
-| 5 | Vitest | Error state shows Offline + message | |
+| ID | Test file | Tool | Test | Result |
+|----|-----------|------|------|--------|
+| API-01 | `server/tests/lab-01/health.test.ts` | Supertest | `GET /api/health` returns 200 and the expected JSON | Expected red baseline: received 501 from the Issue 2 stub |
+| API-02 | `server/tests/lab-01/categories.test.ts` | Supertest | `GET /api/categories` returns four seeded categories in ID order | Not implemented yet |
+| UI-01 | `client/tests/lab-01/App.test.tsx` | Vitest | TokTickIT heading renders | Passed on `feature/1-project-foundation` |
+| UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest | Successful requests show Online and the category list | Not implemented yet |
+| UI-03 | `client/tests/lab-01/App.test.tsx` | Vitest | API failure shows Offline and a useful message | Not implemented yet |
 
-Paste your passing terminal output / screenshot below.
+## Issue 1 foundation checks
+
+Verified on `feature/1-project-foundation` on 2026-08-09.
+
+| Check | Result |
+|-------|--------|
+| Client dependencies install | Passed; lockfile generated and `node_modules` ignored |
+| Server dependencies install | Passed; lockfile generated and `node_modules` ignored |
+| Client production build | Passed |
+| Server TypeScript build | Passed |
+| Client startup probe | Passed; Vite returned HTTP 200 and served the React root |
+| Bootstrap visual check | Passed; author confirmed the heading and green Bootstrap button rendered correctly |
+| Server startup probe | Passed; compiled Express accepted a request on port 3000 |
+| PostgreSQL readiness | Passed; the Docker database accepted connections on port 5432 |
+| Prisma schema validation | Passed; datasource and generator configuration are valid |
+| Prisma client generation | Deferred to Issue 3 because the starter schema intentionally has no models |
+| Client baseline tests | 1 passed, 2 TODO |
+| Server baseline tests | Health test ran red against the intentional 501 stub; category test TODO |
+
+## Commands
+
+Run the backend tests:
+
+```powershell
+cd server
+npm test
+```
+
+Run the frontend tests:
+
+```powershell
+cd client
+npm test
+```
+
+## Final evidence
+
+TODO: After all four features are merged, run both test suites on `main` and
+paste the passing terminal output or add clearly labeled screenshots here.
