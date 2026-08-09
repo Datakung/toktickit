@@ -10,7 +10,7 @@
 
 | PR | Branch | Reviewer verdict |
 |----|--------|------------------|
-| TODO | `feature/1-project-foundation` | Pending |
+| [PR #5](https://github.com/Datakung/toktickit/pull/5) | `feature/1-project-foundation` | Pending review |
 | TODO | `feature/2-health-check` | Pending |
 | TODO | `feature/3-category-seed` | Pending |
 | TODO | `feature/4-category-list` | Pending |
