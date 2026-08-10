@@ -136,25 +136,20 @@ API route, and UI rendering.
 
 ## Database commands
 
-Run Prisma commands from `server/`. During Issue 1, validate the initialized
-Prisma configuration:
+Run Prisma commands from `server/`. Validate the schema, generate the typed
+client, apply the committed migrations, and seed the categories:
 
 ```powershell
 cd server
 npx prisma validate
-```
-
-The Category model, generated client, initial migration, and seed are completed
-in Issue 3. After implementing that model, run:
-
-```powershell
 npx prisma generate
-npx prisma migrate dev --name init
+npx prisma migrate dev
 npm run prisma:seed
 ```
 
-Do not run generation, migration, or seeding while the starter schema has no
-models.
+The seed uses an upsert keyed by the unique category name, so it is safe to run
+more than once. It creates Account and Access, Hardware, Software, and Network
+without duplicates. The category API remains deferred to Issue 4.
 
 ## Test and build
 
