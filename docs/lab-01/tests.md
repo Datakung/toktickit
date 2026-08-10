@@ -4,7 +4,7 @@ All test files live under server/tests/lab-01/ and client/tests/lab-01/.
 
 | ID | Test file | Tool | Test | Result |
 |----|-----------|------|------|--------|
-| API-01 | `server/tests/lab-01/health.test.ts` | Supertest | `GET /api/health` returns 200 and the expected JSON | Expected red baseline: received 501 from the Issue 2 stub |
+| API-01 | `server/tests/lab-01/health.test.ts` | Supertest | `GET /api/health` returns 200 and the expected JSON | Passed on `feature/2-health-check` |
 | API-02 | `server/tests/lab-01/categories.test.ts` | Supertest | `GET /api/categories` returns four seeded categories in ID order | Not implemented yet |
 | UI-01 | `client/tests/lab-01/App.test.tsx` | Vitest | TokTickIT heading renders | Passed on `feature/1-project-foundation` |
 | UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest | Successful requests show Online and the category list | Not implemented yet |
@@ -28,6 +28,19 @@ Verified on `feature/1-project-foundation` on 2026-08-09.
 | Prisma client generation | Deferred to Issue 3 because the starter schema intentionally has no models |
 | Client baseline tests | 1 passed, 2 TODO |
 | Server baseline tests | Health test ran red against the intentional 501 stub; category test TODO |
+
+## Issue 2 health-check evidence
+
+Verified on `feature/2-health-check` on 2026-08-10.
+
+| Check | Result |
+|-------|--------|
+| Health test before implementation | Expected failure: received HTTP 501 instead of 200 |
+| Health test after implementation | Passed: 1 test file and 1 test |
+| Client production build | Passed after adding the real health request and UI states |
+| Client baseline tests | 1 passed; 2 Issue 4 TODO tests remain intentionally deferred |
+| Browser success check | Passed; with the backend running, the page displayed Online |
+| Browser failure check | Passed; with the backend stopped, the page displayed Offline and a useful recovery message |
 
 ## Commands
 
