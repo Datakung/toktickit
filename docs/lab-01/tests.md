@@ -5,10 +5,10 @@ All test files live under server/tests/lab-01/ and client/tests/lab-01/.
 | ID | Test file | Tool | Test | Result |
 |----|-----------|------|------|--------|
 | API-01 | `server/tests/lab-01/health.test.ts` | Supertest | `GET /api/health` returns 200 and the expected JSON | Passed on `feature/2-health-check` |
-| API-02 | `server/tests/lab-01/categories.test.ts` | Supertest | `GET /api/categories` returns four seeded categories in ID order | Not implemented yet |
+| API-02 | `server/tests/lab-01/categories.test.ts` | Supertest | `GET /api/categories` returns four seeded categories in ID order | Passed on `feature/4-category-list` |
 | UI-01 | `client/tests/lab-01/App.test.tsx` | Vitest | TokTickIT heading renders | Passed on `feature/1-project-foundation` |
-| UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest | Successful requests show Online and the category list | Not implemented yet |
-| UI-03 | `client/tests/lab-01/App.test.tsx` | Vitest | API failure shows Offline and a useful message | Not implemented yet |
+| UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest | Successful requests show Online and the category list | Passed on `feature/4-category-list` |
+| UI-03 | `client/tests/lab-01/App.test.tsx` | Vitest | API failure shows Offline and a useful message | Passed on `feature/4-category-list` |
 
 ## Issue 1 foundation checks
 
@@ -58,6 +58,20 @@ Verified on `feature/3-category-seed` on 2026-08-10.
 | Server production build | Passed |
 | Server regression tests | Health test passed; Issue 4 category endpoint test remains TODO |
 | Secret check | Passed; local `.env` and `node_modules` are not tracked |
+
+## Issue 4 category-list evidence
+
+Verified on `feature/4-category-list` on 2026-08-10.
+
+| Check | Result |
+|-------|--------|
+| Category API test before implementation | Expected failure: received HTTP 404 instead of 200 |
+| Server tests after implementation | Passed: health and category API tests |
+| Category API response | Passed; returned only ID and name in ascending ID order |
+| Client UI tests | Passed: heading, loading, Online/category list, and Offline states |
+| Client production build | Passed |
+| Browser success check | Passed; Online and all four database-backed categories displayed |
+| Browser failure check | Passed; stopping the backend produced the useful Offline message |
 
 ## Commands
 

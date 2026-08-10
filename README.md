@@ -132,7 +132,7 @@ API route, and UI rendering.
 | Method | Endpoint | Current behavior |
 |--------|----------|------------------|
 | `GET` | `/api/health` | Returns `200` with `{ "status": "ok", "service": "TokTickIT API" }` |
-| `GET` | `/api/categories` | Planned for Issue 4 |
+| `GET` | `/api/categories` | Returns category IDs and names from PostgreSQL in ID order |
 
 ## Database commands
 

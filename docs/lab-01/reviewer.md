@@ -12,7 +12,7 @@
 |----|--------|------------------|
 | [PR #5](https://github.com/Datakung/toktickit/pull/5) | `feature/1-project-foundation` | Approved and merged into `lab1-staging` |
 | [PR #6](https://github.com/Datakung/toktickit/pull/6) | `feature/2-health-check` | Approved and merged into `lab1-staging` |
-| [PR #7](https://github.com/Datakung/toktickit/pull/7) | `feature/3-category-seed` | Pending review |
+| [PR #7](https://github.com/Datakung/toktickit/pull/7) | `feature/3-category-seed` | Approved and merged into `lab1-staging` |
 | TODO | `feature/4-category-list` | Pending |
 
 ## Review evidence from my partner
@@ -24,6 +24,8 @@
 **Final outcome:** Phanuwit confirmed that his test environment had disabled dependency lifecycle scripts, approved PR #5, and the approved changes were merged into `lab1-staging`.
 
 On [PR #6](https://github.com/Datakung/toktickit/pull/6), Phanuwit confirmed that the health API, Supertest coverage, and React Online/Offline behavior met Issue 2 and approved the PR. He suggested using `Closes #2`; I explained that GitHub ignores closing keywords when a PR targets the non-default `lab1-staging` branch, then manually closed Issue 2 after the approved merge.
+
+On [PR #7](https://github.com/Datakung/toktickit/pull/7), Phanuwit verified the Prisma model, generated migration, repeatable seed, ignored credentials, and Issue 3 scope before approving the merge into `lab1-staging`.
 
 ## Pull Requests I reviewed for my partner
 

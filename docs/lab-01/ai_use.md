@@ -15,7 +15,7 @@
 | 7 | Check the repository after dependency installation and verify the Issue 1 foundation. | I reviewed the lockfiles and ignored folders, then used builds, tests, and startup probes to verify the scaffold. This exposed and corrected TypeScript build-output problems before they were committed. |
 | 8 | Check whether the proposed frontend health-check work accidentally included Issue 4 category behavior. | I challenged the scope, kept Issue 2 limited to the real health request and Online/Offline states, and deferred category fetching and rendering to Issue 4. |
 | 9 | Verify whether my peer's Issue was automatically closed even though his PR also targeted `lab1-staging`. | I checked the peer repository's default branch, PR base, merge time, and Issue event history. The Issue was manually closed after the merge, confirming the documented default-branch rule. |
-| 10 | Guide me through the Issue 3 Prisma model, migration, and repeatable seed while explaining each step. | I defined and validated the model, inspected the generated SQL, applied the migration, ran the seed twice, and queried PostgreSQL to prove that exactly four unique categories remained. |
+| 10 | Guide me through Issues 3 and 4 while explaining the database, API, UI, and test steps. | I validated the Prisma model and SQL, proved the repeatable seed with a direct query, then used red-to-green API and UI tests before manually checking the complete browser-to-database flow. |
 
 ## Reflection
 
@@ -31,3 +31,6 @@ criteria instead of implementing future work prematurely.
 For Issue 3, I also checked the generated migration and database rows rather
 than treating successful commands alone as proof that the schema and repeatable
 seed matched the requirements.
+For Issue 4, I wrote the tests before completing each implementation layer and
+used both successful and unavailable-backend browser checks before marking the
+acceptance criteria complete.
