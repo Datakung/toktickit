@@ -9,18 +9,17 @@ export default function App() {
   const [state, setState] = useState<UiState>("idle");
   const [categories, setCategories] = useState<Category[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
-  void categories;
-  void setCategories;
 
   async function handleCheck() {
-    // Issue 4 will also store result.categories after this health check.
     setState("loading");
     setErrorMessage("");
 
     try {
-      await checkSystem();
+      const result = await checkSystem();
+      setCategories(result.categories);
       setState("success");
     } catch {
+      setCategories([]);
       setErrorMessage(
         "Cannot reach the TokTickIT API. Make sure the backend is running and try again.",
       );
@@ -45,6 +44,14 @@ export default function App() {
       {state === "success" && (
         <div className="alert alert-success mt-3" role="status">
           <strong>Online.</strong> TokTickIT API is available.
+          <h2 className="h5 mt-3">IT request categories</h2>
+          <ul className="list-group mt-2">
+            {categories.map((category) => (
+              <li className="list-group-item" key={category.id}>
+                {category.name}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
