@@ -42,6 +42,23 @@ Verified on `feature/2-health-check` on 2026-08-10.
 | Browser success check | Passed; with the backend running, the page displayed Online |
 | Browser failure check | Passed; with the backend stopped, the page displayed Offline and a useful recovery message |
 
+## Issue 3 category database evidence
+
+Verified on `feature/3-category-seed` on 2026-08-10.
+
+| Check | Result |
+|-------|--------|
+| Prisma schema validation | Passed with the `Category` model |
+| Prisma Client generation | Passed with Prisma 5.22.0 |
+| Initial migration | Created and applied `20260810073523_init` |
+| Migration status | Passed; database schema is up to date |
+| Seed first run | Passed; inserted the four required categories |
+| Seed second run | Passed; database remained at 4 rows and 4 distinct names |
+| Direct PostgreSQL query | Passed; Account and Access, Hardware, Software, and Network were present |
+| Server production build | Passed |
+| Server regression tests | Health test passed; Issue 4 category endpoint test remains TODO |
+| Secret check | Passed; local `.env` and `node_modules` are not tracked |
+
 ## Commands
 
 Run the backend tests:
