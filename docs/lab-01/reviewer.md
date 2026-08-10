@@ -13,7 +13,7 @@
 | [PR #5](https://github.com/Datakung/toktickit/pull/5) | `feature/1-project-foundation` | Approved and merged into `lab1-staging` |
 | [PR #6](https://github.com/Datakung/toktickit/pull/6) | `feature/2-health-check` | Approved and merged into `lab1-staging` |
 | [PR #7](https://github.com/Datakung/toktickit/pull/7) | `feature/3-category-seed` | Approved and merged into `lab1-staging` |
-| TODO | `feature/4-category-list` | Pending |
+| [PR #8](https://github.com/Datakung/toktickit/pull/8) | `feature/4-category-list` | Pending review |
 
 ## Review evidence from my partner
 
