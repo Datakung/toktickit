@@ -10,9 +10,8 @@ export interface SystemStatus {
   categories: Category[];
 }
 
-// Issue 2 checks the backend health endpoint and returns an empty category list.
-// Issue 4 will extend this function to fetch `/api/categories` from PostgreSQL.
-// Throwing on failure lets the UI show an Offline/error state.
+// Check both backend dependencies. Throwing on either failure lets the UI show
+// one useful Offline/error state.
 export async function checkSystem(): Promise<SystemStatus> {
   const response = await fetch(`${API_URL}/api/health`);
 
@@ -26,8 +25,18 @@ export async function checkSystem(): Promise<SystemStatus> {
     throw new Error("The backend returned an unhealthy status");
   }
 
+  const categoriesResponse = await fetch(`${API_URL}/api/categories`);
+
+  if (!categoriesResponse.ok) {
+    throw new Error(
+      `Category request failed with status ${categoriesResponse.status}`,
+    );
+  }
+
+  const categories = (await categoriesResponse.json()) as Category[];
+
   return {
     online: true,
-    categories: [],
+    categories,
   };
 }
