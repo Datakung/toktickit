@@ -123,9 +123,9 @@ npm run dev
 ```
 
 Open `http://localhost:5173` in a browser. The **Check System** button calls
-`GET /api/health` and displays an Online or Offline state. The category list
-remains intentionally empty until Issues 3 and 4 add the database model, seed,
-API route, and UI rendering.
+`GET /api/health` followed by `GET /api/categories`. On success, the page shows
+an Online state and the four database-backed categories. If either request
+fails, it shows an Offline state with a useful recovery message.
 
 ## API endpoints
 
@@ -149,7 +149,8 @@ npm run prisma:seed
 
 The seed uses an upsert keyed by the unique category name, so it is safe to run
 more than once. It creates Account and Access, Hardware, Software, and Network
-without duplicates. The category API remains deferred to Issue 4.
+without duplicates. `GET /api/categories` reads these rows through Prisma and
+returns their IDs and names in ascending ID order.
 
 ## Test and build
 

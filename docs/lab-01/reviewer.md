@@ -13,7 +13,7 @@
 | [PR #5](https://github.com/Datakung/toktickit/pull/5) | `feature/1-project-foundation` | Approved and merged into `lab1-staging` |
 | [PR #6](https://github.com/Datakung/toktickit/pull/6) | `feature/2-health-check` | Approved and merged into `lab1-staging` |
 | [PR #7](https://github.com/Datakung/toktickit/pull/7) | `feature/3-category-seed` | Approved and merged into `lab1-staging` |
-| [PR #8](https://github.com/Datakung/toktickit/pull/8) | `feature/4-category-list` | Pending review |
+| [PR #8](https://github.com/Datakung/toktickit/pull/8) | `feature/4-category-list` | Approved; README reminder addressed |
 
 ## Review evidence from my partner
 
@@ -27,6 +27,8 @@ On [PR #6](https://github.com/Datakung/toktickit/pull/6), Phanuwit confirmed tha
 
 On [PR #7](https://github.com/Datakung/toktickit/pull/7), Phanuwit verified the Prisma model, generated migration, repeatable seed, ignored credentials, and Issue 3 scope before approving the merge into `lab1-staging`.
 
+On [PR #8](https://github.com/Datakung/toktickit/pull/8), Phanuwit approved the Prisma-backed category API, Supertest coverage, and tested React states. He also noted two outdated README statements that still described Issue 4 as unfinished; I updated both statements to document the completed behavior before merging.
+
 ## Pull Requests I reviewed for my partner
 
 **Partner PR:** TODO - add the Pull Request link.
@@ -38,8 +40,8 @@ On [PR #7](https://github.com/Datakung/toktickit/pull/7), Phanuwit verified the 
 ## Review checklist
 
 - [x] My partner's name, student ID, and GitHub username are recorded.
-- [ ] Every authored feature PR is linked.
-- [ ] My partner approved the submitted PRs.
+- [x] Every authored feature PR is linked.
+- [x] My partner approved the submitted PRs.
 - [x] At least one received review comment and my response are recorded.
 - [ ] At least one partner PR that I reviewed is linked.
 - [ ] My review comment and my partner's response are recorded.
