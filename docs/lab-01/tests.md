@@ -1,95 +1,49 @@
 # Lab 1 - Test Plan and Evidence
 
-All test files live under server/tests/lab-01/ and client/tests/lab-01/.
+All automated test files are located under `server/tests/lab-01/` and
+`client/tests/lab-01/`.
 
-| ID | Test file | Tool | Test | Result |
-|----|-----------|------|------|--------|
-| API-01 | `server/tests/lab-01/health.test.ts` | Supertest | `GET /api/health` returns 200 and the expected JSON | Passed on `feature/2-health-check` |
-| API-02 | `server/tests/lab-01/categories.test.ts` | Supertest | `GET /api/categories` returns four seeded categories in ID order | Passed on `feature/4-category-list` |
-| UI-01 | `client/tests/lab-01/App.test.tsx` | Vitest | TokTickIT heading renders | Passed on `feature/1-project-foundation` |
-| UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest | Successful requests show Online and the category list | Passed on `feature/4-category-list` |
-| UI-03 | `client/tests/lab-01/App.test.tsx` | Vitest | API failure shows Offline and a useful message | Passed on `feature/4-category-list` |
+| ID | Test file | Tool | Test description | Result |
+|----|-----------|------|------------------|--------|
+| API-01 | `server/tests/lab-01/health.test.ts` | Supertest | `GET /api/health` returns HTTP 200 and the expected JSON | Passed |
+| API-02 | `server/tests/lab-01/categories.test.ts` | Supertest | `GET /api/categories` returns the four seeded categories in ID order | Passed |
+| UI-01 | `client/tests/lab-01/App.test.tsx` | Vitest | The TokTickIT heading renders | Passed |
+| UI-02 | `client/tests/lab-01/App.test.tsx` | Vitest | A loading state appears while the system check is pending | Passed |
+| UI-03 | `client/tests/lab-01/App.test.tsx` | Vitest | A successful check displays Online and the four-category list | Passed |
+| UI-04 | `client/tests/lab-01/App.test.tsx` | Vitest | An unavailable API displays Offline and a useful error message | Passed |
 
-## Issue 1 foundation checks
+## Passing terminal output
 
-Verified on `feature/1-project-foundation` on 2026-08-09.
+The complete test suites were run on 2026-08-12 with PostgreSQL running.
 
-| Check | Result |
-|-------|--------|
-| Client dependencies install | Passed; lockfile generated and `node_modules` ignored |
-| Server dependencies install | Passed; lockfile generated and `node_modules` ignored |
-| Client production build | Passed |
-| Server TypeScript build | Passed |
-| Client startup probe | Passed; Vite returned HTTP 200 and served the React root |
-| Bootstrap visual check | Passed; author confirmed the heading and green Bootstrap button rendered correctly |
-| Server startup probe | Passed; compiled Express accepted a request on port 3000 |
-| PostgreSQL readiness | Passed; the Docker database accepted connections on port 5432 |
-| Prisma schema validation | Passed; datasource and generator configuration are valid |
-| Prisma client generation | Deferred to Issue 3 because the starter schema intentionally has no models |
-| Client baseline tests | 1 passed, 2 TODO |
-| Server baseline tests | Health test ran red against the intentional 501 stub; category test TODO |
+### Server
 
-## Issue 2 health-check evidence
+Command: `npm --prefix server test`
 
-Verified on `feature/2-health-check` on 2026-08-10.
+```text
+RUN  v2.1.9 C:/CPE/CPE333/MINE/toktickit/server
 
-| Check | Result |
-|-------|--------|
-| Health test before implementation | Expected failure: received HTTP 501 instead of 200 |
-| Health test after implementation | Passed: 1 test file and 1 test |
-| Client production build | Passed after adding the real health request and UI states |
-| Client baseline tests | 1 passed; 2 Issue 4 TODO tests remain intentionally deferred |
-| Browser success check | Passed; with the backend running, the page displayed Online |
-| Browser failure check | Passed; with the backend stopped, the page displayed Offline and a useful recovery message |
+✓ tests/lab-01/categories.test.ts (1)
+✓ tests/lab-01/health.test.ts (1)
 
-## Issue 3 category database evidence
-
-Verified on `feature/3-category-seed` on 2026-08-10.
-
-| Check | Result |
-|-------|--------|
-| Prisma schema validation | Passed with the `Category` model |
-| Prisma Client generation | Passed with Prisma 5.22.0 |
-| Initial migration | Created and applied `20260810073523_init` |
-| Migration status | Passed; database schema is up to date |
-| Seed first run | Passed; inserted the four required categories |
-| Seed second run | Passed; database remained at 4 rows and 4 distinct names |
-| Direct PostgreSQL query | Passed; Account and Access, Hardware, Software, and Network were present |
-| Server production build | Passed |
-| Server regression tests | Health test passed; Issue 4 category endpoint test remains TODO |
-| Secret check | Passed; local `.env` and `node_modules` are not tracked |
-
-## Issue 4 category-list evidence
-
-Verified on `feature/4-category-list` on 2026-08-10.
-
-| Check | Result |
-|-------|--------|
-| Category API test before implementation | Expected failure: received HTTP 404 instead of 200 |
-| Server tests after implementation | Passed: health and category API tests |
-| Category API response | Passed; returned only ID and name in ascending ID order |
-| Client UI tests | Passed: heading, loading, Online/category list, and Offline states |
-| Client production build | Passed |
-| Browser success check | Passed; Online and all four database-backed categories displayed |
-| Browser failure check | Passed; stopping the backend produced the useful Offline message |
-
-## Commands
-
-Run the backend tests:
-
-```powershell
-cd server
-npm test
+Test Files  2 passed (2)
+     Tests  2 passed (2)
 ```
 
-Run the frontend tests:
+### Client
 
-```powershell
-cd client
-npm test
+Command: `npm --prefix client test`
+
+```text
+RUN  v2.1.9 C:/CPE/CPE333/MINE/toktickit/client
+
+✓ tests/lab-01/App.test.tsx (4)
+  ✓ App (4)
+    ✓ renders the TokTickIT heading
+    ✓ shows a loading state while checking the system
+    ✓ shows Online and the seeded categories on success
+    ✓ shows an Offline error message when the API is unavailable
+
+Test Files  1 passed (1)
+     Tests  4 passed (4)
 ```
-
-## Final evidence
-
-TODO: After all four features are merged, run both test suites on `main` and
-paste the passing terminal output or add clearly labeled screenshots here.
