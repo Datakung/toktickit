@@ -1,19 +1,30 @@
 import { useState } from "react";
 import { checkSystem, Category } from "./api.js";
 
-// UI states you must handle for Issue 4: idle, loading, success, error.
+// Issue 2 handles these health-check states. Issue 4 will extend the success
+// state by displaying the categories returned by the backend.
 type UiState = "idle" | "loading" | "success" | "error";
 
 export default function App() {
   const [state, setState] = useState<UiState>("idle");
   const [categories, setCategories] = useState<Category[]>([]);
-  void categories;
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleCheck() {
-    // TODO(Issue 4): set loading, call checkSystem(), then either
-    //   - success: store categories and show Online + the list, or
-    //   - error: show Offline + a useful message.
     setState("loading");
+    setErrorMessage("");
+
+    try {
+      const result = await checkSystem();
+      setCategories(result.categories);
+      setState("success");
+    } catch {
+      setCategories([]);
+      setErrorMessage(
+        "Cannot reach the TokTickIT API. Make sure the backend is running and try again.",
+      );
+      setState("error");
+    }
   }
 
   return (
@@ -26,7 +37,29 @@ export default function App() {
         {state === "loading" ? "Loading…" : "Check System"}
       </button>
 
-      {/* TODO(Issue 4): render loading / success (Online + categories) / error (Offline) states. */}
+      {state === "loading" && (
+        <p className="mt-3 text-secondary">Checking the backend…</p>
+      )}
+
+      {state === "success" && (
+        <div className="alert alert-success mt-3" role="status">
+          <strong>Online.</strong> TokTickIT API is available.
+          <h2 className="h5 mt-3">IT request categories</h2>
+          <ul className="list-group mt-2">
+            {categories.map((category) => (
+              <li className="list-group-item" key={category.id}>
+                {category.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {state === "error" && (
+        <div className="alert alert-danger mt-3" role="alert">
+          <strong>Offline.</strong> {errorMessage}
+        </div>
+      )}
     </div>
   );
 }
