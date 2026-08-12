@@ -7,7 +7,7 @@
 
 - **My repository:** [Datakung/toktickit](https://github.com/Datakung/toktickit)
 - **Partner repository:** [auto4496/toktickit](https://github.com/auto4496/toktickit)
-- **My GitHub Project:** [TokTickIT Lab 1 Kanban](https://github.com/users/Datakung/projects/1)
+- **My GitHub Project:** [TokTickIT Individual Sprints](https://github.com/users/Datakung/projects/1)
 
 ## Pull Requests I authored and Phanuwit reviewed
 
@@ -29,7 +29,7 @@
 
 ## Kanban completion evidence
 
-The [TokTickIT Lab 1 Kanban](https://github.com/users/Datakung/projects/1) was
+The [TokTickIT Individual Sprints](https://github.com/users/Datakung/projects/1) was
 verified on 2026-08-11 with all four Issue cards in **Done**.
 
 | Issue | Final status |
