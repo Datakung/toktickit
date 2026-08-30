@@ -1,6 +1,6 @@
 # Lab 2 Sprint Engineering Specification
 
-**Status:** Draft — author-approved on 2026-08-30; peer review changes are in progress.
+**Status:** Approved by Pitchai and peer reviewer Phanuwit on 2026-08-30 ([PR #17 approval](https://github.com/Datakung/toktickit/pull/17#pullrequestreview-5061353056)).
 
 **Product increment:** Requester Ticketing MVP with UI Foundation
 

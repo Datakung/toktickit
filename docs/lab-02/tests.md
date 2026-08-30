@@ -6,7 +6,7 @@
 
 ## 1. Test Strategy
 
-Tests derive from the author-approved, peer-reviewed-in-progress `FR`, `BR`, and `AC` identifiers in `specification.md`.
+Tests derive from the peer-approved `FR`, `BR`, and `AC` identifiers in `specification.md`.
 
 - **Unit:** pure Ticket Number, Ticket validation, and Attachment validation helpers.
 - **API/integration:** Express + Supertest + Prisma/PostgreSQL for real persistence, query behavior, ownership, and Attachment lifecycle.
