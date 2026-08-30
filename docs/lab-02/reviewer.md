@@ -45,11 +45,11 @@ Record only substantive, verified interactions from the partner repository.
 
 ## Kanban record
 
-All six Lab 2 Issues were created before implementation and initially placed in Backlog. Issue #11 moved to Specified only after its scope was understood, then to Started when `feature/11-engineering-contract` was created, PR Review when PR #17 opened, and Fixing after Phanuwit's changes-requested review.
+All six Lab 2 Issues were created before implementation and initially placed in Backlog. Issue #11 moved to Specified only after its scope was understood, then to Started when `feature/11-engineering-contract` was created, PR Review when PR #17 opened, Fixing after Phanuwit's changes-requested review, and back to PR Review after correction commit `1a36faa` and responses to all three review threads.
 
 | Issue | Current/final status |
 |---|---|
-| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | Fixing |
+| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | PR Review — corrected and re-review pending |
 | [#12 — Data foundation and Development Requester context](https://github.com/Datakung/toktickit/issues/12) | Backlog |
 | [#13 — Requester Ticket creation](https://github.com/Datakung/toktickit/issues/13) | Backlog |
 | [#14 — My Tickets](https://github.com/Datakung/toktickit/issues/14) | Backlog |
