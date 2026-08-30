@@ -27,7 +27,7 @@ This table is updated during each Issue. Do not replace pending entries with cla
 
 | Issue and branch | Pull Request | Useful review comment and Pitchai's response | Approval and reviewer merge |
 |---|---|---|---|
-| [Issue #11](https://github.com/Datakung/toktickit/issues/11) — `feature/11-engineering-contract` | Pending | Pending | Pending |
+| [Issue #11](https://github.com/Datakung/toktickit/issues/11) — `feature/11-engineering-contract` | [PR #17 — Engineering contract and test plan](https://github.com/Datakung/toktickit/pull/17) | Awaiting Phanuwit's review; interaction will be recorded after it occurs. | Review requested from Phanuwit; approval and reviewer merge pending. |
 | [Issue #12](https://github.com/Datakung/toktickit/issues/12) — `feature/12-data-requester-context` | Pending | Pending | Pending |
 | [Issue #13](https://github.com/Datakung/toktickit/issues/13) — `feature/13-create-ticket` | Pending | Pending | Pending |
 | [Issue #14](https://github.com/Datakung/toktickit/issues/14) — `feature/14-my-tickets` | Pending | Pending | Pending |
@@ -49,7 +49,7 @@ All six Lab 2 Issues were created before implementation and initially placed in 
 
 | Issue | Current/final status |
 |---|---|
-| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | Started |
+| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | PR Review |
 | [#12 — Data foundation and Development Requester context](https://github.com/Datakung/toktickit/issues/12) | Backlog |
 | [#13 — Requester Ticket creation](https://github.com/Datakung/toktickit/issues/13) | Backlog |
 | [#14 — My Tickets](https://github.com/Datakung/toktickit/issues/14) | Backlog |
