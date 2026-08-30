@@ -1,6 +1,6 @@
 # Lab 2 Sprint Engineering Specification
 
-**Status:** Approved engineering contract for Issue #11 on 2026-08-30
+**Status:** Draft — author-approved on 2026-08-30; peer review changes are in progress.
 
 **Product increment:** Requester Ticketing MVP with UI Foundation
 
@@ -94,7 +94,7 @@ The IT department needs a usable vertical slice rather than isolated screens. Da
 
 ### Attachments
 
-- **BR-23:** Permitted file types are JPG/JPEG, PNG, WEBP, and PDF. The backend validates extension, declared MIME type, and recognizable file signature where supported.
+- **BR-23:** A permitted file must pass all three checks: a case-insensitive extension, its declared MIME type, and its exact signature must agree. `.jpg`/`.jpeg` use `image/jpeg` and begin `FF D8 FF`; `.png` uses `image/png` and begins `89 50 4E 47 0D 0A 1A 0A`; `.webp` uses `image/webp` with ASCII `RIFF` at bytes 0–3 and `WEBP` at bytes 8–11; `.pdf` uses `application/pdf` and begins `%PDF-` (`25 50 44 46 2D`).
 - **BR-24:** Each file is at most 5 MiB (5,242,880 bytes), and each Ticket has at most five Attachments with `removedAt = null`.
 - **BR-25:** Invalid files are rejected before submission when detected by the UI; valid selections remain. The backend repeats all authoritative checks.
 - **BR-26:** Ticket creation occurs before initial Attachment uploads. If one upload fails, the Ticket and successful uploads remain; failed files are reported individually and may be retried from Ticket Detail.
@@ -110,6 +110,10 @@ The IT department needs a usable vertical slice rather than isolated screens. Da
 - **BR-33:** After a Create Ticket API failure, editable form values and valid file selections remain where safe; after successful Ticket creation, the UI must not recreate the Ticket while retrying failed files.
 - **BR-34:** Seed operations are idempotent and include four required Categories, at least six Related Systems, at least four active Requesters, and at least one inactive Requester.
 - **BR-35:** Category, Related System, and Requester records include an active flag; inactive reference records are not offered for new Tickets but existing Ticket history remains readable.
+- **BR-36:** Original filenames are deterministic display metadata, never paths. The backend replaces `\` with `/`, keeps the final basename, normalizes Unicode to NFC, removes C0/DEL control characters, trims surrounding Unicode whitespace and trailing dots, replaces Windows-reserved characters (`< > : \" / \\ | ? *`) in the stem with `_`, substitutes `attachment` for an empty, `.` or `..` stem, canonicalizes `.jpeg` to `.jpg`, and truncates by Unicode code points so `stem.ext` is at most 120 characters. The physical stored name is `${crypto.randomUUID()}.${canonicalExtension}`.
+- **BR-37:** The five-active-Attachment limit is atomic. After streaming to `server/uploads/.tmp`, the backend validates the file, starts a Prisma interactive transaction, obtains PostgreSQL transaction advisory lock `pg_advisory_xact_lock(141448, ticketId)`, rechecks Ticket ownership and the active count, then moves the file and creates metadata while the lock is held. A losing or failed upload removes every temporary/final file it created and leaves no active row. With four active Attachments and two concurrent valid uploads, exactly one succeeds and the final database/filesystem state contains five active files and no orphan.
+- **BR-38:** Preview and download are authenticated client operations, never direct browser navigation to the protected endpoint. The client fetches binary content with `X-Development-Requester-Id`, creates a Blob/object URL, previews JPEG/PNG/WEBP in an accessible dialog, and downloads through a temporary anchor using the sanitized filename. For PDF Preview, the click synchronously opens a blank tab, clears its opener, fetches with the header, then navigates that tab to the Blob URL; a blocked popup or failed fetch closes the blank tab and shows Retry. Image URLs are revoked on dialog close/unmount, PDF URLs after the preview tab's load event (with a 60-second fallback), and download URLs in the next macrotask after the click.
+- **BR-39:** Every required API capability—Requester/reference lookup, Ticket create/list/detail, Attachment upload/metadata/content/removal—has an injected unexpected-failure test. It returns that capability's documented stable safe `500` code without a stack trace, SQL, filesystem/stored path, credentials, or another Requester's data; the corresponding UI shows a safe message with Retry and clears any stale cross-Requester data.
 
 ## 6. UI Specification Summary
 
@@ -187,8 +191,8 @@ The API uses JSON except multipart Attachment upload and binary content response
 - **AC-20:** Given an owned Ticket ID, when Requester Ticket Detail loads, then its approved fields and Attachment metadata render read-only.
 - **AC-21:** Given a missing Ticket or a Ticket owned by another Requester, when detail is requested directly, then the same safe `404` is returned and no protected data renders.
 - **AC-22:** Given an owned Ticket with fewer than five active Attachments, when a valid file is uploaded, then `201` returns safe metadata and the file appears as active.
-- **AC-23:** Given an invalid type, oversized file, or five active Attachments, when upload is attempted, then the documented `415`, `413`, or `409` response occurs and no invalid active row is created.
-- **AC-24:** Given an active owned Attachment, when its content endpoint is requested, then the documented content type, safe filename, and disposition are returned.
+- **AC-23:** Given an invalid extension/MIME/signature combination, unsafe filename, oversized file, or five active Attachments, when upload is attempted, then the documented safe filename or `415`, `413`, or `409` result occurs and no invalid active row or orphaned file is created.
+- **AC-24:** Given an active owned Attachment, when Preview or Download is selected, then the client fetches content with the Requester header, receives the documented content type/safe filename/disposition, uses the correct Blob behavior, and revokes the object URL at the defined lifecycle point.
 - **AC-25:** Given a missing or non-owned Attachment, when metadata or content is requested, then the same safe `404` is returned.
 - **AC-26:** Given an active owned Attachment and a valid reason, when removal is confirmed, then removal metadata is recorded and the row remains.
 - **AC-27:** Given a removed Attachment, when Ticket Detail and its content endpoint are requested, then metadata remains visibly marked Removed and content returns safe `404`.
@@ -197,6 +201,8 @@ The API uses JSON except multipart Attachment upload and binary content response
 - **AC-30:** Given keyboard-only use and assistive names, when navigating required workflows, then focus remains visible, controls have accessible labels, errors are associated with fields, and status is not communicated by color alone.
 - **AC-31:** Given Create Ticket or Attachment API failure, when the UI reports the error, then the message is safe, retry is possible, and appropriate entered data remains.
 - **AC-32:** Given a seeded environment, when the full E2E flow runs, then a selected Requester creates a Ticket, finds it in My Tickets, opens Detail, adds/downloads/removes an Attachment, and another Requester cannot access it.
+- **AC-33:** Given four active Attachments, when two valid uploads execute concurrently for the same Ticket, then exactly one returns `201`, one returns `409`, the final active count is five, and no temporary/final orphan exists.
+- **AC-34:** Given an injected unexpected failure in each required API capability, when the API and corresponding UI handle it, then the capability-specific stable safe `500` code, safe Retry state, and absence of sensitive or stale cross-Requester data are verified.
 
 ## 10. Definition of Done
 
@@ -207,6 +213,8 @@ The API uses JSON except multipart Attachment upload and binary content response
 - [ ] Unit, API/integration, UI component, UI style, responsive, and E2E suites pass with no required test skipped or disabled.
 - [ ] Database migration and idempotent seed succeed from documented setup without deleting Lab 1 data.
 - [ ] Backend ownership, validation, failure, boundary, and Attachment rules are enforced independently of the UI.
+- [ ] Concurrent Attachment boundary and compensation tests prove a five-file maximum with no temporary/final orphan.
+- [ ] Injected unexpected failures cover every required API capability and its safe retrying UI state.
 - [ ] Desktop, tablet, and mobile visual checks match `ui-spec.md` with no clipping, overlap, hidden actions, or horizontal page scrolling.
 - [ ] README and all Lab 2 documentation match the final implementation and commands.
 - [ ] `.env`, uploaded files, secrets, `node_modules`, and build output are not tracked.
@@ -230,4 +238,6 @@ The API uses JSON except multipart Attachment upload and binary content response
 - UI busy-state protection satisfies the Lab 2 duplicate-submission requirement. End-to-end request idempotency is deferred and must be reconsidered for unreliable networks.
 - Ticket creation and Attachment uploads are separate operations. A valid Ticket is not deleted because a later optional file fails.
 - Local filesystem storage is adequate for the local Lab 2 application. Cloud storage, antivirus scanning, and retention policies are deferred.
+- PostgreSQL transaction advisory locking serializes same-Ticket Attachment admission for the single PostgreSQL service used in Lab 2; the cleanup contract covers both temporary and final local files.
+- Protected Attachment preview/download uses authenticated `fetch` plus short-lived Blob URLs because ordinary image links, anchors, and new-window navigation cannot attach the Development Requester header.
 - Non-owned resources use the same `404` as missing resources to minimize ownership disclosure even though the current identity mechanism is only for testing.

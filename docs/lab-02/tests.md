@@ -6,7 +6,7 @@
 
 ## 1. Test Strategy
 
-Tests derive from the approved `FR`, `BR`, and `AC` identifiers in `specification.md`.
+Tests derive from the author-approved, peer-reviewed-in-progress `FR`, `BR`, and `AC` identifiers in `specification.md`.
 
 - **Unit:** pure Ticket Number, Ticket validation, and Attachment validation helpers.
 - **API/integration:** Express + Supertest + Prisma/PostgreSQL for real persistence, query behavior, ownership, and Attachment lifecycle.
@@ -23,23 +23,26 @@ For each feature branch, write or activate the planned failing test first where 
 |---|---|---|---|---|---|---|
 | UNIT-01 | Unit | BR-06, AC-07 | Ticket Number generation format and collision retry | Approved format; collision regenerates; result is unique | `server/tests/lab-02/ticket-number.unit.test.ts` | Planned |
 | UNIT-02 | Unit | BR-08–BR-12, AC-08, AC-09 | Trim, required fields, length boundaries, enum and ID validation | Exact normalized values or field errors at boundaries | `server/tests/lab-02/ticket-validation.unit.test.ts` | Planned |
-| UNIT-03 | Unit | BR-23–BR-25, AC-11, AC-23 | File extension, MIME/signature, size, and active-count rules | Valid files accepted; invalid type/size/count rejected | `server/tests/lab-02/attachment-validation.unit.test.ts` | Planned |
+| UNIT-03 | Unit | BR-23–BR-25, BR-36, AC-11, AC-23 | Exact extension/MIME/signature matrix, deterministic filename sanitation, size, and active-count rules | Supported triples and safe names accepted; mismatches, path/control/empty/overlong names, type/size/count rejected or normalized exactly | `server/tests/lab-02/attachment-validation.unit.test.ts` | Planned |
 | API-01 | API/integration | FR-01, FR-04, AC-01, AC-05 | Active Requesters, Categories, and Related Systems | `200`; only active seeded rows in deterministic order | `server/tests/lab-02/requester-context.api.test.ts` | Planned |
 | API-02 | API/integration | BR-02, BR-04, AC-02, AC-03, AC-04 | Missing/malformed/inactive Requester context | Documented `400`/`403`; active context accepted | `server/tests/lab-02/requester-context.api.test.ts` | Planned |
 | API-03 | API/integration | FR-05–FR-07, AC-06, AC-07 | Create valid Ticket for selected Requester | `201`; one saved row; number, owner, `NEW`, timestamps returned | `server/tests/lab-02/create-ticket.api.test.ts` | Planned |
 | API-04 | API/integration | BR-09–BR-12, AC-09 | Direct invalid Ticket requests and boundary values | `400` field errors; no Ticket saved | `server/tests/lab-02/create-ticket.api.test.ts` | Planned |
 | API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, combined search/filters/sort/page, invalid query | Only owned matches; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
 | API-06 | API/integration | FR-11, FR-17, AC-20, AC-21 | Owned Ticket Detail versus missing/non-owned Ticket | Owned `200`; missing/non-owned identical safe `404` | `server/tests/lab-02/ticket-detail.api.test.ts` | Planned |
-| API-07 | API/integration | FR-12, FR-13, AC-22, AC-23 | Metadata and valid/invalid existing-Ticket upload | Valid `201`; type `415`; size `413`; count `409`; no invalid row | `server/tests/lab-02/attachments.api.test.ts` | Planned |
-| API-08 | API/integration | FR-14, FR-17, AC-24, AC-25 | Active content and missing/non-owned content | Owned active `200` with safe headers; protected requests `404` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
+| API-07 | API/integration | FR-12, FR-13, BR-23, BR-36, AC-22, AC-23 | Metadata and valid/invalid existing-Ticket upload | Valid `201`; exact sanitized display/stored names; mismatch `415`; size `413`; count `409`; no invalid row/file | `server/tests/lab-02/attachments.api.test.ts` | Planned |
+| API-08 | API/integration | FR-14, FR-17, BR-38, AC-24, AC-25 | Active inline/download content and missing/non-owned content | Both dispositions return safe headers; protected requests `404` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
 | API-09 | API/integration | FR-15, FR-16, AC-26–AC-28 | Valid/invalid soft removal, retained metadata, blocked content, repeat | Metadata recorded; content `404`; invalid `400`; repeat `409` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
+| API-10 | API/integration | BR-37, AC-33 | Four active Attachments plus two simultaneous valid uploads to one Ticket | Exactly one `201`, one `409`, five active rows/files, and no `.tmp` or final orphan | `server/tests/lab-02/attachments-concurrency.api.test.ts` | Planned |
+| API-11 | API/integration | BR-39, AC-34 | Injected unexpected failure for every required API capability | Exact capability-specific safe `500`; no stack, SQL, path/name, credentials, or cross-Requester data | `server/tests/lab-02/unexpected-errors.api.test.ts` | Planned |
 | UI-01 | UI component | FR-01–FR-03, AC-01–AC-04 | Requester selector loading/ready/empty/failure, Continue, session, Change | Correct states; valid session; old requester state cleared | `client/tests/lab-02/RequesterSelection.test.tsx` | Planned |
 | UI-02 | UI component | FR-04–FR-07, AC-05, AC-08, AC-10 | Create form reference loading, validation, busy button, duplicate click | Active data shown; field errors; one API call while pending | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-03 | UI component | FR-05–FR-08, AC-06, AC-07, AC-31 | Create success and pre-create API failure | Official number/next actions; failure preserves values | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-04 | UI component | BR-23–BR-26, AC-11, AC-12 | Mixed initial files and partial upload failure | Invalid rejected; valid retained; Ticket not recreated; retry offered | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-05 | UI component | FR-09, FR-10, AC-13–AC-19 | Owned My Tickets controls and all list states | Correct query, list, pagination, empty/no-results/failure and switch | `client/tests/lab-02/MyTickets.test.tsx` | Planned |
 | UI-06 | UI component | FR-11, AC-20, AC-21 | Read-only owned detail and safe unavailable state | Approved fields render read-only; no protected data on error | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Planned |
-| UI-07 | UI component | FR-12–FR-16, AC-22–AC-28 | Attachment list/upload/download/removal dialog/states | Correct actions, validation, busy state, removed metadata/no content action | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
+| UI-07 | UI component | FR-12–FR-16, BR-38, AC-22–AC-28 | Attachment list/upload, authenticated Blob preview/download, removal dialog/states | Header and disposition sent; image/PDF/download behavior and object-URL cleanup; validation/busy/removed states | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
+| UI-08 | UI component | BR-39, AC-34 | Injected safe failures and Retry for Requester/reference, Ticket create/list/detail, and Attachment upload/metadata/content/removal | Capability-appropriate safe message/Retry; preserved safe input; no stale cross-Requester data | `client/tests/lab-02/SafeErrorStates.test.tsx` | Planned |
 | STYLE-01 | UI style | FR-18, AC-29, AC-30 | Zen Green tokens/classes; editable/read-only/invalid/focus/buttons/badges | Required semantics and styles exist without color-only status | `client/tests/lab-02/ui-style.test.tsx` | Planned |
 | RESP-01 | Responsive/visual | FR-18, AC-29, AC-30 | Required screens at 1440×900, 820×1180, 390×844 | No horizontal overflow, clipping, overlap, hidden action; screenshots saved | `e2e/lab-02/responsive.spec.ts` | Planned |
 | E2E-01 | E2E | AC-32 | Select Requester, create Ticket, find/list, open detail | Confirmation number matches list/detail and persisted database-backed data | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
@@ -82,6 +85,8 @@ For each feature branch, write or activate the planned failing test first where 
 | AC-30 | UI-01–UI-07, STYLE-01, RESP-01 |
 | AC-31 | UI-03, UI-04, UI-05, UI-07 |
 | AC-32 | E2E-01, E2E-02, E2E-03 |
+| AC-33 | API-10 |
+| AC-34 | API-11, UI-08 |
 
 No AC is intentionally untested. If implementation changes an AC, update the contract and this matrix in the same Issue before changing its tests.
 
@@ -129,5 +134,5 @@ Not yet available. Issue #11 plans tests before product implementation. Each own
 
 - The Development Requester header is intentionally not secure authentication; security testing is deferred to Lab 3's real identity design.
 - UI busy-state protection prevents repeated clicks, but durable network idempotency is not implemented in Lab 2 and must be reconsidered later.
-- Local filesystem upload is tested for the supported local environment; cloud storage, malware scanning, and distributed concurrency are outside Lab 2.
+- Local filesystem upload is tested for the supported local environment, including concurrent same-Ticket admission in the single PostgreSQL service. Cloud storage, malware scanning, and multi-service/distributed locking are outside Lab 2.
 - Browser coverage targets the course-supported Chromium/Playwright environment plus manual inspection in the student's browser; broader cross-browser testing is deferred.

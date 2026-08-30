@@ -134,21 +134,21 @@ Ticket detail adds `description`, `requester`, and `attachments` to the summary 
 Returns active Categories ordered by `name ASC`, then `id ASC`.
 
 - Success: `200` with `Reference item[]`.
-- Failure: safe `500`.
+- Unexpected failure: safe `500 REFERENCE_DATA_FAILED`.
 
 ### `GET /api/related-systems`
 
 Returns active Related Systems ordered by `name ASC`, then `id ASC`.
 
 - Success: `200` with `Reference item[]`.
-- Failure: safe `500`.
+- Unexpected failure: safe `500 REFERENCE_DATA_FAILED`.
 
 ### `GET /api/development-requesters`
 
 Returns active Development Requesters ordered by `displayName ASC`, then `id ASC`.
 
 - Success: `200` with `Development Requester[]`; an empty array drives the selector empty state.
-- Failure: safe `500`.
+- Unexpected failure: safe `500 REQUESTER_LOOKUP_FAILED`.
 
 ## 5. Ticket Creation
 
@@ -240,6 +240,8 @@ Success: `200`.
 
 An out-of-range but positive page returns `200` with empty `data` and accurate totals. Invalid names/values return `400 INVALID_QUERY`. Unknown query parameters return `400` rather than being silently ignored.
 
+An unexpected list failure returns safe `500 TICKET_LIST_FAILED`.
+
 The UI determines:
 
 - empty account: unfiltered request has `totalItems = 0`;
@@ -262,6 +264,7 @@ Returns metadata for both active and removed Attachments on an owned Ticket, ord
 
 - Success: `200` with `{ "data": AttachmentMetadata[] }`.
 - Missing/non-owned Ticket: `404 TICKET_NOT_FOUND`.
+- Unexpected failure: safe `500 ATTACHMENT_METADATA_FAILED`.
 
 This endpoint may be used independently, although Ticket Detail embeds the same metadata to avoid a mandatory second request on initial render.
 
@@ -271,15 +274,32 @@ This endpoint may be used independently, although Ticket Detail embeds the same 
 
 Requires `X-Development-Requester-Id` and multipart field `file`. Exactly one file is accepted per request so the UI can report and retry per-file outcomes.
 
-Validation order:
+The multipart parser streams the incoming file to `server/uploads/.tmp`; it does not first trust the browser filename or write to the final directory.
+
+Deterministic filename and content rules:
+
+- Replace `\` with `/`, retain only the final basename, normalize it to Unicode NFC, remove U+0000–U+001F and U+007F, trim surrounding Unicode whitespace and trailing dots, and replace `< > : \" / \\ | ? *` in the stem with `_`.
+- An empty, `.` or `..` stem becomes `attachment`. The display name is truncated by Unicode code points so the complete `stem.ext` is at most 120 characters.
+- Extensions are case-insensitive; `.jpeg` is stored as canonical `.jpg`. The physical name is `${crypto.randomUUID()}.${canonicalExtension}` and is never derived from the display name.
+- `.jpg`/`.jpeg`: `image/jpeg`, first bytes `FF D8 FF`.
+- `.png`: `image/png`, first bytes `89 50 4E 47 0D 0A 1A 0A`.
+- `.webp`: `image/webp`, ASCII `RIFF` at bytes 0–3 and `WEBP` at bytes 8–11.
+- `.pdf`: `application/pdf`, first bytes `%PDF-` (`25 50 44 46 2D`).
+- Extension, declared MIME type, and signature must all agree; a valid signature cannot override a mismatched extension or MIME type.
+
+Validation and atomic-admission order:
 
 1. validate Requester context and owned Ticket;
 2. require one file;
 3. enforce size at or below 5,242,880 bytes;
-4. validate extension, declared MIME, and recognizable signature;
-5. confirm active Attachment count is below five;
-6. create a random stored name, persist file safely, and create metadata;
-7. compensate partial filesystem/database failure so no successful response points to missing content and no invalid active row remains.
+4. sanitize the display filename and validate extension, declared MIME, and the exact signature above;
+5. start a Prisma interactive transaction and acquire `SELECT pg_advisory_xact_lock(141448, ticketId)`;
+6. while holding the lock, recheck Ticket ownership and count rows with `removedAt IS NULL`;
+7. if the count is five, return `409` after deleting this request's temporary file;
+8. create the random stored name, move the validated file to the final ignored upload directory, and create metadata while the lock remains held;
+9. commit and return `201`; if move, metadata creation, or commit fails, remove every temporary/final file created by this request and leave no active row.
+
+The integration boundary test starts with four active rows and fires two valid uploads concurrently. Exactly one returns `201`, one returns `409`, the final active count is five, and neither `.tmp` nor the final directory contains an orphan from the losing request.
 
 Success: `201` with `{ "data": AttachmentMetadata }`.
 
@@ -298,11 +318,21 @@ Errors:
 
 Requires `X-Development-Requester-Id`.
 
-Optional query: `disposition=attachment|inline`, default `attachment`. `inline` supports permitted image/PDF preview; the browser may still download according to its capabilities.
+Query: `disposition=attachment|inline`, default `attachment`. `inline` is permitted for JPEG, PNG, WEBP, and PDF; `attachment` is used for Download.
 
 Success: `200` binary content with the stored MIME type, safe `Content-Length`, and sanitized original filename in `Content-Disposition`.
 
 Missing, non-owned, removed, or unavailable content returns the same `404 ATTACHMENT_NOT_FOUND`. Filesystem paths and stored names are never returned.
+
+The frontend must not place this protected URL directly in `src`, `href`, `window.open`, or ordinary navigation because those mechanisms cannot attach `X-Development-Requester-Id`. Preview and Download first call `fetch` with the header, verify success, create a Blob/object URL, and then:
+
+- show JPEG/PNG/WEBP in an accessible image-preview dialog;
+- for PDF, synchronously open a blank tab during the click, set `opener = null`, fetch the protected content, and assign the Blob URL to that tab; a blocked popup or failed fetch closes the blank tab and shows the safe Retry state; or
+- click a temporary anchor with `download` set to the sanitized response filename.
+
+The image URL is revoked on dialog close/unmount. A PDF URL is revoked after the preview tab's `load` event, with a 60-second fallback timer; a download URL is revoked in the next macrotask after the anchor click. Tests assert the Requester header, `inline` versus `attachment`, filename, supported preview types, popup/fetch failure, and `URL.createObjectURL`/`URL.revokeObjectURL` lifecycle separately.
+
+Unexpected failure returns safe `500 ATTACHMENT_CONTENT_FAILED`.
 
 ## 10. Attachment Soft Removal
 
@@ -330,3 +360,19 @@ The reason is trimmed and must contain 5–250 characters. The backend records `
 - After Ticket `201`, the Ticket identity and number remain fixed while initial files upload. Individual file failures do not trigger Ticket recreation.
 - List/detail failures retain navigation and Retry/Back actions but never display stale data for a newly selected Requester.
 - When an API returns `REQUESTER_UNAVAILABLE`, the client clears `sessionStorage` and returns to Requester selection with a safe explanation.
+
+Every required capability has an injected failure path with a stable code:
+
+| Capability | Safe unexpected response |
+|---|---|
+| Categories / Related Systems | `500 REFERENCE_DATA_FAILED` |
+| Development Requesters | `500 REQUESTER_LOOKUP_FAILED` |
+| Ticket create | `500 TICKET_CREATE_FAILED` |
+| Ticket list | `500 TICKET_LIST_FAILED` |
+| Ticket detail | `500 TICKET_RETRIEVAL_FAILED` |
+| Attachment metadata | `500 ATTACHMENT_METADATA_FAILED` |
+| Attachment upload | `500 ATTACHMENT_UPLOAD_FAILED` |
+| Attachment content | `500 ATTACHMENT_CONTENT_FAILED` |
+| Attachment removal | `500 ATTACHMENT_REMOVE_FAILED` |
+
+Injected tests verify the exact status/code and that the response contains no stack trace, SQL, filesystem/stored path, credentials, or another Requester's data. Each corresponding UI state uses a safe message and Retry; selection changes and failures clear stale data belonging to the previous Requester.

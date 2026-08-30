@@ -27,7 +27,7 @@ This table is updated during each Issue. Do not replace pending entries with cla
 
 | Issue and branch | Pull Request | Useful review comment and Pitchai's response | Approval and reviewer merge |
 |---|---|---|---|
-| [Issue #11](https://github.com/Datakung/toktickit/issues/11) — `feature/11-engineering-contract` | [PR #17 — Engineering contract and test plan](https://github.com/Datakung/toktickit/pull/17) | Awaiting Phanuwit's review; interaction will be recorded after it occurs. | Review requested from Phanuwit; approval and reviewer merge pending. |
+| [Issue #11](https://github.com/Datakung/toktickit/issues/11) — `feature/11-engineering-contract` | [PR #17 — Engineering contract and test plan](https://github.com/Datakung/toktickit/pull/17) | Phanuwit [requested changes](https://github.com/Datakung/toktickit/pull/17#pullrequestreview-4918272889): make the five-file limit atomic, define deterministic filename/signature rules and authenticated preview behavior, test safe unexpected failures for every capability, and avoid claiming peer approval early. Pitchai moved the card to Fixing and updated the contract/tests; the thread responses will link the pushed correction. | Changes requested; correction and re-review pending. Phanuwit must approve and merge after resolution. |
 | [Issue #12](https://github.com/Datakung/toktickit/issues/12) — `feature/12-data-requester-context` | Pending | Pending | Pending |
 | [Issue #13](https://github.com/Datakung/toktickit/issues/13) — `feature/13-create-ticket` | Pending | Pending | Pending |
 | [Issue #14](https://github.com/Datakung/toktickit/issues/14) — `feature/14-my-tickets` | Pending | Pending | Pending |
@@ -45,11 +45,11 @@ Record only substantive, verified interactions from the partner repository.
 
 ## Kanban record
 
-All six Lab 2 Issues were created before implementation and initially placed in Backlog. Issue #11 moved to Specified only after its scope was understood, then to Started when `feature/11-engineering-contract` was created.
+All six Lab 2 Issues were created before implementation and initially placed in Backlog. Issue #11 moved to Specified only after its scope was understood, then to Started when `feature/11-engineering-contract` was created, PR Review when PR #17 opened, and Fixing after Phanuwit's changes-requested review.
 
 | Issue | Current/final status |
 |---|---|
-| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | PR Review |
+| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | Fixing |
 | [#12 — Data foundation and Development Requester context](https://github.com/Datakung/toktickit/issues/12) | Backlog |
 | [#13 — Requester Ticket creation](https://github.com/Datakung/toktickit/issues/13) | Backlog |
 | [#14 — My Tickets](https://github.com/Datakung/toktickit/issues/14) | Backlog |

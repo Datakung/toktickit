@@ -74,6 +74,7 @@ Icons may support labels but do not replace unclear text. Every icon-only contro
 - Errors use a safe message, recovery action, and field-level details where applicable.
 - Retry does not discard safe user input.
 - Empty and no-results states are visually distinct and explain the next action.
+- Injected failures are covered for Requester/reference loading, Ticket create/list/detail, and Attachment upload/metadata/content/removal. Each state displays a capability-appropriate safe message with Retry and never exposes server internals or stale data from a previously selected Requester.
 
 ### Badges
 
@@ -196,6 +197,9 @@ Headers identify sortable fields where supported. Every row is understandable wi
 ### Attachment presentation
 
 - Active item shows original filename, type, formatted size, created time, **Preview/Download**, and **Remove**.
+- **Preview** is offered only for JPEG, PNG, WEBP, and PDF. It fetches content with the current Development Requester header, creates an object URL, and displays images in an accessible dialog. A PDF click synchronously opens a blank tab, clears its opener, then navigates it to the fetched Blob URL; a blocked popup or failed fetch closes the blank tab and shows Retry. The protected API URL is never used directly in `src`, `href`, or `window.open`.
+- **Download** performs the same authenticated fetch with `disposition=attachment`, then clicks a temporary anchor whose `download` value is the server-sanitized filename.
+- Image object URLs are revoked on dialog close/unmount, PDF URLs after the tab's load event with a 60-second fallback, and download URLs in the next macrotask after the anchor click. Preview and Download show separate busy/error states and allow Retry without reloading Ticket Detail.
 - Upload row shows selecting, validating, uploading, success, and failure states.
 - At five active Attachments, upload is disabled with explanatory text.
 - Removed item retains original filename, size/type, created time, `Removed` badge, removed time, and reason. It has no preview/download/remove action.
@@ -211,7 +215,7 @@ Headers identify sortable fields where supported. Every row is understandable wi
 
 ### States
 
-- Loading, owned ready, no Attachments, Attachment uploading, removal confirmation/busy, safe not-found/unavailable, and recoverable API failure.
+- Loading, owned ready, no Attachments, Attachment uploading, preview/download busy or failure, removal confirmation/busy, safe not-found/unavailable, and recoverable metadata/upload/content/removal API failures.
 - Missing and non-owned Tickets share the same safe unavailable UI.
 
 ## 8. Responsive Layout Rules
