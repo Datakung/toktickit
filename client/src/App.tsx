@@ -1,65 +1,240 @@
-import { useState } from "react";
-import { checkSystem, Category } from "./api.js";
+import { useCallback, useEffect, useState } from "react";
+import {
+  getDevelopmentRequesters,
+  type DevelopmentRequester,
+} from "./api.js";
+import "./app.css";
 
-// Issue 2 handles these health-check states. Issue 4 will extend the success
-// state by displaying the categories returned by the backend.
-type UiState = "idle" | "loading" | "success" | "error";
+export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
+  "toktickit.developmentRequesterId";
+
+type LoadState = "loading" | "ready" | "empty" | "error";
+
+function navigate(path: string) {
+  if (window.location.pathname !== path) {
+    window.history.pushState({}, "", path);
+  }
+}
+
+function RequesterSelection({
+  loadState,
+  requesters,
+  selectedId,
+  onSelectedIdChange,
+  onContinue,
+  onRetry,
+}: {
+  loadState: LoadState;
+  requesters: DevelopmentRequester[];
+  selectedId: string;
+  onSelectedIdChange: (id: string) => void;
+  onContinue: () => void;
+  onRetry: () => void;
+}) {
+  return (
+    <main className="selection-page">
+      <section className="selection-card" aria-labelledby="selection-title">
+        <p className="eyebrow">TokTickIT IT Service Desk</p>
+        <h1 id="selection-title">Select a Development Requester</h1>
+        <p className="selection-intro">
+          Select a Development Requester to test requester-specific ticket behavior.
+          This is not a login screen. Authentication and role-based access will be
+          introduced in Lab 3.
+        </p>
+
+        {loadState === "loading" && (
+          <div className="selection-form" aria-busy="true">
+            <label htmlFor="development-requester">Development Requester</label>
+            <select id="development-requester" disabled>
+              <option>Loading…</option>
+            </select>
+            <p className="helper-text" aria-live="polite">
+              Loading Development Requesters…
+            </p>
+            <button className="primary-button" type="button" disabled>
+              Continue
+            </button>
+          </div>
+        )}
+
+        {loadState === "ready" && (
+          <div className="selection-form">
+            <label htmlFor="development-requester">
+              Development Requester <span aria-hidden="true">*</span>
+            </label>
+            <p className="helper-text" id="requester-help">
+              Required testing context for requester-specific screens.
+            </p>
+            <select
+              id="development-requester"
+              aria-describedby="requester-help"
+              value={selectedId}
+              onChange={(event) => onSelectedIdChange(event.target.value)}
+            >
+              <option value="">Choose a Development Requester</option>
+              {requesters.map((requester) => (
+                <option key={requester.id} value={requester.id}>
+                  {requester.displayName} — {requester.email}
+                </option>
+              ))}
+            </select>
+            <button
+              className="primary-button"
+              type="button"
+              disabled={!selectedId}
+              onClick={onContinue}
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
+        {loadState === "empty" && (
+          <div className="feedback-panel" role="status">
+            <h2>No Requesters available</h2>
+            <p>No active Development Requesters are available.</p>
+          </div>
+        )}
+
+        {loadState === "error" && (
+          <div className="feedback-panel feedback-panel-error" role="alert">
+            <h2>Development Requesters are unavailable</h2>
+            <p>We could not load the testing list. Try again.</p>
+            <button className="secondary-button" type="button" onClick={onRetry}>
+              Retry
+            </button>
+          </div>
+        )}
+      </section>
+    </main>
+  );
+}
+
+function AppShell({
+  requester,
+  onChangeRequester,
+}: {
+  requester: DevelopmentRequester;
+  onChangeRequester: () => void;
+}) {
+  return (
+    <div className="app-layout">
+      <header className="app-header">
+        <a className="brand" href="/tickets" aria-label="TokTickIT home">
+          <span>TokTickIT</span>
+          <small>IT Service Desk</small>
+        </a>
+        <nav aria-label="Primary navigation">
+          <span aria-current="page">My Tickets</span>
+          <span>Create Ticket</span>
+        </nav>
+        <div className="requester-context">
+          <span className="context-label">Development Requester</span>
+          <strong>{requester.displayName}</strong>
+          <button className="text-button" type="button" onClick={onChangeRequester}>
+            Change Requester
+          </button>
+        </div>
+      </header>
+      <main className="app-content">
+        <p className="eyebrow">Development Requester testing context</p>
+        <h1>Requester context ready</h1>
+        <p>
+          You are testing as <strong>{requester.displayName}</strong>. Ticket features
+          will be added in the next Lab 2 Issues.
+        </p>
+      </main>
+    </div>
+  );
+}
 
 export default function App() {
-  const [state, setState] = useState<UiState>("idle");
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [requesters, setRequesters] = useState<DevelopmentRequester[]>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [currentRequester, setCurrentRequester] =
+    useState<DevelopmentRequester | null>(null);
 
-  async function handleCheck() {
-    setState("loading");
-    setErrorMessage("");
+  const loadRequesters = useCallback(async () => {
+    setLoadState("loading");
+    setRequesters([]);
 
     try {
-      const result = await checkSystem();
-      setCategories(result.categories);
-      setState("success");
-    } catch {
-      setCategories([]);
-      setErrorMessage(
-        "Cannot reach the TokTickIT API. Make sure the backend is running and try again.",
+      const activeRequesters = await getDevelopmentRequesters();
+      setRequesters(activeRequesters);
+
+      if (activeRequesters.length === 0) {
+        sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+        setCurrentRequester(null);
+        navigate("/select-requester");
+        setLoadState("empty");
+        return;
+      }
+
+      const storedId = sessionStorage.getItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+      const storedRequester = activeRequesters.find(
+        (requester) => String(requester.id) === storedId,
       );
-      setState("error");
+
+      if (storedRequester && window.location.pathname !== "/select-requester") {
+        setSelectedId(String(storedRequester.id));
+        setCurrentRequester(storedRequester);
+      } else if (storedId && !storedRequester) {
+        sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+        setSelectedId("");
+        setCurrentRequester(null);
+        navigate("/select-requester");
+      } else {
+        setCurrentRequester(null);
+        navigate("/select-requester");
+      }
+
+      setLoadState("ready");
+    } catch {
+      setRequesters([]);
+      setCurrentRequester(null);
+      setLoadState("error");
+      navigate("/select-requester");
     }
+  }, []);
+
+  useEffect(() => {
+    void loadRequesters();
+  }, [loadRequesters]);
+
+  function continueAsRequester() {
+    const requester = requesters.find(
+      (candidate) => String(candidate.id) === selectedId,
+    );
+    if (!requester) return;
+
+    sessionStorage.setItem(DEVELOPMENT_REQUESTER_STORAGE_KEY, selectedId);
+    setCurrentRequester(requester);
+    navigate("/tickets");
+  }
+
+  function changeRequester() {
+    sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+    setCurrentRequester(null);
+    setSelectedId("");
+    navigate("/select-requester");
+    setLoadState(requesters.length === 0 ? "empty" : "ready");
+  }
+
+  if (currentRequester) {
+    return (
+      <AppShell requester={currentRequester} onChangeRequester={changeRequester} />
+    );
   }
 
   return (
-    <div className="container py-5" style={{ maxWidth: 640 }}>
-      <h1 className="h3 mb-4">
-        TokTickIT <span className="text-success">IT Service Desk</span>
-      </h1>
-
-      <button className="btn btn-success" onClick={handleCheck} disabled={state === "loading"}>
-        {state === "loading" ? "Loading…" : "Check System"}
-      </button>
-
-      {state === "loading" && (
-        <p className="mt-3 text-secondary">Checking the backend…</p>
-      )}
-
-      {state === "success" && (
-        <div className="alert alert-success mt-3" role="status">
-          <strong>Online.</strong> TokTickIT API is available.
-          <h2 className="h5 mt-3">IT request categories</h2>
-          <ul className="list-group mt-2">
-            {categories.map((category) => (
-              <li className="list-group-item" key={category.id}>
-                {category.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {state === "error" && (
-        <div className="alert alert-danger mt-3" role="alert">
-          <strong>Offline.</strong> {errorMessage}
-        </div>
-      )}
-    </div>
+    <RequesterSelection
+      loadState={loadState}
+      requesters={requesters}
+      selectedId={selectedId}
+      onSelectedIdChange={setSelectedId}
+      onContinue={continueAsRequester}
+      onRetry={() => void loadRequesters()}
+    />
   );
 }

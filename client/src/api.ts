@@ -5,6 +5,17 @@ export interface Category {
   name: string;
 }
 
+export interface RelatedSystem {
+  id: number;
+  name: string;
+}
+
+export interface DevelopmentRequester {
+  id: number;
+  displayName: string;
+  email: string;
+}
+
 export interface SystemStatus {
   online: boolean;
   categories: Category[];
@@ -38,5 +49,33 @@ export async function checkSystem(): Promise<SystemStatus> {
   return {
     online: true,
     categories,
+  };
+}
+
+async function getJson<T>(path: string): Promise<T> {
+  const response = await fetch(`${API_URL}${path}`);
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  return (await response.json()) as T;
+}
+
+export function getCategories(): Promise<Category[]> {
+  return getJson<Category[]>("/api/categories");
+}
+
+export function getRelatedSystems(): Promise<RelatedSystem[]> {
+  return getJson<RelatedSystem[]>("/api/related-systems");
+}
+
+export function getDevelopmentRequesters(): Promise<DevelopmentRequester[]> {
+  return getJson<DevelopmentRequester[]>("/api/development-requesters");
+}
+
+export function developmentRequesterHeaders(requesterId: number): HeadersInit {
+  return {
+    "X-Development-Requester-Id": String(requesterId),
   };
 }
