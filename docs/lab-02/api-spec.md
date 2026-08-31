@@ -131,7 +131,7 @@ Ticket detail adds `description`, `requester`, and `attachments` to the summary 
 
 ### `GET /api/categories`
 
-Returns active Categories ordered by `name ASC`, then `id ASC`.
+Returns active Categories ordered by `id ASC`. This preserves the Lab 1 public API order and avoids rewriting persisted identifiers. Related Systems and Development Requesters use name order as specified below.
 
 - Success: `200` with `Reference item[]`.
 - Unexpected failure: safe `500 REFERENCE_DATA_FAILED`.

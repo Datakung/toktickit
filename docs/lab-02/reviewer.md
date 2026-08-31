@@ -27,7 +27,7 @@ This table is updated during each Issue. Do not replace pending entries with cla
 
 | Issue and branch | Pull Request | Useful review comment and Pitchai's response | Approval and reviewer merge |
 |---|---|---|---|
-| [Issue #11](https://github.com/Datakung/toktickit/issues/11) — `feature/11-engineering-contract` | [PR #17 — Engineering contract and test plan](https://github.com/Datakung/toktickit/pull/17) | Phanuwit [requested changes](https://github.com/Datakung/toktickit/pull/17#pullrequestreview-5061141468): make the five-file limit atomic, define deterministic filename/signature rules and authenticated preview behavior, test safe unexpected failures for every capability, and avoid claiming peer approval early. Pitchai moved the card to Fixing, applied [correction `1a36faa`](https://github.com/Datakung/toktickit/commit/1a36faa9754e00e373280044409ea1c681d86d45), replied to all three threads, and returned the card to PR Review. | Phanuwit [approved](https://github.com/Datakung/toktickit/pull/17#pullrequestreview-5061353056) the corrected contract at `861e824`; final bookkeeping and his reviewer merge remain. |
+| [Issue #11](https://github.com/Datakung/toktickit/issues/11) — `feature/11-engineering-contract` | [PR #17 — Engineering contract and test plan](https://github.com/Datakung/toktickit/pull/17) | Phanuwit [requested changes](https://github.com/Datakung/toktickit/pull/17#pullrequestreview-5061141468): make the five-file limit atomic, define deterministic filename/signature rules and authenticated preview behavior, test safe unexpected failures for every capability, and avoid claiming peer approval early. Pitchai moved the card to Fixing, applied [correction `1a36faa`](https://github.com/Datakung/toktickit/commit/1a36faa9754e00e373280044409ea1c681d86d45), replied to all three threads, and returned the card to PR Review. | Phanuwit [approved](https://github.com/Datakung/toktickit/pull/17#pullrequestreview-5061353056) the corrected contract and merged PR #17 into `lab2-staging` as [`1144689`](https://github.com/Datakung/toktickit/commit/1144689f49e94f5047ea1c7d8ad34d6df6df88b6). |
 | [Issue #12](https://github.com/Datakung/toktickit/issues/12) — `feature/12-data-requester-context` | Pending | Pending | Pending |
 | [Issue #13](https://github.com/Datakung/toktickit/issues/13) — `feature/13-create-ticket` | Pending | Pending | Pending |
 | [Issue #14](https://github.com/Datakung/toktickit/issues/14) — `feature/14-my-tickets` | Pending | Pending | Pending |
@@ -45,12 +45,12 @@ Record only substantive, verified interactions from the partner repository.
 
 ## Kanban record
 
-All six Lab 2 Issues were created before implementation and initially placed in Backlog. Issue #11 moved to Specified only after its scope was understood, then to Started when `feature/11-engineering-contract` was created, PR Review when PR #17 opened, Fixing after Phanuwit's changes-requested review, and back to PR Review after correction commit `1a36faa` and responses to all three review threads. Phanuwit approved at `861e824`; the card remains in PR Review until his merge completes the Issue.
+All six Lab 2 Issues were created before implementation and initially placed in Backlog. Issue #11 followed Backlog → Specified → Started → PR Review → Fixing → PR Review → Done; Phanuwit merged the corrected and approved PR. Issue #12 moved through Specified to Started when its feature branch began.
 
 | Issue | Current/final status |
 |---|---|
-| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | PR Review — approved; final bookkeeping and reviewer merge pending |
-| [#12 — Data foundation and Development Requester context](https://github.com/Datakung/toktickit/issues/12) | Backlog |
+| [#11 — Engineering contract and test plan](https://github.com/Datakung/toktickit/issues/11) | Done — approved and merged by Phanuwit |
+| [#12 — Data foundation and Development Requester context](https://github.com/Datakung/toktickit/issues/12) | Started |
 | [#13 — Requester Ticket creation](https://github.com/Datakung/toktickit/issues/13) | Backlog |
 | [#14 — My Tickets](https://github.com/Datakung/toktickit/issues/14) | Backlog |
 | [#15 — Ticket Detail and Attachment lifecycle](https://github.com/Datakung/toktickit/issues/15) | Backlog |

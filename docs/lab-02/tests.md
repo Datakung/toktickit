@@ -2,7 +2,7 @@
 
 **Planning status:** Created before Lab 2 product implementation.
 
-**Final status:** Not yet executed; rows remain `Planned` until their owning Issue supplies real tests and results.
+**Current status:** Issue #12 foundation checks have passed. Later feature rows remain `Planned` until their owning Issue supplies real tests and results.
 
 ## 1. Test Strategy
 
@@ -24,8 +24,8 @@ For each feature branch, write or activate the planned failing test first where 
 | UNIT-01 | Unit | BR-06, AC-07 | Ticket Number generation format and collision retry | Approved format; collision regenerates; result is unique | `server/tests/lab-02/ticket-number.unit.test.ts` | Planned |
 | UNIT-02 | Unit | BR-08–BR-12, AC-08, AC-09 | Trim, required fields, length boundaries, enum and ID validation | Exact normalized values or field errors at boundaries | `server/tests/lab-02/ticket-validation.unit.test.ts` | Planned |
 | UNIT-03 | Unit | BR-23–BR-25, BR-36, AC-11, AC-23 | Exact extension/MIME/signature matrix, deterministic filename sanitation, size, and active-count rules | Supported triples and safe names accepted; mismatches, path/control/empty/overlong names, type/size/count rejected or normalized exactly | `server/tests/lab-02/attachment-validation.unit.test.ts` | Planned |
-| API-01 | API/integration | FR-01, FR-04, AC-01, AC-05 | Active Requesters, Categories, and Related Systems | `200`; only active seeded rows in deterministic order | `server/tests/lab-02/requester-context.api.test.ts` | Planned |
-| API-02 | API/integration | BR-02, BR-04, AC-02, AC-03, AC-04 | Missing/malformed/inactive Requester context | Documented `400`/`403`; active context accepted | `server/tests/lab-02/requester-context.api.test.ts` | Planned |
+| API-01 | API/integration | FR-01, FR-04, AC-01, AC-05 | Active Requesters, Categories, and Related Systems | `200`; only active seeded rows in deterministic order | `server/tests/lab-02/requester-context.api.test.ts` | Passed in Issue #12 |
+| API-02 | API/integration | BR-02, BR-04, AC-02, AC-03, AC-04 | Missing/malformed/inactive Requester context | Documented `400`/`403`; active context accepted | `server/tests/lab-02/requester-context.api.test.ts` | Passed in Issue #12 |
 | API-03 | API/integration | FR-05–FR-07, AC-06, AC-07 | Create valid Ticket for selected Requester | `201`; one saved row; number, owner, `NEW`, timestamps returned | `server/tests/lab-02/create-ticket.api.test.ts` | Planned |
 | API-04 | API/integration | BR-09–BR-12, AC-09 | Direct invalid Ticket requests and boundary values | `400` field errors; no Ticket saved | `server/tests/lab-02/create-ticket.api.test.ts` | Planned |
 | API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, combined search/filters/sort/page, invalid query | Only owned matches; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
@@ -35,7 +35,7 @@ For each feature branch, write or activate the planned failing test first where 
 | API-09 | API/integration | FR-15, FR-16, AC-26–AC-28 | Valid/invalid soft removal, retained metadata, blocked content, repeat | Metadata recorded; content `404`; invalid `400`; repeat `409` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
 | API-10 | API/integration | BR-37, AC-33 | Four active Attachments plus two simultaneous valid uploads to one Ticket | Exactly one `201`, one `409`, five active rows/files, and no `.tmp` or final orphan | `server/tests/lab-02/attachments-concurrency.api.test.ts` | Planned |
 | API-11 | API/integration | BR-39, AC-34 | Injected unexpected failure for every required API capability | Exact capability-specific safe `500`; no stack, SQL, path/name, credentials, or cross-Requester data | `server/tests/lab-02/unexpected-errors.api.test.ts` | Planned |
-| UI-01 | UI component | FR-01–FR-03, AC-01–AC-04 | Requester selector loading/ready/empty/failure, Continue, session, Change | Correct states; valid session; old requester state cleared | `client/tests/lab-02/RequesterSelection.test.tsx` | Planned |
+| UI-01 | UI component | FR-01–FR-03, AC-01–AC-04 | Requester selector loading/ready/empty/failure, Continue, session, Change | Correct states; valid session; old requester state cleared | `client/tests/lab-02/RequesterSelection.test.tsx` | Passed in Issue #12 |
 | UI-02 | UI component | FR-04–FR-07, AC-05, AC-08, AC-10 | Create form reference loading, validation, busy button, duplicate click | Active data shown; field errors; one API call while pending | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-03 | UI component | FR-05–FR-08, AC-06, AC-07, AC-31 | Create success and pre-create API failure | Official number/next actions; failure preserves values | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-04 | UI component | BR-23–BR-26, AC-11, AC-12 | Mixed initial files and partial upload failure | Invalid rejected; valid retained; Ticket not recreated; retry offered | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
@@ -44,19 +44,20 @@ For each feature branch, write or activate the planned failing test first where 
 | UI-07 | UI component | FR-12–FR-16, BR-38, AC-22–AC-28 | Attachment list/upload, authenticated Blob preview/download, removal dialog/states | Header and disposition sent; image/PDF/download behavior and object-URL cleanup; validation/busy/removed states | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
 | UI-08 | UI component | BR-39, AC-34 | Injected safe failures and Retry for Requester/reference, Ticket create/list/detail, and Attachment upload/metadata/content/removal | Capability-appropriate safe message/Retry; preserved safe input; no stale cross-Requester data | `client/tests/lab-02/SafeErrorStates.test.tsx` | Planned |
 | STYLE-01 | UI style | FR-18, AC-29, AC-30 | Zen Green tokens/classes; editable/read-only/invalid/focus/buttons/badges | Required semantics and styles exist without color-only status | `client/tests/lab-02/ui-style.test.tsx` | Planned |
-| RESP-01 | Responsive/visual | FR-18, AC-29, AC-30 | Required screens at 1440×900, 820×1180, 390×844 | No horizontal overflow, clipping, overlap, hidden action; screenshots saved | `e2e/lab-02/responsive.spec.ts` | Planned |
-| E2E-01 | E2E | AC-32 | Select Requester, create Ticket, find/list, open detail | Confirmation number matches list/detail and persisted database-backed data | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
-| E2E-02 | E2E | AC-14, AC-21, AC-25, AC-32 | Switch Requester and attempt direct Ticket/Attachment access | A's data disappears; B receives safe unavailable behavior | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
-| E2E-03 | E2E | AC-11, AC-12, AC-22–AC-28, AC-32 | Mixed files, add/download, soft remove with reason, blocked removed download | Required Attachment lifecycle and failure evidence pass | `e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
+| RESP-01 | Responsive/visual | FR-18, AC-29, AC-30 | Required screens at 1440×900, 820×1180, 390×844 | No horizontal overflow, clipping, overlap, hidden action; screenshots saved | `client/e2e/lab-02/responsive.spec.ts` | Planned |
+| E2E-00 | E2E | AC-01–AC-04 | Select and change the Development Requester context in Chromium | Database-backed selection opens the shell; session is stored and then cleared | `client/e2e/lab-02/requester-context.spec.ts` | Passed in Issue #12 |
+| E2E-01 | E2E | AC-32 | Select Requester, create Ticket, find/list, open detail | Confirmation number matches list/detail and persisted database-backed data | `client/e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
+| E2E-02 | E2E | AC-14, AC-21, AC-25, AC-32 | Switch Requester and attempt direct Ticket/Attachment access | A's data disappears; B receives safe unavailable behavior | `client/e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
+| E2E-03 | E2E | AC-11, AC-12, AC-22–AC-28, AC-32 | Mixed files, add/download, soft remove with reason, blocked removed download | Required Attachment lifecycle and failure evidence pass | `client/e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
 
 ## 3. Acceptance-Criterion Traceability
 
 | AC | Planned evidence |
 |---|---|
-| AC-01 | API-01, UI-01 |
-| AC-02 | API-02, UI-01 |
-| AC-03 | API-02, UI-01 |
-| AC-04 | API-02, UI-01 |
+| AC-01 | API-01, UI-01, E2E-00 |
+| AC-02 | API-02, UI-01, E2E-00 |
+| AC-03 | API-02, UI-01, E2E-00 |
+| AC-04 | API-02, UI-01, E2E-00 |
 | AC-05 | API-01, UI-02 |
 | AC-06 | API-03, UI-03, E2E-01 |
 | AC-07 | UNIT-01, API-03, UI-03, E2E-01 |
@@ -126,9 +127,18 @@ npm --prefix client run build
 
 Final `main` evidence must also show PostgreSQL readiness, migration/seed success where appropriate, the current `main` branch, complete pass counts, and a clean working tree.
 
-## 6. Final Results
+## 6. Current Results
 
-Not yet available. Issue #11 plans tests before product implementation. Each owning Issue changes only its implemented rows from `Planned` to a verified result, records exact commands/output, and keeps the traceability matrix accurate. Issue #16 and final `main` provide complete final results.
+Issue #12 passed the following checks on 2026-08-31:
+
+- server: 3 files and 14 tests passed, including both Lab 1 regression tests;
+- client: 2 files and 10 tests passed, including all four Lab 1 regression tests;
+- Playwright: 1 Chromium requester-context test passed;
+- server and client production builds passed;
+- the committed migration applied with no schema drift, and the idempotent seed passed twice; and
+- production dependency audit (`npm audit --omit=dev`) reported zero vulnerabilities.
+
+The development-only Vitest 2 dependency chain reports advisories whose automated fix requires a major Vitest 4 upgrade. That unrelated upgrade is deferred for a separately reviewed dependency task; no vulnerable package is part of the production dependency tree. Later feature rows remain `Planned`, and Issue #16 plus final `main` will provide the complete results.
 
 ## 7. Known Limitations or Deferred Tests
 
