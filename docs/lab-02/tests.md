@@ -36,6 +36,8 @@ For each feature branch, write or activate the planned failing test first where 
 | API-10 | API/integration | BR-37, AC-33 | Four active Attachments plus two simultaneous valid uploads to one Ticket | Exactly one `201`, one `409`, five active rows/files, and no `.tmp` or final orphan | `server/tests/lab-02/attachments-concurrency.api.test.ts` | Planned |
 | API-11 | API/integration | BR-39, AC-34 | Injected unexpected failure for every required API capability | Exact capability-specific safe `500`; no stack, SQL, path/name, credentials, or cross-Requester data | `server/tests/lab-02/unexpected-errors.api.test.ts` | Planned |
 | UI-01 | UI component | FR-01–FR-03, AC-01–AC-04 | Requester selector loading/ready/empty/failure, Continue, session, Change | Correct states; valid session; old requester state cleared | `client/tests/lab-02/RequesterSelection.test.tsx` | Passed in Issue #12 |
+| STYLE-00 | UI style | FR-18, AC-29, AC-30 | Requester controls, component hierarchy, touch targets, and keyboard focus | Accessible semantics/classes; controls at least 44 px; visible 3 px focus outline | `client/tests/lab-02/ui-foundation-style.test.tsx`, `client/e2e/lab-02/requester-context-responsive.spec.ts` | Passed in Issue #12 |
+| RESP-00 | Responsive/visual | FR-18, AC-29, AC-30 | Requester Selection and shell at 1440×900, 820×1180, and 390×844 | Required controls visible and no horizontal overflow at all three viewports | `client/e2e/lab-02/requester-context-responsive.spec.ts` | Passed in Issue #12 |
 | UI-02 | UI component | FR-04–FR-07, AC-05, AC-08, AC-10 | Create form reference loading, validation, busy button, duplicate click | Active data shown; field errors; one API call while pending | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-03 | UI component | FR-05–FR-08, AC-06, AC-07, AC-31 | Create success and pre-create API failure | Official number/next actions; failure preserves values | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
 | UI-04 | UI component | BR-23–BR-26, AC-11, AC-12 | Mixed initial files and partial upload failure | Invalid rejected; valid retained; Ticket not recreated; retry offered | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
@@ -82,8 +84,8 @@ For each feature branch, write or activate the planned failing test first where 
 | AC-26 | API-09, UI-07, E2E-03 |
 | AC-27 | API-09, UI-07, E2E-03 |
 | AC-28 | API-09, UI-07, E2E-03 |
-| AC-29 | STYLE-01, RESP-01 |
-| AC-30 | UI-01–UI-07, STYLE-01, RESP-01 |
+| AC-29 | STYLE-00, RESP-00, STYLE-01, RESP-01 |
+| AC-30 | UI-01–UI-07, STYLE-00, RESP-00, STYLE-01, RESP-01 |
 | AC-31 | UI-03, UI-04, UI-05, UI-07 |
 | AC-32 | E2E-01, E2E-02, E2E-03 |
 | AC-33 | API-10 |
@@ -132,13 +134,15 @@ Final `main` evidence must also show PostgreSQL readiness, migration/seed succes
 Issue #12 passed the following checks on 2026-08-31:
 
 - server: 3 files and 14 tests passed, including both Lab 1 regression tests;
-- client: 2 files and 10 tests passed, including all four Lab 1 regression tests;
-- Playwright: 1 Chromium requester-context test passed;
+- client: 3 files and 11 tests passed, including all four Lab 1 regression tests;
+- Playwright: 4 Chromium tests passed: the requester-context flow plus desktop, tablet, and mobile checks;
 - server and client production builds passed;
 - the committed migration applied with no schema drift, and the idempotent seed passed twice; and
 - production dependency audit (`npm audit --omit=dev`) reported zero vulnerabilities.
 
 The development-only Vitest 2 dependency chain reports advisories whose automated fix requires a major Vitest 4 upgrade. That unrelated upgrade is deferred for a separately reviewed dependency task; no vulnerable package is part of the production dependency tree. Later feature rows remain `Planned`, and Issue #16 plus final `main` will provide the complete results.
+
+No standalone pure unit test applies to Issue #12: its rules cross the Prisma/API or React/browser boundaries and are covered by API/integration, component, style, responsive, and E2E tests. Pure Ticket and Attachment helpers remain assigned to their later owning Issues.
 
 ## 7. Known Limitations or Deferred Tests
 
