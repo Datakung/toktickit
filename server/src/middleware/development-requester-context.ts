@@ -11,6 +11,8 @@ export interface DevelopmentRequesterLocals extends Record<string, unknown> {
   developmentRequester: DevelopmentRequester;
 }
 
+const POSTGRES_INTEGER_MAX = 2_147_483_647;
+
 export const developmentRequesterContext: RequestHandler<
   Record<string, string>,
   unknown,
@@ -20,7 +22,14 @@ export const developmentRequesterContext: RequestHandler<
 > = async (request, response, next) => {
   const rawRequesterId = request.get("X-Development-Requester-Id");
 
-  if (!rawRequesterId || !/^[1-9]\d*$/.test(rawRequesterId)) {
+  const requesterId = rawRequesterId ? Number(rawRequesterId) : Number.NaN;
+
+  if (
+    !rawRequesterId ||
+    !/^[1-9]\d*$/.test(rawRequesterId) ||
+    !Number.isSafeInteger(requesterId) ||
+    requesterId > POSTGRES_INTEGER_MAX
+  ) {
     response.status(400).json({
       error: {
         code: "INVALID_REQUESTER_CONTEXT",
@@ -32,7 +41,7 @@ export const developmentRequesterContext: RequestHandler<
 
   try {
     const requester = await getPrisma().requesterUser.findUnique({
-      where: { id: Number(rawRequesterId) },
+      where: { id: requesterId },
       select: {
         id: true,
         displayName: true,

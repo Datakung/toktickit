@@ -75,5 +75,33 @@ for (const viewport of viewports) {
         ),
       )
       .toBe(true);
+
+    const menu = page.getByRole("button", { name: "Menu" });
+    const myTickets = page.getByRole("link", { name: "My Tickets" });
+    const createTicket = page.getByRole("link", { name: "Create Ticket" });
+
+    if (viewport.name === "mobile") {
+      await expect(menu).toBeVisible();
+      await expect(menu).toHaveAttribute("aria-expanded", "false");
+      await expect(createTicket).toBeHidden();
+
+      await menu.click();
+      await expect(menu).toHaveAttribute("aria-expanded", "true");
+      await expect(myTickets).toBeVisible();
+      await expect(createTicket).toBeVisible();
+
+      await createTicket.click();
+      await expect(page).toHaveURL(/\/tickets\/new$/);
+      await expect(menu).toHaveAttribute("aria-expanded", "false");
+
+      await menu.click();
+      await expect(createTicket).toBeVisible();
+      await expect(createTicket).toHaveAttribute("aria-current", "page");
+    } else {
+      await expect(menu).toBeHidden();
+      await expect(myTickets).toBeVisible();
+      await expect(createTicket).toBeVisible();
+      await expect(myTickets).toHaveAttribute("aria-current", "page");
+    }
   });
 }

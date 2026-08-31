@@ -212,14 +212,29 @@ h2 {
   color: #52685b;
 }
 
-.app-header nav {
+.primary-navigation {
   display: flex;
   gap: 24px;
   font-weight: 650;
 }
 
-.app-header nav span[aria-current="page"] {
+.primary-navigation a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: #365c49;
+  text-decoration: none;
+}
+
+.primary-navigation a[aria-current="page"] {
   color: #17633f;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+}
+
+.mobile-nav-toggle {
+  display: none;
 }
 
 .requester-context {
@@ -263,14 +278,35 @@ h2 {
     padding: 16px 20px;
   }
 
-  .app-header nav {
+  .mobile-nav-toggle {
     grid-column: 1 / -1;
     grid-row: 2;
+    display: inline-flex;
+    justify-self: start;
+    align-items: center;
+  }
+
+  .primary-navigation {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
     padding-top: 12px;
     border-top: 1px solid #dbe5de;
   }
 
+  .primary-navigation-open {
+    display: flex;
+  }
+
+  .primary-navigation a[aria-current="page"] {
+    text-underline-offset: 4px;
+  }
+
   .requester-context {
+    grid-column: 2;
+    grid-row: 1;
     justify-items: end;
     text-align: right;
   }

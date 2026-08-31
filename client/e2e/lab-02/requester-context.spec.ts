@@ -27,6 +27,19 @@ test("selects and changes the Development Requester context", async ({ page }) =
     )
     .toBeTruthy();
 
+  await page.goBack();
+  await expect(page).toHaveURL(/\/select-requester$/);
+  await expect(requesterSelect).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Requester context ready" }),
+  ).toBeHidden();
+
+  await page.goForward();
+  await expect(page).toHaveURL(/\/tickets$/);
+  await expect(
+    page.getByRole("heading", { name: "Requester context ready" }),
+  ).toBeVisible();
+
   await page.getByRole("button", { name: "Change Requester" }).click();
 
   await expect(page).toHaveURL(/\/select-requester$/);

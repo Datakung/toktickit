@@ -7,8 +7,8 @@ This document is the authoritative Lab 2 HTTP contract. Examples omit fields onl
 - Base path: `/api`.
 - JSON request and response bodies use `camelCase`.
 - Timestamps are UTC ISO 8601 strings.
-- IDs are positive integers.
-- Requester-scoped endpoints require `X-Development-Requester-Id: <positive integer>`.
+- IDs are positive PostgreSQL `INTEGER` values (`1` through `2147483647`).
+- Requester-scoped endpoints require `X-Development-Requester-Id` in that range; malformed, unsafe, zero/negative, or out-of-range values are rejected before any database query.
 - This header is a Lab 2 testing context, not authentication. A missing/malformed header returns `400`; an inactive/nonexistent Requester returns `403` and the client clears its stored selection.
 - Unknown JSON fields are ignored only where explicitly stated; Ticket-create fields are allow-listed.
 - Binary upload uses `multipart/form-data` with one field named `file`.

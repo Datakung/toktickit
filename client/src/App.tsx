@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type MouseEvent } from "react";
 import {
   getDevelopmentRequesters,
   type DevelopmentRequester,
@@ -10,10 +10,8 @@ export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
 
 type LoadState = "loading" | "ready" | "empty" | "error";
 
-function navigate(path: string) {
-  if (window.location.pathname !== path) {
-    window.history.pushState({}, "", path);
-  }
+function isRequesterPath(path: string) {
+  return path === "/tickets" || path === "/tickets/new";
 }
 
 function RequesterSelection({
@@ -112,21 +110,63 @@ function RequesterSelection({
 
 function AppShell({
   requester,
+  currentPath,
+  onNavigate,
   onChangeRequester,
 }: {
   requester: DevelopmentRequester;
+  currentPath: string;
+  onNavigate: (path: string) => void;
   onChangeRequester: () => void;
 }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  function followAppLink(event: MouseEvent<HTMLAnchorElement>, path: string) {
+    event.preventDefault();
+    setIsMenuOpen(false);
+    onNavigate(path);
+  }
+
   return (
     <div className="app-layout">
       <header className="app-header">
-        <a className="brand" href="/tickets" aria-label="TokTickIT home">
+        <a
+          className="brand"
+          href="/tickets"
+          aria-label="TokTickIT home"
+          onClick={(event) => followAppLink(event, "/tickets")}
+        >
           <span>TokTickIT</span>
           <small>IT Service Desk</small>
         </a>
-        <nav aria-label="Primary navigation">
-          <span aria-current="page">My Tickets</span>
-          <span>Create Ticket</span>
+        <button
+          className="mobile-nav-toggle secondary-button"
+          type="button"
+          aria-expanded={isMenuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          Menu
+        </button>
+        <nav
+          className={`primary-navigation${isMenuOpen ? " primary-navigation-open" : ""}`}
+          id="primary-navigation"
+          aria-label="Primary navigation"
+        >
+          <a
+            href="/tickets"
+            aria-current={currentPath === "/tickets" ? "page" : undefined}
+            onClick={(event) => followAppLink(event, "/tickets")}
+          >
+            My Tickets
+          </a>
+          <a
+            href="/tickets/new"
+            aria-current={currentPath === "/tickets/new" ? "page" : undefined}
+            onClick={(event) => followAppLink(event, "/tickets/new")}
+          >
+            Create Ticket
+          </a>
         </nav>
         <div className="requester-context">
           <span className="context-label">Development Requester</span>
@@ -152,8 +192,16 @@ export default function App() {
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [requesters, setRequesters] = useState<DevelopmentRequester[]>([]);
   const [selectedId, setSelectedId] = useState("");
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [currentRequester, setCurrentRequester] =
     useState<DevelopmentRequester | null>(null);
+
+  const navigate = useCallback((path: string, replace = false) => {
+    if (window.location.pathname !== path) {
+      window.history[replace ? "replaceState" : "pushState"]({}, "", path);
+    }
+    setCurrentPath(path);
+  }, []);
 
   const loadRequesters = useCallback(async () => {
     setLoadState("loading");
@@ -165,8 +213,9 @@ export default function App() {
 
       if (activeRequesters.length === 0) {
         sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+        setSelectedId("");
         setCurrentRequester(null);
-        navigate("/select-requester");
+        navigate("/select-requester", true);
         setLoadState("empty");
         return;
       }
@@ -176,31 +225,61 @@ export default function App() {
         (requester) => String(requester.id) === storedId,
       );
 
-      if (storedRequester && window.location.pathname !== "/select-requester") {
+      if (storedRequester) {
         setSelectedId(String(storedRequester.id));
         setCurrentRequester(storedRequester);
+
+        if (
+          window.location.pathname !== "/select-requester" &&
+          !isRequesterPath(window.location.pathname)
+        ) {
+          navigate("/select-requester", true);
+        } else {
+          setCurrentPath(window.location.pathname);
+        }
       } else if (storedId && !storedRequester) {
         sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
         setSelectedId("");
         setCurrentRequester(null);
-        navigate("/select-requester");
+        navigate("/select-requester", true);
       } else {
+        setSelectedId("");
         setCurrentRequester(null);
-        navigate("/select-requester");
+        navigate("/select-requester", true);
       }
 
       setLoadState("ready");
     } catch {
       setRequesters([]);
+      setSelectedId("");
       setCurrentRequester(null);
       setLoadState("error");
-      navigate("/select-requester");
+      navigate("/select-requester", true);
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     void loadRequesters();
   }, [loadRequesters]);
+
+  useEffect(() => {
+    function handlePopState() {
+      setCurrentPath(window.location.pathname);
+    }
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (
+      loadState !== "loading" &&
+      !currentRequester &&
+      isRequesterPath(currentPath)
+    ) {
+      navigate("/select-requester", true);
+    }
+  }, [currentPath, currentRequester, loadState, navigate]);
 
   function continueAsRequester() {
     const requester = requesters.find(
@@ -221,9 +300,14 @@ export default function App() {
     setLoadState(requesters.length === 0 ? "empty" : "ready");
   }
 
-  if (currentRequester) {
+  if (currentRequester && isRequesterPath(currentPath)) {
     return (
-      <AppShell requester={currentRequester} onChangeRequester={changeRequester} />
+      <AppShell
+        requester={currentRequester}
+        currentPath={currentPath}
+        onNavigate={navigate}
+        onChangeRequester={changeRequester}
+      />
     );
   }
 

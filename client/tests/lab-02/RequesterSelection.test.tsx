@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import App, { DEVELOPMENT_REQUESTER_STORAGE_KEY } from "../../src/App.js";
@@ -113,6 +113,42 @@ describe("Development Requester selection", () => {
     expect(screen.queryByText("Anan Chaiyasit")).not.toBeInTheDocument();
     expect(
       screen.getByRole("combobox", { name: /Development Requester/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps browser route changes and the rendered screen synchronized", async () => {
+    vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue(requesters);
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await screen.findByRole("option", { name: /Anan Chaiyasit/i });
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: /Development Requester/i }),
+      "1",
+    );
+    await user.click(screen.getByRole("button", { name: "Continue" }));
+    expect(
+      screen.getByRole("heading", { name: "Requester context ready" }),
+    ).toBeInTheDocument();
+
+    act(() => {
+      window.history.replaceState({}, "", "/select-requester");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    expect(
+      screen.getByRole("combobox", { name: /Development Requester/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Requester context ready" }),
+    ).not.toBeInTheDocument();
+
+    act(() => {
+      window.history.replaceState({}, "", "/tickets");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    expect(
+      screen.getByRole("heading", { name: "Requester context ready" }),
     ).toBeInTheDocument();
   });
 });

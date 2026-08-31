@@ -1,6 +1,6 @@
 import express from "express";
 import request from "supertest";
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { app } from "../../src/app.js";
 import {
   developmentRequesterContext,
@@ -13,6 +13,15 @@ const prisma = getPrisma();
 
 beforeAll(async () => {
   await seedDatabase(prisma);
+});
+
+afterAll(async () => {
+  await prisma.category.deleteMany({
+    where: { name: "Retired Test Category" },
+  });
+  await prisma.relatedSystem.deleteMany({
+    where: { name: "Retired Test System" },
+  });
 });
 
 describe("Lab 2 reference and requester APIs", () => {
@@ -127,7 +136,15 @@ describe("Development Requester context middleware", () => {
     },
   );
 
-  it.each([undefined, "0", "-1", "1.5", "abc"])(
+  it.each([
+    undefined,
+    "0",
+    "-1",
+    "1.5",
+    "abc",
+    "2147483648",
+    "9007199254740992",
+  ])(
     "returns 400 for invalid header value %s",
     async (header) => {
       const call = request(scopedApp).get("/probe");
