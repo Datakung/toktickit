@@ -79,12 +79,13 @@ Copy-Item server/.env.example server/.env
 ```
 
 Update `server/.env` with credentials for your local PostgreSQL database. The
-default examples expect:
+default examples define separate development and test targets:
 
 ```text
 Frontend: http://localhost:5173
 API:      http://localhost:3000
-Database: PostgreSQL on localhost:5432
+Development database: PostgreSQL `toktickit` on localhost:5432
+Test database:        PostgreSQL `toktickit_test` on localhost:5432
 ```
 
 Real `.env` files contain local credentials and must never be committed.
@@ -109,6 +110,17 @@ Check that PostgreSQL is accepting connections:
 ```powershell
 docker exec toktickit-postgres pg_isready -U toktickit -d toktickit
 ```
+
+Create the isolated test database once after creating the container:
+
+```powershell
+docker exec toktickit-postgres createdb -U toktickit toktickit_test
+```
+
+`server/.env` must keep `DATABASE_URL` pointed at `toktickit` and
+`TEST_DATABASE_URL` pointed at `toktickit_test`. Server tests fail before loading
+test modules if the test target is missing, matches development, or is not
+clearly named as a test database/schema.
 
 ## Install dependencies
 
@@ -189,6 +201,12 @@ npm test
 npm run build
 npm run test:e2e
 ```
+
+`npm test` validates `TEST_DATABASE_URL`, injects it as Prisma's
+`DATABASE_URL`, applies committed migrations, and seeds only the isolated test
+target before the suites begin. To apply the same guarded migration step
+explicitly, run `npm --prefix server run test:db:migrate` from the repository
+root.
 
 Install the Playwright Chromium binary once on a new machine with
 `npx playwright install chromium`. Lab 2 results and planned-test traceability

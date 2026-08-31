@@ -15,7 +15,7 @@ Tests derive from the peer-approved `FR`, `BR`, and `AC` identifiers in `specifi
 - **Responsive/visual:** Playwright viewport checks, screenshots, overflow assertions, and the manual checklist from `ui-spec.md`.
 - **E2E:** seeded Requester selection through Ticket creation, discovery, detail, Attachment lifecycle, and cross-Requester rejection.
 
-For each feature branch, write or activate the planned failing test first where practical, confirm that it fails for the intended missing behavior, implement the smallest correct behavior, and refactor while keeping the relevant suite green. Database tests isolate their data and clean it predictably without deleting shared schema or relying on test order.
+For each feature branch, write or activate the planned failing test first where practical, confirm that it fails for the intended missing behavior, implement the smallest correct behavior, and refactor while keeping the relevant suite green. Database tests require a guarded `TEST_DATABASE_URL`, apply migrations and seed before test files start, isolate their data from development, and clean fixtures predictably without relying on test order.
 
 ## 2. Planned Tests
 
@@ -113,6 +113,12 @@ Automated screenshots are saved under `artifacts/lab-02/screenshots/` using the 
 Commands are planned now and must be implemented/documented by their owning Issues.
 
 ```powershell
+# One-time local creation of the isolated database
+docker exec toktickit-postgres createdb -U toktickit toktickit_test
+
+# Guarded isolated migration (rejects missing/unsafe/same-as-development target)
+npm --prefix server run test:db:migrate
+
 # Server unit and API/integration tests
 npm --prefix server test -- tests/lab-02
 
@@ -133,12 +139,13 @@ Final `main` evidence must also show PostgreSQL readiness, migration/seed succes
 
 Issue #12 passed the following checks on 2026-08-31:
 
-- server: 3 files and 16 tests passed, including both Lab 1 regression tests and oversized-header boundaries;
+- server: 4 files and 21 tests passed, including both Lab 1 regressions, five isolation-guard tests, and oversized-header boundaries;
 - client: 3 files and 13 tests passed, including all four Lab 1 regression tests and route/navigation regressions;
 - Playwright: 4 Chromium tests passed: the requester-context flow plus desktop, tablet, and mobile checks;
 - server and client production builds passed;
 - the committed migration applied with no schema drift, and the idempotent seed passed twice; and
 - integration-test cleanup left zero retired Category or Related System fixtures in PostgreSQL; and
+- the development reference-data snapshot was identical before and after the isolated run; missing and same-as-development test targets both failed before test loading; and
 - production dependency audit (`npm audit --omit=dev`) reported zero vulnerabilities.
 
 The development-only Vitest 2 dependency chain reports advisories whose automated fix requires a major Vitest 4 upgrade. That unrelated upgrade is deferred for a separately reviewed dependency task; no vulnerable package is part of the production dependency tree. Later feature rows remain `Planned`, and Issue #16 plus final `main` will provide the complete results.
