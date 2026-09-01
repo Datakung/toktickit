@@ -804,3 +804,267 @@ h2 {
     justify-content: center;
   }
 }
+
+.ticket-detail-page {
+  display: grid;
+  gap: 22px;
+  max-width: 1000px;
+}
+
+.back-link {
+  justify-self: start;
+  color: #17633f;
+  font-weight: 700;
+}
+
+.ticket-detail-heading,
+.attachment-section-heading,
+.attachment-item-heading,
+.dialog-heading,
+.dialog-actions,
+.attachment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ticket-detail-heading h1,
+.attachment-section-heading h2,
+.attachment-section-heading p,
+.dialog-heading h2 {
+  margin: 0;
+}
+
+.detail-panel {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid #bdd0c4;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.detail-panel > h2 {
+  margin-top: 0;
+}
+
+.detail-grid,
+.detail-copy,
+.attachment-metadata {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+}
+
+.detail-grid div,
+.detail-copy div,
+.attachment-metadata div {
+  min-width: 0;
+}
+
+.detail-grid dt,
+.detail-copy dt,
+.attachment-metadata dt {
+  margin-bottom: 5px;
+  color: #61756a;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.detail-grid dd,
+.detail-copy dd,
+.attachment-metadata dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.detail-copy {
+  grid-template-columns: 1fr;
+}
+
+.detail-copy dd {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.attachment-section {
+  display: grid;
+  gap: 16px;
+}
+
+.file-picker-disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.selected-upload,
+.attachment-empty {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #c7d8cd;
+  border-radius: 10px;
+  background: #f4f8f5;
+}
+
+.success-message {
+  color: #17633f;
+  font-weight: 700;
+}
+
+.detail-attachment-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detail-attachment-list > li {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #c7d8cd;
+  border-radius: 12px;
+  background: #f9fcfa;
+}
+
+.detail-attachment-list > li.attachment-removed {
+  border-color: #d9c7c7;
+  background: #faf5f5;
+}
+
+.attachment-metadata {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.attachment-metadata .full-width {
+  grid-column: 1 / -1;
+}
+
+.attachment-actions {
+  justify-content: flex-start;
+}
+
+.danger-button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #9b1c1c;
+  border-radius: 8px;
+  color: #fff;
+  background: #9b1c1c;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.danger-button:hover:not(:disabled) {
+  background: #7d1717;
+}
+
+.danger-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.badge-active {
+  color: #14532d;
+  background: #dcfce7;
+}
+
+.badge-removed {
+  color: #7f1d1d;
+  background: #fee2e2;
+}
+
+.dialog-backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(12, 35, 25, 0.72);
+}
+
+.preview-dialog,
+.removal-dialog {
+  width: min(100%, 680px);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.preview-dialog img {
+  display: block;
+  max-width: 100%;
+  max-height: 65vh;
+  margin: 20px auto 0;
+  object-fit: contain;
+}
+
+.removal-dialog label {
+  display: grid;
+  gap: 7px;
+  margin: 20px 0;
+  font-weight: 700;
+}
+
+.removal-dialog textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 10px 12px;
+  border: 1px solid #7e9b89;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+.removal-dialog textarea[aria-invalid="true"] {
+  border-color: #9b1c1c;
+  box-shadow: 0 0 0 1px #9b1c1c;
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .ticket-detail-heading,
+  .attachment-section-heading {
+    align-items: flex-start;
+  }
+
+  .detail-panel {
+    padding: 18px;
+  }
+
+  .detail-grid,
+  .attachment-metadata {
+    grid-template-columns: 1fr;
+  }
+
+  .attachment-metadata .full-width {
+    grid-column: auto;
+  }
+
+  .attachment-actions > button {
+    flex: 1 1 130px;
+  }
+
+  .preview-dialog,
+  .removal-dialog {
+    padding: 18px;
+  }
+
+  .dialog-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

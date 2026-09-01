@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import {
   getDevelopmentRequesters,
   type DevelopmentRequester,
@@ -6,6 +6,7 @@ import {
 import "./app.css";
 import { CreateTicketPage } from "./CreateTicketPage.js";
 import { MyTicketsPage } from "./MyTicketsPage.js";
+import { TicketDetailPage } from "./TicketDetailPage.js";
 
 export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
   "toktickit.developmentRequesterId";
@@ -13,13 +14,19 @@ export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
 type LoadState = "loading" | "ready" | "empty" | "error";
 
 function isRequesterPath(path: string) {
-  return path === "/tickets" || path === "/tickets/new";
+  return path === "/tickets" || path === "/tickets/new" || /^\/tickets\/[^/]+$/.test(path);
+}
+
+function ticketIdFromPath(path: string) {
+  if (path === "/tickets" || path === "/tickets/new") return null;
+  return path.match(/^\/tickets\/([^/]+)$/)?.[1] ?? null;
 }
 
 function RequesterSelection({
   loadState,
   requesters,
   selectedId,
+  contextMessage,
   onSelectedIdChange,
   onContinue,
   onRetry,
@@ -27,6 +34,7 @@ function RequesterSelection({
   loadState: LoadState;
   requesters: DevelopmentRequester[];
   selectedId: string;
+  contextMessage: string;
   onSelectedIdChange: (id: string) => void;
   onContinue: () => void;
   onRetry: () => void;
@@ -41,6 +49,13 @@ function RequesterSelection({
           This is not a login screen. Authentication and role-based access will be
           introduced in Lab 3.
         </p>
+
+        {contextMessage && (
+          <div className="feedback-panel feedback-panel-error" role="alert">
+            <h2>Requester selection required</h2>
+            <p>{contextMessage}</p>
+          </div>
+        )}
 
         {loadState === "loading" && (
           <div className="selection-form" aria-busy="true">
@@ -115,13 +130,16 @@ function AppShell({
   currentPath,
   onNavigate,
   onChangeRequester,
+  onRequesterUnavailable,
 }: {
   requester: DevelopmentRequester;
   currentPath: string;
   onNavigate: (path: string) => void;
   onChangeRequester: () => void;
+  onRequesterUnavailable: () => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const ticketId = ticketIdFromPath(currentPath);
 
   function followAppLink(event: MouseEvent<HTMLAnchorElement>, path: string) {
     event.preventDefault();
@@ -180,9 +198,25 @@ function AppShell({
       </header>
       <main className="app-content">
         {currentPath === "/tickets/new" ? (
-          <CreateTicketPage requester={requester} />
+          <CreateTicketPage
+            requester={requester}
+            onRequesterUnavailable={onRequesterUnavailable}
+          />
+        ) : ticketId ? (
+          <TicketDetailPage
+            key={`${requester.id}-${ticketId}`}
+            requester={requester}
+            ticketId={ticketId}
+            onNavigate={onNavigate}
+            onRequesterUnavailable={onRequesterUnavailable}
+          />
         ) : (
-          <MyTicketsPage key={requester.id} requester={requester} onNavigate={onNavigate} />
+          <MyTicketsPage
+            key={requester.id}
+            requester={requester}
+            onNavigate={onNavigate}
+            onRequesterUnavailable={onRequesterUnavailable}
+          />
         )}
       </main>
     </div>
@@ -193,9 +227,11 @@ export default function App() {
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [requesters, setRequesters] = useState<DevelopmentRequester[]>([]);
   const [selectedId, setSelectedId] = useState("");
+  const [contextMessage, setContextMessage] = useState("");
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [currentRequester, setCurrentRequester] =
     useState<DevelopmentRequester | null>(null);
+  const requesterLoadGeneration = useRef(0);
 
   const navigate = useCallback((path: string, replace = false) => {
     if (window.location.pathname !== path) {
@@ -205,11 +241,13 @@ export default function App() {
   }, []);
 
   const loadRequesters = useCallback(async () => {
+    const generation = ++requesterLoadGeneration.current;
     setLoadState("loading");
     setRequesters([]);
 
     try {
       const activeRequesters = await getDevelopmentRequesters();
+      if (generation !== requesterLoadGeneration.current) return;
       setRequesters(activeRequesters);
 
       if (activeRequesters.length === 0) {
@@ -251,6 +289,7 @@ export default function App() {
 
       setLoadState("ready");
     } catch {
+      if (generation !== requesterLoadGeneration.current) return;
       setRequesters([]);
       setSelectedId("");
       setCurrentRequester(null);
@@ -289,6 +328,7 @@ export default function App() {
     if (!requester) return;
 
     sessionStorage.setItem(DEVELOPMENT_REQUESTER_STORAGE_KEY, selectedId);
+    setContextMessage("");
     setCurrentRequester(requester);
     navigate("/tickets");
   }
@@ -297,9 +337,26 @@ export default function App() {
     sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
     setCurrentRequester(null);
     setSelectedId("");
+    setContextMessage("");
     navigate("/select-requester");
     setLoadState(requesters.length === 0 ? "empty" : "ready");
   }
+
+  const handleRequesterUnavailable = useCallback(() => {
+    const rejectedRequesterId = currentRequester?.id;
+    const remainingRequesters = rejectedRequesterId === undefined
+      ? requesters
+      : requesters.filter((requester) => requester.id !== rejectedRequesterId);
+    sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+    setRequesters(remainingRequesters);
+    setCurrentRequester(null);
+    setSelectedId("");
+    setContextMessage(
+      "The selected Development Requester is no longer available. Choose another Requester.",
+    );
+    setLoadState(remainingRequesters.length === 0 ? "empty" : "ready");
+    navigate("/select-requester", true);
+  }, [currentRequester?.id, navigate, requesters]);
 
   if (currentRequester && isRequesterPath(currentPath)) {
     return (
@@ -308,6 +365,7 @@ export default function App() {
         currentPath={currentPath}
         onNavigate={navigate}
         onChangeRequester={changeRequester}
+        onRequesterUnavailable={handleRequesterUnavailable}
       />
     );
   }
@@ -317,6 +375,7 @@ export default function App() {
       loadState={loadState}
       requesters={requesters}
       selectedId={selectedId}
+      contextMessage={contextMessage}
       onSelectedIdChange={setSelectedId}
       onContinue={continueAsRequester}
       onRetry={() => void loadRequesters()}

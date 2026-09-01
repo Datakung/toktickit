@@ -11,8 +11,19 @@ import {
   ticketListOrderBy,
   ticketListWhere,
 } from "./ticket-list-query.js";
+import {
+  attachmentMetadataSelect,
+  toAttachmentMetadata,
+} from "../attachments/attachment-metadata.js";
 
 export const ticketRouter = Router();
+const POSTGRES_INTEGER_MAX = 2_147_483_647;
+
+function parseTicketId(value: string): number | null {
+  if (!/^[1-9]\d*$/.test(value)) return null;
+  const id = Number(value);
+  return Number.isSafeInteger(id) && id <= POSTGRES_INTEGER_MAX ? id : null;
+}
 
 function validationError(response: Response, fields: TicketFieldErrors) {
   response.status(400).json({
@@ -149,6 +160,74 @@ ticketRouter.post(
         error: {
           code: "TICKET_CREATE_FAILED",
           message: "The Ticket could not be created. Try again.",
+        },
+      });
+    }
+  },
+);
+
+ticketRouter.get(
+  "/:ticketId",
+  developmentRequesterContext,
+  async (request, response: Response<unknown, DevelopmentRequesterLocals>) => {
+    const ticketId = parseTicketId(request.params.ticketId);
+    if (ticketId === null) {
+      response.status(400).json({
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "Correct the highlighted fields and try again.",
+          fields: { ticketId: "Ticket ID must be a positive supported integer." },
+        },
+      });
+      return;
+    }
+
+    try {
+      const ticket = await getPrisma().ticket.findFirst({
+        where: {
+          id: ticketId,
+          requesterId: response.locals.developmentRequester.id,
+        },
+        select: {
+          id: true,
+          ticketNumber: true,
+          summary: true,
+          description: true,
+          requestedPriority: true,
+          itPriority: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+          requester: {
+            select: { id: true, displayName: true, email: true },
+          },
+          category: { select: { id: true, name: true } },
+          relatedSystem: { select: { id: true, name: true } },
+          attachments: {
+            select: attachmentMetadataSelect,
+            orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+          },
+        },
+      });
+
+      if (!ticket) {
+        response.status(404).json({
+          error: { code: "TICKET_NOT_FOUND", message: "Ticket not found." },
+        });
+        return;
+      }
+
+      response.status(200).json({
+        data: {
+          ...ticket,
+          attachments: ticket.attachments.map(toAttachmentMetadata),
+        },
+      });
+    } catch {
+      response.status(500).json({
+        error: {
+          code: "TICKET_RETRIEVAL_FAILED",
+          message: "The Ticket could not be loaded. Try again.",
         },
       });
     }

@@ -3,6 +3,7 @@ import {
   getCategories,
   getRelatedSystems,
   getTickets,
+  isRequesterUnavailable,
   type Category,
   type DevelopmentRequester,
   type RelatedSystem,
@@ -55,9 +56,11 @@ function isDefaultQuery(query: TicketListQuery) {
 export function MyTicketsPage({
   requester,
   onNavigate,
+  onRequesterUnavailable,
 }: {
   requester: DevelopmentRequester;
   onNavigate: (path: string) => void;
+  onRequesterUnavailable: () => void;
 }) {
   const [query, setQuery] = useState<TicketListQuery>(defaultTicketListQuery);
   const [searchDraft, setSearchDraft] = useState("");
@@ -92,13 +95,17 @@ export function MyTicketsPage({
         setResult(response);
         setListState("ready");
       })
-      .catch(() => {
+      .catch((error) => {
         if (!current) return;
+        if (isRequesterUnavailable(error)) {
+          onRequesterUnavailable();
+          return;
+        }
         setResult(null);
         setListState("error");
       });
     return () => { current = false; };
-  }, [query, requester.id]);
+  }, [onRequesterUnavailable, query, requester.id]);
 
   function updateQuery(update: Partial<TicketListQuery>) {
     setResult(null);
@@ -121,6 +128,11 @@ export function MyTicketsPage({
   function followCreateTicket(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     onNavigate("/tickets/new");
+  }
+
+  function followTicket(event: MouseEvent<HTMLAnchorElement>, ticketId: number) {
+    event.preventDefault();
+    onNavigate(`/tickets/${ticketId}`);
   }
 
   const hasActiveQuery = !isDefaultQuery(query);
@@ -294,7 +306,7 @@ export function MyTicketsPage({
               </tr></thead>
               <tbody>{result.data.map((ticket) => (
                 <tr key={ticket.id}>
-                  <td><a href={`/tickets/${ticket.id}`}>{ticket.ticketNumber}</a></td>
+                  <td><a href={`/tickets/${ticket.id}`} onClick={(event) => followTicket(event, ticket.id)}>{ticket.ticketNumber}</a></td>
                   <td>{ticket.summary}</td>
                   <td>{ticket.category.name}</td>
                   <td>{ticket.relatedSystem.name}</td>
@@ -322,7 +334,7 @@ export function MyTicketsPage({
                   <div><dt>Priority</dt><dd><span className={`badge priority-${ticket.requestedPriority.toLowerCase()}`}>{labelPriority(ticket.requestedPriority)}</span></dd></div>
                   <div><dt>Updated</dt><dd>{formatDate(ticket.updatedAt)}</dd></div>
                 </dl>
-                <a className="secondary-button button-link" href={`/tickets/${ticket.id}`}>
+                <a className="secondary-button button-link" href={`/tickets/${ticket.id}`} onClick={(event) => followTicket(event, ticket.id)}>
                   View Ticket {ticket.ticketNumber}
                 </a>
               </article>

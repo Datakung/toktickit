@@ -2,12 +2,12 @@
 
 TokTickIT is an IT service desk application developed for CPE334. Lab 2 extends
 the verified Lab 1 vertical slice with the data foundation, temporary
-Development Requester context, Ticket creation, and requester-owned discovery
-needed by the Requester Ticketing MVP.
+Development Requester context, Ticket creation and discovery, owned Ticket
+Detail, and Attachment lifecycle needed by the Requester Ticketing MVP.
 
 ## Current Lab 2 increment
 
-Through Issue #14, the current increment provides:
+Through Issue #15, the current increment provides:
 
 1. a PostgreSQL/Prisma foundation for Requesters, Categories, Related Systems,
    Tickets, and Attachments;
@@ -23,11 +23,15 @@ Through Issue #14, the current increment provides:
    safe filenames, a 5 MiB/file limit, and an atomic five-file limit; and
 9. a requester-owned My Tickets API and responsive page with validated search,
    filters, sorting, pagination, distinct list states, desktop tables, and mobile
-   cards; and
-10. Vitest/Supertest component and API tests plus Chromium Playwright flows.
+   cards;
+10. a read-only owned Ticket Detail API and responsive page with safe unavailable
+    behavior;
+11. existing-Ticket Attachment upload, ordered active/removed metadata,
+    authenticated image/PDF preview and download, and confirmed soft removal; and
+12. Vitest/Supertest component and API tests plus Chromium Playwright flows.
 
-Ticket Detail and the later Attachment download/removal lifecycle are owned by
-Issue #15 and are not implemented on this branch.
+Comments, Internal Notes, IT Staff controls, status changes, and real
+authentication remain outside the Lab 2 Requester MVP.
 
 ## Lab 1 goal
 
@@ -167,8 +171,9 @@ Open `http://localhost:5173` in a browser. Choose an active Development
 Requester and select **Continue**. The application stores only that temporary
 development selection in the current browser tab, opens the requester shell,
 and allows it to be cleared with **Change Requester**. Select **Create Ticket**
-to submit a validated request and optional initial files. This is development
-context for Lab 2, not authentication.
+to submit a validated request and optional initial files, or open **My Tickets**
+to search owned Tickets and manage permitted Attachments from read-only Ticket
+Detail. This is development context for Lab 2, not authentication.
 
 ## API endpoints
 
@@ -180,7 +185,11 @@ context for Lab 2, not authentication.
 | `GET` | `/api/development-requesters` | Returns active Development Requesters in display-name order |
 | `GET` | `/api/tickets` | Returns only the selected Requester's Tickets with validated search, filters, sorting, and pagination |
 | `POST` | `/api/tickets` | Creates one validated Ticket for the selected Development Requester |
+| `GET` | `/api/tickets/:ticketId` | Returns an owned read-only Ticket with ordered Attachment metadata |
+| `GET` | `/api/tickets/:ticketId/attachments` | Returns active and removed metadata for an owned Ticket |
 | `POST` | `/api/tickets/:ticketId/attachments` | Uploads one validated owned-Ticket Attachment; field name is `file` |
+| `GET` | `/api/tickets/:ticketId/attachments/:attachmentId/download` | Returns protected active content as `inline` or `attachment` |
+| `DELETE` | `/api/tickets/:ticketId/attachments/:attachmentId` | Soft-removes an owned Attachment with a validated reason |
 
 ## Database commands
 

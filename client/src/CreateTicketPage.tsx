@@ -4,6 +4,7 @@ import {
   createTicket,
   getCategories,
   getRelatedSystems,
+  isRequesterUnavailable,
   uploadTicketAttachment,
   type Category,
   type CreatedTicket,
@@ -100,7 +101,13 @@ function validateForm(fields: FormFields) {
   return errors;
 }
 
-export function CreateTicketPage({ requester }: { requester: DevelopmentRequester }) {
+export function CreateTicketPage({
+  requester,
+  onRequesterUnavailable,
+}: {
+  requester: DevelopmentRequester;
+  onRequesterUnavailable: () => void;
+}) {
   const [referenceState, setReferenceState] = useState<ReferenceState>("loading");
   const [categories, setCategories] = useState<Category[]>([]);
   const [systems, setSystems] = useState<RelatedSystem[]>([]);
@@ -176,12 +183,20 @@ export function CreateTicketPage({ requester }: { requester: DevelopmentRequeste
           setAttachments((current) => current.map((item, itemIndex) =>
             itemIndex === index ? { ...item, state: "succeeded" } : item));
         } catch (error) {
+          if (isRequesterUnavailable(error)) {
+            onRequesterUnavailable();
+            return;
+          }
           const message = error instanceof ApiError ? error.message : "Upload failed. Retry from Ticket Detail.";
           setAttachments((current) => current.map((item, itemIndex) =>
             itemIndex === index ? { ...item, state: "failed", error: message } : item));
         }
       }
     } catch (error) {
+      if (isRequesterUnavailable(error)) {
+        onRequesterUnavailable();
+        return;
+      }
       if (error instanceof ApiError) {
         setFieldErrors(error.fields);
         setSubmitError(error.message);
