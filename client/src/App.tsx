@@ -4,6 +4,7 @@ import {
   type DevelopmentRequester,
 } from "./api.js";
 import "./app.css";
+import { CreateTicketPage } from "./CreateTicketPage.js";
 
 export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
   "toktickit.developmentRequesterId";
@@ -177,12 +178,18 @@ function AppShell({
         </div>
       </header>
       <main className="app-content">
-        <p className="eyebrow">Development Requester testing context</p>
-        <h1>Requester context ready</h1>
-        <p>
-          You are testing as <strong>{requester.displayName}</strong>. Ticket features
-          will be added in the next Lab 2 Issues.
-        </p>
+        {currentPath === "/tickets/new" ? (
+          <CreateTicketPage requester={requester} />
+        ) : (
+          <>
+            <p className="eyebrow">Development Requester testing context</p>
+            <h1>Requester context ready</h1>
+            <p>
+              You are testing as <strong>{requester.displayName}</strong>. My Tickets
+              will be added in the next Lab 2 Issue.
+            </p>
+          </>
+        )}
       </main>
     </div>
   );

@@ -21,6 +21,44 @@ export interface SystemStatus {
   categories: Category[];
 }
 
+export type RequestedPriority = "LOW" | "MEDIUM" | "HIGH";
+
+export interface CreateTicketRequest {
+  categoryId: number;
+  relatedSystemId: number;
+  summary: string;
+  requestedPriority: RequestedPriority;
+  description: string;
+}
+
+export interface CreatedTicket {
+  id: number;
+  ticketNumber: string;
+  requesterId: number;
+  status: "NEW";
+  createdAt: string;
+}
+
+export interface AttachmentMetadata {
+  id: number;
+  ticketId: number;
+  originalName: string;
+  mimeType: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    message: string,
+    public readonly fieldErrors: Record<string, string> = {},
+  ) {
+    super(message);
+  }
+}
+
 // Check both backend dependencies. Throwing on either failure lets the UI show
 // one useful Offline/error state.
 export async function checkSystem(): Promise<SystemStatus> {
@@ -78,4 +116,49 @@ export function developmentRequesterHeaders(requesterId: number): HeadersInit {
   return {
     "X-Development-Requester-Id": String(requesterId),
   };
+}
+
+async function parseApiResponse<T>(response: Response): Promise<T> {
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new ApiError(
+      response.status,
+      body?.error?.code ?? "REQUEST_FAILED",
+      body?.error?.message ?? "The request failed. Try again.",
+      body?.error?.fieldErrors ?? {},
+    );
+  }
+  return body as T;
+}
+
+export async function createTicket(
+  requesterId: number,
+  input: CreateTicketRequest,
+): Promise<CreatedTicket> {
+  const response = await fetch(`${API_URL}/api/tickets`, {
+    method: "POST",
+    headers: {
+      ...developmentRequesterHeaders(requesterId),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+  const body = await parseApiResponse<{ data: CreatedTicket }>(response);
+  return body.data;
+}
+
+export async function uploadTicketAttachment(
+  requesterId: number,
+  ticketId: number,
+  file: File,
+): Promise<AttachmentMetadata> {
+  const form = new FormData();
+  form.append("file", file);
+  const response = await fetch(`${API_URL}/api/tickets/${ticketId}/attachments`, {
+    method: "POST",
+    headers: developmentRequesterHeaders(requesterId),
+    body: form,
+  });
+  const body = await parseApiResponse<{ data: AttachmentMetadata }>(response);
+  return body.data;
 }
