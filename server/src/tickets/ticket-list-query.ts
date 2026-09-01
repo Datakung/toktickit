@@ -33,6 +33,10 @@ export type TicketListQueryResult =
 
 const POSTGRES_INTEGER_MAX = 2_147_483_647;
 
+function escapePostgresLikePattern(value: string): string {
+  return value.replace(/[\\%_]/g, "\\$&");
+}
+
 function singleValue(
   query: Record<string, unknown>,
   name: string,
@@ -150,13 +154,15 @@ export function parseTicketListQuery(query: Record<string, unknown>): TicketList
 }
 
 export function ticketListWhere(requesterId: number, query: TicketListQuery): Prisma.TicketWhereInput {
+  const literalSearch = escapePostgresLikePattern(query.search);
+
   return {
     requesterId,
     ...(query.search
       ? {
           OR: [
-            { ticketNumber: { contains: query.search, mode: "insensitive" as const } },
-            { summary: { contains: query.search, mode: "insensitive" as const } },
+            { ticketNumber: { contains: literalSearch, mode: "insensitive" as const } },
+            { summary: { contains: literalSearch, mode: "insensitive" as const } },
           ],
         }
       : {}),

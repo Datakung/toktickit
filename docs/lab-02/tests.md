@@ -28,7 +28,7 @@ For each feature branch, write or activate the planned failing test first where 
 | API-02 | API/integration | BR-02, BR-04, AC-02, AC-03, AC-04 | Missing/malformed/out-of-range/inactive Requester context | Documented `400`/`403`; oversized values rejected before Prisma; active context accepted | `server/tests/lab-02/requester-context.api.test.ts` | Passed in Issue #12 and re-review |
 | API-03 | API/integration | FR-05–FR-07, AC-06, AC-07 | Create valid Ticket for selected Requester | `201`; one saved row; number, owner, `NEW`, timestamps returned | `server/tests/lab-02/create-ticket.api.test.ts` | Passed in Issue #13 |
 | API-04 | API/integration | BR-09–BR-12, AC-09 | Direct invalid Ticket requests and boundary values | `400` field errors; no Ticket saved | `server/tests/lab-02/create-ticket.api.test.ts` | Passed in Issue #13 |
-| API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, combined search/filters/sort/page, invalid query | Only owned matches; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Passed in Issue #14 (13 tests) |
+| API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, literal wildcard-character search, combined filters/sort/page, invalid query | Only owned matches; `%`, `_`, and backslash are literal; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Passed in Issue #14 re-review (16 tests) |
 | API-06 | API/integration | FR-11, FR-17, AC-20, AC-21 | Owned Ticket Detail versus missing/non-owned Ticket | Owned `200`; missing/non-owned identical safe `404` | `server/tests/lab-02/ticket-detail.api.test.ts` | Planned |
 | API-07 | API/integration | FR-12, FR-13, BR-23, BR-36, AC-22, AC-23 | Metadata and valid/invalid existing-Ticket upload | Valid `201`; exact sanitized display name; stored name hidden; mismatch `415`; size `413`; ownership `404`; count `409`; no invalid row/file | `server/tests/lab-02/attachment-upload.api.test.ts` | Initial-upload portion passed in Issue #13; later lifecycle remains Issue #15 |
 | API-08 | API/integration | FR-14, FR-17, BR-38, AC-24, AC-25 | Active inline/download content and missing/non-owned content | Both dispositions return safe headers; protected requests `404` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
@@ -139,10 +139,10 @@ Final `main` evidence must also show PostgreSQL readiness, migration/seed succes
 
 Issue #14 passed the following checks on 2026-09-01:
 
-- API-05: 13 PostgreSQL-backed tests cover strict query validation, requester ownership, case-insensitive Ticket Number/Summary search, combined filters, all documented sort/page behavior, and accurate out-of-range metadata;
+- API-05: 16 PostgreSQL-backed tests cover strict query validation, requester ownership, case-insensitive Ticket Number/Summary search, literal `%`, `_`, and backslash handling, combined filters, all documented sort/page behavior, and accurate out-of-range metadata;
 - UI-05: 7 component tests cover loading, ready rows/actions, combined controls, one-based pagination, empty versus no-results, Clear Filters, safe retry, and removal of stale rows when the Requester changes;
 - responsive My Tickets: 3 Chromium checks prove the desktop table/mobile-card switch and no horizontal overflow at 1440×900, 820×1180, and 390×844;
-- the full server suite passes 10 files and 66 tests; the full client suite passes 5 files and 27 tests;
+- the full server suite passes 10 files and 69 tests; the full client suite passes 5 files and 27 tests;
 - the complete Playwright regression suite passes all 9 Chromium tests; and
 - server and client production builds pass; and
 - manual OperaGX verification confirmed the database-backed list, search, filters, sorting, page-size and Clear Filters behavior; changing from Anan to Kanya removed Anan's Tickets; and the 390 px mobile layout stacked its controls without horizontal overflow.

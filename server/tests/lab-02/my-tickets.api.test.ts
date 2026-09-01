@@ -150,6 +150,39 @@ describe("GET /api/tickets", () => {
     });
   });
 
+  it.each([
+    ["percent", "%"],
+    ["underscore", "_"],
+    ["backslash", "\\"],
+  ])("treats a %s search character literally", async (_case, character) => {
+    const literalTicket = await prisma.ticket.create({
+      data: {
+        ticketNumber: `TKT-20260901-S${character.charCodeAt(0).toString().padStart(5, "0")}`,
+        requesterId: requesterA,
+        categoryId: categoryA,
+        relatedSystemId: systemA,
+        summary: `${prefix} literal ${character} search marker`,
+        description: "A Ticket used to verify literal PostgreSQL search behavior.",
+        requestedPriority: "MEDIUM",
+      },
+      select: { id: true, ticketNumber: true },
+    });
+
+    try {
+      const response = await request(app)
+        .get("/api/tickets")
+        .query({ search: character, pageSize: 50 })
+        .set("X-Development-Requester-Id", String(requesterA));
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.map((ticket: { ticketNumber: string }) => ticket.ticketNumber))
+        .toEqual([literalTicket.ticketNumber]);
+      expect(response.body.meta).toMatchObject({ search: character, totalItems: 1 });
+    } finally {
+      await prisma.ticket.delete({ where: { id: literalTicket.id } });
+    }
+  });
+
   it("returns an accurate second page and an empty out-of-range page", async () => {
     const secondPage = await request(app)
       .get("/api/tickets?page=2&pageSize=10")
