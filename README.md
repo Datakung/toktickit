@@ -2,12 +2,12 @@
 
 TokTickIT is an IT service desk application developed for CPE334. Lab 2 extends
 the verified Lab 1 vertical slice with the data foundation, temporary
-Development Requester context, and Ticket-creation flow needed by the
-Requester Ticketing MVP.
+Development Requester context, Ticket creation, and requester-owned discovery
+needed by the Requester Ticketing MVP.
 
 ## Current Lab 2 increment
 
-Through Issue #13, the current increment provides:
+Through Issue #14, the current increment provides:
 
 1. a PostgreSQL/Prisma foundation for Requesters, Categories, Related Systems,
    Tickets, and Attachments;
@@ -21,10 +21,13 @@ Through Issue #13, the current increment provides:
    ownership derived only from the validated development header;
 8. optional initial JPEG, PNG, WEBP, and PDF uploads with content validation,
    safe filenames, a 5 MiB/file limit, and an atomic five-file limit; and
-9. Vitest/Supertest component and API tests plus Chromium Playwright flows.
+9. a requester-owned My Tickets API and responsive page with validated search,
+   filters, sorting, pagination, distinct list states, desktop tables, and mobile
+   cards; and
+10. Vitest/Supertest component and API tests plus Chromium Playwright flows.
 
-My Tickets, Ticket Detail, and the later Attachment download/removal lifecycle
-are owned by Issues #14 and #15 and are not implemented on this branch.
+Ticket Detail and the later Attachment download/removal lifecycle are owned by
+Issue #15 and are not implemented on this branch.
 
 ## Lab 1 goal
 
@@ -175,6 +178,7 @@ context for Lab 2, not authentication.
 | `GET` | `/api/categories` | Returns active category IDs and names from PostgreSQL in ID order |
 | `GET` | `/api/related-systems` | Returns active related systems in name order |
 | `GET` | `/api/development-requesters` | Returns active Development Requesters in display-name order |
+| `GET` | `/api/tickets` | Returns only the selected Requester's Tickets with validated search, filters, sorting, and pagination |
 | `POST` | `/api/tickets` | Creates one validated Ticket for the selected Development Requester |
 | `POST` | `/api/tickets/:ticketId/attachments` | Uploads one validated owned-Ticket Attachment; field name is `file` |
 

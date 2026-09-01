@@ -64,7 +64,7 @@ for (const viewport of viewports) {
       page.getByRole("button", { name: "Change Requester" }),
     ).toBeInViewport();
     await expect(
-      page.getByRole("heading", { name: "Requester context ready" }),
+      page.getByRole("heading", { name: "My Tickets" }),
     ).toBeInViewport();
     await expect
       .poll(() =>
@@ -77,8 +77,9 @@ for (const viewport of viewports) {
       .toBe(true);
 
     const menu = page.getByRole("button", { name: "Menu" });
-    const myTickets = page.getByRole("link", { name: "My Tickets" });
-    const createTicket = page.getByRole("link", { name: "Create Ticket" });
+    const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+    const myTickets = navigation.getByRole("link", { name: "My Tickets" });
+    const createTicket = navigation.getByRole("link", { name: "Create Ticket" });
 
     if (viewport.name === "mobile") {
       await expect(menu).toBeVisible();

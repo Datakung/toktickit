@@ -13,6 +13,26 @@ describe("Development Requester selection", () => {
   beforeEach(() => {
     sessionStorage.clear();
     window.history.replaceState({}, "", "/select-requester");
+    vi.spyOn(api, "getCategories").mockResolvedValue([]);
+    vi.spyOn(api, "getRelatedSystems").mockResolvedValue([]);
+    vi.spyOn(api, "getTickets").mockResolvedValue({
+      data: [],
+      meta: {
+        page: 1,
+        pageSize: 10,
+        totalItems: 0,
+        totalPages: 0,
+        search: "",
+        filters: {
+          categoryId: null,
+          relatedSystemId: null,
+          requestedPriority: null,
+          status: null,
+        },
+        sort: "updatedAt",
+        direction: "desc",
+      },
+    });
   });
 
   afterEach(() => {
@@ -51,7 +71,9 @@ describe("Development Requester selection", () => {
     expect(window.location.pathname).toBe("/tickets");
     expect(screen.getAllByText("Kanya Srisuk")).toHaveLength(2);
     expect(screen.getByRole("button", { name: "Change Requester" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Requester context ready" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "My Tickets" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "You have no Tickets yet" }))
+      .toBeInTheDocument();
   });
 
   it("shows an empty state without a Continue action", async () => {
@@ -129,8 +151,10 @@ describe("Development Requester selection", () => {
     );
     await user.click(screen.getByRole("button", { name: "Continue" }));
     expect(
-      screen.getByRole("heading", { name: "Requester context ready" }),
+      screen.getByRole("heading", { name: "My Tickets" }),
     ).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "You have no Tickets yet" }))
+      .toBeInTheDocument();
 
     act(() => {
       window.history.replaceState({}, "", "/select-requester");
@@ -140,7 +164,7 @@ describe("Development Requester selection", () => {
       screen.getByRole("combobox", { name: /Development Requester/i }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { name: "Requester context ready" }),
+      screen.queryByRole("heading", { name: "My Tickets" }),
     ).not.toBeInTheDocument();
 
     act(() => {
@@ -148,7 +172,9 @@ describe("Development Requester selection", () => {
       window.dispatchEvent(new PopStateEvent("popstate"));
     });
     expect(
-      screen.getByRole("heading", { name: "Requester context ready" }),
+      screen.getByRole("heading", { name: "My Tickets" }),
     ).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "You have no Tickets yet" }))
+      .toBeInTheDocument();
   });
 });

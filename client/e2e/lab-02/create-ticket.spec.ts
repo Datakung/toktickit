@@ -7,7 +7,9 @@ async function selectRequesterAndOpenForm(page: import("@playwright/test").Page)
   await expect(requester).toBeEnabled();
   await requester.selectOption({ index: 1 });
   await page.getByRole("button", { name: "Continue" }).click();
-  const createTicketLink = page.getByRole("link", { name: "Create Ticket" });
+  const createTicketLink = page
+    .getByRole("navigation", { name: "Primary navigation" })
+    .getByRole("link", { name: "Create Ticket" });
   if (!(await createTicketLink.isVisible())) {
     await page.getByRole("button", { name: "Menu" }).click();
   }
