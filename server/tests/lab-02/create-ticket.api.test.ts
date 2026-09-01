@@ -90,7 +90,7 @@ describe("POST /api/tickets", () => {
     expect(response.status).toBe(400);
     expect(response.body.error).toMatchObject({
       code: "VALIDATION_ERROR",
-      fieldErrors: {
+      fields: {
         categoryId: expect.any(String),
         relatedSystemId: expect.any(String),
         summary: expect.any(String),
@@ -116,7 +116,7 @@ describe("POST /api/tickets", () => {
         .send({ ...validBody(), categoryId: inactiveCategory.id, relatedSystemId: inactiveSystem.id });
 
       expect(response.status).toBe(400);
-      expect(response.body.error.fieldErrors).toEqual({
+      expect(response.body.error.fields).toEqual({
         categoryId: "Select an active Category.",
         relatedSystemId: "Select an active Related System.",
       });
@@ -124,5 +124,30 @@ describe("POST /api/tickets", () => {
       await prisma.category.delete({ where: { id: inactiveCategory.id } });
       await prisma.relatedSystem.delete({ where: { id: inactiveSystem.id } });
     }
+  });
+
+  it("returns a safe JSON 400 for malformed JSON without saving a Ticket", async () => {
+    const before = await prisma.ticket.count({
+      where: { summary: { startsWith: testSummaryPrefix } },
+    });
+
+    const response = await request(app)
+      .post("/api/tickets")
+      .set("X-Development-Requester-Id", String(requesterId))
+      .set("Content-Type", "application/json")
+      .send('{"summary":');
+
+    expect(response.status).toBe(400);
+    expect(response.headers["content-type"]).toMatch(/application\/json/);
+    expect(response.body).toEqual({
+      error: {
+        code: "INVALID_JSON",
+        message: "Request body must be valid JSON.",
+      },
+    });
+    expect(response.text).not.toMatch(/SyntaxError|stack|express|node_modules|Unexpected token/i);
+    await expect(prisma.ticket.count({
+      where: { summary: { startsWith: testSummaryPrefix } },
+    })).resolves.toBe(before);
   });
 });

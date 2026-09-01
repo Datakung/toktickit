@@ -9,12 +9,12 @@ import { validateCreateTicketInput, type TicketFieldErrors } from "./ticket-vali
 
 export const ticketRouter = Router();
 
-function validationError(response: Response, fieldErrors: TicketFieldErrors) {
+function validationError(response: Response, fields: TicketFieldErrors) {
   response.status(400).json({
     error: {
       code: "VALIDATION_ERROR",
       message: "Correct the highlighted fields and try again.",
-      fieldErrors,
+      fields,
     },
   });
 }

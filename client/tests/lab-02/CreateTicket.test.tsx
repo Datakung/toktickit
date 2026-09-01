@@ -17,7 +17,10 @@ describe("Create Ticket", () => {
     vi.spyOn(api, "getRelatedSystems").mockResolvedValue([{ id: 2, name: "Network and VPN" }]);
   });
 
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
 
   async function completeRequiredFields(user: ReturnType<typeof userEvent.setup>) {
     await user.selectOptions(await screen.findByLabelText(/Category/), "1");
@@ -52,7 +55,46 @@ describe("Create Ticket", () => {
     expect(screen.getByText("Select a Requested Priority.")).toBeInTheDocument();
     expect(screen.getByText("Summary must be between 5 and 120 characters.")).toBeInTheDocument();
     expect(screen.getByText("Description must be between 10 and 4000 characters.")).toBeInTheDocument();
+    for (const control of [
+      screen.getByLabelText(/Category/),
+      screen.getByLabelText(/Related System/),
+      screen.getByLabelText(/Requested Priority/),
+      screen.getByLabelText(/Summary/),
+      screen.getByLabelText(/Description/),
+    ]) {
+      expect(control).toBeRequired();
+      expect(control).toHaveAttribute("aria-invalid", "true");
+      const describedBy = control.getAttribute("aria-describedby") ?? "";
+      expect(describedBy).toMatch(/-error/);
+      for (const id of describedBy.split(" ")) {
+        expect(document.getElementById(id)).not.toBeNull();
+      }
+    }
     expect(create).not.toHaveBeenCalled();
+  });
+
+  it("maps the API contract error.fields object for the form", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({
+      error: {
+        code: "VALIDATION_ERROR",
+        message: "Review the highlighted fields.",
+        fields: { summary: "Summary must contain 5 to 120 characters." },
+      },
+    }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    })));
+
+    await expect(api.createTicket(1, {
+      categoryId: 1,
+      relatedSystemId: 2,
+      summary: "bad",
+      requestedPriority: "HIGH",
+      description: "A valid description.",
+    })).rejects.toMatchObject({
+      code: "VALIDATION_ERROR",
+      fields: { summary: "Summary must contain 5 to 120 characters." },
+    });
   });
 
   it("prevents repeated submission and presents the official Ticket Number", async () => {

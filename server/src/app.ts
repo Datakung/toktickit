@@ -10,6 +10,20 @@ export const app = express();
 
 app.use(cors());          // already wired: lets the Vite dev server call this API
 app.use(express.json());
+app.use((error: unknown, _request: Request, response: Response, next: (error?: unknown) => void) => {
+  const parseError = error as { type?: string };
+  if (error instanceof SyntaxError && parseError.type === "entity.parse.failed") {
+    response.status(400).json({
+      error: {
+        code: "INVALID_JSON",
+        message: "Request body must be valid JSON.",
+      },
+    });
+    return;
+  }
+
+  next(error);
+});
 app.use("/api/tickets", ticketRouter);
 app.use("/api/tickets/:ticketId/attachments", attachmentRouter);
 

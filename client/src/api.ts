@@ -53,7 +53,7 @@ export class ApiError extends Error {
     public readonly status: number,
     public readonly code: string,
     message: string,
-    public readonly fieldErrors: Record<string, string> = {},
+    public readonly fields: Record<string, string> = {},
   ) {
     super(message);
   }
@@ -125,7 +125,7 @@ async function parseApiResponse<T>(response: Response): Promise<T> {
       response.status,
       body?.error?.code ?? "REQUEST_FAILED",
       body?.error?.message ?? "The request failed. Try again.",
-      body?.error?.fieldErrors ?? {},
+      body?.error?.fields ?? {},
     );
   }
   return body as T;

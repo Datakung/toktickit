@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { Buffer } from "node:buffer";
 
 async function selectRequesterAndOpenForm(page: import("@playwright/test").Page) {
   await page.goto("/select-requester");
@@ -36,6 +37,11 @@ test("creates one Ticket and displays its official number", async ({ page }) => 
   });
 
   await selectRequesterAndOpenForm(page);
+  await page.getByRole("button", { name: "Create Ticket" }).click();
+  const invalidSummary = page.getByLabel(/Summary/);
+  await expect(invalidSummary).toHaveAttribute("aria-invalid", "true");
+  expect(await invalidSummary.evaluate((element) => getComputedStyle(element).borderColor))
+    .toBe("rgb(155, 28, 28)");
   await page.getByLabel(/Category/).selectOption({ index: 1 });
   await page.getByLabel(/Related System/).selectOption({ index: 1 });
   await page.getByLabel(/Requested Priority/).selectOption("MEDIUM");
@@ -54,6 +60,15 @@ test("keeps the Create Ticket form within a mobile viewport", async ({ page }) =
 
   await expect(page.getByLabel(/Category/)).toBeVisible();
   await expect(page.getByLabel(/Description/)).toBeVisible();
+  const longName = `${"accessible-filename-".repeat(10)}.png`;
+  await page.getByLabel("Choose files").setInputFiles({
+    name: longName,
+    mimeType: "image/png",
+    buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]),
+  });
+  const attachmentName = page.locator(".attachment-name");
+  await expect(attachmentName).toHaveText(longName);
+  await expect(attachmentName).toHaveAttribute("title", longName);
   const hasHorizontalOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
   );

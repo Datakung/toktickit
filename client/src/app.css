@@ -118,6 +118,11 @@ textarea:focus-visible {
   background: #fff;
 }
 
+.form-grid [aria-invalid="true"] {
+  border-color: #9b1c1c;
+  box-shadow: 0 0 0 1px #9b1c1c;
+}
+
 .form-grid textarea {
   min-height: 160px;
   resize: vertical;
@@ -178,6 +183,13 @@ textarea:focus-visible {
   padding: 10px 12px;
   border-radius: 8px;
   background: #edf5ef;
+  min-width: 0;
+}
+
+.attachment-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .attachment-list small {

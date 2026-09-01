@@ -139,8 +139,8 @@ Final `main` evidence must also show PostgreSQL readiness, migration/seed succes
 
 Issue #13 passed the following checks on 2026-09-01:
 
-- server: 9 files and 52 tests passed, including Ticket Number collision retry, exact Ticket boundaries, real PostgreSQL persistence, ownership, Attachment signatures/names, upload errors, cleanup, and concurrent five-file admission;
-- client: 4 files and 19 tests passed, including form reference data, client/server error presentation, duplicate-click prevention, official Ticket confirmation, invalid initial files, and partial upload failure without Ticket recreation;
+- server: 9 files and 53 tests passed, including Ticket Number collision retry, exact Ticket boundaries, safe malformed-JSON handling, real PostgreSQL persistence, ownership, Attachment signatures/names, upload errors, cleanup, and concurrent five-file admission;
+- client: 4 files and 20 tests passed, including contract `error.fields` parsing, required/error associations, form reference data, client/server error presentation, duplicate-click prevention, official Ticket confirmation, invalid initial files, and partial upload failure without Ticket recreation;
 - Playwright: 6 Chromium tests passed, including the Create Ticket success flow and a 390×844 no-horizontal-overflow check;
 - server and client production builds passed; and
 - Issue #13 browser coverage is intentionally a creation-only smoke flow and does not falsely mark the later full list/detail `E2E-01` as complete.

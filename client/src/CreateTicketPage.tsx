@@ -183,7 +183,7 @@ export function CreateTicketPage({ requester }: { requester: DevelopmentRequeste
       }
     } catch (error) {
       if (error instanceof ApiError) {
-        setFieldErrors(error.fieldErrors);
+        setFieldErrors(error.fields);
         setSubmitError(error.message);
       } else {
         setSubmitError("The Ticket could not be created. Try again.");
@@ -234,28 +234,28 @@ export function CreateTicketPage({ requester }: { requester: DevelopmentRequeste
         <fieldset disabled={isSubmitting || Boolean(createdTicket)}>
           <legend>Request details</legend>
           <div className="form-grid">
-            <label>Category <span aria-hidden="true">*</span>
-              <select value={fields.categoryId} onChange={(event) => setField("categoryId", event.target.value)} aria-invalid={Boolean(fieldErrors.categoryId)}>
+            <label htmlFor="ticket-category">Category <span aria-hidden="true">*</span>
+              <select id="ticket-category" required value={fields.categoryId} onChange={(event) => setField("categoryId", event.target.value)} aria-invalid={Boolean(fieldErrors.categoryId)} aria-describedby={fieldErrors.categoryId ? "ticket-category-error" : undefined}>
                 <option value="">Select a Category</option>{categories.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-              </select>{fieldErrors.categoryId && <small className="field-error">{fieldErrors.categoryId}</small>}
+              </select>{fieldErrors.categoryId && <small className="field-error" id="ticket-category-error">{fieldErrors.categoryId}</small>}
             </label>
-            <label>Related System <span aria-hidden="true">*</span>
-              <select value={fields.relatedSystemId} onChange={(event) => setField("relatedSystemId", event.target.value)} aria-invalid={Boolean(fieldErrors.relatedSystemId)}>
+            <label htmlFor="ticket-system">Related System <span aria-hidden="true">*</span>
+              <select id="ticket-system" required value={fields.relatedSystemId} onChange={(event) => setField("relatedSystemId", event.target.value)} aria-invalid={Boolean(fieldErrors.relatedSystemId)} aria-describedby={fieldErrors.relatedSystemId ? "ticket-system-error" : undefined}>
                 <option value="">Select a Related System</option>{systems.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-              </select>{fieldErrors.relatedSystemId && <small className="field-error">{fieldErrors.relatedSystemId}</small>}
+              </select>{fieldErrors.relatedSystemId && <small className="field-error" id="ticket-system-error">{fieldErrors.relatedSystemId}</small>}
             </label>
-            <label>Requested Priority <span aria-hidden="true">*</span>
-              <select value={fields.requestedPriority} onChange={(event) => setField("requestedPriority", event.target.value)} aria-invalid={Boolean(fieldErrors.requestedPriority)}>
+            <label htmlFor="ticket-priority">Requested Priority <span aria-hidden="true">*</span>
+              <select id="ticket-priority" required value={fields.requestedPriority} onChange={(event) => setField("requestedPriority", event.target.value)} aria-invalid={Boolean(fieldErrors.requestedPriority)} aria-describedby={fieldErrors.requestedPriority ? "ticket-priority-error" : undefined}>
                 <option value="">Select a Priority</option><option value="LOW">Low</option><option value="MEDIUM">Medium</option><option value="HIGH">High</option>
-              </select>{fieldErrors.requestedPriority && <small className="field-error">{fieldErrors.requestedPriority}</small>}
+              </select>{fieldErrors.requestedPriority && <small className="field-error" id="ticket-priority-error">{fieldErrors.requestedPriority}</small>}
             </label>
-            <label className="full-width">Summary <span aria-hidden="true">*</span>
-              <input value={fields.summary} maxLength={120} onChange={(event) => setField("summary", event.target.value)} aria-invalid={Boolean(fieldErrors.summary)} />
-              <small>{fields.summary.trim().length}/120 characters</small>{fieldErrors.summary && <small className="field-error">{fieldErrors.summary}</small>}
+            <label className="full-width" htmlFor="ticket-summary">Summary <span aria-hidden="true">*</span>
+              <input id="ticket-summary" required value={fields.summary} maxLength={120} onChange={(event) => setField("summary", event.target.value)} aria-invalid={Boolean(fieldErrors.summary)} aria-describedby={`ticket-summary-count${fieldErrors.summary ? " ticket-summary-error" : ""}`} />
+              <small id="ticket-summary-count">{fields.summary.trim().length}/120 characters</small>{fieldErrors.summary && <small className="field-error" id="ticket-summary-error">{fieldErrors.summary}</small>}
             </label>
-            <label className="full-width">Description <span aria-hidden="true">*</span>
-              <textarea value={fields.description} maxLength={4000} rows={8} onChange={(event) => setField("description", event.target.value)} aria-invalid={Boolean(fieldErrors.description)} />
-              <small>{fields.description.trim().length}/4000 characters</small>{fieldErrors.description && <small className="field-error">{fieldErrors.description}</small>}
+            <label className="full-width" htmlFor="ticket-description">Description <span aria-hidden="true">*</span>
+              <textarea id="ticket-description" required value={fields.description} maxLength={4000} rows={8} onChange={(event) => setField("description", event.target.value)} aria-invalid={Boolean(fieldErrors.description)} aria-describedby={`ticket-description-count${fieldErrors.description ? " ticket-description-error" : ""}`} />
+              <small id="ticket-description-count">{fields.description.trim().length}/4000 characters</small>{fieldErrors.description && <small className="field-error" id="ticket-description-error">{fieldErrors.description}</small>}
             </label>
           </div>
         </fieldset>
@@ -266,7 +266,7 @@ export function CreateTicketPage({ requester }: { requester: DevelopmentRequeste
           <label className="file-picker">Choose files<input type="file" multiple accept=".jpg,.jpeg,.png,.webp,.pdf" onChange={(event) => void selectFiles(event)} /></label>
           {selectionError && <p className="field-error" role="alert">{selectionError}</p>}
           {attachments.length > 0 && <ul className="attachment-list">{attachments.map((item, index) => <li key={`${item.file.name}-${index}`}>
-            <span>{item.file.name}</span><span>{item.state}</span>
+            <span className="attachment-name" title={item.file.name}>{item.file.name}</span><span>{item.state}</span>
             {item.error && <small className="field-error">{item.error}</small>}
             {item.state === "pending" && <button type="button" className="text-button" onClick={() => setAttachments((current) => current.filter((_, itemIndex) => itemIndex !== index))}>Remove</button>}
           </li>)}</ul>}
