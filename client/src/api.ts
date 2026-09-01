@@ -48,6 +48,54 @@ export interface AttachmentMetadata {
   createdAt: string;
 }
 
+export type TicketStatus = "NEW";
+export type TicketListSort = "updatedAt" | "createdAt" | "ticketNumber";
+export type SortDirection = "asc" | "desc";
+
+export interface TicketListItem {
+  id: number;
+  ticketNumber: string;
+  summary: string;
+  requestedPriority: RequestedPriority;
+  itPriority: RequestedPriority | null;
+  status: TicketStatus;
+  createdAt: string;
+  updatedAt: string;
+  category: Category;
+  relatedSystem: RelatedSystem;
+}
+
+export interface TicketListQuery {
+  search: string;
+  categoryId: number | null;
+  relatedSystemId: number | null;
+  requestedPriority: RequestedPriority | null;
+  status: TicketStatus | null;
+  sort: TicketListSort;
+  direction: SortDirection;
+  page: number;
+  pageSize: 10 | 20 | 50;
+}
+
+export interface TicketListResponse {
+  data: TicketListItem[];
+  meta: {
+    page: number;
+    pageSize: 10 | 20 | 50;
+    totalItems: number;
+    totalPages: number;
+    search: string;
+    filters: {
+      categoryId: number | null;
+      relatedSystemId: number | null;
+      requestedPriority: RequestedPriority | null;
+      status: TicketStatus | null;
+    };
+    sort: TicketListSort;
+    direction: SortDirection;
+  };
+}
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -161,4 +209,30 @@ export async function uploadTicketAttachment(
   });
   const body = await parseApiResponse<{ data: AttachmentMetadata }>(response);
   return body.data;
+}
+
+export async function getTickets(
+  requesterId: number,
+  query: TicketListQuery,
+): Promise<TicketListResponse> {
+  const parameters = new URLSearchParams({
+    sort: query.sort,
+    direction: query.direction,
+    page: String(query.page),
+    pageSize: String(query.pageSize),
+  });
+  if (query.search) parameters.set("search", query.search);
+  if (query.categoryId !== null) parameters.set("categoryId", String(query.categoryId));
+  if (query.relatedSystemId !== null) {
+    parameters.set("relatedSystemId", String(query.relatedSystemId));
+  }
+  if (query.requestedPriority !== null) {
+    parameters.set("requestedPriority", query.requestedPriority);
+  }
+  if (query.status !== null) parameters.set("status", query.status);
+
+  const response = await fetch(`${API_URL}/api/tickets?${parameters.toString()}`, {
+    headers: developmentRequesterHeaders(requesterId),
+  });
+  return parseApiResponse<TicketListResponse>(response);
 }

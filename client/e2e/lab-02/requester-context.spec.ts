@@ -16,7 +16,7 @@ test("selects and changes the Development Requester context", async ({ page }) =
 
   await expect(page).toHaveURL(/\/tickets$/);
   await expect(
-    page.getByRole("heading", { name: "Requester context ready" }),
+    page.getByRole("heading", { name: "My Tickets" }),
   ).toBeVisible();
   await expect(page.getByText("Kanya Srisuk", { exact: true })).toHaveCount(2);
   await expect
@@ -31,13 +31,13 @@ test("selects and changes the Development Requester context", async ({ page }) =
   await expect(page).toHaveURL(/\/select-requester$/);
   await expect(requesterSelect).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Requester context ready" }),
+    page.getByRole("heading", { name: "My Tickets" }),
   ).toBeHidden();
 
   await page.goForward();
   await expect(page).toHaveURL(/\/tickets$/);
   await expect(
-    page.getByRole("heading", { name: "Requester context ready" }),
+    page.getByRole("heading", { name: "My Tickets" }),
   ).toBeVisible();
 
   await page.getByRole("button", { name: "Change Requester" }).click();
