@@ -56,7 +56,7 @@ model Ticket {
   categoryId        Int
   relatedSystemId   Int
   summary           String             @db.VarChar(120)
-  description       String             @db.VarChar(2000)
+  description       String             @db.VarChar(4000)
   requestedPriority RequestedPriority
   itPriority        RequestedPriority?
   status            TicketStatus       @default(NEW)

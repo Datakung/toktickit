@@ -9,6 +9,7 @@ dist/
 build/
 playwright-report/
 test-results/
+server/uploads/
 # prisma
 server/prisma/*.db
 # logs & OS

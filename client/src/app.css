@@ -21,7 +21,9 @@ body {
 }
 
 button,
-select {
+select,
+input,
+textarea {
   font: inherit;
 }
 
@@ -33,8 +35,187 @@ select {
 
 button:focus-visible,
 a:focus-visible,
-select:focus-visible {
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
   outline: 3px solid #f0b429;
+}
+
+.ticket-page {
+  max-width: 980px;
+}
+
+.page-intro {
+  max-width: 720px;
+  margin: 16px 0 28px;
+  color: #50665b;
+  line-height: 1.6;
+}
+
+.ticket-form {
+  display: grid;
+  gap: 22px;
+}
+
+.ticket-form fieldset {
+  margin: 0;
+  padding: 24px;
+  border: 1px solid #bdd0c4;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.ticket-form legend {
+  padding: 0 8px;
+  color: #173f2d;
+  font-size: 1.15rem;
+  font-weight: 750;
+}
+
+.context-grid,
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.context-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.context-grid div {
+  display: grid;
+  gap: 4px;
+}
+
+.context-grid span,
+.optional-label {
+  color: #61756a;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.form-grid label {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  font-weight: 700;
+}
+
+.form-grid label > span {
+  color: #9b1c1c;
+}
+
+.form-grid select,
+.form-grid input,
+.form-grid textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #7e9b89;
+  border-radius: 8px;
+  color: #18352a;
+  background: #fff;
+}
+
+.form-grid [aria-invalid="true"] {
+  border-color: #9b1c1c;
+  box-shadow: 0 0 0 1px #9b1c1c;
+}
+
+.form-grid textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.form-grid small:not(.field-error) {
+  color: #61756a;
+  font-weight: 500;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.field-error {
+  color: #9b1c1c;
+  font-weight: 650;
+}
+
+.file-picker {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 9px 16px;
+  border: 1px solid #17633f;
+  border-radius: 8px;
+  color: #17633f;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.file-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.file-picker:focus-within {
+  outline: 3px solid #f0b429;
+  outline-offset: 3px;
+}
+
+.attachment-list {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attachment-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #edf5ef;
+  min-width: 0;
+}
+
+.attachment-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.attachment-list small {
+  grid-column: 1 / -1;
+}
+
+.success-panel {
+  margin: 22px 0;
+  padding: 22px;
+  border: 1px solid #7ab893;
+  border-radius: 12px;
+  background: #e3f3e9;
+}
+
+.success-panel h2 {
+  margin-bottom: 8px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.success-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.submit-ticket {
+  justify-self: start;
+  min-width: 170px;
 }
 
 .selection-page {
@@ -309,5 +490,23 @@ h2 {
     grid-row: 1;
     justify-items: end;
     text-align: right;
+  }
+
+  .app-content {
+    width: min(100% - 32px, 1100px);
+    padding: 36px 0;
+  }
+
+  .context-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .ticket-form fieldset {
+    padding: 18px;
   }
 }
