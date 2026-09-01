@@ -1,7 +1,7 @@
 import { readdir, rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import request from "supertest";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { seedDatabase } from "../../prisma/seed.js";
 import { app } from "../../src/app.js";
 import { getPrisma } from "../../src/prisma.js";
@@ -150,6 +150,29 @@ describe("POST /api/tickets/:ticketId/attachments", () => {
       .filter((entry) => entry.isFile()).map((entry) => entry.name);
     expect(filesAfter).toHaveLength(filesBefore.length + 1);
     await expect(readdir(temporaryRoot)).resolves.toEqual([]);
+  });
+
+  it("returns a safe unexpected upload failure without leaving an orphan", async () => {
+    const rowsBefore = await prisma.attachment.count({ where: { ticketId } });
+    const failure = vi.spyOn(prisma, "$transaction").mockRejectedValueOnce(
+      new Error("private database and filesystem details"),
+    );
+    const response = await request(app)
+      .post(`/api/tickets/${ticketId}/attachments`)
+      .set("X-Development-Requester-Id", String(requesterId))
+      .attach("file", png, { filename: "failure.png", contentType: "image/png" });
+    failure.mockRestore();
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toEqual({
+      code: "ATTACHMENT_UPLOAD_FAILED",
+      message: "The file could not be uploaded. Try again.",
+    });
+    expect(response.text).not.toMatch(/private|database|filesystem|stack|node_modules|uploads/i);
+    await expect(prisma.attachment.count({ where: { ticketId } })).resolves.toBe(rowsBefore);
+    await expect(prisma.attachment.count({
+      where: { ticketId, originalName: "failure.png" },
+    })).resolves.toBe(0);
   });
 });
 

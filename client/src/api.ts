@@ -46,6 +46,10 @@ export interface AttachmentMetadata {
   mimeType: string;
   sizeBytes: number;
   createdAt: string;
+  removed: boolean;
+  removedAt: string | null;
+  removalReason: string | null;
+  removedByRequesterId: number | null;
 }
 
 export type TicketStatus = "NEW";
@@ -63,6 +67,18 @@ export interface TicketListItem {
   updatedAt: string;
   category: Category;
   relatedSystem: RelatedSystem;
+}
+
+export interface TicketDetail extends TicketListItem {
+  description: string;
+  requester: DevelopmentRequester;
+  attachments: AttachmentMetadata[];
+}
+
+export interface AttachmentContent {
+  blob: Blob;
+  filename: string;
+  mimeType: string;
 }
 
 export interface TicketListQuery {
@@ -235,4 +251,75 @@ export async function getTickets(
     headers: developmentRequesterHeaders(requesterId),
   });
   return parseApiResponse<TicketListResponse>(response);
+}
+
+export async function getTicket(
+  requesterId: number,
+  ticketId: string | number,
+): Promise<TicketDetail> {
+  const response = await fetch(`${API_URL}/api/tickets/${encodeURIComponent(String(ticketId))}`, {
+    headers: developmentRequesterHeaders(requesterId),
+  });
+  const body = await parseApiResponse<{ data: TicketDetail }>(response);
+  return body.data;
+}
+
+export async function getTicketAttachments(
+  requesterId: number,
+  ticketId: number,
+): Promise<AttachmentMetadata[]> {
+  const response = await fetch(`${API_URL}/api/tickets/${ticketId}/attachments`, {
+    headers: developmentRequesterHeaders(requesterId),
+  });
+  const body = await parseApiResponse<{ data: AttachmentMetadata[] }>(response);
+  return body.data;
+}
+
+function responseFilename(response: Response): string {
+  const header = response.headers.get("Content-Disposition") ?? "";
+  const encoded = header.match(/filename\*=UTF-8''([^;]+)/i)?.[1];
+  if (encoded) {
+    try {
+      return decodeURIComponent(encoded);
+    } catch {
+      // Continue to the safe ASCII fallback supplied by the server.
+    }
+  }
+  return header.match(/filename="([^"]+)"/i)?.[1] ?? "attachment";
+}
+
+export async function getAttachmentContent(
+  requesterId: number,
+  ticketId: number,
+  attachmentId: number,
+  disposition: "inline" | "attachment",
+): Promise<AttachmentContent> {
+  const response = await fetch(
+    `${API_URL}/api/tickets/${ticketId}/attachments/${attachmentId}/download?disposition=${disposition}`,
+    { headers: developmentRequesterHeaders(requesterId) },
+  );
+  if (!response.ok) await parseApiResponse<never>(response);
+  return {
+    blob: await response.blob(),
+    filename: responseFilename(response),
+    mimeType: response.headers.get("Content-Type")?.split(";")[0] ?? "application/octet-stream",
+  };
+}
+
+export async function removeTicketAttachment(
+  requesterId: number,
+  ticketId: number,
+  attachmentId: number,
+  reason: string,
+): Promise<AttachmentMetadata> {
+  const response = await fetch(`${API_URL}/api/tickets/${ticketId}/attachments/${attachmentId}`, {
+    method: "DELETE",
+    headers: {
+      ...developmentRequesterHeaders(requesterId),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ reason }),
+  });
+  const body = await parseApiResponse<{ data: AttachmentMetadata }>(response);
+  return body.data;
 }

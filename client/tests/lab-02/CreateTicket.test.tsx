@@ -161,6 +161,7 @@ describe("Create Ticket", () => {
       .mockResolvedValueOnce({
         id: 1, ticketId: 43, originalName: "one.png", mimeType: "image/png",
         sizeBytes: 9, createdAt: "2026-09-01T03:00:01.000Z",
+        removed: false, removedAt: null, removalReason: null, removedByRequesterId: null,
       })
       .mockRejectedValueOnce(new api.ApiError(500, "ATTACHMENT_UPLOAD_FAILED", "Upload failed."));
     const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);

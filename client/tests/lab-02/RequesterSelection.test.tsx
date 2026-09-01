@@ -138,6 +138,36 @@ describe("Development Requester selection", () => {
     ).toBeInTheDocument();
   });
 
+  it("supports a direct owned Ticket Detail route and clears it on Requester change", async () => {
+    sessionStorage.setItem(DEVELOPMENT_REQUESTER_STORAGE_KEY, "1");
+    window.history.replaceState({}, "", "/tickets/41");
+    vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue(requesters);
+    vi.spyOn(api, "getTicket").mockResolvedValue({
+      id: 41,
+      ticketNumber: "TKT-20260901-ABC123",
+      requester: requesters[0],
+      category: { id: 1, name: "Hardware" },
+      relatedSystem: { id: 2, name: "Network and VPN" },
+      summary: "Owned Ticket Detail",
+      description: "Only the selected Requester can read this Ticket.",
+      requestedPriority: "HIGH",
+      itPriority: null,
+      status: "NEW",
+      createdAt: "2026-09-01T03:00:00.000Z",
+      updatedAt: "2026-09-01T04:00:00.000Z",
+      attachments: [],
+    });
+    const user = userEvent.setup();
+
+    render(<App />);
+    expect(await screen.findByRole("heading", { name: "TKT-20260901-ABC123" })).toBeVisible();
+    await user.click(screen.getByRole("button", { name: "Change Requester" }));
+
+    expect(window.location.pathname).toBe("/select-requester");
+    expect(screen.queryByText("Owned Ticket Detail")).not.toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: /Development Requester/i })).toBeVisible();
+  });
+
   it("keeps browser route changes and the rendered screen synchronized", async () => {
     vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue(requesters);
     const user = userEvent.setup();

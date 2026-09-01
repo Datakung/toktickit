@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import {
   getDevelopmentRequesters,
   type DevelopmentRequester,
@@ -6,6 +6,7 @@ import {
 import "./app.css";
 import { CreateTicketPage } from "./CreateTicketPage.js";
 import { MyTicketsPage } from "./MyTicketsPage.js";
+import { TicketDetailPage } from "./TicketDetailPage.js";
 
 export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
   "toktickit.developmentRequesterId";
@@ -13,7 +14,12 @@ export const DEVELOPMENT_REQUESTER_STORAGE_KEY =
 type LoadState = "loading" | "ready" | "empty" | "error";
 
 function isRequesterPath(path: string) {
-  return path === "/tickets" || path === "/tickets/new";
+  return path === "/tickets" || path === "/tickets/new" || /^\/tickets\/[^/]+$/.test(path);
+}
+
+function ticketIdFromPath(path: string) {
+  if (path === "/tickets" || path === "/tickets/new") return null;
+  return path.match(/^\/tickets\/([^/]+)$/)?.[1] ?? null;
 }
 
 function RequesterSelection({
@@ -122,6 +128,7 @@ function AppShell({
   onChangeRequester: () => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const ticketId = ticketIdFromPath(currentPath);
 
   function followAppLink(event: MouseEvent<HTMLAnchorElement>, path: string) {
     event.preventDefault();
@@ -181,6 +188,13 @@ function AppShell({
       <main className="app-content">
         {currentPath === "/tickets/new" ? (
           <CreateTicketPage requester={requester} />
+        ) : ticketId ? (
+          <TicketDetailPage
+            key={`${requester.id}-${ticketId}`}
+            requester={requester}
+            ticketId={ticketId}
+            onNavigate={onNavigate}
+          />
         ) : (
           <MyTicketsPage key={requester.id} requester={requester} onNavigate={onNavigate} />
         )}
@@ -196,6 +210,7 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [currentRequester, setCurrentRequester] =
     useState<DevelopmentRequester | null>(null);
+  const requesterLoadGeneration = useRef(0);
 
   const navigate = useCallback((path: string, replace = false) => {
     if (window.location.pathname !== path) {
@@ -205,11 +220,13 @@ export default function App() {
   }, []);
 
   const loadRequesters = useCallback(async () => {
+    const generation = ++requesterLoadGeneration.current;
     setLoadState("loading");
     setRequesters([]);
 
     try {
       const activeRequesters = await getDevelopmentRequesters();
+      if (generation !== requesterLoadGeneration.current) return;
       setRequesters(activeRequesters);
 
       if (activeRequesters.length === 0) {
@@ -251,6 +268,7 @@ export default function App() {
 
       setLoadState("ready");
     } catch {
+      if (generation !== requesterLoadGeneration.current) return;
       setRequesters([]);
       setSelectedId("");
       setCurrentRequester(null);

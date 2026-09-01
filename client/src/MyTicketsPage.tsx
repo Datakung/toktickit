@@ -123,6 +123,11 @@ export function MyTicketsPage({
     onNavigate("/tickets/new");
   }
 
+  function followTicket(event: MouseEvent<HTMLAnchorElement>, ticketId: number) {
+    event.preventDefault();
+    onNavigate(`/tickets/${ticketId}`);
+  }
+
   const hasActiveQuery = !isDefaultQuery(query);
   const totalItems = result?.meta.totalItems ?? 0;
 
@@ -294,7 +299,7 @@ export function MyTicketsPage({
               </tr></thead>
               <tbody>{result.data.map((ticket) => (
                 <tr key={ticket.id}>
-                  <td><a href={`/tickets/${ticket.id}`}>{ticket.ticketNumber}</a></td>
+                  <td><a href={`/tickets/${ticket.id}`} onClick={(event) => followTicket(event, ticket.id)}>{ticket.ticketNumber}</a></td>
                   <td>{ticket.summary}</td>
                   <td>{ticket.category.name}</td>
                   <td>{ticket.relatedSystem.name}</td>
@@ -322,7 +327,7 @@ export function MyTicketsPage({
                   <div><dt>Priority</dt><dd><span className={`badge priority-${ticket.requestedPriority.toLowerCase()}`}>{labelPriority(ticket.requestedPriority)}</span></dd></div>
                   <div><dt>Updated</dt><dd>{formatDate(ticket.updatedAt)}</dd></div>
                 </dl>
-                <a className="secondary-button button-link" href={`/tickets/${ticket.id}`}>
+                <a className="secondary-button button-link" href={`/tickets/${ticket.id}`} onClick={(event) => followTicket(event, ticket.id)}>
                   View Ticket {ticket.ticketNumber}
                 </a>
               </article>
