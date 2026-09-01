@@ -1,12 +1,13 @@
 # TokTickIT
 
 TokTickIT is an IT service desk application developed for CPE334. Lab 2 extends
-the verified Lab 1 vertical slice with the data foundation and temporary
-Development Requester context needed by the Requester Ticketing MVP.
+the verified Lab 1 vertical slice with the data foundation, temporary
+Development Requester context, and Ticket-creation flow needed by the
+Requester Ticketing MVP.
 
 ## Current Lab 2 increment
 
-Issue #12 currently provides:
+Through Issue #13, the current increment provides:
 
 1. a PostgreSQL/Prisma foundation for Requesters, Categories, Related Systems,
    Tickets, and Attachments;
@@ -15,11 +16,15 @@ Issue #12 currently provides:
 4. reusable validation for the temporary `X-Development-Requester-Id` context;
 5. requester selection stored in `sessionStorage`, an application shell, and a
    **Change Requester** action; and
-6. Vitest/Supertest component and API tests plus a real Chromium Playwright
-   smoke flow.
+6. a responsive, validated Create Ticket form backed by `POST /api/tickets`;
+7. backend-generated official Ticket Numbers, `NEW` status, and Requester
+   ownership derived only from the validated development header;
+8. optional initial JPEG, PNG, WEBP, and PDF uploads with content validation,
+   safe filenames, a 5 MiB/file limit, and an atomic five-file limit; and
+9. Vitest/Supertest component and API tests plus Chromium Playwright flows.
 
-Ticket creation, My Tickets, Ticket Detail, and Attachment behavior are owned by
-later Lab 2 Issues and are not implemented on this branch.
+My Tickets, Ticket Detail, and the later Attachment download/removal lifecycle
+are owned by Issues #14 and #15 and are not implemented on this branch.
 
 ## Lab 1 goal
 
@@ -158,7 +163,8 @@ npm run dev
 Open `http://localhost:5173` in a browser. Choose an active Development
 Requester and select **Continue**. The application stores only that temporary
 development selection in the current browser tab, opens the requester shell,
-and allows it to be cleared with **Change Requester**. This is development
+and allows it to be cleared with **Change Requester**. Select **Create Ticket**
+to submit a validated request and optional initial files. This is development
 context for Lab 2, not authentication.
 
 ## API endpoints
@@ -169,6 +175,8 @@ context for Lab 2, not authentication.
 | `GET` | `/api/categories` | Returns active category IDs and names from PostgreSQL in ID order |
 | `GET` | `/api/related-systems` | Returns active related systems in name order |
 | `GET` | `/api/development-requesters` | Returns active Development Requesters in display-name order |
+| `POST` | `/api/tickets` | Creates one validated Ticket for the selected Development Requester |
+| `POST` | `/api/tickets/:ticketId/attachments` | Uploads one validated owned-Ticket Attachment; field name is `file` |
 
 ## Database commands
 

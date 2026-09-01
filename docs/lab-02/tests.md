@@ -2,7 +2,7 @@
 
 **Planning status:** Created before Lab 2 product implementation.
 
-**Current status:** Issue #12 foundation checks have passed. Later feature rows remain `Planned` until their owning Issue supplies real tests and results.
+**Current status:** Issue #13 Ticket creation and initial-Attachment checks pass locally. Later feature rows remain `Planned` until their owning Issue supplies real tests and results.
 
 ## 1. Test Strategy
 
@@ -21,26 +21,26 @@ For each feature branch, write or activate the planned failing test first where 
 
 | Test ID | Type | Requirement / AC | What it tests | Expected result | Automated test file | Status |
 |---|---|---|---|---|---|---|
-| UNIT-01 | Unit | BR-06, AC-07 | Ticket Number generation format and collision retry | Approved format; collision regenerates; result is unique | `server/tests/lab-02/ticket-number.unit.test.ts` | Planned |
-| UNIT-02 | Unit | BR-08–BR-12, AC-08, AC-09 | Trim, required fields, length boundaries, enum and ID validation | Exact normalized values or field errors at boundaries | `server/tests/lab-02/ticket-validation.unit.test.ts` | Planned |
-| UNIT-03 | Unit | BR-23–BR-25, BR-36, AC-11, AC-23 | Exact extension/MIME/signature matrix, deterministic filename sanitation, size, and active-count rules | Supported triples and safe names accepted; mismatches, path/control/empty/overlong names, type/size/count rejected or normalized exactly | `server/tests/lab-02/attachment-validation.unit.test.ts` | Planned |
+| UNIT-01 | Unit | BR-06, AC-07 | Ticket Number generation format and collision retry | Approved format; collision regenerates; result is unique | `server/tests/lab-02/ticket-number.unit.test.ts` | Passed in Issue #13 |
+| UNIT-02 | Unit | BR-08–BR-12, AC-08, AC-09 | Trim, required fields, length boundaries, enum and ID validation | Exact normalized values or field errors at boundaries | `server/tests/lab-02/ticket-validation.unit.test.ts` | Passed in Issue #13 |
+| UNIT-03 | Unit | BR-23–BR-25, BR-36, AC-11, AC-23 | Exact extension/MIME/signature matrix and deterministic filename sanitation | Supported triples and safe names accepted; mismatches and path/control/empty/overlong names rejected or normalized exactly | `server/tests/lab-02/attachment-validation.unit.test.ts` | Passed in Issue #13; size/count are covered at the API boundary |
 | API-01 | API/integration | FR-01, FR-04, AC-01, AC-05 | Active Requesters, Categories, and Related Systems | `200`; only active seeded rows in deterministic order | `server/tests/lab-02/requester-context.api.test.ts` | Passed in Issue #12 |
 | API-02 | API/integration | BR-02, BR-04, AC-02, AC-03, AC-04 | Missing/malformed/out-of-range/inactive Requester context | Documented `400`/`403`; oversized values rejected before Prisma; active context accepted | `server/tests/lab-02/requester-context.api.test.ts` | Passed in Issue #12 and re-review |
-| API-03 | API/integration | FR-05–FR-07, AC-06, AC-07 | Create valid Ticket for selected Requester | `201`; one saved row; number, owner, `NEW`, timestamps returned | `server/tests/lab-02/create-ticket.api.test.ts` | Planned |
-| API-04 | API/integration | BR-09–BR-12, AC-09 | Direct invalid Ticket requests and boundary values | `400` field errors; no Ticket saved | `server/tests/lab-02/create-ticket.api.test.ts` | Planned |
+| API-03 | API/integration | FR-05–FR-07, AC-06, AC-07 | Create valid Ticket for selected Requester | `201`; one saved row; number, owner, `NEW`, timestamps returned | `server/tests/lab-02/create-ticket.api.test.ts` | Passed in Issue #13 |
+| API-04 | API/integration | BR-09–BR-12, AC-09 | Direct invalid Ticket requests and boundary values | `400` field errors; no Ticket saved | `server/tests/lab-02/create-ticket.api.test.ts` | Passed in Issue #13 |
 | API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, combined search/filters/sort/page, invalid query | Only owned matches; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
 | API-06 | API/integration | FR-11, FR-17, AC-20, AC-21 | Owned Ticket Detail versus missing/non-owned Ticket | Owned `200`; missing/non-owned identical safe `404` | `server/tests/lab-02/ticket-detail.api.test.ts` | Planned |
-| API-07 | API/integration | FR-12, FR-13, BR-23, BR-36, AC-22, AC-23 | Metadata and valid/invalid existing-Ticket upload | Valid `201`; exact sanitized display/stored names; mismatch `415`; size `413`; count `409`; no invalid row/file | `server/tests/lab-02/attachments.api.test.ts` | Planned |
+| API-07 | API/integration | FR-12, FR-13, BR-23, BR-36, AC-22, AC-23 | Metadata and valid/invalid existing-Ticket upload | Valid `201`; exact sanitized display name; stored name hidden; mismatch `415`; size `413`; ownership `404`; count `409`; no invalid row/file | `server/tests/lab-02/attachment-upload.api.test.ts` | Initial-upload portion passed in Issue #13; later lifecycle remains Issue #15 |
 | API-08 | API/integration | FR-14, FR-17, BR-38, AC-24, AC-25 | Active inline/download content and missing/non-owned content | Both dispositions return safe headers; protected requests `404` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
 | API-09 | API/integration | FR-15, FR-16, AC-26–AC-28 | Valid/invalid soft removal, retained metadata, blocked content, repeat | Metadata recorded; content `404`; invalid `400`; repeat `409` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
-| API-10 | API/integration | BR-37, AC-33 | Four active Attachments plus two simultaneous valid uploads to one Ticket | Exactly one `201`, one `409`, five active rows/files, and no `.tmp` or final orphan | `server/tests/lab-02/attachments-concurrency.api.test.ts` | Planned |
+| API-10 | API/integration | BR-37, AC-33 | Four active Attachments plus two simultaneous valid uploads to one Ticket | Exactly one `201`, one `409`, five active rows, one final file, and no `.tmp` or final orphan | `server/tests/lab-02/attachment-upload.api.test.ts` | Passed in Issue #13 |
 | API-11 | API/integration | BR-39, AC-34 | Injected unexpected failure for every required API capability | Exact capability-specific safe `500`; no stack, SQL, path/name, credentials, or cross-Requester data | `server/tests/lab-02/unexpected-errors.api.test.ts` | Planned |
 | UI-01 | UI component | FR-01–FR-03, AC-01–AC-04 | Requester selector loading/ready/empty/failure, Continue, session, Change, Back/Forward | Correct states and session; route and rendered screen stay synchronized; old requester state cleared | `client/tests/lab-02/RequesterSelection.test.tsx` | Passed in Issue #12 and re-review |
 | STYLE-00 | UI style | FR-18, AC-29, AC-30 | Requester controls, component hierarchy, real navigation, mobile disclosure, touch targets, and keyboard focus | Links and active marker; `aria-expanded`/`aria-controls`; controls at least 44 px; visible 3 px focus outline | `client/tests/lab-02/ui-foundation-style.test.tsx`, `client/e2e/lab-02/requester-context-responsive.spec.ts` | Passed in Issue #12 and re-review |
 | RESP-00 | Responsive/visual | FR-18, AC-29, AC-30 | Requester Selection, shell, and navigation at 1440×900, 820×1180, and 390×844 | Required controls visible; mobile menu operates; no horizontal overflow at all viewports | `client/e2e/lab-02/requester-context-responsive.spec.ts` | Passed in Issue #12 and re-review |
-| UI-02 | UI component | FR-04–FR-07, AC-05, AC-08, AC-10 | Create form reference loading, validation, busy button, duplicate click | Active data shown; field errors; one API call while pending | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
-| UI-03 | UI component | FR-05–FR-08, AC-06, AC-07, AC-31 | Create success and pre-create API failure | Official number/next actions; failure preserves values | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
-| UI-04 | UI component | BR-23–BR-26, AC-11, AC-12 | Mixed initial files and partial upload failure | Invalid rejected; valid retained; Ticket not recreated; retry offered | `client/tests/lab-02/CreateTicket.test.tsx` | Planned |
+| UI-02 | UI component | FR-04–FR-07, AC-05, AC-08, AC-10 | Create form reference loading, validation, busy button, duplicate click | Active data shown; field errors; one API call while pending | `client/tests/lab-02/CreateTicket.test.tsx` | Passed in Issue #13 |
+| UI-03 | UI component | FR-05–FR-08, AC-06, AC-07, AC-31 | Create success and pre-create API failure | Official number shown; safe failure preserves values and permits retry | `client/tests/lab-02/CreateTicket.test.tsx` | Passed in Issue #13 |
+| UI-04 | UI component | BR-23–BR-26, AC-11, AC-12 | Mixed initial files and partial upload failure | Detectable invalid rejected; Ticket not recreated; per-file success/failure retained for later retry | `client/tests/lab-02/CreateTicket.test.tsx` | Initial-upload portion passed in Issue #13 |
 | UI-05 | UI component | FR-09, FR-10, AC-13–AC-19 | Owned My Tickets controls and all list states | Correct query, list, pagination, empty/no-results/failure and switch | `client/tests/lab-02/MyTickets.test.tsx` | Planned |
 | UI-06 | UI component | FR-11, AC-20, AC-21 | Read-only owned detail and safe unavailable state | Approved fields render read-only; no protected data on error | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Planned |
 | UI-07 | UI component | FR-12–FR-16, BR-38, AC-22–AC-28 | Attachment list/upload, authenticated Blob preview/download, removal dialog/states | Header and disposition sent; image/PDF/download behavior and object-URL cleanup; validation/busy/removed states | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
@@ -137,6 +137,15 @@ Final `main` evidence must also show PostgreSQL readiness, migration/seed succes
 
 ## 6. Current Results
 
+Issue #13 passed the following checks on 2026-09-01:
+
+- server: 9 files and 52 tests passed, including Ticket Number collision retry, exact Ticket boundaries, real PostgreSQL persistence, ownership, Attachment signatures/names, upload errors, cleanup, and concurrent five-file admission;
+- client: 4 files and 19 tests passed, including form reference data, client/server error presentation, duplicate-click prevention, official Ticket confirmation, invalid initial files, and partial upload failure without Ticket recreation;
+- Playwright: 6 Chromium tests passed, including the Create Ticket success flow and a 390×844 no-horizontal-overflow check;
+- server and client production builds passed; and
+- Issue #13 browser coverage is intentionally a creation-only smoke flow and does not falsely mark the later full list/detail `E2E-01` as complete.
+- manual OperaGX verification created `TKT-20260901-M7DAQV` for the selected Requester and showed one initial PNG as `succeeded`; the observed Thai-locale Buddhist year was then normalized to an explicit Gregorian display with a regression assertion.
+
 Issue #12 passed the following checks on 2026-08-31:
 
 - server: 4 files and 21 tests passed, including both Lab 1 regressions, five isolation-guard tests, and oversized-header boundaries;
@@ -148,7 +157,7 @@ Issue #12 passed the following checks on 2026-08-31:
 - the development reference-data snapshot was identical before and after the isolated run; missing and same-as-development test targets both failed before test loading; and
 - production dependency audit (`npm audit --omit=dev`) reported zero vulnerabilities.
 
-The development-only Vitest 2 dependency chain reports advisories whose automated fix requires a major Vitest 4 upgrade. That unrelated upgrade is deferred for a separately reviewed dependency task; no vulnerable package is part of the production dependency tree. Later feature rows remain `Planned`, and Issue #16 plus final `main` will provide the complete results.
+The development-only Vitest 2 dependency chain reports advisories whose automated fix requires a major Vitest 4 upgrade. That unrelated upgrade is deferred for a separately reviewed dependency task. Later feature rows remain `Planned`, and Issue #16 plus final `main` will provide the complete results.
 
 No standalone pure unit test applies to Issue #12: its rules cross the Prisma/API or React/browser boundaries and are covered by API/integration, component, style, responsive, and E2E tests. Pure Ticket and Attachment helpers remain assigned to their later owning Issues.
 
