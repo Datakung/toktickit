@@ -2,7 +2,7 @@
 
 **Planning status:** Created before Lab 2 product implementation.
 
-**Current status:** Issue #13 Ticket creation and initial-Attachment checks pass locally. Later feature rows remain `Planned` until their owning Issue supplies real tests and results.
+**Current status:** Issue #14 requester-owned My Tickets API, component, and responsive checks pass locally. Later feature rows remain `Planned` until their owning Issue supplies real tests and results.
 
 ## 1. Test Strategy
 
@@ -28,7 +28,7 @@ For each feature branch, write or activate the planned failing test first where 
 | API-02 | API/integration | BR-02, BR-04, AC-02, AC-03, AC-04 | Missing/malformed/out-of-range/inactive Requester context | Documented `400`/`403`; oversized values rejected before Prisma; active context accepted | `server/tests/lab-02/requester-context.api.test.ts` | Passed in Issue #12 and re-review |
 | API-03 | API/integration | FR-05–FR-07, AC-06, AC-07 | Create valid Ticket for selected Requester | `201`; one saved row; number, owner, `NEW`, timestamps returned | `server/tests/lab-02/create-ticket.api.test.ts` | Passed in Issue #13 |
 | API-04 | API/integration | BR-09–BR-12, AC-09 | Direct invalid Ticket requests and boundary values | `400` field errors; no Ticket saved | `server/tests/lab-02/create-ticket.api.test.ts` | Passed in Issue #13 |
-| API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, combined search/filters/sort/page, invalid query | Only owned matches; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Planned |
+| API-05 | API/integration | FR-09, BR-15–BR-22, AC-13–AC-18 | Owned list, combined search/filters/sort/page, invalid query | Only owned matches; correct order/meta; invalid query `400` | `server/tests/lab-02/my-tickets.api.test.ts` | Passed in Issue #14 (13 tests) |
 | API-06 | API/integration | FR-11, FR-17, AC-20, AC-21 | Owned Ticket Detail versus missing/non-owned Ticket | Owned `200`; missing/non-owned identical safe `404` | `server/tests/lab-02/ticket-detail.api.test.ts` | Planned |
 | API-07 | API/integration | FR-12, FR-13, BR-23, BR-36, AC-22, AC-23 | Metadata and valid/invalid existing-Ticket upload | Valid `201`; exact sanitized display name; stored name hidden; mismatch `415`; size `413`; ownership `404`; count `409`; no invalid row/file | `server/tests/lab-02/attachment-upload.api.test.ts` | Initial-upload portion passed in Issue #13; later lifecycle remains Issue #15 |
 | API-08 | API/integration | FR-14, FR-17, BR-38, AC-24, AC-25 | Active inline/download content and missing/non-owned content | Both dispositions return safe headers; protected requests `404` | `server/tests/lab-02/attachments.api.test.ts` | Planned |
@@ -41,12 +41,12 @@ For each feature branch, write or activate the planned failing test first where 
 | UI-02 | UI component | FR-04–FR-07, AC-05, AC-08, AC-10 | Create form reference loading, validation, busy button, duplicate click | Active data shown; field errors; one API call while pending | `client/tests/lab-02/CreateTicket.test.tsx` | Passed in Issue #13 |
 | UI-03 | UI component | FR-05–FR-08, AC-06, AC-07, AC-31 | Create success and pre-create API failure | Official number shown; safe failure preserves values and permits retry | `client/tests/lab-02/CreateTicket.test.tsx` | Passed in Issue #13 |
 | UI-04 | UI component | BR-23–BR-26, AC-11, AC-12 | Mixed initial files and partial upload failure | Detectable invalid rejected; Ticket not recreated; per-file success/failure retained for later retry | `client/tests/lab-02/CreateTicket.test.tsx` | Initial-upload portion passed in Issue #13 |
-| UI-05 | UI component | FR-09, FR-10, AC-13–AC-19 | Owned My Tickets controls and all list states | Correct query, list, pagination, empty/no-results/failure and switch | `client/tests/lab-02/MyTickets.test.tsx` | Planned |
+| UI-05 | UI component | FR-09, FR-10, AC-13–AC-19 | Owned My Tickets controls and all list states | Correct query, list, pagination, empty/no-results/failure and switch | `client/tests/lab-02/MyTickets.test.tsx` | Passed in Issue #14 (7 tests) |
 | UI-06 | UI component | FR-11, AC-20, AC-21 | Read-only owned detail and safe unavailable state | Approved fields render read-only; no protected data on error | `client/tests/lab-02/RequesterTicketDetail.test.tsx` | Planned |
 | UI-07 | UI component | FR-12–FR-16, BR-38, AC-22–AC-28 | Attachment list/upload, authenticated Blob preview/download, removal dialog/states | Header and disposition sent; image/PDF/download behavior and object-URL cleanup; validation/busy/removed states | `client/tests/lab-02/AttachmentSection.test.tsx` | Planned |
 | UI-08 | UI component | BR-39, AC-34 | Injected safe failures and Retry for Requester/reference, Ticket create/list/detail, and Attachment upload/metadata/content/removal | Capability-appropriate safe message/Retry; preserved safe input; no stale cross-Requester data | `client/tests/lab-02/SafeErrorStates.test.tsx` | Planned |
 | STYLE-01 | UI style | FR-18, AC-29, AC-30 | Zen Green tokens/classes; editable/read-only/invalid/focus/buttons/badges | Required semantics and styles exist without color-only status | `client/tests/lab-02/ui-style.test.tsx` | Planned |
-| RESP-01 | Responsive/visual | FR-18, AC-29, AC-30 | Required screens at 1440×900, 820×1180, 390×844 | No horizontal overflow, clipping, overlap, hidden action; screenshots saved | `client/e2e/lab-02/responsive.spec.ts` | Planned |
+| RESP-01 | Responsive/visual | FR-18, AC-29, AC-30 | Required screens at 1440×900, 820×1180, 390×844 | No horizontal overflow, clipping, overlap, hidden action; screenshots saved | `client/e2e/lab-02/responsive.spec.ts` | My Tickets desktop/mobile portion passed in `my-tickets-responsive.spec.ts`; final all-screen evidence remains Issue #16 |
 | E2E-00 | E2E | AC-01–AC-04 | Select/change the Requester and use browser Back/Forward in Chromium | Selection opens the shell; history stays synchronized; session is stored and then cleared | `client/e2e/lab-02/requester-context.spec.ts` | Passed in Issue #12 and re-review |
 | E2E-01 | E2E | AC-32 | Select Requester, create Ticket, find/list, open detail | Confirmation number matches list/detail and persisted database-backed data | `client/e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
 | E2E-02 | E2E | AC-14, AC-21, AC-25, AC-32 | Switch Requester and attempt direct Ticket/Attachment access | A's data disappears; B receives safe unavailable behavior | `client/e2e/lab-02/requester-ticket-flow.spec.ts` | Planned |
@@ -136,6 +136,16 @@ npm --prefix client run build
 Final `main` evidence must also show PostgreSQL readiness, migration/seed success where appropriate, the current `main` branch, complete pass counts, and a clean working tree.
 
 ## 6. Current Results
+
+Issue #14 passed the following checks on 2026-09-01:
+
+- API-05: 13 PostgreSQL-backed tests cover strict query validation, requester ownership, case-insensitive Ticket Number/Summary search, combined filters, all documented sort/page behavior, and accurate out-of-range metadata;
+- UI-05: 7 component tests cover loading, ready rows/actions, combined controls, one-based pagination, empty versus no-results, Clear Filters, safe retry, and removal of stale rows when the Requester changes;
+- responsive My Tickets: 3 Chromium checks prove the desktop table/mobile-card switch and no horizontal overflow at 1440×900, 820×1180, and 390×844;
+- the full server suite passes 10 files and 66 tests; the full client suite passes 5 files and 27 tests;
+- the complete Playwright regression suite passes all 9 Chromium tests; and
+- server and client production builds pass; and
+- manual OperaGX verification confirmed the database-backed list, search, filters, sorting, page-size and Clear Filters behavior; changing from Anan to Kanya removed Anan's Tickets; and the 390 px mobile layout stacked its controls without horizontal overflow.
 
 Issue #13 passed the following checks on 2026-09-01:
 
