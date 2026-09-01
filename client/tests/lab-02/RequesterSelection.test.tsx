@@ -185,6 +185,9 @@ describe("Development Requester selection", () => {
     expect(sessionStorage.getItem(DEVELOPMENT_REQUESTER_STORAGE_KEY)).toBeNull();
     expect(window.location.pathname).toBe("/select-requester");
     expect(screen.getByRole("combobox", { name: /Development Requester/i })).toBeVisible();
+    expect(screen.queryByRole("option", { name: /Anan Chaiyasit/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("option", { name: /Kanya Srisuk/i })).toBeVisible();
+    expect(screen.getAllByRole("option")).toHaveLength(2);
   });
 
   it("keeps browser route changes and the rendered screen synchronized", async () => {

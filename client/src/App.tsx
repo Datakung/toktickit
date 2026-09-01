@@ -343,15 +343,20 @@ export default function App() {
   }
 
   const handleRequesterUnavailable = useCallback(() => {
+    const rejectedRequesterId = currentRequester?.id;
+    const remainingRequesters = rejectedRequesterId === undefined
+      ? requesters
+      : requesters.filter((requester) => requester.id !== rejectedRequesterId);
     sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+    setRequesters(remainingRequesters);
     setCurrentRequester(null);
     setSelectedId("");
     setContextMessage(
       "The selected Development Requester is no longer available. Choose another Requester.",
     );
-    setLoadState(requesters.length === 0 ? "empty" : "ready");
+    setLoadState(remainingRequesters.length === 0 ? "empty" : "ready");
     navigate("/select-requester", true);
-  }, [navigate, requesters.length]);
+  }, [currentRequester?.id, navigate, requesters]);
 
   if (currentRequester && isRequesterPath(currentPath)) {
     return (
