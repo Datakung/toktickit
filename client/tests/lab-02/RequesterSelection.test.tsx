@@ -168,6 +168,25 @@ describe("Development Requester selection", () => {
     expect(screen.getByRole("combobox", { name: /Development Requester/i })).toBeVisible();
   });
 
+  it("clears requester context and explains a Ticket Detail 403", async () => {
+    sessionStorage.setItem(DEVELOPMENT_REQUESTER_STORAGE_KEY, "1");
+    window.history.replaceState({}, "", "/tickets/41");
+    vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue(requesters);
+    vi.spyOn(api, "getTicket").mockRejectedValue(
+      new api.ApiError(403, "REQUESTER_UNAVAILABLE", "Internal requester detail."),
+    );
+
+    render(<App />);
+
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent("Requester selection required");
+    expect(alert).toHaveTextContent("selected Development Requester is no longer available");
+    expect(alert).not.toHaveTextContent("Internal requester detail");
+    expect(sessionStorage.getItem(DEVELOPMENT_REQUESTER_STORAGE_KEY)).toBeNull();
+    expect(window.location.pathname).toBe("/select-requester");
+    expect(screen.getByRole("combobox", { name: /Development Requester/i })).toBeVisible();
+  });
+
   it("keeps browser route changes and the rendered screen synchronized", async () => {
     vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue(requesters);
     const user = userEvent.setup();

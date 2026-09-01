@@ -123,6 +123,12 @@ export class ApiError extends Error {
   }
 }
 
+export function isRequesterUnavailable(error: unknown): error is ApiError {
+  return error instanceof ApiError
+    && error.status === 403
+    && error.code === "REQUESTER_UNAVAILABLE";
+}
+
 // Check both backend dependencies. Throwing on either failure lets the UI show
 // one useful Offline/error state.
 export async function checkSystem(): Promise<SystemStatus> {

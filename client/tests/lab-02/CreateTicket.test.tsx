@@ -11,6 +11,12 @@ const requester: api.DevelopmentRequester = {
   email: "anan.chaiyasit@example.test",
 };
 
+function renderCreateTicket() {
+  render(
+    <CreateTicketPage requester={requester} onRequesterUnavailable={vi.fn()} />,
+  );
+}
+
 describe("Create Ticket", () => {
   beforeEach(() => {
     vi.spyOn(api, "getCategories").mockResolvedValue([{ id: 1, name: "Hardware" }]);
@@ -34,7 +40,7 @@ describe("Create Ticket", () => {
   }
 
   it("renders reference choices and read-only generated context", async () => {
-    render(<CreateTicketPage requester={requester} />);
+    renderCreateTicket();
 
     expect(await screen.findByRole("option", { name: "Hardware" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Network and VPN" })).toBeInTheDocument();
@@ -45,7 +51,7 @@ describe("Create Ticket", () => {
   it("shows all client validation errors without making a request", async () => {
     const create = vi.spyOn(api, "createTicket");
     const user = userEvent.setup();
-    render(<CreateTicketPage requester={requester} />);
+    renderCreateTicket();
 
     await screen.findByRole("option", { name: "Hardware" });
     await user.click(screen.getByRole("button", { name: "Create Ticket" }));
@@ -103,7 +109,7 @@ describe("Create Ticket", () => {
       resolveCreate = resolve;
     }));
     const user = userEvent.setup();
-    render(<CreateTicketPage requester={requester} />);
+    renderCreateTicket();
     await completeRequiredFields(user);
 
     const submit = screen.getByRole("button", { name: "Create Ticket" });
@@ -131,7 +137,7 @@ describe("Create Ticket", () => {
       new api.ApiError(500, "TICKET_CREATE_FAILED", "The Ticket could not be created. Try again."),
     );
     const user = userEvent.setup();
-    render(<CreateTicketPage requester={requester} />);
+    renderCreateTicket();
     await completeRequiredFields(user);
 
     await user.click(screen.getByRole("button", { name: "Create Ticket" }));
@@ -166,7 +172,7 @@ describe("Create Ticket", () => {
       .mockRejectedValueOnce(new api.ApiError(500, "ATTACHMENT_UPLOAD_FAILED", "Upload failed."));
     const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
     const user = userEvent.setup();
-    render(<CreateTicketPage requester={requester} />);
+    renderCreateTicket();
     await completeRequiredFields(user);
     await user.upload(screen.getByLabelText("Choose files"), [
       new File([png], "one.png", { type: "image/png" }),

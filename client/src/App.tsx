@@ -26,6 +26,7 @@ function RequesterSelection({
   loadState,
   requesters,
   selectedId,
+  contextMessage,
   onSelectedIdChange,
   onContinue,
   onRetry,
@@ -33,6 +34,7 @@ function RequesterSelection({
   loadState: LoadState;
   requesters: DevelopmentRequester[];
   selectedId: string;
+  contextMessage: string;
   onSelectedIdChange: (id: string) => void;
   onContinue: () => void;
   onRetry: () => void;
@@ -47,6 +49,13 @@ function RequesterSelection({
           This is not a login screen. Authentication and role-based access will be
           introduced in Lab 3.
         </p>
+
+        {contextMessage && (
+          <div className="feedback-panel feedback-panel-error" role="alert">
+            <h2>Requester selection required</h2>
+            <p>{contextMessage}</p>
+          </div>
+        )}
 
         {loadState === "loading" && (
           <div className="selection-form" aria-busy="true">
@@ -121,11 +130,13 @@ function AppShell({
   currentPath,
   onNavigate,
   onChangeRequester,
+  onRequesterUnavailable,
 }: {
   requester: DevelopmentRequester;
   currentPath: string;
   onNavigate: (path: string) => void;
   onChangeRequester: () => void;
+  onRequesterUnavailable: () => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const ticketId = ticketIdFromPath(currentPath);
@@ -187,16 +198,25 @@ function AppShell({
       </header>
       <main className="app-content">
         {currentPath === "/tickets/new" ? (
-          <CreateTicketPage requester={requester} />
+          <CreateTicketPage
+            requester={requester}
+            onRequesterUnavailable={onRequesterUnavailable}
+          />
         ) : ticketId ? (
           <TicketDetailPage
             key={`${requester.id}-${ticketId}`}
             requester={requester}
             ticketId={ticketId}
             onNavigate={onNavigate}
+            onRequesterUnavailable={onRequesterUnavailable}
           />
         ) : (
-          <MyTicketsPage key={requester.id} requester={requester} onNavigate={onNavigate} />
+          <MyTicketsPage
+            key={requester.id}
+            requester={requester}
+            onNavigate={onNavigate}
+            onRequesterUnavailable={onRequesterUnavailable}
+          />
         )}
       </main>
     </div>
@@ -207,6 +227,7 @@ export default function App() {
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [requesters, setRequesters] = useState<DevelopmentRequester[]>([]);
   const [selectedId, setSelectedId] = useState("");
+  const [contextMessage, setContextMessage] = useState("");
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [currentRequester, setCurrentRequester] =
     useState<DevelopmentRequester | null>(null);
@@ -307,6 +328,7 @@ export default function App() {
     if (!requester) return;
 
     sessionStorage.setItem(DEVELOPMENT_REQUESTER_STORAGE_KEY, selectedId);
+    setContextMessage("");
     setCurrentRequester(requester);
     navigate("/tickets");
   }
@@ -315,9 +337,21 @@ export default function App() {
     sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
     setCurrentRequester(null);
     setSelectedId("");
+    setContextMessage("");
     navigate("/select-requester");
     setLoadState(requesters.length === 0 ? "empty" : "ready");
   }
+
+  const handleRequesterUnavailable = useCallback(() => {
+    sessionStorage.removeItem(DEVELOPMENT_REQUESTER_STORAGE_KEY);
+    setCurrentRequester(null);
+    setSelectedId("");
+    setContextMessage(
+      "The selected Development Requester is no longer available. Choose another Requester.",
+    );
+    setLoadState(requesters.length === 0 ? "empty" : "ready");
+    navigate("/select-requester", true);
+  }, [navigate, requesters.length]);
 
   if (currentRequester && isRequesterPath(currentPath)) {
     return (
@@ -326,6 +360,7 @@ export default function App() {
         currentPath={currentPath}
         onNavigate={navigate}
         onChangeRequester={changeRequester}
+        onRequesterUnavailable={handleRequesterUnavailable}
       />
     );
   }
@@ -335,6 +370,7 @@ export default function App() {
       loadState={loadState}
       requesters={requesters}
       selectedId={selectedId}
+      contextMessage={contextMessage}
       onSelectedIdChange={setSelectedId}
       onContinue={continueAsRequester}
       onRetry={() => void loadRequesters()}

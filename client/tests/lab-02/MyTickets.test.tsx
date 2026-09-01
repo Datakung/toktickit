@@ -68,7 +68,7 @@ describe("My Tickets", () => {
       resolveTickets = resolve;
     }));
 
-    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} />);
+    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
 
     expect(screen.getByText("Loading your Tickets…")).toHaveAttribute("aria-busy", "true");
     resolveTickets(response([ticket]));
@@ -90,7 +90,7 @@ describe("My Tickets", () => {
     }));
     const user = userEvent.setup();
 
-    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} />);
+    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
     await screen.findAllByText(ticket.summary);
 
     await user.type(screen.getByRole("searchbox", { name: /Ticket Number or Summary/i }), " VPN ");
@@ -124,7 +124,7 @@ describe("My Tickets", () => {
     const user = userEvent.setup();
 
     render(
-      <MyTicketsPage requester={requester} onNavigate={vi.fn()} />,
+      <MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />,
     );
     expect(await screen.findByRole("heading", { name: "You have no Tickets yet" }))
       .toBeInTheDocument();
@@ -142,7 +142,7 @@ describe("My Tickets", () => {
     const getTickets = vi.spyOn(api, "getTickets").mockResolvedValue(response([ticket]));
     const user = userEvent.setup();
 
-    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} />);
+    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
     await screen.findAllByText(ticket.summary);
     await user.selectOptions(screen.getByRole("combobox", { name: "Requested Priority filter" }), "HIGH");
     await user.selectOptions(screen.getByRole("combobox", { name: "Direction" }), "asc");
@@ -163,7 +163,7 @@ describe("My Tickets", () => {
     );
     const user = userEvent.setup();
 
-    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} />);
+    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
     await screen.findByText("Page 1 of 2");
     expect(screen.getByRole("button", { name: "Previous" })).toBeDisabled();
 
@@ -184,7 +184,7 @@ describe("My Tickets", () => {
       .mockResolvedValueOnce(response([ticket]));
     const user = userEvent.setup();
 
-    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} />);
+    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("Your Tickets are unavailable");
@@ -203,11 +203,11 @@ describe("My Tickets", () => {
     const secondRequester = { ...requester, id: 2, displayName: "Kanya Srisuk" };
 
     const { rerender } = render(
-      <MyTicketsPage requester={requester} onNavigate={vi.fn()} />,
+      <MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />,
     );
     await screen.findAllByText(ticket.summary);
 
-    rerender(<MyTicketsPage requester={secondRequester} onNavigate={vi.fn()} />);
+    rerender(<MyTicketsPage requester={secondRequester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
     expect(screen.queryByText(ticket.summary)).not.toBeInTheDocument();
     expect(screen.getByText("Loading your Tickets…")).toBeInTheDocument();
     resolveSecond(response([]));

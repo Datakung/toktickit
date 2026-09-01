@@ -1,8 +1,17 @@
-import { useCallback, useEffect, useState, type ChangeEvent, type MouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent,
+} from "react";
 import {
   ApiError,
   getAttachmentContent,
   getTicket,
+  isRequesterUnavailable,
   removeTicketAttachment,
   uploadTicketAttachment,
   type AttachmentMetadata,
@@ -31,6 +40,46 @@ interface ContentAction {
 interface ImagePreview {
   url: string;
   filename: string;
+}
+
+const FOCUSABLE_SELECTOR = [
+  "button:not([disabled])",
+  "a[href]",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
+function handleDialogKeyDown(
+  event: ReactKeyboardEvent<HTMLDivElement>,
+  closeDialog: () => void,
+) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeDialog();
+    return;
+  }
+  if (event.key !== "Tab") return;
+
+  const focusable = Array.from(
+    event.currentTarget.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+  );
+  if (focusable.length === 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+  if (event.shiftKey && (active === first || !event.currentTarget.contains(active))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (active === last || !event.currentTarget.contains(active))) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 
 function formatDate(value: string) {
@@ -65,10 +114,12 @@ export function TicketDetailPage({
   requester,
   ticketId,
   onNavigate,
+  onRequesterUnavailable,
 }: {
   requester: DevelopmentRequester;
   ticketId: string;
   onNavigate: (path: string) => void;
+  onRequesterUnavailable: () => void;
 }) {
   const [detailState, setDetailState] = useState<DetailState>("loading");
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
@@ -80,6 +131,19 @@ export function TicketDetailPage({
   const [removeReason, setRemoveReason] = useState("");
   const [removeError, setRemoveError] = useState("");
   const [isRemoving, setIsRemoving] = useState(false);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const previewCloseRef = useRef<HTMLButtonElement>(null);
+  const removalReasonRef = useRef<HTMLTextAreaElement>(null);
+  const previewTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const removalTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const previewWasOpen = useRef(false);
+  const removalWasOpen = useRef(false);
+
+  const handleApiError = useCallback((error: unknown) => {
+    if (!isRequesterUnavailable(error)) return false;
+    onRequesterUnavailable();
+    return true;
+  }, [onRequesterUnavailable]);
 
   const loadTicket = useCallback(async () => {
     setDetailState("loading");
@@ -93,17 +157,40 @@ export function TicketDetailPage({
       setDetailState("ready");
     } catch (error) {
       setTicket(null);
+      if (handleApiError(error)) return;
       setDetailState(error instanceof ApiError && (error.status === 400 || error.status === 404)
         ? "unavailable"
         : "error");
     }
-  }, [requester.id, ticketId]);
+  }, [handleApiError, requester.id, ticketId]);
 
   useEffect(() => { void loadTicket(); }, [loadTicket]);
 
   useEffect(() => () => {
     if (imagePreview) URL.revokeObjectURL(imagePreview.url);
   }, [imagePreview]);
+
+  useEffect(() => {
+    if (detailState === "ready" && ticket) headingRef.current?.focus();
+  }, [detailState, ticket?.id]);
+
+  useEffect(() => {
+    if (imagePreview) {
+      previewCloseRef.current?.focus();
+    } else if (previewWasOpen.current) {
+      previewTriggerRef.current?.focus();
+    }
+    previewWasOpen.current = Boolean(imagePreview);
+  }, [imagePreview]);
+
+  useEffect(() => {
+    if (removeTarget) {
+      removalReasonRef.current?.focus();
+    } else if (removalWasOpen.current) {
+      removalTriggerRef.current?.focus();
+    }
+    removalWasOpen.current = Boolean(removeTarget);
+  }, [removeTarget]);
 
   function followBack(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
@@ -139,6 +226,7 @@ export function TicketDetailPage({
       setSelectedUpload(null);
       setUploadMessage(`${attachment.originalName} uploaded successfully.`);
     } catch (error) {
+      if (handleApiError(error)) return;
       const message = error instanceof ApiError
         ? error.message
         : "The Attachment could not be uploaded. Try again.";
@@ -146,8 +234,12 @@ export function TicketDetailPage({
     }
   }
 
-  async function previewAttachment(attachment: AttachmentMetadata) {
+  async function previewAttachment(
+    attachment: AttachmentMetadata,
+    trigger: HTMLButtonElement,
+  ) {
     if (!ticket) return;
+    previewTriggerRef.current = trigger;
     setContentAction({ attachmentId: attachment.id, kind: "preview", state: "busy" });
 
     if (attachment.mimeType === "application/pdf") {
@@ -181,6 +273,7 @@ export function TicketDetailPage({
         setContentAction(null);
       } catch (error) {
         popup.close();
+        if (handleApiError(error)) return;
         setContentAction({
           attachmentId: attachment.id,
           kind: "preview",
@@ -201,6 +294,7 @@ export function TicketDetailPage({
       setImagePreview({ url, filename: content.filename });
       setContentAction(null);
     } catch (error) {
+      if (handleApiError(error)) return;
       setContentAction({
         attachmentId: attachment.id,
         kind: "preview",
@@ -230,6 +324,7 @@ export function TicketDetailPage({
       window.setTimeout(() => URL.revokeObjectURL(url), 0);
       setContentAction(null);
     } catch (error) {
+      if (handleApiError(error)) return;
       setContentAction({
         attachmentId: attachment.id,
         kind: "download",
@@ -241,7 +336,8 @@ export function TicketDetailPage({
     }
   }
 
-  function openRemoval(attachment: AttachmentMetadata) {
+  function openRemoval(attachment: AttachmentMetadata, trigger: HTMLButtonElement) {
+    removalTriggerRef.current = trigger;
     setRemoveTarget(attachment);
     setRemoveReason("");
     setRemoveError("");
@@ -252,6 +348,10 @@ export function TicketDetailPage({
     setRemoveTarget(null);
     setRemoveReason("");
     setRemoveError("");
+  }
+
+  function closeImagePreview() {
+    setImagePreview(null);
   }
 
   async function confirmRemoval() {
@@ -274,6 +374,7 @@ export function TicketDetailPage({
       setRemoveTarget(null);
       setRemoveReason("");
     } catch (error) {
+      if (handleApiError(error)) return;
       setRemoveError(error instanceof ApiError
         ? error.message
         : "The Attachment could not be removed. Try again.");
@@ -326,7 +427,7 @@ export function TicketDetailPage({
       <div className="ticket-detail-heading">
         <div>
           <p className="eyebrow">Requester Ticket Detail</p>
-          <h1 id="ticket-detail-title">{ticket.ticketNumber}</h1>
+          <h1 id="ticket-detail-title" ref={headingRef} tabIndex={-1}>{ticket.ticketNumber}</h1>
         </div>
         <span className="badge status-new">New</span>
       </div>
@@ -431,7 +532,7 @@ export function TicketDetailPage({
                         className="secondary-button"
                         type="button"
                         disabled={action?.state === "busy"}
-                        onClick={() => void previewAttachment(attachment)}
+                        onClick={(event) => void previewAttachment(attachment, event.currentTarget)}
                       >{action?.kind === "preview" && action.state === "busy" ? "Previewing…" : "Preview"}</button>
                       <button
                         className="secondary-button"
@@ -439,7 +540,7 @@ export function TicketDetailPage({
                         disabled={action?.state === "busy"}
                         onClick={() => void downloadAttachment(attachment)}
                       >{action?.kind === "download" && action.state === "busy" ? "Downloading…" : "Download"}</button>
-                      <button className="danger-button" type="button" onClick={() => openRemoval(attachment)}>
+                      <button className="danger-button" type="button" onClick={(event) => openRemoval(attachment, event.currentTarget)}>
                         Remove
                       </button>
                     </div>
@@ -454,10 +555,16 @@ export function TicketDetailPage({
 
       {imagePreview && (
         <div className="dialog-backdrop" role="presentation">
-          <div className="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+          <div
+            className="preview-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="preview-title"
+            onKeyDown={(event) => handleDialogKeyDown(event, closeImagePreview)}
+          >
             <div className="dialog-heading">
               <h2 id="preview-title">Preview {imagePreview.filename}</h2>
-              <button className="secondary-button" type="button" onClick={() => setImagePreview(null)}>
+              <button ref={previewCloseRef} className="secondary-button" type="button" onClick={closeImagePreview}>
                 Close
               </button>
             </div>
@@ -468,11 +575,18 @@ export function TicketDetailPage({
 
       {removeTarget && (
         <div className="dialog-backdrop" role="presentation">
-          <div className="removal-dialog" role="dialog" aria-modal="true" aria-labelledby="remove-title">
+          <div
+            className="removal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="remove-title"
+            onKeyDown={(event) => handleDialogKeyDown(event, closeRemoval)}
+          >
             <h2 id="remove-title">Remove {removeTarget.originalName}?</h2>
             <p>The file will remain in the audit record but can no longer be previewed or downloaded.</p>
             <label htmlFor="removal-reason">Removal reason <span aria-hidden="true">*</span>
               <textarea
+                ref={removalReasonRef}
                 id="removal-reason"
                 required
                 maxLength={250}

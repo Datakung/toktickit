@@ -54,6 +54,18 @@ function detail(attachments: api.AttachmentMetadata[] = [activeAttachment, remov
   };
 }
 
+function renderDetail(onRequesterUnavailable = vi.fn()) {
+  render(
+    <TicketDetailPage
+      requester={requester}
+      ticketId="41"
+      onNavigate={vi.fn()}
+      onRequesterUnavailable={onRequesterUnavailable}
+    />,
+  );
+  return onRequesterUnavailable;
+}
+
 beforeEach(() => {
   vi.spyOn(api, "getTicket").mockResolvedValue(detail());
   Object.defineProperty(URL, "createObjectURL", {
@@ -74,7 +86,7 @@ afterEach(() => {
 
 describe("Ticket Detail Attachment section", () => {
   it("distinguishes active and removed metadata and hides removed actions", async () => {
-    render(<TicketDetailPage requester={requester} ticketId="41" onNavigate={vi.fn()} />);
+    renderDetail();
 
     const activeItem = (await screen.findByText("evidence.png")).closest("li")!;
     const removedItem = screen.getByText("old-report.pdf").closest("li")!;
@@ -101,16 +113,23 @@ describe("Ticket Detail Attachment section", () => {
       });
     const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
     const user = userEvent.setup();
-    render(<TicketDetailPage requester={requester} ticketId="41" onNavigate={vi.fn()} />);
+    renderDetail();
     const item = (await screen.findByText("evidence.png")).closest("li")!;
+    const previewButton = within(item).getByRole("button", { name: "Preview" });
 
-    await user.click(within(item).getByRole("button", { name: "Preview" }));
+    await user.click(previewButton);
     expect(api.getAttachmentContent).toHaveBeenNthCalledWith(1, 1, 41, 21, "inline");
     expect(await screen.findByRole("dialog", { name: "Preview evidence.png" })).toBeVisible();
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    expect(closeButton).toHaveFocus();
     expect(screen.getByRole("img", { name: "Preview of evidence.png" })).toHaveAttribute(
       "src", "blob:attachment-preview",
     );
-    await user.click(screen.getByRole("button", { name: "Close" }));
+    await user.tab();
+    expect(closeButton).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog", { name: "Preview evidence.png" })).not.toBeInTheDocument();
+    expect(previewButton).toHaveFocus();
     await waitFor(() => expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:attachment-preview"));
 
     await user.click(within(item).getByRole("button", { name: "Download" }));
@@ -137,7 +156,7 @@ describe("Ticket Detail Attachment section", () => {
     } as unknown as Window;
     vi.spyOn(window, "open").mockReturnValue(popup);
     const user = userEvent.setup();
-    render(<TicketDetailPage requester={requester} ticketId="41" onNavigate={vi.fn()} />);
+    renderDetail();
 
     await user.click(await screen.findByRole("button", { name: "Preview" }));
     expect(window.open).toHaveBeenCalledWith("", "_blank");
@@ -155,7 +174,7 @@ describe("Ticket Detail Attachment section", () => {
       .mockRejectedValueOnce(new api.ApiError(500, "ATTACHMENT_UPLOAD_FAILED", "Upload failed."))
       .mockResolvedValueOnce({ ...activeAttachment, id: 30, originalName: "new.png" });
     const user = userEvent.setup();
-    render(<TicketDetailPage requester={requester} ticketId="41" onNavigate={vi.fn()} />);
+    renderDetail();
     await screen.findByRole("heading", { name: "Attachments" });
 
     const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
@@ -178,7 +197,7 @@ describe("Ticket Detail Attachment section", () => {
       id: 50 + index,
       originalName: `active-${index}.png`,
     }))));
-    render(<TicketDetailPage requester={requester} ticketId="41" onNavigate={vi.fn()} />);
+    renderDetail();
 
     expect(await screen.findByText("5 of 5 active Attachments")).toBeVisible();
     expect(screen.getByLabelText("Choose file")).toBeDisabled();
@@ -194,11 +213,20 @@ describe("Ticket Detail Attachment section", () => {
       removedByRequesterId: requester.id,
     });
     const user = userEvent.setup();
-    render(<TicketDetailPage requester={requester} ticketId="41" onNavigate={vi.fn()} />);
+    renderDetail();
     const item = (await screen.findByText("evidence.png")).closest("li")!;
+    const removeButton = within(item).getByRole("button", { name: "Remove" });
 
-    await user.click(within(item).getByRole("button", { name: "Remove" }));
+    await user.click(removeButton);
     expect(screen.getByRole("dialog", { name: "Remove evidence.png?" })).toBeVisible();
+    expect(screen.getByLabelText(/Removal reason/)).toHaveFocus();
+    await user.tab({ shift: true });
+    expect(screen.getByRole("button", { name: "Confirm Remove" })).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog", { name: "Remove evidence.png?" })).not.toBeInTheDocument();
+    expect(removeButton).toHaveFocus();
+
+    await user.click(removeButton);
     await user.type(screen.getByLabelText(/Removal reason/), "no");
     await user.click(screen.getByRole("button", { name: "Confirm Remove" }));
     expect(await screen.findByText("Removal reason must be between 5 and 250 characters.")).toBeVisible();
@@ -214,5 +242,58 @@ describe("Ticket Detail Attachment section", () => {
     expect(within(updatedItem).getByText("Removed", { selector: "span" })).toBeVisible();
     expect(within(updatedItem).getByText("The uploaded evidence is outdated.")).toBeVisible();
     expect(within(updatedItem).queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  it("delegates an unavailable Requester during an existing-Ticket upload", async () => {
+    vi.mocked(api.getTicket).mockResolvedValue(detail([]));
+    vi.spyOn(api, "uploadTicketAttachment").mockRejectedValue(
+      new api.ApiError(403, "REQUESTER_UNAVAILABLE", "Requester unavailable."),
+    );
+    const onRequesterUnavailable = renderDetail();
+    const user = userEvent.setup();
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+
+    await screen.findByRole("heading", { name: "Attachments" });
+    await user.upload(
+      screen.getByLabelText("Choose file"),
+      new File([png], "new.png", { type: "image/png" }),
+    );
+    await user.click(screen.getByRole("button", { name: "Upload" }));
+
+    await waitFor(() => expect(onRequesterUnavailable).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText("Requester unavailable.")).not.toBeInTheDocument();
+  });
+
+  it.each(["Preview", "Download"] as const)(
+    "delegates an unavailable Requester during Attachment %s",
+    async (actionName) => {
+      vi.spyOn(api, "getAttachmentContent").mockRejectedValue(
+        new api.ApiError(403, "REQUESTER_UNAVAILABLE", "Requester unavailable."),
+      );
+      const onRequesterUnavailable = renderDetail();
+      const user = userEvent.setup();
+      const item = (await screen.findByText("evidence.png")).closest("li")!;
+
+      await user.click(within(item).getByRole("button", { name: actionName }));
+
+      await waitFor(() => expect(onRequesterUnavailable).toHaveBeenCalledTimes(1));
+      expect(screen.queryByText("Requester unavailable.")).not.toBeInTheDocument();
+    },
+  );
+
+  it("delegates an unavailable Requester during Attachment removal", async () => {
+    vi.spyOn(api, "removeTicketAttachment").mockRejectedValue(
+      new api.ApiError(403, "REQUESTER_UNAVAILABLE", "Requester unavailable."),
+    );
+    const onRequesterUnavailable = renderDetail();
+    const user = userEvent.setup();
+    const item = (await screen.findByText("evidence.png")).closest("li")!;
+
+    await user.click(within(item).getByRole("button", { name: "Remove" }));
+    await user.type(screen.getByLabelText(/Removal reason/), "Requester is inactive.");
+    await user.click(screen.getByRole("button", { name: "Confirm Remove" }));
+
+    await waitFor(() => expect(onRequesterUnavailable).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText("Requester unavailable.")).not.toBeInTheDocument();
   });
 });
