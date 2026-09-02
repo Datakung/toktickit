@@ -7,7 +7,8 @@ Detail, and Attachment lifecycle needed by the Requester Ticketing MVP.
 
 ## Current Lab 2 increment
 
-Through the verified Issue #16 quality gate on `lab2-staging`, the current increment provides:
+Through the verified Issue #16 quality gate and final release to `main`, the
+current increment provides:
 
 1. a PostgreSQL/Prisma foundation for Requesters, Categories, Related Systems,
    Tickets, and Attachments;
@@ -33,9 +34,11 @@ Through the verified Issue #16 quality gate on `lab2-staging`, the current incre
 14. inspected desktop, tablet, and mobile evidence for Create Ticket, My Tickets,
     and Ticket Detail under `artifacts/lab-02/screenshots/`.
 
-Issue #16 is not released yet. Phanuwit approved and merged its corrected quality
-PR into `lab2-staging`; the reviewed `lab2-staging` to `main` release PR and a
-complete final `main` rerun remain pending.
+Phanuwit merged corrected quality PR #22 into `lab2-staging`, then merged final
+release PR #23 from `lab2-staging` into `main` as `996c9bf`. The complete final
+`main` rerun passed 94 server tests, 65 client tests, 14 Chromium tests, both
+production builds, both production-only audits, and the unchanged-development-
+state check.
 
 Comments, Internal Notes, IT Staff controls, status changes, and real
 authentication remain outside the Lab 2 Requester MVP.
@@ -256,10 +259,9 @@ repeatable.
 
 Install the Playwright Chromium binary once on a new machine with
 `npx playwright install chromium`. Lab 2 results and planned-test traceability
-are recorded in `docs/lab-02/tests.md`. The latest feature-branch quality gate
-passes 14 server files/94 tests, 9 client files/65 tests, all 14 Chromium tests,
-both production builds, and both production-only dependency audits. These
-counts must be rerun and recorded again after the reviewer merges final `main`.
+are recorded in `docs/lab-02/tests.md`. The final `main` quality gate passes 14
+server files/94 tests, 9 client files/65 tests, all 14 Chromium tests, both
+production builds, and both production-only dependency audits.
 
 ## Git workflow
 
