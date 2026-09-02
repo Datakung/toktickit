@@ -72,7 +72,11 @@ describe("Zen Green requester-context foundation", () => {
 
     await screen.findByRole("heading", { name: "My Tickets" });
     await screen.findByRole("heading", { name: "You have no Tickets yet" });
-    const menu = screen.getByRole("button", { name: "Menu" });
+    // CSS is loaded in Vitest so the desktop viewport hides this mobile-only
+    // control. Query the element directly because this test verifies its
+    // disclosure semantics, not its visibility at the current viewport.
+    const menu = document.querySelector<HTMLButtonElement>(".mobile-nav-toggle");
+    expect(menu).not.toBeNull();
     const navigation = screen.getByRole("navigation", { name: "Primary navigation" });
     const myTickets = within(navigation).getByRole("link", { name: "My Tickets" });
     const createTicket = within(navigation).getByRole("link", { name: "Create Ticket" });
@@ -83,7 +87,7 @@ describe("Zen Green requester-context foundation", () => {
     expect(myTickets).toHaveAttribute("aria-current", "page");
     expect(createTicket).toHaveAttribute("href", "/tickets/new");
 
-    await user.click(menu);
+    await user.click(menu!);
     expect(menu).toHaveAttribute("aria-expanded", "true");
 
     await user.click(createTicket);

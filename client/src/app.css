@@ -1,6 +1,22 @@
 :root {
-  color: #18352a;
-  background: #f4f8f5;
+  --green-700: #006b3c;
+  --green-600: #0b7a46;
+  --green-100: #eaf6ef;
+  --page-bg: #f5f7f6;
+  --surface: #ffffff;
+  --text: #18352a;
+  --muted: #52665e;
+  --border: #c8d5cf;
+  --readonly-bg: #f0f3ee;
+  --error: #9b1c1c;
+  --error-bg: #fdecec;
+  --warning: #8a4b08;
+  --warning-bg: #fff4d6;
+  --success: #12633b;
+  --focus: #0b7a46;
+
+  color: var(--text);
+  background: var(--page-bg);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -17,7 +33,7 @@ body {
   min-height: 100vh;
   background:
     radial-gradient(circle at top right, rgba(210, 234, 219, 0.7), transparent 30rem),
-    #f4f8f5;
+    var(--page-bg);
 }
 
 button,
@@ -38,7 +54,7 @@ a:focus-visible,
 select:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid #f0b429;
+  outline: 3px solid var(--focus);
 }
 
 .ticket-page {
@@ -60,14 +76,14 @@ textarea:focus-visible {
 .ticket-form fieldset {
   margin: 0;
   padding: 24px;
-  border: 1px solid #bdd0c4;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .ticket-form legend {
   padding: 0 8px;
-  color: #173f2d;
+  color: var(--green-700);
   font-size: 1.15rem;
   font-weight: 750;
 }
@@ -86,11 +102,15 @@ textarea:focus-visible {
 .context-grid div {
   display: grid;
   gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--readonly-bg);
 }
 
 .context-grid span,
 .optional-label {
-  color: #61756a;
+  color: var(--muted);
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -103,7 +123,7 @@ textarea:focus-visible {
 }
 
 .form-grid label > span {
-  color: #9b1c1c;
+  color: var(--error);
 }
 
 .form-grid select,
@@ -114,13 +134,13 @@ textarea:focus-visible {
   padding: 10px 12px;
   border: 1px solid #7e9b89;
   border-radius: 8px;
-  color: #18352a;
-  background: #fff;
+  color: var(--text);
+  background: var(--surface);
 }
 
 .form-grid [aria-invalid="true"] {
-  border-color: #9b1c1c;
-  box-shadow: 0 0 0 1px #9b1c1c;
+  border-color: var(--error);
+  box-shadow: 0 0 0 1px var(--error);
 }
 
 .form-grid textarea {
@@ -129,7 +149,7 @@ textarea:focus-visible {
 }
 
 .form-grid small:not(.field-error) {
-  color: #61756a;
+  color: var(--muted);
   font-weight: 500;
 }
 
@@ -138,7 +158,7 @@ textarea:focus-visible {
 }
 
 .field-error {
-  color: #9b1c1c;
+  color: var(--error);
   font-weight: 650;
 }
 
@@ -147,9 +167,9 @@ textarea:focus-visible {
   min-height: 44px;
   align-items: center;
   padding: 9px 16px;
-  border: 1px solid #17633f;
+  border: 1px solid var(--green-700);
   border-radius: 8px;
-  color: #17633f;
+  color: var(--green-700);
   font-weight: 700;
   cursor: pointer;
 }
@@ -163,7 +183,7 @@ textarea:focus-visible {
 }
 
 .file-picker:focus-within {
-  outline: 3px solid #f0b429;
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
@@ -182,7 +202,7 @@ textarea:focus-visible {
   gap: 12px;
   padding: 10px 12px;
   border-radius: 8px;
-  background: #edf5ef;
+  background: var(--green-100);
   min-width: 0;
 }
 
@@ -201,7 +221,7 @@ textarea:focus-visible {
   padding: 22px;
   border: 1px solid #7ab893;
   border-radius: 12px;
-  background: #e3f3e9;
+  background: var(--green-100);
 }
 
 .success-panel h2 {
@@ -245,9 +265,9 @@ textarea:focus-visible {
   display: grid;
   gap: 18px;
   padding: 22px;
-  border: 1px solid #bdd0c4;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .ticket-search,
@@ -276,8 +296,8 @@ textarea:focus-visible {
   padding: 9px 11px;
   border: 1px solid #7e9b89;
   border-radius: 8px;
-  color: #18352a;
-  background: #fff;
+  color: var(--text);
+  background: var(--surface);
 }
 
 .ticket-filter-grid {
@@ -292,7 +312,7 @@ textarea:focus-visible {
 
 .filter-warning {
   margin: 0;
-  color: #76520a;
+  color: var(--warning);
 }
 
 .ticket-list-state {
@@ -310,7 +330,7 @@ textarea:focus-visible {
 .ticket-list-state p,
 .ticket-result-summary {
   margin: 0;
-  color: #50665b;
+  color: var(--muted);
 }
 
 .ticket-result-summary {
@@ -319,9 +339,9 @@ textarea:focus-visible {
 
 .ticket-table-wrap {
   overflow: hidden;
-  border: 1px solid #bdd0c4;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .ticket-table {
@@ -338,8 +358,8 @@ textarea:focus-visible {
 }
 
 .ticket-table th {
-  color: #254f3b;
-  background: #e8f2eb;
+  color: var(--green-700);
+  background: var(--green-100);
   font-size: 0.86rem;
 }
 
@@ -349,7 +369,7 @@ textarea:focus-visible {
 
 .ticket-table a,
 .ticket-card a {
-  color: #125f3a;
+  color: var(--green-600);
   font-weight: 750;
 }
 
@@ -435,7 +455,7 @@ textarea:focus-visible {
 .selection-card {
   width: min(100%, 680px);
   padding: clamp(28px, 6vw, 52px);
-  border: 1px solid #bdd0c4;
+  border: 1px solid var(--border);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 18px 50px rgba(24, 53, 42, 0.12);
@@ -444,7 +464,7 @@ textarea:focus-visible {
 .eyebrow,
 .context-label {
   margin: 0 0 8px;
-  color: #336c50;
+  color: var(--green-600);
   font-size: 0.78rem;
   font-weight: 750;
   letter-spacing: 0.08em;
@@ -459,7 +479,7 @@ p {
 
 h1 {
   margin: 0;
-  color: #173f2d;
+  color: var(--green-700);
   font-size: clamp(2rem, 5vw, 3.25rem);
   line-height: 1.08;
 }
@@ -471,7 +491,7 @@ h2 {
 
 .selection-intro {
   margin: 20px 0 30px;
-  color: #50665b;
+  color: var(--muted);
   line-height: 1.6;
 }
 
@@ -485,7 +505,7 @@ h2 {
 }
 
 .selection-form label span {
-  color: #9b1c1c;
+  color: var(--error);
 }
 
 .selection-form select {
@@ -494,18 +514,18 @@ h2 {
   padding: 10px 12px;
   border: 1px solid #7e9b89;
   border-radius: 8px;
-  color: #18352a;
-  background: #fff;
+  color: var(--text);
+  background: var(--surface);
 }
 
 .selection-form select:disabled {
   color: #677a70;
-  background: #edf2ee;
+  background: var(--readonly-bg);
 }
 
 .helper-text {
   margin: -4px 0 6px;
-  color: #5c6f64;
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
@@ -520,9 +540,9 @@ h2 {
 .primary-button {
   margin-top: 8px;
   padding: 10px 18px;
-  border: 1px solid #17633f;
-  color: #fff;
-  background: #17633f;
+  border: 1px solid var(--green-700);
+  color: var(--surface);
+  background: var(--green-700);
 }
 
 .primary-button:hover:not(:disabled) {
@@ -537,15 +557,15 @@ h2 {
 
 .secondary-button {
   padding: 8px 16px;
-  border: 1px solid #17633f;
-  color: #17633f;
-  background: #fff;
+  border: 1px solid var(--green-700);
+  color: var(--green-700);
+  background: var(--surface);
 }
 
 .text-button {
   padding: 4px 8px;
   border: 0;
-  color: #17633f;
+  color: var(--green-600);
   background: transparent;
   text-decoration: underline;
 }
@@ -554,7 +574,7 @@ h2 {
   padding: 20px;
   border: 1px solid #a6c9b3;
   border-radius: 10px;
-  background: #e8f4ec;
+  background: var(--green-100);
 }
 
 .feedback-panel p {
@@ -563,8 +583,8 @@ h2 {
 
 .feedback-panel-error {
   border-color: #e3a7a7;
-  color: #701313;
-  background: #fdecec;
+  color: var(--error);
+  background: var(--error-bg);
 }
 
 .feedback-panel-error p {
@@ -581,13 +601,13 @@ h2 {
   align-items: center;
   gap: 32px;
   padding: 18px clamp(20px, 5vw, 72px);
-  border-bottom: 1px solid #c8d8ce;
+  border-bottom: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.96);
 }
 
 .brand {
   display: grid;
-  color: #174b32;
+  color: var(--green-700);
   text-decoration: none;
 }
 
@@ -597,7 +617,7 @@ h2 {
 }
 
 .brand small {
-  color: #52685b;
+  color: var(--muted);
 }
 
 .primary-navigation {
@@ -610,12 +630,12 @@ h2 {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  color: #365c49;
+  color: var(--muted);
   text-decoration: none;
 }
 
 .primary-navigation a[aria-current="page"] {
-  color: #17633f;
+  color: var(--green-600);
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 8px;
@@ -646,7 +666,7 @@ h2 {
 
 .app-content > p:last-child {
   max-width: 680px;
-  color: #50665b;
+  color: var(--muted);
   line-height: 1.6;
 }
 
@@ -746,9 +766,9 @@ h2 {
   .ticket-card {
     min-width: 0;
     padding: 18px;
-    border: 1px solid #bdd0c4;
+    border: 1px solid var(--border);
     border-radius: 14px;
-    background: #fff;
+    background: var(--surface);
   }
 
   .ticket-card-heading {
@@ -813,7 +833,7 @@ h2 {
 
 .back-link {
   justify-self: start;
-  color: #17633f;
+  color: var(--green-600);
   font-weight: 700;
 }
 
@@ -837,12 +857,17 @@ h2 {
   margin: 0;
 }
 
+.ticket-detail-heading h1:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
 .detail-panel {
   min-width: 0;
   padding: 24px;
-  border: 1px solid #bdd0c4;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .detail-panel > h2 {
@@ -868,7 +893,7 @@ h2 {
 .detail-copy dt,
 .attachment-metadata dt {
   margin-bottom: 5px;
-  color: #61756a;
+  color: var(--muted);
   font-size: 0.86rem;
   font-weight: 700;
 }
@@ -911,7 +936,7 @@ h2 {
 }
 
 .success-message {
-  color: #17633f;
+  color: var(--success);
   font-weight: 700;
 }
 
@@ -954,10 +979,10 @@ h2 {
 .danger-button {
   min-height: 44px;
   padding: 10px 16px;
-  border: 1px solid #9b1c1c;
+  border: 1px solid var(--error);
   border-radius: 8px;
   color: #fff;
-  background: #9b1c1c;
+  background: var(--error);
   font-weight: 750;
   cursor: pointer;
 }
@@ -998,7 +1023,7 @@ h2 {
   overflow: auto;
   padding: 24px;
   border-radius: 14px;
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
 }
 
@@ -1027,8 +1052,8 @@ h2 {
 }
 
 .removal-dialog textarea[aria-invalid="true"] {
-  border-color: #9b1c1c;
-  box-shadow: 0 0 0 1px #9b1c1c;
+  border-color: var(--error);
+  box-shadow: 0 0 0 1px var(--error);
 }
 
 .dialog-actions {
