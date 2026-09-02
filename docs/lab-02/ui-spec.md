@@ -261,7 +261,7 @@ artifacts/lab-02/screenshots/
     `-- mobile.png
 ```
 
-These nine files are the actual Issue #16 responsive evidence. Validation, submitting, success, API-failure, invalid-file, empty/no-results, Attachment lifecycle, and ownership states are covered by the traceable component/API/E2E tests in `tests.md` rather than represented as nonexistent screenshot paths.
+These nine files are the actual Issue #16 responsive evidence. They are refreshed only by the explicit `npm --prefix client run test:e2e:evidence` command, which uses fixed seeded E2E data. Routine `test:e2e` screenshots go to ignored Playwright output and cannot overwrite reviewed evidence. Validation, submitting, success, API-failure, invalid-file, empty/no-results, Attachment lifecycle, and ownership states are covered by the traceable component/API/E2E tests in `tests.md` rather than represented as nonexistent screenshot paths.
 
 ## 11. Visual Inspection Checklist
 

@@ -105,6 +105,7 @@ Frontend: http://localhost:5173
 API:      http://localhost:3000
 Development database: PostgreSQL `toktickit` on localhost:5432
 Test database:        PostgreSQL `toktickit_test` on localhost:5432
+E2E database:         PostgreSQL `toktickit_e2e` on localhost:5432
 ```
 
 Real `.env` files contain local credentials and must never be committed.
@@ -124,22 +125,27 @@ again:
 docker start toktickit-postgres
 ```
 
+Create the isolated automated-test targets once after the container is ready:
+
+```powershell
+docker exec toktickit-postgres createdb -U toktickit toktickit_test
+docker exec toktickit-postgres createdb -U toktickit toktickit_e2e
+```
+
+If either command reports that the database already exists, keep the existing
+database. `TEST_DATABASE_URL` and `E2E_DATABASE_URL` are guarded: the test
+commands fail before running if either target is missing, points at the
+development database/schema, or lacks its required test/E2E marker.
+
 Check that PostgreSQL is accepting connections:
 
 ```powershell
 docker exec toktickit-postgres pg_isready -U toktickit -d toktickit
 ```
 
-Create the isolated test database once after creating the container:
-
-```powershell
-docker exec toktickit-postgres createdb -U toktickit toktickit_test
-```
-
 `server/.env` must keep `DATABASE_URL` pointed at `toktickit` and
-`TEST_DATABASE_URL` pointed at `toktickit_test`. Server tests fail before loading
-test modules if the test target is missing, matches development, or is not
-clearly named as a test database/schema.
+`TEST_DATABASE_URL` pointed at `toktickit_test`, with `E2E_DATABASE_URL` pointed
+at `toktickit_e2e`.
 
 ## Install dependencies
 
@@ -238,10 +244,20 @@ timing from affecting results. To apply the same guarded migration step
 explicitly, run `npm --prefix server run test:db:migrate` from the repository
 root.
 
+Playwright always starts a fresh API on port 3100 against the guarded E2E
+target, applies migrations, resets and seeds deterministic E2E data, isolates
+uploaded files under `server/uploads/e2e`, and cleans that target afterward.
+Its global check hashes the development database and development uploads before
+and after the run and fails if they change. An ordinary `npm run test:e2e`
+writes screenshots only to ignored Playwright output. Refresh the nine committed
+responsive evidence files deliberately with `npm run test:e2e:evidence`; this
+explicit command uses fixed seeded Ticket data so the reviewed evidence is
+repeatable.
+
 Install the Playwright Chromium binary once on a new machine with
 `npx playwright install chromium`. Lab 2 results and planned-test traceability
 are recorded in `docs/lab-02/tests.md`. The latest feature-branch quality gate
-passes 13 server files/89 tests, 9 client files/65 tests, all 14 Chromium tests,
+passes 14 server files/94 tests, 9 client files/65 tests, all 14 Chromium tests,
 both production builds, and both production-only dependency audits. These
 counts must be rerun and recorded again after the reviewer merges final `main`.
 

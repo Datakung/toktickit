@@ -2,7 +2,7 @@
 
 **Planning status:** Created before Lab 2 product implementation.
 
-**Current status:** Issue #16 release-wide API, UI, style, responsive, E2E, build, dependency, and repository-hygiene checks pass locally on `feature/16-quality-release`. Reviewer approval, integration into `lab2-staging`, the release PR, and the final `main` rerun remain pending.
+**Current status:** Issue #16 is in Fixing after PR #22 review identified E2E database-isolation and committed-screenshot reproducibility gaps. The guarded dedicated E2E target, routine-output separation, and explicit deterministic evidence flow now pass locally in correction `b3fe114`. Documentation push/response, re-review, integration, the release PR, and the final `main` rerun remain pending.
 
 ## 1. Test Strategy
 
@@ -15,7 +15,7 @@ Tests derive from the peer-approved `FR`, `BR`, and `AC` identifiers in `specifi
 - **Responsive/visual:** Playwright viewport checks, screenshots, overflow assertions, and the manual checklist from `ui-spec.md`.
 - **E2E:** seeded Requester selection through Ticket creation, discovery, detail, Attachment lifecycle, and cross-Requester rejection.
 
-For each feature branch, write or activate the planned failing test first where practical, confirm that it fails for the intended missing behavior, implement the smallest correct behavior, and refactor while keeping the relevant suite green. Database tests require a guarded `TEST_DATABASE_URL`, apply migrations and seed before test files start, isolate their data from development, and clean fixtures predictably without relying on test order.
+For each feature branch, write or activate the planned failing test first where practical, confirm that it fails for the intended missing behavior, implement the smallest correct behavior, and refactor while keeping the relevant suite green. Database tests require a guarded `TEST_DATABASE_URL`; browser tests require a separately guarded `E2E_DATABASE_URL`. Both apply migrations and seed before their suites, isolate data from development, and clean fixtures predictably without relying on test order.
 
 Because API files share that one isolated PostgreSQL target, Vitest runs server test files serially (`fileParallelism: false`). This prevents legitimate fixtures in one file from changing another file's global-count assertion while preserving repeatability and development-database isolation.
 
@@ -108,15 +108,16 @@ The authoritative checklist is in `ui-spec.md`. Final evidence must include:
 - search, filters, sort, clear, pagination, and Attachment controls; and
 - no clipping, overlap, hidden controls, unreadable filenames, or horizontal page overflow.
 
-Nine automated screenshots are saved under `artifacts/lab-02/screenshots/` using the exact paths in `ui-spec.md`. Visual inspection on 2026-09-02 confirmed the three screens at all required widths with no clipping, overlap, hidden action, unreadable content, or horizontal page overflow.
+Nine reviewed screenshots are saved under `artifacts/lab-02/screenshots/` using the exact paths in `ui-spec.md`. Ordinary E2E runs send screenshots to ignored Playwright test output and do not modify these files. Only the explicit deterministic evidence command refreshes them from fixed seeded data.
 
 ## 5. Test Commands
 
 Commands are planned now and must be implemented/documented by their owning Issues.
 
 ```powershell
-# One-time local creation of the isolated database
+# One-time local creation of the isolated databases
 docker exec toktickit-postgres createdb -U toktickit toktickit_test
+docker exec toktickit-postgres createdb -U toktickit toktickit_e2e
 
 # Guarded isolated migration (rejects missing/unsafe/same-as-development target)
 npm --prefix server run test:db:migrate
@@ -127,15 +128,23 @@ npm --prefix server test -- tests/lab-02
 # Client component and style tests
 npm --prefix client test -- tests/lab-02
 
-# Playwright E2E and responsive tests (Playwright setup added in Issue #12)
+# Routine Playwright E2E: guarded E2E DB, ignored screenshot output
 npm --prefix client run test:e2e
+
+# Explicit deterministic refresh of the nine committed evidence screenshots
+npm --prefix client run test:e2e:evidence
 
 # Production type/build checks
 npm --prefix server run build
 npm --prefix client run build
 ```
 
-Final `main` evidence must also show PostgreSQL readiness, migration/seed success where appropriate, the current `main` branch, complete pass counts, and a clean working tree.
+Playwright rejects a missing, same-as-development, or unmarked E2E target. It
+starts a fresh API on port 3100, migrates and seeds fixed E2E data, isolates
+uploads, cleans created rows/files, and compares development database/upload
+hashes before and after. Final `main` evidence must also show PostgreSQL
+readiness, migration/seed success where appropriate, the current `main` branch,
+complete pass counts, and a clean working tree.
 
 ## 6. Current Results
 
@@ -145,14 +154,16 @@ Issue #16 passed the following local quality checks on 2026-09-02:
 - UI-08 and STYLE-01: safe Retry behavior preserves permitted input and clears stale protected data, while 18 style tests enforce the approved 15 Zen Green tokens and editable/read-only/invalid/focus/button/badge/responsive semantics;
 - RESP-01: Create Ticket, My Tickets, and Ticket Detail pass at 1440×900, 820×1180, and 390×844; all nine screenshots were inspected and the My Tickets evidence consistently shows one filtered demonstration Ticket;
 - E2E-03: the browser flow rejects an invalid initial text file while retaining a valid PNG, creates one Ticket, uploads/previews/downloads/soft-removes another PNG, verifies retained removed metadata, rejects its authenticated download with `404 ATTACHMENT_NOT_FOUND`, and then proves cross-Requester isolation;
-- the full server suite passes 13 files and 89 tests, including both Lab 1 regressions;
+- the full server suite passes 14 files and 94 tests, including both Lab 1 regressions and five E2E-target guard regressions;
 - the full client suite passes 9 files and 65 tests, including all four Lab 1 regressions;
 - the complete Playwright regression suite passes all 14 Chromium tests;
 - server and client production builds pass;
 - production dependency audits report zero vulnerabilities in both packages; and
 - `git diff --check` passes, while tracked-file inspection finds no `.env`, uploads, `node_modules`, `dist`, Playwright report, or test-result output.
 
-The first new responsive runs exposed three evidence-test selector assumptions: native options are not themselves visible, “Attachments” also matched “No Attachments,” and the hidden desktop Ticket link preceded the visible mobile card link. Those assertions were narrowed to the visible control/container instead of weakening product expectations. Visual inspection also found inconsistent screenshots retained from interrupted runs, so the final flow now filters to one newly created Ticket and deliberately refreshes all nine evidence images. A later parallel server run exposed shared-database cross-file count interference; serial file execution fixed the harness, and two consecutive full 89-test runs passed.
+The first new responsive runs exposed three evidence-test selector assumptions: native options are not themselves visible, “Attachments” also matched “No Attachments,” and the hidden desktop Ticket link preceded the visible mobile card link. Those assertions were narrowed to the visible control/container instead of weakening product expectations. A later parallel server run exposed shared-database cross-file count interference, so the server harness now runs database-backed files serially.
+
+Phanuwit's PR #22 review then exposed two release-gate weaknesses missed by the first audit. The correction rejects missing, same-as-development, and unmarked E2E database targets; migrates, resets, seeds, and cleans `toktickit_e2e`; isolates E2E uploads; and hashes all development tables plus upload files before and after Playwright. The complete 14-test routine run produced the same development hash before and after, removed the E2E upload directory, and left all nine committed image hashes unchanged. Two consecutive explicit evidence runs used the fixed `TKT-20260902-EVID01` seed and produced identical hashes for every screenshot; the refreshed desktop/mobile images were also visually inspected for readable deterministic content and no overflow.
 
 These are feature-branch results. They must be rerun after reviewer merge into `lab2-staging` and again on final `main` before the submission PDF records final-release evidence.
 
