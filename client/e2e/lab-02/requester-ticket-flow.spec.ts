@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { Buffer } from "node:buffer";
 
+const e2eApiUrl = "http://127.0.0.1:3100";
+
 test("creates, finds, opens, attaches, downloads, removes, and protects a Requester Ticket", async ({ page }) => {
   const unique = Date.now().toString(36).toUpperCase();
   const summary = `Issue 15 browser lifecycle ${unique}`;
@@ -9,6 +11,7 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
   const requesterSelect = page.getByRole("combobox", { name: /Development Requester/i });
   await expect(requesterSelect).toBeEnabled();
   await requesterSelect.selectOption({ index: 1 });
+  const requesterId = await requesterSelect.inputValue();
   await page.getByRole("button", { name: "Continue" }).click();
 
   await page.getByRole("navigation", { name: "Primary navigation" })
@@ -20,9 +23,26 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
   await page.getByLabel(/Description/).fill(
     "This Ticket verifies the owned detail and complete Attachment lifecycle.",
   );
+  await page.getByLabel("Choose files").setInputFiles([
+    {
+      name: "initial-valid.png",
+      mimeType: "image/png",
+      buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]),
+    },
+    {
+      name: "initial-invalid.txt",
+      mimeType: "text/plain",
+      buffer: Buffer.from("not an approved attachment"),
+    },
+  ]);
+  await expect(page.getByText(/initial-invalid\.txt is not an allowed/i)).toBeVisible();
+  await expect(page.getByText("initial-valid.png")).toBeVisible();
   await page.getByRole("button", { name: "Create Ticket" }).click();
   const ticketNumber = await page.locator(".success-panel h2").textContent();
   expect(ticketNumber).toMatch(/^TKT-/);
+  const initialAttachment = page.locator(".attachment-list > li")
+    .filter({ hasText: "initial-valid.png" });
+  await expect(initialAttachment).toContainText("succeeded");
 
   await page.getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: "My Tickets" }).click();
@@ -42,7 +62,13 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
     mimeType: "image/png",
     buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]),
   });
+  const uploadResponsePromise = page.waitForResponse((response) =>
+    response.request().method() === "POST" &&
+    response.url().endsWith(`/api/tickets/${ticketId}/attachments`));
   await page.getByRole("button", { name: "Upload" }).click();
+  const uploadResponse = await uploadResponsePromise;
+  expect(uploadResponse.status()).toBe(201);
+  const uploadedAttachmentId = (await uploadResponse.json()).data.id as number;
   await expect(page.getByText("lifecycle.png uploaded successfully.")).toBeVisible();
 
   const attachment = page.locator(".detail-attachment-list > li").filter({ hasText: "lifecycle.png" });
@@ -62,6 +88,15 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
   await expect(attachment.locator(".badge-removed")).toHaveText("Removed");
   await expect(attachment.getByRole("button", { name: "Preview" })).toHaveCount(0);
   await expect(attachment.getByRole("button", { name: "Download" })).toHaveCount(0);
+
+  const removedDownload = await page.request.get(
+    `${e2eApiUrl}/api/tickets/${ticketId}/attachments/${uploadedAttachmentId}/download`,
+    { headers: { "X-Development-Requester-Id": requesterId } },
+  );
+  expect(removedDownload.status()).toBe(404);
+  await expect(removedDownload.json()).resolves.toMatchObject({
+    error: { code: "ATTACHMENT_NOT_FOUND" },
+  });
 
   await page.getByRole("button", { name: "Change Requester" }).click();
   await requesterSelect.selectOption({ index: 2 });

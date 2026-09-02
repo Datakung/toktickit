@@ -12,5 +12,8 @@ export default defineConfig({
     },
     globalSetup: ["./tests/global-setup.ts"],
     include: ["tests/**/*.test.ts"],
+    // API files share one isolated PostgreSQL test database. Serial files avoid
+    // cross-file fixture timing while each file remains independently cleaned.
+    fileParallelism: false,
   },
 });

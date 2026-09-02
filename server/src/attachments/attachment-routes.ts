@@ -16,8 +16,11 @@ import {
   toAttachmentMetadata,
 } from "./attachment-metadata.js";
 
-const uploadRoot = fileURLToPath(new URL("../../uploads/", import.meta.url));
-const temporaryRoot = fileURLToPath(new URL("../../uploads/.tmp/", import.meta.url));
+const defaultUploadRoot = fileURLToPath(new URL("../../uploads/", import.meta.url));
+const uploadRoot = process.env.ATTACHMENT_UPLOAD_ROOT
+  ? path.resolve(process.env.ATTACHMENT_UPLOAD_ROOT)
+  : defaultUploadRoot;
+const temporaryRoot = path.join(uploadRoot, ".tmp");
 mkdirSync(temporaryRoot, { recursive: true });
 
 const upload = multer({
@@ -203,7 +206,7 @@ attachmentRouter.post(
       const ticketId = response.locals.attachmentTicketId;
       const requesterId = response.locals.developmentRequester.id;
       const storedName = `${randomUUID()}.${valid.canonicalExtension}`;
-      finalPath = `${uploadRoot}${storedName}`;
+      finalPath = path.join(uploadRoot, storedName);
 
       const attachment = await prisma.$transaction(async (transaction) => {
         await transaction.$queryRaw`
