@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:evidence": "playwright test e2e/lab-02/responsive.spec.ts"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",

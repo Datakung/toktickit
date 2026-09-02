@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { Buffer } from "node:buffer";
 
+const e2eApiUrl = "http://127.0.0.1:3100";
+
 test("creates, finds, opens, attaches, downloads, removes, and protects a Requester Ticket", async ({ page }) => {
   const unique = Date.now().toString(36).toUpperCase();
   const summary = `Issue 15 browser lifecycle ${unique}`;
@@ -88,7 +90,7 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
   await expect(attachment.getByRole("button", { name: "Download" })).toHaveCount(0);
 
   const removedDownload = await page.request.get(
-    `http://127.0.0.1:3000/api/tickets/${ticketId}/attachments/${uploadedAttachmentId}/download`,
+    `${e2eApiUrl}/api/tickets/${ticketId}/attachments/${uploadedAttachmentId}/download`,
     { headers: { "X-Development-Requester-Id": requesterId } },
   );
   expect(removedDownload.status()).toBe(404);

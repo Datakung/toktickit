@@ -1,11 +1,16 @@
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page, type TestInfo } from "@playwright/test";
 
-const screenshotRoot = fileURLToPath(
+const committedScreenshotRoot = fileURLToPath(
   new URL("../../../artifacts/lab-02/screenshots/", import.meta.url),
 );
+const captureCommittedEvidence =
+  process.env.npm_lifecycle_event === "test:e2e:evidence" ||
+  process.env.LAB2_CAPTURE_EVIDENCE === "1";
+const api = "http://127.0.0.1:3100";
+const evidenceTicketNumber = "TKT-20260902-EVID01";
 
 const viewports = [
   { name: "desktop", width: 1440, height: 900 },
@@ -23,8 +28,14 @@ async function expectNoHorizontalPageOverflow(page: Page) {
   expect(dimensions.body).toBeLessThanOrEqual(dimensions.viewport);
 }
 
-async function saveEvidence(page: Page, relativePath: string) {
-  const path = `${screenshotRoot}${relativePath}`;
+async function saveEvidence(
+  page: Page,
+  testInfo: TestInfo,
+  relativePath: string,
+) {
+  const path = captureCommittedEvidence
+    ? `${committedScreenshotRoot}${relativePath}`
+    : testInfo.outputPath("responsive-evidence", relativePath);
   mkdirSync(dirname(path), { recursive: true });
   await page.screenshot({ path, fullPage: true, animations: "disabled" });
 }
@@ -32,28 +43,27 @@ async function saveEvidence(page: Page, relativePath: string) {
 test("validates and captures Create, My Tickets, and Ticket Detail at all contract widths", async ({
   page,
   request,
-}) => {
-  const api = "http://127.0.0.1:3000";
+}, testInfo) => {
   const requesters = await (await request.get(`${api}/api/development-requesters`)).json();
   const categories = await (await request.get(`${api}/api/categories`)).json();
-  const systems = await (await request.get(`${api}/api/related-systems`)).json();
   const requester = requesters[0] as { id: number; displayName: string };
 
-  const creation = await request.post(`${api}/api/tickets`, {
-    headers: {
-      "X-Development-Requester-Id": String(requester.id),
-      "Content-Type": "application/json",
+  const ticketResponse = await request.get(
+    `${api}/api/tickets?search=${encodeURIComponent(evidenceTicketNumber)}`,
+    {
+      headers: {
+        "X-Development-Requester-Id": String(requester.id),
+      },
     },
-    data: {
-      categoryId: categories[0].id,
-      relatedSystemId: systems[0].id,
-      summary: `Responsive release evidence ${Date.now().toString(36)}`,
-      description: "This demonstration Ticket provides deterministic responsive release evidence.",
-      requestedPriority: "MEDIUM",
-    },
-  });
-  expect(creation.status()).toBe(201);
-  const ticket = (await creation.json()).data as { id: number; ticketNumber: string };
+  );
+  expect(ticketResponse.status()).toBe(200);
+  const ticketList = (await ticketResponse.json()).data as Array<{
+    id: number;
+    ticketNumber: string;
+  }>;
+  expect(ticketList).toHaveLength(1);
+  expect(ticketList[0].ticketNumber).toBe(evidenceTicketNumber);
+  const ticket = ticketList[0];
 
   await page.goto("/select-requester");
   const requesterSelect = page.getByRole("combobox", { name: /Development Requester/i });
@@ -73,6 +83,7 @@ test("validates and captures Create, My Tickets, and Ticket Detail at all contra
     await expectNoHorizontalPageOverflow(page);
     await saveEvidence(
       page,
+      testInfo,
       `create-ticket/initial-${viewport.name}.png`,
     );
 
@@ -94,6 +105,7 @@ test("validates and captures Create, My Tickets, and Ticket Detail at all contra
     await expectNoHorizontalPageOverflow(page);
     await saveEvidence(
       page,
+      testInfo,
       `my-tickets/requester-a-${viewport.name}.png`,
     );
 
@@ -104,6 +116,7 @@ test("validates and captures Create, My Tickets, and Ticket Detail at all contra
     await expectNoHorizontalPageOverflow(page);
     await saveEvidence(
       page,
+      testInfo,
       viewport.name === "desktop"
         ? "ticket-detail/owned-desktop.png"
         : `ticket-detail/${viewport.name}.png`,

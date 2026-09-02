@@ -10,6 +10,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
     "test:db:migrate": "tsx tests/migrate-test-database.ts",
+    "e2e:server": "tsx tests/e2e-server.ts",
     "test": "vitest run"
   },
   "prisma": {
