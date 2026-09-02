@@ -1,35 +1,46 @@
-import { afterEach, describe, it, expect, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import App from "../../src/App.js";
 
-describe("App", () => {
+describe("Lab 1 regressions", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    sessionStorage.clear();
   });
 
-  it("renders the TokTickIT heading", () => {
-    render(<App />);
-    expect(screen.getByText(/TokTickIT/i)).toBeInTheDocument();
-  });
+  it("retains the TokTickIT product heading", () => {
+    vi.spyOn(api, "getDevelopmentRequesters").mockReturnValue(new Promise(() => {}));
 
-  it("shows a loading state while checking the system", async () => {
-    vi.spyOn(api, "checkSystem").mockReturnValue(new Promise(() => {}));
-
-    const user = userEvent.setup();
     render(<App />);
 
-    await user.click(
-      screen.getByRole("button", { name: /Check System/i }),
-    );
-
-    expect(screen.getByText(/Checking the backend/i)).toBeInTheDocument();
-    expect(screen.getByRole("button")).toBeDisabled();
+    expect(screen.getByText(/TokTickIT IT Service Desk/i)).toBeInTheDocument();
   });
 
-  it("shows Online and the seeded categories on success", async () => {
-    vi.spyOn(api, "checkSystem").mockResolvedValue({
+  it("retains the Lab 1 health and category helper", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ status: "ok", service: "TokTickIT API" }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify([
+            { id: 1, name: "Account and Access" },
+            { id: 2, name: "Hardware" },
+            { id: 3, name: "Software" },
+            { id: 4, name: "Network" },
+          ]),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(api.checkSystem()).resolves.toEqual({
       online: true,
       categories: [
         { id: 1, name: "Account and Access" },
@@ -38,35 +49,41 @@ describe("App", () => {
         { id: 4, name: "Network" },
       ],
     });
-
-    const user = userEvent.setup();
-    render(<App />);
-
-    await user.click(
-      screen.getByRole("button", { name: /Check System/i }),
-    );
-
-    expect(await screen.findByRole("status")).toHaveTextContent("Online");
-    expect(screen.getByText("Account and Access")).toBeInTheDocument();
-    expect(screen.getByText("Hardware")).toBeInTheDocument();
-    expect(screen.getByText("Software")).toBeInTheDocument();
-    expect(screen.getByText("Network")).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
-  it("shows an Offline error message when the API is unavailable", async () => {
-    vi.spyOn(api, "checkSystem").mockRejectedValue(
-      new Error("API unavailable"),
+  it("still rejects an unhealthy backend response", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ status: "error" }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
     );
 
-    const user = userEvent.setup();
-    render(<App />);
+    await expect(api.checkSystem()).rejects.toThrow(
+      "The backend returned an unhealthy status",
+    );
+  });
 
-    await user.click(
-      screen.getByRole("button", { name: /Check System/i }),
+  it("still rejects a failed Category request", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ status: "ok" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }),
+        )
+        .mockResolvedValueOnce(new Response(null, { status: 500 })),
     );
 
-    const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent("Offline");
-    expect(alert).toHaveTextContent("Cannot reach the TokTickIT API");
+    await expect(api.checkSystem()).rejects.toThrow(
+      "Category request failed with status 500",
+    );
   });
 });

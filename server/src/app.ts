@@ -1,16 +1,33 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { getPrisma } from "./prisma.js";
-// getPrisma() is your lazy database handle. Call it INSIDE a route when you
-// need the DB (Issue 4). It is intentionally unused until then.
-void getPrisma;
+import { ticketRouter } from "./tickets/ticket-routes.js";
+import { attachmentRouter } from "./attachments/attachment-routes.js";
 
 // The Express app is exported separately from app.listen() (see index.ts) so
 // Supertest can import `app` without opening a port. Do not merge these files.
 export const app = express();
 
-app.use(cors());          // already wired: lets the Vite dev server call this API
+app.use(cors({
+  exposedHeaders: ["Content-Disposition", "Content-Length"],
+}));
 app.use(express.json());
+app.use((error: unknown, _request: Request, response: Response, next: (error?: unknown) => void) => {
+  const parseError = error as { type?: string };
+  if (error instanceof SyntaxError && parseError.type === "entity.parse.failed") {
+    response.status(400).json({
+      error: {
+        code: "INVALID_JSON",
+        message: "Request body must be valid JSON.",
+      },
+    });
+    return;
+  }
+
+  next(error);
+});
+app.use("/api/tickets", ticketRouter);
+app.use("/api/tickets/:ticketId/attachments", attachmentRouter);
 
 // ---------------------------------------------------------------------------
 // Issue 2 — API health check
@@ -24,15 +41,10 @@ app.get("/api/health", (_req: Request, res: Response) => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// Issue 4 — Category list
-// Add:  GET /api/categories
-//   -> read categories from PostgreSQL via getPrisma().category.findMany(...)
-//   -> return each { id, name } in a predictable (id) order
-//   -> on failure, respond 500 with a safe message (no internal details)
 app.get("/api/categories", async (_req: Request, res: Response) => {
   try {
     const categories = await getPrisma().category.findMany({
+      where: { isActive: true },
       select: {
         id: true,
         name: true,
@@ -45,7 +57,55 @@ app.get("/api/categories", async (_req: Request, res: Response) => {
     res.status(200).json(categories);
   } catch {
     res.status(500).json({
-      error: "Unable to retrieve categories",
+      error: {
+        code: "REFERENCE_DATA_FAILED",
+        message: "Reference data is unavailable. Try again.",
+      },
+    });
+  }
+});
+
+app.get("/api/related-systems", async (_req: Request, res: Response) => {
+  try {
+    const relatedSystems = await getPrisma().relatedSystem.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        name: true,
+      },
+      orderBy: [{ name: "asc" }, { id: "asc" }],
+    });
+
+    res.status(200).json(relatedSystems);
+  } catch {
+    res.status(500).json({
+      error: {
+        code: "REFERENCE_DATA_FAILED",
+        message: "Reference data is unavailable. Try again.",
+      },
+    });
+  }
+});
+
+app.get("/api/development-requesters", async (_req: Request, res: Response) => {
+  try {
+    const requesters = await getPrisma().requesterUser.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        displayName: true,
+        email: true,
+      },
+      orderBy: [{ displayName: "asc" }, { id: "asc" }],
+    });
+
+    res.status(200).json(requesters);
+  } catch {
+    res.status(500).json({
+      error: {
+        code: "REQUESTER_LOOKUP_FAILED",
+        message: "Development Requesters are unavailable. Try again.",
+      },
     });
   }
 });
