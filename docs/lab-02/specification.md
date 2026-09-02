@@ -224,8 +224,8 @@ The API uses JSON except multipart Attachment upload and binary content response
 - [x] All six Lab 2 Issues are linked to the Project and follow the required Kanban transitions.
 - [x] Each feature uses its own branch and peer-reviewed PR into `lab2-staging`.
 - [x] Each PR is explicitly linked to its Issue; each review comment has an author response.
-- [ ] Phanuwit approves and performs every feature merge and the final release merge. Feature approvals and all reviewer-performed merges are recorded; explicit post-merge confirmation for release PR #23 is pending in the final-evidence PR.
-- [ ] `reviewer.md` records identities, PR links, meaningful comments, responses, approvals, and merges. The final release confirmation link is pending.
+- [x] Phanuwit approved and performed every feature merge; for final release PR #23, he personally performed the merge and explicitly confirmed his review afterward because the formal Approve action was accidentally skipped.
+- [ ] `reviewer.md` records identities, PR links, meaningful comments, responses, approvals, and merges. The final PR #24 author-response link will be added after this correction is pushed.
 - [x] `ai-use.md` records the LLM, 6–10 selected prompts, decisions, corrections, and reflection.
 - [x] Final tests were rerun on clean final `main`; all Issues and Kanban cards are Done.
 - [ ] One concise PDF uses `Answer Part 1` through `Answer Part 9` in exact order with working links and readable evidence.
