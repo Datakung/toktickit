@@ -7,7 +7,7 @@ Detail, and Attachment lifecycle needed by the Requester Ticketing MVP.
 
 ## Current Lab 2 increment
 
-Through Issue #15, the current increment provides:
+Through the local Issue #16 quality gate, the current feature branch provides:
 
 1. a PostgreSQL/Prisma foundation for Requesters, Categories, Related Systems,
    Tickets, and Attachments;
@@ -28,7 +28,14 @@ Through Issue #15, the current increment provides:
     behavior;
 11. existing-Ticket Attachment upload, ordered active/removed metadata,
     authenticated image/PDF preview and download, and confirmed soft removal; and
-12. Vitest/Supertest component and API tests plus Chromium Playwright flows.
+12. Vitest/Supertest component and API tests plus Chromium Playwright flows;
+13. release-wide safe-error and exact Zen Green style audits; and
+14. inspected desktop, tablet, and mobile evidence for Create Ticket, My Tickets,
+    and Ticket Detail under `artifacts/lab-02/screenshots/`.
+
+Issue #16 is not released yet. Its quality PR still requires Phanuwit's approval
+and reviewer-performed merge into `lab2-staging`, followed by the reviewed
+`lab2-staging` to `main` release PR and a complete final `main` rerun.
 
 Comments, Internal Notes, IT Staff controls, status changes, and real
 authentication remain outside the Lab 2 Requester MVP.
@@ -225,13 +232,18 @@ npm run test:e2e
 
 `npm test` validates `TEST_DATABASE_URL`, injects it as Prisma's
 `DATABASE_URL`, applies committed migrations, and seeds only the isolated test
-target before the suites begin. To apply the same guarded migration step
+target before the suites begin. Database-backed server test files execute
+serially against that shared isolated target to prevent cross-file fixture
+timing from affecting results. To apply the same guarded migration step
 explicitly, run `npm --prefix server run test:db:migrate` from the repository
 root.
 
 Install the Playwright Chromium binary once on a new machine with
 `npx playwright install chromium`. Lab 2 results and planned-test traceability
-are recorded in `docs/lab-02/tests.md`.
+are recorded in `docs/lab-02/tests.md`. The latest feature-branch quality gate
+passes 13 server files/89 tests, 9 client files/65 tests, all 14 Chromium tests,
+both production builds, and both production-only dependency audits. These
+counts must be rerun and recorded again after the reviewer merges final `main`.
 
 ## Git workflow
 

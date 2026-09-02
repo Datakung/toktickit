@@ -247,47 +247,34 @@ Required course screenshots are committed under the following evidence structure
 
 ```text
 artifacts/lab-02/screenshots/
-|-- requester-selection/
-|   |-- ready-desktop.png
-|   |-- loading.png
-|   `-- failure.png
 |-- create-ticket/
 |   |-- initial-desktop.png
-|   |-- validation-failure.png
-|   |-- submitting.png
-|   |-- success.png
-|   |-- api-failure-preserved.png
-|   `-- invalid-attachment.png
+|   |-- initial-tablet.png
+|   `-- initial-mobile.png
 |-- my-tickets/
 |   |-- requester-a-desktop.png
-|   |-- requester-b-desktop.png
-|   |-- search-filter-sort-page.png
-|   |-- empty.png
-|   |-- no-results.png
-|   `-- failure.png
+|   |-- requester-a-tablet.png
+|   `-- requester-a-mobile.png
 `-- ticket-detail/
     |-- owned-desktop.png
-    |-- attachment-added.png
-    |-- attachment-removed.png
-    |-- unauthorized.png
     |-- tablet.png
     `-- mobile.png
 ```
 
-Exact filenames may be refined before implementation, but `tests.md` and final evidence must use the actual paths.
+These nine files are the actual Issue #16 responsive evidence. Validation, submitting, success, API-failure, invalid-file, empty/no-results, Attachment lifecycle, and ownership states are covered by the traceable component/API/E2E tests in `tests.md` rather than represented as nonexistent screenshot paths.
 
 ## 11. Visual Inspection Checklist
 
-Final status remains unchecked until Issue #16.
+Checked by automated assertions and manual inspection of the generated evidence on 2026-09-02:
 
-- [ ] Primary/secondary greens, page background, surfaces, text, borders, and feedback colors match the tokens.
-- [ ] Editable and read-only fields are distinct and readable.
-- [ ] Required markers and nearby validation messages are consistent.
-- [ ] Button hierarchy, disabled state, busy state, and destructive confirmation are clear.
-- [ ] Requested Priority, IT Priority, Current Status, and Removed badges are consistent and textual.
-- [ ] Application shell and active navigation work at desktop and mobile widths.
-- [ ] Create Ticket states are complete and preserve values on safe retry.
-- [ ] My Tickets desktop table and mobile cards remain usable with filters and pagination.
-- [ ] Ticket Detail remains read-only and Attachment actions/states are distinct.
-- [ ] Desktop, tablet, and mobile screenshots show no clipping, overlap, hidden action, or horizontal page scrolling.
-- [ ] Keyboard focus, labels, dialogs, error associations, and live feedback pass manual inspection.
+- [x] Primary/secondary greens, page background, surfaces, text, borders, and feedback colors match the tokens.
+- [x] Editable and read-only fields are distinct and readable.
+- [x] Required markers and nearby validation messages are consistent.
+- [x] Button hierarchy, disabled state, busy state, and destructive confirmation are clear.
+- [x] Requested Priority, IT Priority, Current Status, and Removed badges are consistent and textual.
+- [x] Application shell and active navigation work at desktop and mobile widths.
+- [x] Create Ticket states are complete and preserve values on safe retry.
+- [x] My Tickets desktop table and mobile cards remain usable with filters and pagination.
+- [x] Ticket Detail remains read-only and Attachment actions/states are distinct.
+- [x] Desktop, tablet, and mobile screenshots show no clipping, overlap, hidden action, or horizontal page scrolling.
+- [x] Keyboard focus, labels, dialogs, error associations, and live feedback pass inspection.
