@@ -7,7 +7,7 @@ Detail, and Attachment lifecycle needed by the Requester Ticketing MVP.
 
 ## Current Lab 2 increment
 
-Through the local Issue #16 quality gate, the current feature branch provides:
+Through the verified Issue #16 quality gate on `lab2-staging`, the current increment provides:
 
 1. a PostgreSQL/Prisma foundation for Requesters, Categories, Related Systems,
    Tickets, and Attachments;
@@ -33,9 +33,9 @@ Through the local Issue #16 quality gate, the current feature branch provides:
 14. inspected desktop, tablet, and mobile evidence for Create Ticket, My Tickets,
     and Ticket Detail under `artifacts/lab-02/screenshots/`.
 
-Issue #16 is not released yet. Its quality PR still requires Phanuwit's approval
-and reviewer-performed merge into `lab2-staging`, followed by the reviewed
-`lab2-staging` to `main` release PR and a complete final `main` rerun.
+Issue #16 is not released yet. Phanuwit approved and merged its corrected quality
+PR into `lab2-staging`; the reviewed `lab2-staging` to `main` release PR and a
+complete final `main` rerun remain pending.
 
 Comments, Internal Notes, IT Staff controls, status changes, and real
 authentication remain outside the Lab 2 Requester MVP.

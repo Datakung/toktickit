@@ -208,25 +208,25 @@ The API uses JSON except multipart Attachment upload and binary content response
 
 ### Product completion
 
-- [ ] All included FRs, BRs, and ACs are implemented consistently with the approved contract.
-- [ ] Every AC maps to at least one real automated or documented visual test in `tests.md`.
-- [ ] Unit, API/integration, UI component, UI style, responsive, and E2E suites pass with no required test skipped or disabled.
-- [ ] Database migration and idempotent seed succeed from documented setup without deleting Lab 1 data.
-- [ ] Backend ownership, validation, failure, boundary, and Attachment rules are enforced independently of the UI.
-- [ ] Concurrent Attachment boundary and compensation tests prove a five-file maximum with no temporary/final orphan.
-- [ ] Injected unexpected failures cover every required API capability and its safe retrying UI state.
-- [ ] Desktop, tablet, and mobile visual checks match `ui-spec.md` with no clipping, overlap, hidden actions, or horizontal page scrolling.
-- [ ] README and all Lab 2 documentation match the final implementation and commands.
-- [ ] `.env`, uploaded files, secrets, `node_modules`, and build output are not tracked.
+- [x] All included FRs, BRs, and ACs are implemented consistently with the approved contract.
+- [x] Every AC maps to at least one real automated or documented visual test in `tests.md`.
+- [x] Unit, API/integration, UI component, UI style, responsive, and E2E suites pass with no required test skipped or disabled.
+- [x] Database migration and idempotent seed succeed from documented setup without deleting Lab 1 data.
+- [x] Backend ownership, validation, failure, boundary, and Attachment rules are enforced independently of the UI.
+- [x] Concurrent Attachment boundary and compensation tests prove a five-file maximum with no temporary/final orphan.
+- [x] Injected unexpected failures cover every required API capability and its safe retrying UI state.
+- [x] Desktop, tablet, and mobile visual checks match `ui-spec.md` with no clipping, overlap, hidden actions, or horizontal page scrolling.
+- [x] README and all Lab 2 documentation match the implementation and documented commands on verified `lab2-staging`.
+- [x] `.env`, uploaded files, secrets, `node_modules`, and build output are not tracked.
 
 ### Course delivery
 
-- [ ] All six Lab 2 Issues are linked to the Project and follow the required Kanban transitions.
-- [ ] Each feature uses its own branch and peer-reviewed PR into `lab2-staging`.
-- [ ] Each PR is explicitly linked to its Issue; each review comment has an author response.
+- [x] All six Lab 2 Issues are linked to the Project and follow the required Kanban transitions.
+- [x] Each feature uses its own branch and peer-reviewed PR into `lab2-staging`.
+- [x] Each PR is explicitly linked to its Issue; each review comment has an author response.
 - [ ] Phanuwit approves and performs every feature merge and the final release merge.
 - [ ] `reviewer.md` records identities, PR links, meaningful comments, responses, approvals, and merges.
-- [ ] `ai-use.md` records the LLM, 6–10 selected prompts, decisions, corrections, and reflection.
+- [x] `ai-use.md` records the LLM, 6–10 selected prompts, decisions, corrections, and reflection.
 - [ ] Final tests are rerun on clean final `main`; all Issues and Kanban cards are Done.
 - [ ] One concise PDF uses `Answer Part 1` through `Answer Part 9` in exact order with working links and readable evidence.
 
