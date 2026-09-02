@@ -2,7 +2,7 @@
 
 **Planning status:** Created before Lab 2 product implementation.
 
-**Current status:** Issue #16 is in Fixing after PR #22 review identified E2E database-isolation and committed-screenshot reproducibility gaps. The guarded dedicated E2E target, routine-output separation, and explicit deterministic evidence flow now pass locally in correction `b3fe114`. Documentation push/response, re-review, integration, the release PR, and the final `main` rerun remain pending.
+**Current status:** Phanuwit approved and merged corrected quality PR #22 into `lab2-staging` as `4dfb0f2`. The complete staging gate passes 94 server tests, 65 client tests, 14 browser tests, both builds, both production audits, and the unchanged-development-state proof. The final release PR and complete `main` rerun remain pending.
 
 ## 1. Test Strategy
 
@@ -165,7 +165,7 @@ The first new responsive runs exposed three evidence-test selector assumptions: 
 
 Phanuwit's PR #22 review then exposed two release-gate weaknesses missed by the first audit. The correction rejects missing, same-as-development, and unmarked E2E database targets; migrates, resets, seeds, and cleans `toktickit_e2e`; isolates E2E uploads; and hashes all development tables plus upload files before and after Playwright. The complete 14-test routine run produced the same development hash before and after, removed the E2E upload directory, and left all nine committed image hashes unchanged. Two consecutive explicit evidence runs used the fixed `TKT-20260902-EVID01` seed and produced identical hashes for every screenshot; the refreshed desktop/mobile images were also visually inspected for readable deterministic content and no overflow.
 
-These are feature-branch results. They must be rerun after reviewer merge into `lab2-staging` and again on final `main` before the submission PDF records final-release evidence.
+The same complete gate passed on merged `lab2-staging` commit `4dfb0f2` on 2026-09-02 with a clean working tree. It must be rerun once more on final `main` before the submission PDF records final-release evidence.
 
 Issue #15 passed the following automated checks on 2026-09-01:
 
