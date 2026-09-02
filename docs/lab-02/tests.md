@@ -2,7 +2,10 @@
 
 **Planning status:** Created before Lab 2 product implementation.
 
-**Current status:** Phanuwit approved and merged corrected quality PR #22 into `lab2-staging` as `4dfb0f2`. The complete staging gate passes 94 server tests, 65 client tests, 14 browser tests, both builds, both production audits, and the unchanged-development-state proof. The final release PR and complete `main` rerun remain pending.
+**Current status:** Phanuwit merged final release PR #23 from `lab2-staging` into
+`main` as `996c9bf`. On 2026-09-02, the complete clean final-`main` gate passed
+94 server tests, 65 client tests, 14 browser tests, both builds, both production
+audits, and the unchanged-development-state proof.
 
 ## 1. Test Strategy
 
@@ -165,7 +168,12 @@ The first new responsive runs exposed three evidence-test selector assumptions: 
 
 Phanuwit's PR #22 review then exposed two release-gate weaknesses missed by the first audit. The correction rejects missing, same-as-development, and unmarked E2E database targets; migrates, resets, seeds, and cleans `toktickit_e2e`; isolates E2E uploads; and hashes all development tables plus upload files before and after Playwright. The complete 14-test routine run produced the same development hash before and after, removed the E2E upload directory, and left all nine committed image hashes unchanged. Two consecutive explicit evidence runs used the fixed `TKT-20260902-EVID01` seed and produced identical hashes for every screenshot; the refreshed desktop/mobile images were also visually inspected for readable deterministic content and no overflow.
 
-The same complete gate passed on merged `lab2-staging` commit `4dfb0f2` on 2026-09-02 with a clean working tree. It must be rerun once more on final `main` before the submission PDF records final-release evidence.
+The same complete gate passed on merged `lab2-staging` commit `4dfb0f2` and was
+rerun successfully on final `main` release commit `996c9bf` on 2026-09-02. The
+final run used guarded `toktickit_test` and `toktickit_e2e` databases, reported
+the identical development-state hash
+`13a8e39513495da8284757539287735d0e9592833cd69b833d72ca18b35993ae`
+before and after Playwright, and left the working tree clean.
 
 Issue #15 passed the following automated checks on 2026-09-01:
 
@@ -212,7 +220,11 @@ Issue #12 passed the following checks on 2026-08-31:
 - the development reference-data snapshot was identical before and after the isolated run; missing and same-as-development test targets both failed before test loading; and
 - production dependency audit (`npm audit --omit=dev`) reported zero vulnerabilities.
 
-The development-only Vitest 2 dependency chain reports advisories whose automated fix requires a major Vitest 4 upgrade. That unrelated major upgrade is deferred for a separately reviewed dependency task; both production-only dependency audits report zero vulnerabilities. Final `main` verification remains required after the reviewer performs the quality and release merges.
+The development-only Vitest 2 dependency chain reports advisories whose
+automated fix requires a major Vitest 4 upgrade. That unrelated major upgrade is
+deferred for a separately reviewed dependency task; both production-only
+dependency audits report zero vulnerabilities. Final `main` verification passed
+after the reviewer performed the quality and release merges.
 
 No standalone pure unit test applies to Issue #12: its rules cross the Prisma/API or React/browser boundaries and are covered by API/integration, component, style, responsive, and E2E tests. Pure Ticket and Attachment helpers remain assigned to their later owning Issues.
 

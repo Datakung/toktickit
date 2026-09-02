@@ -216,7 +216,7 @@ The API uses JSON except multipart Attachment upload and binary content response
 - [x] Concurrent Attachment boundary and compensation tests prove a five-file maximum with no temporary/final orphan.
 - [x] Injected unexpected failures cover every required API capability and its safe retrying UI state.
 - [x] Desktop, tablet, and mobile visual checks match `ui-spec.md` with no clipping, overlap, hidden actions, or horizontal page scrolling.
-- [x] README and all Lab 2 documentation match the implementation and documented commands on verified `lab2-staging`.
+- [x] README and all Lab 2 documentation match the implementation and documented commands on final `main`.
 - [x] `.env`, uploaded files, secrets, `node_modules`, and build output are not tracked.
 
 ### Course delivery
@@ -224,10 +224,10 @@ The API uses JSON except multipart Attachment upload and binary content response
 - [x] All six Lab 2 Issues are linked to the Project and follow the required Kanban transitions.
 - [x] Each feature uses its own branch and peer-reviewed PR into `lab2-staging`.
 - [x] Each PR is explicitly linked to its Issue; each review comment has an author response.
-- [ ] Phanuwit approves and performs every feature merge and the final release merge.
-- [ ] `reviewer.md` records identities, PR links, meaningful comments, responses, approvals, and merges.
+- [ ] Phanuwit approves and performs every feature merge and the final release merge. Feature approvals and all reviewer-performed merges are recorded; explicit post-merge confirmation for release PR #23 is pending in the final-evidence PR.
+- [ ] `reviewer.md` records identities, PR links, meaningful comments, responses, approvals, and merges. The final release confirmation link is pending.
 - [x] `ai-use.md` records the LLM, 6–10 selected prompts, decisions, corrections, and reflection.
-- [ ] Final tests are rerun on clean final `main`; all Issues and Kanban cards are Done.
+- [x] Final tests were rerun on clean final `main`; all Issues and Kanban cards are Done.
 - [ ] One concise PDF uses `Answer Part 1` through `Answer Part 9` in exact order with working links and readable evidence.
 
 ## 11. Assumptions and Decisions
