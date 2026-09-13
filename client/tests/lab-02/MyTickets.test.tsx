@@ -15,7 +15,7 @@ const ticket: api.TicketListItem = {
   ticketNumber: "TKT-20260901-ABC123",
   summary: "Cannot connect to VPN",
   requestedPriority: "HIGH",
-  itPriority: null,
+  itPriority: "HIGH",
   status: "NEW",
   createdAt: "2026-09-01T03:00:00.000Z",
   updatedAt: "2026-09-01T04:00:00.000Z",

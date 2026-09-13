@@ -16,6 +16,16 @@ export interface DevelopmentRequester {
   email: string;
 }
 
+export type UserRole = "REQUESTER" | "IT_STAFF" | "ADMINISTRATOR";
+export interface CurrentUser extends DevelopmentRequester {
+  role: UserRole;
+  isActive: boolean;
+  mustChangePassword: boolean;
+}
+
+let csrfToken = "";
+const requestCredentials: RequestCredentials = "include";
+
 export interface SystemStatus {
   online: boolean;
   categories: Category[];
@@ -61,7 +71,7 @@ export interface TicketListItem {
   ticketNumber: string;
   summary: string;
   requestedPriority: RequestedPriority;
-  itPriority: RequestedPriority | null;
+  itPriority: RequestedPriority;
   status: TicketStatus;
   createdAt: string;
   updatedAt: string;
@@ -144,7 +154,7 @@ export async function checkSystem(): Promise<SystemStatus> {
     throw new Error("The backend returned an unhealthy status");
   }
 
-  const categoriesResponse = await fetch(`${API_URL}/api/categories`);
+  const categoriesResponse = await fetch(`${API_URL}/api/categories`, { credentials: requestCredentials });
 
   if (!categoriesResponse.ok) {
     throw new Error(
@@ -161,7 +171,7 @@ export async function checkSystem(): Promise<SystemStatus> {
 }
 
 async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`);
+  const response = await fetch(`${API_URL}${path}`, { credentials: requestCredentials });
 
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
@@ -178,14 +188,8 @@ export function getRelatedSystems(): Promise<RelatedSystem[]> {
   return getJson<RelatedSystem[]>("/api/related-systems");
 }
 
-export function getDevelopmentRequesters(): Promise<DevelopmentRequester[]> {
-  return getJson<DevelopmentRequester[]>("/api/development-requesters");
-}
-
-export function developmentRequesterHeaders(requesterId: number): HeadersInit {
-  return {
-    "X-Development-Requester-Id": String(requesterId),
-  };
+export function authenticatedHeaders(_requesterId: number): HeadersInit {
+  return csrfToken ? { "X-CSRF-Token": csrfToken } : {};
 }
 
 async function parseApiResponse<T>(response: Response): Promise<T> {
@@ -201,14 +205,43 @@ async function parseApiResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+export async function bootstrapCsrf(): Promise<string> {
+  const response = await fetch(`${API_URL}/api/auth/csrf`, { credentials: requestCredentials });
+  const body = await parseApiResponse<{ csrfToken: string }>(response);
+  csrfToken = body.csrfToken;
+  return csrfToken;
+}
+export async function login(email: string, password: string) {
+  if (!csrfToken) await bootstrapCsrf();
+  const response = await fetch(`${API_URL}/api/auth/login`, { method: "POST", credentials: requestCredentials, headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken }, body: JSON.stringify({ email, password }) });
+  const body = await parseApiResponse<{ user: CurrentUser; csrfToken: string }>(response);
+  csrfToken = body.csrfToken; return body.user;
+}
+export async function getCurrentUser() {
+  const response = await fetch(`${API_URL}/api/auth/me`, { credentials: requestCredentials });
+  const body = await parseApiResponse<{ user: CurrentUser; csrfToken: string }>(response);
+  csrfToken = body.csrfToken; return body.user;
+}
+export async function changePassword(currentPassword: string, newPassword: string, confirmPassword: string) {
+  const response = await fetch(`${API_URL}/api/auth/change-password`, { method: "POST", credentials: requestCredentials, headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken }, body: JSON.stringify({ currentPassword, newPassword, confirmPassword }) });
+  const body = await parseApiResponse<{ user: CurrentUser; csrfToken: string }>(response);
+  csrfToken = body.csrfToken; return body.user;
+}
+export async function logout() {
+  const response = await fetch(`${API_URL}/api/auth/logout`, { method: "POST", credentials: requestCredentials, headers: { "X-CSRF-Token": csrfToken } });
+  if (!response.ok) await parseApiResponse<never>(response);
+  csrfToken = "";
+}
+
 export async function createTicket(
   requesterId: number,
   input: CreateTicketRequest,
 ): Promise<CreatedTicket> {
   const response = await fetch(`${API_URL}/api/tickets`, {
     method: "POST",
+    credentials: requestCredentials,
     headers: {
-      ...developmentRequesterHeaders(requesterId),
+      ...authenticatedHeaders(requesterId),
       "Content-Type": "application/json",
     },
     body: JSON.stringify(input),
@@ -226,7 +259,8 @@ export async function uploadTicketAttachment(
   form.append("file", file);
   const response = await fetch(`${API_URL}/api/tickets/${ticketId}/attachments`, {
     method: "POST",
-    headers: developmentRequesterHeaders(requesterId),
+    credentials: requestCredentials,
+    headers: authenticatedHeaders(requesterId),
     body: form,
   });
   const body = await parseApiResponse<{ data: AttachmentMetadata }>(response);
@@ -254,7 +288,8 @@ export async function getTickets(
   if (query.status !== null) parameters.set("status", query.status);
 
   const response = await fetch(`${API_URL}/api/tickets?${parameters.toString()}`, {
-    headers: developmentRequesterHeaders(requesterId),
+    credentials: requestCredentials,
+    headers: authenticatedHeaders(requesterId),
   });
   return parseApiResponse<TicketListResponse>(response);
 }
@@ -264,7 +299,8 @@ export async function getTicket(
   ticketId: string | number,
 ): Promise<TicketDetail> {
   const response = await fetch(`${API_URL}/api/tickets/${encodeURIComponent(String(ticketId))}`, {
-    headers: developmentRequesterHeaders(requesterId),
+    credentials: requestCredentials,
+    headers: authenticatedHeaders(requesterId),
   });
   const body = await parseApiResponse<{ data: TicketDetail }>(response);
   return body.data;
@@ -275,7 +311,8 @@ export async function getTicketAttachments(
   ticketId: number,
 ): Promise<AttachmentMetadata[]> {
   const response = await fetch(`${API_URL}/api/tickets/${ticketId}/attachments`, {
-    headers: developmentRequesterHeaders(requesterId),
+    credentials: requestCredentials,
+    headers: authenticatedHeaders(requesterId),
   });
   const body = await parseApiResponse<{ data: AttachmentMetadata[] }>(response);
   return body.data;
@@ -302,7 +339,7 @@ export async function getAttachmentContent(
 ): Promise<AttachmentContent> {
   const response = await fetch(
     `${API_URL}/api/tickets/${ticketId}/attachments/${attachmentId}/download?disposition=${disposition}`,
-    { headers: developmentRequesterHeaders(requesterId) },
+    { credentials: requestCredentials, headers: authenticatedHeaders(requesterId) },
   );
   if (!response.ok) await parseApiResponse<never>(response);
   return {
@@ -320,8 +357,9 @@ export async function removeTicketAttachment(
 ): Promise<AttachmentMetadata> {
   const response = await fetch(`${API_URL}/api/tickets/${ticketId}/attachments/${attachmentId}`, {
     method: "DELETE",
+    credentials: requestCredentials,
     headers: {
-      ...developmentRequesterHeaders(requesterId),
+      ...authenticatedHeaders(requesterId),
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ reason }),

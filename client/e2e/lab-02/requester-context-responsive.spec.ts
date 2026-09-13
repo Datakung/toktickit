@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { signIn } from "../support/auth.js";
 
 const viewports = [
   { name: "desktop", width: 1440, height: 900 },
@@ -7,43 +8,20 @@ const viewports = [
 ];
 
 for (const viewport of viewports) {
-  test(`requester context remains usable at ${viewport.name} width`, async ({
+  test(`signed-in Requester context remains usable at ${viewport.name} width`, async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/select-requester");
-
-    const requesterSelect = page.getByRole("combobox", {
-      name: /Development Requester/i,
-    });
-    const continueButton = page.getByRole("button", { name: "Continue" });
-
-    await expect(requesterSelect).toBeEnabled();
-    await expect(requesterSelect).toBeInViewport();
-    await expect(continueButton).toBeInViewport();
+    await signIn(page);
+    const signOut = page.getByRole("button", { name: "Sign out" });
+    await expect(signOut).toBeInViewport();
     await expect
       .poll(() =>
-        requesterSelect.evaluate((element) =>
+        signOut.evaluate((element) =>
           Number.parseFloat(getComputedStyle(element).minHeight),
         ),
       )
       .toBeGreaterThanOrEqual(44);
-    await expect
-      .poll(() =>
-        continueButton.evaluate((element) =>
-          Number.parseFloat(getComputedStyle(element).minHeight),
-        ),
-      )
-      .toBeGreaterThanOrEqual(44);
-
-    await requesterSelect.focus();
-    await expect
-      .poll(() =>
-        requesterSelect.evaluate((element) =>
-          Number.parseFloat(getComputedStyle(element).outlineWidth),
-        ),
-      )
-      .toBeGreaterThanOrEqual(3);
     await expect
       .poll(() =>
         page.evaluate(
@@ -54,15 +32,7 @@ for (const viewport of viewports) {
       )
       .toBe(true);
 
-    await requesterSelect.selectOption({
-      label: "Kanya Srisuk — kanya.srisuk@example.test",
-    });
-    await continueButton.click();
-
     await expect(page).toHaveURL(/\/tickets$/);
-    await expect(
-      page.getByRole("button", { name: "Change Requester" }),
-    ).toBeInViewport();
     await expect(
       page.getByRole("heading", { name: "My Tickets" }),
     ).toBeInViewport();

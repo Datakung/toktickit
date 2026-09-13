@@ -28,6 +28,9 @@ export default defineConfig({
       url: `${e2eApiUrl}/api/health`,
       reuseExistingServer: false,
       timeout: 60_000,
+      env: {
+        FRONTEND_ORIGIN: "http://127.0.0.1:5173",
+      },
     },
     {
       command: "npm run dev -- --host 127.0.0.1",

@@ -20,7 +20,7 @@ function detail(): api.TicketDetail {
     summary: "Laptop screen flickers",
     description: "The screen flickers after the laptop resumes from sleep.",
     requestedPriority: "HIGH",
-    itPriority: null,
+    itPriority: "HIGH",
     status: "NEW",
     createdAt: "2026-09-01T03:00:00.000Z",
     updatedAt: "2026-09-01T04:00:00.000Z",
@@ -70,7 +70,7 @@ describe("Requester Ticket Detail", () => {
     expect(screen.getByText("The screen flickers after the laptop resumes from sleep.")).toBeVisible();
     expect(screen.getByText("Hardware")).toBeVisible();
     expect(screen.getByText("Student Information System")).toBeVisible();
-    expect(screen.getByText("Not assigned")).toBeVisible();
+    expect(screen.getAllByText("High")).toHaveLength(2);
     expect(screen.queryByRole("textbox", { name: /Summary/i })).not.toBeInTheDocument();
     expect(api.getTicket).toHaveBeenCalledWith(requester.id, "41");
   });

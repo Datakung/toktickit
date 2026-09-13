@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { mockSignedInRequester } from "../support/auth.js";
 
 const requester = {
   id: 1,
@@ -15,7 +16,7 @@ const detail = {
   summary: "Laptop screen flickers after sleep",
   description: "The screen flickers after the laptop resumes from sleep.",
   requestedPriority: "HIGH",
-  itPriority: null,
+  itPriority: "HIGH",
   status: "NEW",
   createdAt: "2026-09-01T03:00:00.000Z",
   updatedAt: "2026-09-01T04:00:00.000Z",
@@ -34,15 +35,10 @@ const detail = {
 };
 
 async function mockDetail(page: import("@playwright/test").Page) {
-  await page.route("**/api/development-requesters", (route) => route.fulfill({
-    status: 200, contentType: "application/json", body: JSON.stringify([requester]),
-  }));
+  await mockSignedInRequester(page);
   await page.route("**/api/tickets/41", (route) => route.fulfill({
     status: 200, contentType: "application/json", body: JSON.stringify({ data: detail }),
   }));
-  await page.addInitScript(() => {
-    sessionStorage.setItem("toktickit.developmentRequesterId", "1");
-  });
 }
 
 for (const viewport of [

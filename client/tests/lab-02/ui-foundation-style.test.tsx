@@ -2,12 +2,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
-import App, { DEVELOPMENT_REQUESTER_STORAGE_KEY } from "../../src/App.js";
+import App from "../../src/App.js";
 
-describe("Zen Green requester-context foundation", () => {
+const requester: api.CurrentUser = {
+  id: 1,
+  displayName: "Anan Chaiyasit",
+  email: "anan.chaiyasit@example.test",
+  role: "REQUESTER",
+  isActive: true,
+  mustChangePassword: false,
+};
+
+describe("Zen Green authenticated Requester foundation", () => {
   beforeEach(() => {
     sessionStorage.clear();
-    window.history.replaceState({}, "", "/select-requester");
+    window.history.replaceState({}, "", "/tickets");
     vi.spyOn(api, "getCategories").mockResolvedValue([]);
     vi.spyOn(api, "getRelatedSystems").mockResolvedValue([]);
     vi.spyOn(api, "getTickets").mockResolvedValue({
@@ -34,38 +43,28 @@ describe("Zen Green requester-context foundation", () => {
     vi.restoreAllMocks();
   });
 
-  it("uses accessible control semantics and the approved component hierarchy", async () => {
-    vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue([
-      {
-        id: 1,
-        displayName: "Anan Chaiyasit",
-        email: "anan.chaiyasit@example.test",
-      },
-    ]);
+  it("uses accessible sign-in controls and the approved component hierarchy", async () => {
+    vi.spyOn(api, "getCurrentUser").mockRejectedValue(
+      new api.ApiError(401, "AUTHENTICATION_REQUIRED", "Sign in to continue."),
+    );
 
     render(<App />);
 
-    await screen.findByRole("option", { name: /Anan Chaiyasit/i });
-    const select = screen.getByRole("combobox", {
-      name: /Development Requester/i,
-    });
-    expect(select).toHaveAttribute("aria-describedby", "requester-help");
-    expect(select.closest(".selection-card")).not.toBeNull();
-    expect(screen.getByRole("button", { name: "Continue" })).toHaveClass(
+    await screen.findByRole("heading", { name: "Sign in" });
+    expect(screen.getByLabelText("Email")).toHaveAttribute("autocomplete", "username");
+    expect(screen.getByLabelText("Password")).toHaveAttribute(
+      "autocomplete",
+      "current-password",
+    );
+    expect(screen.getByRole("button", { name: "Sign in" })).toHaveClass(
       "primary-button",
     );
+    expect(screen.getByRole("heading", { name: "Sign in" }).closest(".selection-card"))
+      .not.toBeNull();
   });
 
   it("provides real navigation links and an accessible mobile disclosure", async () => {
-    sessionStorage.setItem(DEVELOPMENT_REQUESTER_STORAGE_KEY, "1");
-    window.history.replaceState({}, "", "/tickets");
-    vi.spyOn(api, "getDevelopmentRequesters").mockResolvedValue([
-      {
-        id: 1,
-        displayName: "Anan Chaiyasit",
-        email: "anan.chaiyasit@example.test",
-      },
-    ]);
+    vi.spyOn(api, "getCurrentUser").mockResolvedValue(requester);
     const user = userEvent.setup();
 
     render(<App />);

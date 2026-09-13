@@ -1,12 +1,9 @@
 import { expect, test } from "@playwright/test";
 import { Buffer } from "node:buffer";
+import { signIn } from "../support/auth.js";
 
 async function selectRequesterAndOpenForm(page: import("@playwright/test").Page) {
-  await page.goto("/select-requester");
-  const requester = page.getByRole("combobox", { name: /Development Requester/i });
-  await expect(requester).toBeEnabled();
-  await requester.selectOption({ index: 1 });
-  await page.getByRole("button", { name: "Continue" }).click();
+  await signIn(page);
   const createTicketLink = page
     .getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: "Create Ticket" });
