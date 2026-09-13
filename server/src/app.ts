@@ -3,12 +3,16 @@ import cors from "cors";
 import { getPrisma } from "./prisma.js";
 import { ticketRouter } from "./tickets/ticket-routes.js";
 import { attachmentRouter } from "./attachments/attachment-routes.js";
+import { authRouter } from "./auth/auth-routes.js";
+import { requireNormalSession } from "./auth/auth-middleware.js";
 
 // The Express app is exported separately from app.listen() (see index.ts) so
 // Supertest can import `app` without opening a port. Do not merge these files.
 export const app = express();
 
 app.use(cors({
+  origin: (process.env.FRONTEND_ORIGIN ?? "http://localhost:5173").split(",").map(value => value.trim()),
+  credentials: true,
   exposedHeaders: ["Content-Disposition", "Content-Length"],
 }));
 app.use(express.json());
@@ -26,6 +30,7 @@ app.use((error: unknown, _request: Request, response: Response, next: (error?: u
 
   next(error);
 });
+app.use("/api/auth", authRouter);
 app.use("/api/tickets", ticketRouter);
 app.use("/api/tickets/:ticketId/attachments", attachmentRouter);
 
@@ -41,7 +46,7 @@ app.get("/api/health", (_req: Request, res: Response) => {
   });
 });
 
-app.get("/api/categories", async (_req: Request, res: Response) => {
+app.get("/api/categories", requireNormalSession, async (_req: Request, res: Response) => {
   try {
     const categories = await getPrisma().category.findMany({
       where: { isActive: true },
@@ -65,7 +70,7 @@ app.get("/api/categories", async (_req: Request, res: Response) => {
   }
 });
 
-app.get("/api/related-systems", async (_req: Request, res: Response) => {
+app.get("/api/related-systems", requireNormalSession, async (_req: Request, res: Response) => {
   try {
     const relatedSystems = await getPrisma().relatedSystem.findMany({
       where: { isActive: true },
@@ -82,29 +87,6 @@ app.get("/api/related-systems", async (_req: Request, res: Response) => {
       error: {
         code: "REFERENCE_DATA_FAILED",
         message: "Reference data is unavailable. Try again.",
-      },
-    });
-  }
-});
-
-app.get("/api/development-requesters", async (_req: Request, res: Response) => {
-  try {
-    const requesters = await getPrisma().requesterUser.findMany({
-      where: { isActive: true },
-      select: {
-        id: true,
-        displayName: true,
-        email: true,
-      },
-      orderBy: [{ displayName: "asc" }, { id: "asc" }],
-    });
-
-    res.status(200).json(requesters);
-  } catch {
-    res.status(500).json({
-      error: {
-        code: "REQUESTER_LOOKUP_FAILED",
-        message: "Development Requesters are unavailable. Try again.",
       },
     });
   }

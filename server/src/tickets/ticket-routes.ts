@@ -4,6 +4,7 @@ import {
   developmentRequesterContext,
   type DevelopmentRequesterLocals,
 } from "../middleware/development-requester-context.js";
+import { requireCsrf } from "../auth/auth-middleware.js";
 import { retryTicketNumberCollision } from "./ticket-number.js";
 import { validateCreateTicketInput, type TicketFieldErrors } from "./ticket-validation.js";
 import {
@@ -110,6 +111,7 @@ ticketRouter.get(
 ticketRouter.post(
   "/",
   developmentRequesterContext,
+  requireCsrf,
   async (request, response: Response<unknown, DevelopmentRequesterLocals>) => {
     const validation = validateCreateTicketInput(request.body);
     if (!validation.success) {
@@ -141,6 +143,7 @@ ticketRouter.post(
         prisma.ticket.create({
           data: {
             ...validation.data,
+            itPriority: validation.data.requestedPriority,
             ticketNumber,
             requesterId,
           },
