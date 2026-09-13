@@ -14,7 +14,7 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | Issue | Scope | PR / received review / response / approval / reviewer merge |
 |---|---|---|
 | [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
-| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | Implementation and verification complete on `feature/26-authentication-requester-migration`; PR/review pending. |
+| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): implementation and verification complete; Phanuwit's review requested, response/approval/reviewer merge pending. |
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | Pending |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Pending |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
