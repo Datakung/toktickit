@@ -1,11 +1,55 @@
 # TokTickIT
 
+## Current Lab 3 authentication increment
+
+Issue #26 replaces the Lab 2 Development Requester selector and trusted header
+with database-backed authentication. Active users sign in with email/password,
+receive a revocable HttpOnly cookie session, and must change provisioned initial
+passwords before entering their role workspace. Requester Ticket and Attachment
+authorization now derives only from the authenticated session.
+
+The data-preserving migration renames `RequesterUser` to `User` without changing
+existing IDs, ownership, timestamps, removal history, or stored files. It adds
+roles, password state, versioning, and database session records. The repeatable
+seed preserves edited accounts and existing credentials; it never supplies real
+passwords.
+
+### Lab 3 local account provisioning
+
+Add distinct 32-character-or-longer `SESSION_SECRET` and `CSRF_SECRET` values to
+the ignored `server/.env`. Copy the structure below into an ignored file such as
+`server/lab3.credentials.local.json`, include every account whose password hash
+is still null, and choose private initial passwords of 12–128 characters:
+
+```json
+[
+  {
+    "email": "anan.chaiyasit@example.test",
+    "initialPassword": "replace-with-a-private-initial-password"
+  }
+]
+```
+
+After applying migrations and running the repeatable seed, provision once:
+
+```powershell
+cd server
+npx prisma migrate deploy
+npm run prisma:seed
+npm run prisma:provision -- lab3.credentials.local.json
+```
+
+Provisioning validates the entire file before writing, hashes passwords with the
+documented scrypt policy, requires complete coverage, and skips accounts that
+already have hashes. It does not print or overwrite credentials. The local
+credential file matches `*.credentials.local.json` and must never be committed.
+
 TokTickIT is an IT service desk application developed for CPE334. Lab 2 extends
 the verified Lab 1 vertical slice with the data foundation, temporary
 Development Requester context, Ticket creation and discovery, owned Ticket
 Detail, and Attachment lifecycle needed by the Requester Ticketing MVP.
 
-## Current Lab 2 increment
+## Completed Lab 2 increment (historical baseline)
 
 Through the verified Issue #16 quality gate and final release to `main`, the
 current increment provides:
@@ -183,10 +227,9 @@ cd client
 npm run dev
 ```
 
-Open `http://localhost:5173` in a browser. Choose an active Development
-Requester and select **Continue**. The application stores only that temporary
-development selection in the current browser tab, opens the requester shell,
-and allows it to be cleared with **Change Requester**. Select **Create Ticket**
+Open `http://localhost:5173` in a browser and sign in with an active provisioned
+account. The application forces an initial password change, then opens the
+correct role workspace. Select **Create Ticket**
 to submit a validated request and optional initial files, or open **My Tickets**
 to search owned Tickets and manage permitted Attachments from read-only Ticket
 Detail. This is development context for Lab 2, not authentication.
@@ -198,7 +241,11 @@ Detail. This is development context for Lab 2, not authentication.
 | `GET` | `/api/health` | Returns `200` with `{ "status": "ok", "service": "TokTickIT API" }` |
 | `GET` | `/api/categories` | Returns active category IDs and names from PostgreSQL in ID order |
 | `GET` | `/api/related-systems` | Returns active related systems in name order |
-| `GET` | `/api/development-requesters` | Returns active Development Requesters in display-name order |
+| `GET` | `/api/auth/csrf` | Bootstraps browser-bound CSRF protection for sign-in |
+| `POST` | `/api/auth/login` | Authenticates an active account and creates a revocable cookie session |
+| `GET` | `/api/auth/me` | Returns safe current-user data for an active session |
+| `POST` | `/api/auth/change-password` | Changes an initial/current password and rotates all session state |
+| `POST` | `/api/auth/logout` | Revokes the current session and expires its cookie |
 | `GET` | `/api/tickets` | Returns only the selected Requester's Tickets with validated search, filters, sorting, and pagination |
 | `POST` | `/api/tickets` | Creates one validated Ticket for the selected Development Requester |
 | `GET` | `/api/tickets/:ticketId` | Returns an owned read-only Ticket with ordered Attachment metadata |
@@ -221,8 +268,8 @@ npm run prisma:seed
 ```
 
 The seed uses unique-key upserts, so it is safe to run more than once. It creates
-the four Lab 1 Categories, six Related Systems, four active Development
-Requesters, and one inactive Requester without duplicates.
+the four Lab 1 Categories, six Related Systems, five Requester fixtures, four IT
+Staff fixtures, and one Administrator without duplicates or credential resets.
 
 ## Test and build
 

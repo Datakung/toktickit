@@ -1,6 +1,27 @@
 # Lab 3 Planned Tests and Traceability
 
-Status: Planning before implementation, Issue #25, 2026-09-12. All paths below are proposed test locations; files do not yet exist and no Lab 3 result is claimed. Add exact executable case names/results during each feature Issue.
+Status: Evolving traceability record. Issue #25 established the plan; Issue #26 now has executable branch-level evidence. Later-Issue paths and final release results remain planned until implemented.
+
+## Issue #26 verified implementation evidence
+
+Issue #26 implements the authentication/migration slice. Its executable tests
+are `server/tests/lab-03/auth.unit.test.ts`, `auth.api.test.ts`, and
+`migration-regression.test.ts`, plus `client/tests/lab-03/Login.test.tsx` and
+the authenticated Playwright regressions under `client/e2e/`.
+
+- Server: 17 files / 109 tests passed (including idempotent logout); disposable
+  migration fixtures prove duplicate preflight, preserved IDs/FKs/timestamps,
+  priority backfill, sequence continuity, repeatable seed, and provisioning.
+- Client: 9 files / 61 tests passed, covering neutral bootstrap, safe login
+  failure, mandatory password change, Requester shell, and role destinations.
+- Browser: 14 Chromium tests passed through real cookie sessions. The
+  development database/uploads SHA-256 was identical before and after.
+- Both production TypeScript builds passed. The development migration was
+  applied with `prisma migrate deploy`, never reset, after a database/uploads
+  backup and disposable migration verification.
+
+These are branch-level Issue #26 results; final release results still belong on
+reviewed `main` after Issues #27–#30.
 
 ## Planned coverage and AC mapping
 

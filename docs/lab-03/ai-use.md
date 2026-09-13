@@ -13,8 +13,9 @@ Agent used: OpenAI Codex. Model identification for this draft session: GPT-6 (pe
 | 3 | Prepare a dedicated agent review checklist and reusable Issue descriptions. | Kept the internal checklist outside the repository and separate from required submission documents. |
 | 4 | Create the planned GitHub Issues for me. | Authorized creation; the agent checked for duplicates, created #25-30, and verified their Backlog status. |
 | 5 | Check the peer review on PR #31 and address the findings after moving the Issue to Fixing. | Accepted the three concrete ambiguities: inherited status filtering, undefined terminal guards, and delayed resolution requests after reopening. The contract, UI/API rules and planned regressions were corrected together; implementation and re-review remain pending. |
+| 6 | Continue Issue #26 after Docker is ready, then commit, push, and open a PR for Phanuwit. | Implemented the preserved-data User migration, credential provisioning, cookie sessions, CSRF, throttling, mandatory password change, role routing, and removal of trusted requester headers. I retained a compatibility path only inside isolated historical tests, rewrote browser regressions to use real sessions, and required full API/UI/build/E2E evidence before opening review. |
 
-The final submission needs 6-10 actual selected prompts. Five are recorded so far; do not fill remaining entries with invented work.
+Six actual selected prompts are now recorded. Add only materially useful later review/implementation interactions, up to ten.
 
 ## My Reflection
 
