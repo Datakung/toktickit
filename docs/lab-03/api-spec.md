@@ -32,6 +32,8 @@ Requester create/list/detail/upload/removal remain REQUESTER-only and owned. Rej
 
 ## Staff and communication
 
+Requester `GET /tickets` explicitly overrides the inherited status validator: optional `status` accepts NEW, OPEN, IN_PROGRESS, WAITING_FOR_REQUESTER, RESOLVED, CLOSED, REOPENED and CANCELLED. Omission means all owned statuses. Unknown, lowercase, empty, repeated or non-scalar values return 400 INVALID_QUERY. All other inherited query names, combined-filter behavior, ordering and response envelopes remain unchanged. Status labels/badges follow ui-spec.md.
+
 StaffTicket = existing safe Ticket detail fields plus `{owner:{id,displayName}|null,version,requesterResolutionIndicatedAt}`. Existing requester detail exposes these read fields but never notes. Staff and Admin can use `/staff/*`; this does not grant user-management access to Staff.
 
 | Method/path | Input | Success |
@@ -44,7 +46,7 @@ StaffTicket = existing safe Ticket detail fields plus `{owner:{id,displayName}|n
 | PATCH /staff/tickets/:id/priority | `{itPriority,version}` | 200 updated StaffTicket |
 | PATCH /staff/tickets/:id/status | `{status,version}` | 200 updated StaffTicket |
 | GET /staff/tickets/:id/attachments/:attachmentId/download | IDs | 200 bytes, safe Content-Type/Disposition; removed/missing yields 404 |
-| POST /tickets/:id/resolution-indication | Empty body | 200 `{requesterResolutionIndicatedAt}`; Requester owner only |
+| POST /tickets/:id/resolution-indication | `{version}` | 200 `{id,status,version,requesterResolutionIndicatedAt,updatedAt}`; Requester owner only |
 | GET /tickets/:id/comments | `page=1&pageSize=20` | 200 `{items:[Entry],page,pageSize,total,totalPages}` |
 | POST /tickets/:id/comments | `{body}` | 201 Entry |
 | GET /staff/tickets/:id/notes | `page=1&pageSize=20` | 200 same pagination shape with Entry items |
@@ -54,7 +56,15 @@ Entry = `{id,body,author:{id,displayName},createdAt}`. Comments allow Requester 
 
 Queue summary includes id, ticketNumber, summary, requester displayName, category, relatedSystem, requestedPriority, itPriority, status, owner, createdAt, updatedAt and version. Detail-only description is omitted.
 
-### Queue query
+### Operational guards and resolution concurrency
+
+After authentication/role/resource access and payload validation, check the expected version inside the mutation transaction. A mismatch returns 409 VERSION_CONFLICT without mutation. With a matching version, claim, manual owner changes (including null) and priority changes reject RESOLVED, CLOSED and CANCELLED with 409 TICKET_TERMINAL. They permit NEW, OPEN, IN_PROGRESS, WAITING_FOR_REQUESTER and REOPENED subject to remaining rules; an already-assigned claim returns 409 TICKET_ALREADY_ASSIGNED, and an ineligible target owner returns 400 INVALID_OWNER. These guards apply even to unchanged manual values. Allowed status transitions remain governed by the matrix, so RESOLVED -> CLOSED/REOPENED and CLOSED -> REOPENED are still possible.
+
+Account-triggered automatic unassignment under BR-13 is permitted in all eight statuses as a transaction-internal integrity operation, with version/updatedAt increments and unchanged status. No manual API may invoke this exception.
+
+Resolution indication checks ownership, validates positive integer version, then serializes its version/status/indication checks with Staff transitions. Stale version takes precedence over ineligible status or an existing indication: 409 VERSION_CONFLICT. Current version in an ineligible status: 409 RESOLUTION_INDICATION_NOT_ALLOWED. Current version with an existing indication: 200 current response fields without changing timestamp/version. First valid indication: 200 updated fields with incremented version. Reopening clears indication and increments version; a request delayed across resolve/reopen must fail with VERSION_CONFLICT. Conflict responses use the shared error shape; reload owned detail to obtain fresh state, and require explicit user confirmation before resubmitting. Never automatically retry with a newer version.
+
+### Queue query parameters
 
 `q` trims to 0-120 characters, case-insensitive literal substring of ticketNumber or summary (escape SQL wildcard semantics). Optional categoryId, relatedSystemId, ownerId, status, itPriority and unassigned=true/false. ownerId with unassigned=true is invalid. sort is updatedAt (default), createdAt or itPriority; direction desc (default) or asc. Priority semantic order LOW < MEDIUM < HIGH. Tie-break id in same direction. page positive integer, pageSize 10/20/50 (default 10). Beyond-last page yields empty items with accurate total; totalPages is at least 1. Filters combine with AND; status/priority use enum values. Missing filters mean all.
 

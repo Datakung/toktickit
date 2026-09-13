@@ -19,6 +19,29 @@ Unauthenticated protected navigation leads to login. Mandatory-change users alwa
 
 ## Screens and feedback
 
+### Requester status continuity
+
+My Tickets uses the existing `status` query parameter with All statuses (parameter omitted) and all eight options below. Use the same labels on Requester/Staff filter controls and badges. Invalid status feedback preserves the other filters and offers clearing the invalid choice. Status changes never expose a different Requester's records.
+
+| API enum | Label/badge text |
+|---|---|
+| NEW | New |
+| OPEN | Open |
+| IN_PROGRESS | In Progress |
+| WAITING_FOR_REQUESTER | Waiting for Requester |
+| RESOLVED | Resolved |
+| CLOSED | Closed |
+| REOPENED | Reopened |
+| CANCELLED | Cancelled |
+
+### Operational state feedback
+
+Staff detail disables claim, manual owner/unassign and priority controls for RESOLVED, CLOSED and CANCELLED, with an explanation. Status actions still follow the transition matrix. NEW, OPEN, IN_PROGRESS, WAITING_FOR_REQUESTER and REOPENED expose eligible controls. Direct 409 TICKET_TERMINAL errors explain the restriction and offer reload. Account-triggered unassignment can still change a terminal Ticket's owner; refreshing shows Unassigned and the unchanged status.
+
+Requester resolution submits the displayed Ticket version. A successful response refreshes displayed status/version/indication/time. Disable the action when an indication already exists. On VERSION_CONFLICT, explain that the Ticket changed, reload owned detail, and require an explicit fresh action if still eligible; never silently retry. Reopened detail displays the cleared indication. An in-flight response must not overwrite newer state after reload or navigation. RESOLUTION_INDICATION_NOT_ALLOWED explains the current status restriction.
+
+### Screen behavior
+
 - Login: labeled email/password; show/hide control with accessible name; allow paste/password managers. Disable repeat submission while signing in. Invalid/unknown/inactive login uses the same safe message; offer contact-Administrator guidance without identifying account existence. Clear password on failure.
 - Change Password: explain mandatory restriction; 12-128-character policy and matching confirmation; do not trim password. Busy state, nearby errors, successful session replacement and role-home navigation. Logout remains available during forced change.
 - Queue: desktop columns Ticket Number, Summary, Requested/IT Priority, Status, Owner, Updated and Open. Optional fields remain in filters/detail to avoid a mega-grid. Search on explicit submit; filter/order/page-size changes reset page to 1. Show applied filters and Clear Filters, total and page controls. Mobile uses labeled cards.

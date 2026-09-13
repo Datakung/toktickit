@@ -12,8 +12,9 @@ Agent used: OpenAI Codex. Model identification for this draft session: GPT-6 (pe
 | 2 | Propose a reasonable Issue count, then consolidate the roadmap to around six Issues. | Requested six groups instead of eight, keeping feature tests and documentation inside each implementation Issue. |
 | 3 | Prepare a dedicated agent review checklist and reusable Issue descriptions. | Kept the internal checklist outside the repository and separate from required submission documents. |
 | 4 | Create the planned GitHub Issues for me. | Authorized creation; the agent checked for duplicates, created #25-30, and verified their Backlog status. |
+| 5 | Check the peer review on PR #31 and address the findings after moving the Issue to Fixing. | Accepted the three concrete ambiguities: inherited status filtering, undefined terminal guards, and delayed resolution requests after reopening. The contract, UI/API rules and planned regressions were corrected together; implementation and re-review remain pending. |
 
-The final submission needs 6-10 actual selected prompts. Four are recorded so far; do not fill the remaining entries with invented work.
+The final submission needs 6-10 actual selected prompts. Five are recorded so far; do not fill remaining entries with invented work.
 
 ## My Reflection
 

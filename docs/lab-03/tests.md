@@ -31,7 +31,14 @@ Each row represents a suite of named scenarios, not a single assertion. Every li
 | E2E-03 | Browser | FR-04 / AC-05, AC-06 | Admin create/edit/reset account -> next login forced change -> deactivation revoked; non-Admin management denied. | client/e2e/lab-03/user-administration.spec.ts | Planned |
 | RELEASE-01 | Integration | FR-09 / AC-13 | Full final-main tests/builds; development database/upload before/after hashes equal; no required skipped tests. | Existing isolated runner plus all Lab 3 suites above | Planned |
 
-## Execution and isolation
+## PR #31 review regression requirements (planned)
+
+- REG-01 / AC-04: seed Tickets in every one of the eight statuses for two Requesters; filter each status and combine it with existing search/category/system/page controls. Verify owned-only results, unchanged query names/envelope and all-status omission. Reject unknown/lowercase/empty/repeated/non-scalar status with 400 INVALID_QUERY. Add component coverage at `client/tests/lab-03/MyTickets.test.tsx` for all eight exact labels/badges, generated query values and validation feedback.
+- OPS-01 / AC-08: exercise claim, owner assignment, manual unassignment and priority changes in all eight states for Staff/Admin, including unchanged values. Verify exact terminal set and 409 TICKET_TERMINAL, stale-version precedence, already-assigned claim and invalid owner. Repeat account deactivation/role-change automatic unassignment in all eight states, including terminal ones, and assert unchanged status plus version/updatedAt increments. Include concurrent assignment versus deactivation.
+- OPS-01 / AC-09: capture version V before indication; resolve and reopen before delivering the delayed request -> 409 VERSION_CONFLICT and indication stays null. Verify first success increments once; replay of old V conflicts; repeat with refreshed version returns the same timestamp/version; current-version ineligible state returns RESOLUTION_INDICATION_NOT_ALLOWED. Race indication with resolve/reopen in both serial orders and assert no old request creates a new-cycle indication.
+- UI-03 / AC-08-09: verify terminal control eligibility matches API rules for every state. Verify displayed version is submitted, success updates response fields, conflict requires reload and explicit fresh action, reopening clears the displayed indication, and stale in-flight responses cannot overwrite a newer view. Keep these as planned cases until executable tests exist.
+
+## Execution and isolation details
 
 Retain server test-database guards and isolated E2E database/uploads from Lab 2. Migration testing uses a dedicated disposable target and a populated old-schema fixture, never reset development data. Parallel fixtures must not share mutable global records. Concurrency tests exercise real database transactions.
 
