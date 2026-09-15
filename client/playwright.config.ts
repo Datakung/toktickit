@@ -3,7 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 const e2eApiUrl = "http://127.0.0.1:3100";
 
 export default defineConfig({
-  testDir: "e2e/lab-02",
+  testDir: "e2e",
   globalSetup: "./e2e/global-setup.ts",
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),

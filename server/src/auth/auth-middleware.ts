@@ -21,9 +21,9 @@ export const requireSession: RequestHandler<Record<string, string>, unknown, unk
       } catch { return void response.status(500).json({ error: { code: "REQUESTER_CONTEXT_FAILED", message: "The Development Requester context is unavailable. Try again." } }); }
     }
   }
-  const raw = cookies(request)[SESSION_COOKIE];
-  if (!raw) return void response.status(401).json({ error: { code: "AUTHENTICATION_REQUIRED", message: "Sign in to continue." } });
   try {
+    const raw = cookies(request)[SESSION_COOKIE];
+    if (!raw) return void response.status(401).json({ error: { code: "AUTHENTICATION_REQUIRED", message: "Sign in to continue." } });
     const session = await getPrisma().session.findUnique({ where: { tokenHash: sha256(raw) }, include: { user: { select: safeSelect } } });
     if (!session || session.expiresAt <= new Date() || !session.user.isActive) {
       if (session) await getPrisma().session.deleteMany({ where: { id: session.id } });

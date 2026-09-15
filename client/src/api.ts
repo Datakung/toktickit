@@ -24,6 +24,11 @@ export interface CurrentUser extends DevelopmentRequester {
 }
 
 let csrfToken = "";
+export const AUTHENTICATION_LOST = "toktickit:authentication-lost";
+export function clearAuthentication() { csrfToken = ""; }
+export function isAuthenticationRequired(error: unknown): error is ApiError {
+  return error instanceof ApiError && error.status === 401 && error.code === "AUTHENTICATION_REQUIRED";
+}
 const requestCredentials: RequestCredentials = "include";
 
 export interface SystemStatus {
@@ -134,9 +139,9 @@ export class ApiError extends Error {
 }
 
 export function isRequesterUnavailable(error: unknown): error is ApiError {
-  return error instanceof ApiError
+  return isAuthenticationRequired(error) || (error instanceof ApiError
     && error.status === 403
-    && error.code === "REQUESTER_UNAVAILABLE";
+    && error.code === "REQUESTER_UNAVAILABLE");
 }
 
 // Check both backend dependencies. Throwing on either failure lets the UI show
@@ -173,11 +178,7 @@ export async function checkSystem(): Promise<SystemStatus> {
 async function getJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { credentials: requestCredentials });
 
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  return (await response.json()) as T;
+  return parseApiResponse<T>(response);
 }
 
 export function getCategories(): Promise<Category[]> {
@@ -195,6 +196,10 @@ export function authenticatedHeaders(_requesterId: number): HeadersInit {
 async function parseApiResponse<T>(response: Response): Promise<T> {
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
+    if (response.status === 401 && body?.error?.code === "AUTHENTICATION_REQUIRED") {
+      clearAuthentication();
+      window.dispatchEvent(new Event(AUTHENTICATION_LOST));
+    }
     throw new ApiError(
       response.status,
       body?.error?.code ?? "REQUEST_FAILED",

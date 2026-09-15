@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, type RequestHandler, type ErrorRequestHandler } from "express";
 import { getPrisma } from "../prisma.js";
 import { hashPassword, validPassword, verifyPassword } from "./password.js";
 import { requireCsrf, requireSession, type AuthLocals } from "./auth-middleware.js";
@@ -6,6 +6,9 @@ import { browserCsrf, BROWSER_COOKIE, clearSessionCookie, cookies, csrfHash, new
 import { clearLoginFailures, loginBlocked, recordLoginFailure } from "./login-throttle.js";
 
 export const authRouter = Router();
+const asyncRoute = (handler: RequestHandler): RequestHandler => (request, response, next) => {
+  Promise.resolve().then(() => handler(request, response, next)).catch(next);
+};
 const safe = (user: { id:number; displayName:string; email:string; role:"REQUESTER"|"IT_STAFF"|"ADMINISTRATOR"; isActive:boolean; mustChangePassword:boolean }) => ({ id: user.id, displayName: user.displayName, email: user.email, role: user.role, isActive: user.isActive, mustChangePassword: user.mustChangePassword });
 const noStore = (_request: unknown, response: { set(name:string,value:string):void }, next:()=>void) => { response.set("Cache-Control", "no-store"); next(); };
 const hasExactBody = (body: unknown, keys: string[]) => Boolean(
@@ -20,7 +23,7 @@ authRouter.get("/csrf", (request, response) => {
   response.json({ csrfToken: browserCsrf(browser) });
 });
 
-authRouter.post("/login", async (request, response) => {
+authRouter.post("/login", asyncRoute(async (request, response) => {
   const browser = cookies(request)[BROWSER_COOKIE] ?? "";
   const token = request.get("X-CSRF-Token") ?? "";
   if (!browser || !allowedOrigin(request) || !safeEqual(csrfHash(token), csrfHash(browserCsrf(browser)))) {
@@ -51,7 +54,7 @@ authRouter.post("/login", async (request, response) => {
     setSessionCookie(response, raw);
     response.json({ user: safe(user), csrfToken });
   } catch { response.status(500).json({ error: { code: "LOGIN_FAILED", message: "Sign in is unavailable. Try again." } }); }
-});
+}));
 
 authRouter.get("/me", requireSession, (_request, response) => response.json({ user: safe((response.locals as AuthLocals).currentUser), csrfToken: sessionCsrf((response.locals as AuthLocals).rawSessionToken) }));
 authRouter.post("/logout", (request, response, next) => {
@@ -66,10 +69,10 @@ authRouter.post("/logout", (request, response, next) => {
   }
   clearSessionCookie(response);
   response.status(204).end();
-}, requireSession, requireCsrf, async (_request, response) => {
+}, requireSession, requireCsrf, asyncRoute(async (_request, response) => {
   await getPrisma().session.deleteMany({ where: { id: (response.locals as AuthLocals).sessionId } }); clearSessionCookie(response); response.status(204).end();
-});
-authRouter.post("/change-password", requireSession, requireCsrf, async (request, response) => {
+}));
+authRouter.post("/change-password", requireSession, requireCsrf, asyncRoute(async (request, response) => {
   const locals = response.locals as AuthLocals;
   if (!hasExactBody(request.body, ["currentPassword", "newPassword", "confirmPassword"])) {
     return void response.status(400).json({
@@ -90,4 +93,10 @@ authRouter.post("/change-password", requireSession, requireCsrf, async (request,
     });
     setSessionCookie(response, raw); response.json({ user: safe(user), csrfToken });
   } catch { response.status(500).json({ error: { code: "PASSWORD_CHANGE_FAILED", message: "Password change is unavailable. Try again." } }); }
-});
+}));
+
+const authErrorHandler: ErrorRequestHandler = (_error, _request, response, next) => {
+  if (response.headersSent) return next(_error);
+  response.status(500).json({ error: { code: "AUTHENTICATION_FAILED", message: "Authentication is unavailable. Try again." } });
+};
+authRouter.use(authErrorHandler);

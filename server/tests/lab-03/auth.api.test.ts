@@ -1,5 +1,5 @@
 import request from "supertest";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { app } from "../../src/app.js";
 import { getPrisma } from "../../src/prisma.js";
 import { hashPassword } from "../../src/auth/password.js";
@@ -26,6 +26,30 @@ beforeEach(async () => { resetLoginThrottleForTests(); await prisma.session.dele
 async function csrf(agent: ReturnType<typeof request.agent>) { return (await agent.get("/api/auth/csrf")).body.csrfToken as string; }
 
 describe("Lab 3 authentication API", () => {
+  it("ignores malformed cookies and remains available for subsequent requests", async () => {
+    for (const cookie of ["unrelated=%", "toktickit_session=%", "toktickit_browser=%E0%A4%A", "__proto__=%"]) {
+      expect((await request(app).get("/api/auth/me").set("Cookie", cookie)).status).toBe(401);
+      expect((await request(app).get("/api/auth/csrf").set("Cookie", cookie)).status).toBe(200);
+      expect((await request(app).post("/api/auth/login").set("Cookie", cookie).send({})).status).toBe(403);
+      expect((await request(app).get("/api/health")).status).toBe(200);
+    }
+  });
+  it("routes async logout failures to a safe response and permits a later retry", async () => {
+    const agent = request.agent(app); const token = await csrf(agent);
+    const login = await agent.post("/api/auth/login").set("Origin", origin).set("X-CSRF-Token", token).send({ email: requesterEmail, password: initial });
+    expect(login.status).toBe(200);
+    const originalDelete = prisma.session.deleteMany;
+    const deletion = vi.spyOn(prisma.session, "deleteMany").mockRejectedValueOnce(new Error("private database failure"));
+    try {
+      const failed = await agent.post("/api/auth/logout").set("Origin", origin).set("X-CSRF-Token", login.body.csrfToken);
+      expect(failed.status).toBe(500);
+      expect(JSON.stringify(failed.body)).not.toContain("private database");
+      expect((await agent.get("/api/auth/me")).status).toBe(200);
+      expect((await agent.get("/api/health")).status).toBe(200);
+    } finally { deletion.mockRestore(); prisma.session.deleteMany = originalDelete; }
+    expect((await agent.post("/api/auth/logout").set("Origin", origin).set("X-CSRF-Token", login.body.csrfToken)).status).toBe(204);
+    expect((await agent.get("/api/auth/me")).status).toBe(401);
+  });
   it("uses the same safe response for invalid, absent and inactive credentials", async () => {
     for (const body of [{ email: requesterEmail, password: "wrong-password-value" }, { email: "absent@example.test", password: initial }, { email: inactiveEmail, password: initial }]) {
       const agent = request.agent(app); const token = await csrf(agent);

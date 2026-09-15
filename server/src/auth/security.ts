@@ -18,10 +18,16 @@ export const newToken = () => randomBytes(32).toString("base64url");
 export const sessionExpiry = (now = new Date()) => new Date(now.getTime() + SESSION_HOURS * 60 * 60 * 1000);
 
 export function cookies(request: Request) {
-  const result: Record<string, string> = {};
+  const result: Record<string, string> = Object.create(null);
   for (const part of (request.get("cookie") ?? "").split(";")) {
     const index = part.indexOf("=");
-    if (index > 0) result[part.slice(0, index).trim()] = decodeURIComponent(part.slice(index + 1).trim());
+    if (index > 0) {
+      try {
+        result[part.slice(0, index).trim()] = decodeURIComponent(part.slice(index + 1).trim());
+      } catch {
+        // A malformed cookie is unusable; other cookies may still be valid.
+      }
+    }
   }
   return result;
 }

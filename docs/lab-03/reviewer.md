@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Evolving Lab 3 review record. Engineering contract approved and merged; Issue #26 awaits peer review.
+Status: Evolving Lab 3 review record. Engineering contract approved and merged; Issue #26 corrections await re-review.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -14,7 +14,7 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | Issue | Scope | PR / received review / response / approval / reviewer merge |
 |---|---|---|
 | [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
-| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): implementation and verification complete; Phanuwit's review requested, response/approval/reviewer merge pending. |
+| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): Phanuwit requested four corrections; fixes and regression evidence prepared. Replies, re-review, approval and reviewer merge pending. |
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | Pending |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Pending |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
@@ -30,7 +30,20 @@ Phanuwit [requested changes](https://github.com/Datakung/toktickit/pull/31#pullr
 | [Terminal guards](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940081) | RESOLVED/CLOSED/CANCELLED explicitly locked; errors, UI guards and automatic-unassignment exception defined across all eight states. | Answered before re-review |
 | [Stale resolution indication](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940089) | Expected version, conflict precedence, refreshed-repeat semantics, returned state and delayed-request/reopening tests. | Answered before re-review |
 
-## Partner work reviewed by Pitchai (pending)
+## Received authentication review (corrections prepared)
+
+Phanuwit reviewed `26c3417` on 2026-09-15 and independently passed 109 backend tests, 61 client tests and both builds. His three additional component checks failed, and a malformed cookie terminated his temporary server. He did not independently rerun browser tests.
+
+| Finding | Correction and regression evidence |
+|---|---|
+| [Malformed cookie crash](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347611) | Invalid encoded cookies are ignored. Session parsing is inside error handling; async auth routes forward rejected promises to a safe handler. API tests verify malformed cookies, subsequent health requests and a failed logout database operation. |
+| [False sign-out success](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347617) | Failed revocation keeps the account visible with failure feedback and retry. Component tests cover network/500 failures; browser tests abort logout, reload the real session, retry successfully and reload the login screen. |
+| [Normal password-change route](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347620) | Every role has a Change password action and direct route; initial credentials remain gated. Component tests cover all roles; the browser changes a normal Requester's password and signs in with it. |
+| [Expired session handling](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347625) | Protected 401 responses clear CSRF and authenticated state and return to login without logout. Tests distinguish 403 errors and cover Back navigation; a browser test revokes the session through a second real login. |
+
+Reply/approval status: Corrections prepared; no peer approval or merge claimed.
+
+## Partner review links
 
 Pending actual partner PRs. Record useful review comment, partner response, Pitchai approval and reviewer merge with direct links. Do not copy Lab 2 reviews as Lab 3 evidence or invent reciprocal activity.
 
