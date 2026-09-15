@@ -1,6 +1,33 @@
 # Lab 3 Planned Tests and Traceability
 
-Status: Planning before implementation, Issue #25, 2026-09-12. All paths below are proposed test locations; files do not yet exist and no Lab 3 result is claimed. Add exact executable case names/results during each feature Issue.
+Status: Evolving traceability record. Issue #25 established the plan; Issue #26 now has executable branch-level evidence. Later-Issue paths and final release results remain planned until implemented.
+
+## Issue #26 verified implementation evidence
+
+Review correction verification (2026-09-15, feature branch): backend 17 files / 111 tests passed; client suite 10 files / 75 tests passed, including 7 API-client regressions in `client/tests/lab-03/session-expiry.test.tsx`. Both production builds passed. The browser suite passed all 14 existing tests; after correcting an ambiguous test locator, all 3 new `client/e2e/lab-03/auth-review.spec.ts` tests passed. The failed initial new-browser run was a locator error, not a passing run. E2E development database/uploads hashes matched before and after: `3d158700d3acb2261b8dfc472f360d1a29b93bc78256d046c92b0763cd35f586`.
+
+New regressions cover malformed cookies and server survival, failed logout database operations, network/500 sign-out errors and retry/reload, normal password change for all roles, central 401/CSRF invalidation, distinct 403 errors, and revoked-session Back navigation. Browser revocation uses a second real login; only the network-failure scenario deliberately aborts the logout request. These are branch corrections, not final-main release evidence.
+
+Original implementation baseline:
+
+Issue #26 implements the authentication/migration slice. Its executable tests
+are `server/tests/lab-03/auth.unit.test.ts`, `auth.api.test.ts`, and
+`migration-regression.test.ts`, plus `client/tests/lab-03/Login.test.tsx` and
+the authenticated Playwright regressions under `client/e2e/`.
+
+- Server: 17 files / 109 tests passed (including idempotent logout); disposable
+  migration fixtures prove duplicate preflight, preserved IDs/FKs/timestamps,
+  priority backfill, sequence continuity, repeatable seed, and provisioning.
+- Client: 9 files / 61 tests passed, covering neutral bootstrap, safe login
+  failure, mandatory password change, Requester shell, and role destinations.
+- Browser: 14 Chromium tests passed through real cookie sessions. The
+  development database/uploads SHA-256 was identical before and after.
+- Both production TypeScript builds passed. The development migration was
+  applied with `prisma migrate deploy`, never reset, after a database/uploads
+  backup and disposable migration verification.
+
+These are branch-level Issue #26 results; final release results still belong on
+reviewed `main` after Issues #27–#30.
 
 ## Planned coverage and AC mapping
 

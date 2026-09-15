@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { mockSignedInRequester } from "../support/auth.js";
 
 const requester = {
   id: 1,
@@ -12,7 +13,7 @@ const ticketResponse = {
     ticketNumber: "TKT-20260901-ABC123",
     summary: "Cannot connect to VPN",
     requestedPriority: "HIGH",
-    itPriority: null,
+    itPriority: "HIGH",
     status: "NEW",
     createdAt: "2026-09-01T03:00:00.000Z",
     updatedAt: "2026-09-01T04:00:00.000Z",
@@ -37,11 +38,7 @@ const ticketResponse = {
 };
 
 async function mockMyTicketsApis(page: import("@playwright/test").Page) {
-  await page.route("**/api/development-requesters", (route) => route.fulfill({
-    status: 200,
-    contentType: "application/json",
-    body: JSON.stringify([requester]),
-  }));
+  await mockSignedInRequester(page);
   await page.route("**/api/categories", (route) => route.fulfill({
     status: 200,
     contentType: "application/json",
@@ -57,9 +54,6 @@ async function mockMyTicketsApis(page: import("@playwright/test").Page) {
     contentType: "application/json",
     body: JSON.stringify(ticketResponse),
   }));
-  await page.addInitScript(() => {
-    sessionStorage.setItem("toktickit.developmentRequesterId", "1");
-  });
 }
 
 test("uses the desktop Ticket table without horizontal page overflow", async ({ page }) => {

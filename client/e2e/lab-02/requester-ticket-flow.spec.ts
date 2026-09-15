@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { Buffer } from "node:buffer";
+import { signIn } from "../support/auth.js";
 
 const e2eApiUrl = "http://127.0.0.1:3100";
 
@@ -7,12 +8,7 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
   const unique = Date.now().toString(36).toUpperCase();
   const summary = `Issue 15 browser lifecycle ${unique}`;
 
-  await page.goto("/select-requester");
-  const requesterSelect = page.getByRole("combobox", { name: /Development Requester/i });
-  await expect(requesterSelect).toBeEnabled();
-  await requesterSelect.selectOption({ index: 1 });
-  const requesterId = await requesterSelect.inputValue();
-  await page.getByRole("button", { name: "Continue" }).click();
+  await signIn(page);
 
   await page.getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: "Create Ticket" }).click();
@@ -91,16 +87,14 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
 
   const removedDownload = await page.request.get(
     `${e2eApiUrl}/api/tickets/${ticketId}/attachments/${uploadedAttachmentId}/download`,
-    { headers: { "X-Development-Requester-Id": requesterId } },
   );
   expect(removedDownload.status()).toBe(404);
   await expect(removedDownload.json()).resolves.toMatchObject({
     error: { code: "ATTACHMENT_NOT_FOUND" },
   });
 
-  await page.getByRole("button", { name: "Change Requester" }).click();
-  await requesterSelect.selectOption({ index: 2 });
-  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Sign out" }).click();
+  await signIn(page, "kanya.srisuk@example.test");
   await page.goto(`/tickets/${ticketId}`);
   await expect(page.getByRole("heading", { name: "Ticket unavailable" })).toBeVisible();
   await expect(page.getByText(summary)).toHaveCount(0);

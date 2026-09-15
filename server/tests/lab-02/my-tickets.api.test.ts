@@ -18,8 +18,8 @@ beforeAll(async () => {
   await seedDatabase(prisma);
   await prisma.ticket.deleteMany({ where: { summary: { startsWith: prefix } } });
 
-  const requesters = await prisma.requesterUser.findMany({
-    where: { isActive: true },
+  const requesters = await prisma.user.findMany({
+    where: { isActive: true, role: "REQUESTER" },
     orderBy: { id: "desc" },
     take: 2,
   });
@@ -49,6 +49,7 @@ beforeAll(async () => {
         summary: `${prefix} ${even ? "VPN outage" : "Printer issue"} ${index}`,
         description: "A database-backed Ticket used to verify My Tickets behavior.",
         requestedPriority: even ? "HIGH" : "LOW",
+        itPriority: even ? "HIGH" : "LOW",
         createdAt: timestamp,
         updatedAt: timestamp,
       },
@@ -66,6 +67,7 @@ beforeAll(async () => {
       summary: `${prefix} VPN outage belonging to B`,
       description: "This Ticket must never appear for Requester A.",
       requestedPriority: "HIGH",
+      itPriority: "HIGH",
     },
   });
 });
@@ -164,6 +166,7 @@ describe("GET /api/tickets", () => {
         summary: `${prefix} literal ${character} search marker`,
         description: "A Ticket used to verify literal PostgreSQL search behavior.",
         requestedPriority: "MEDIUM",
+        itPriority: "MEDIUM",
       },
       select: { id: true, ticketNumber: true },
     });

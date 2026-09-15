@@ -9,7 +9,7 @@ export const attachmentMetadataSelect = {
   createdAt: true,
   removedAt: true,
   removalReason: true,
-  removedByRequesterId: true,
+  removedByUserId: true,
 } satisfies Prisma.AttachmentSelect;
 
 export type StoredAttachmentMetadata = Prisma.AttachmentGetPayload<{
@@ -17,8 +17,10 @@ export type StoredAttachmentMetadata = Prisma.AttachmentGetPayload<{
 }>;
 
 export function toAttachmentMetadata(attachment: StoredAttachmentMetadata) {
+  const { removedByUserId, ...metadata } = attachment;
   return {
-    ...attachment,
+    ...metadata,
+    removedByRequesterId: removedByUserId,
     removed: attachment.removedAt !== null,
   };
 }

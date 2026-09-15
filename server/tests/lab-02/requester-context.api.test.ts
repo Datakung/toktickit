@@ -10,9 +10,11 @@ import { getPrisma } from "../../src/prisma.js";
 import { seedDatabase } from "../../prisma/seed.js";
 
 const prisma = getPrisma();
+let requesterId: number;
 
 beforeAll(async () => {
   await seedDatabase(prisma);
+  requesterId = (await prisma.user.findFirstOrThrow({ where: { role: "REQUESTER", isActive: true }, orderBy: { id: "asc" } })).id;
 });
 
 afterAll(async () => {
@@ -32,7 +34,7 @@ describe("Lab 2 reference and requester APIs", () => {
       create: { name: "Retired Test Category", isActive: false },
     });
 
-    const response = await request(app).get("/api/categories");
+    const response = await request(app).get("/api/categories").set("X-Development-Requester-Id", String(requesterId));
 
     expect(response.status).toBe(200);
     expect(response.body.map((item: { name: string }) => item.name)).toEqual([
@@ -55,7 +57,7 @@ describe("Lab 2 reference and requester APIs", () => {
       create: { name: "Retired Test System", isActive: false },
     });
 
-    const response = await request(app).get("/api/related-systems");
+    const response = await request(app).get("/api/related-systems").set("X-Development-Requester-Id", String(requesterId));
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(6);
@@ -66,32 +68,16 @@ describe("Lab 2 reference and requester APIs", () => {
     expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
   });
 
-  it("returns only active Development Requesters without isActive", async () => {
+  it("removes the Development Requester lookup endpoint", async () => {
     const response = await request(app).get("/api/development-requesters");
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveLength(4);
-    expect(response.body).toEqual(
-      response.body
-        .slice()
-        .sort(
-          (a: { displayName: string; id: number }, b: { displayName: string; id: number }) =>
-            a.displayName.localeCompare(b.displayName) || a.id - b.id,
-        ),
-    );
-    expect(response.body[0]).toEqual({
-      id: expect.any(Number),
-      displayName: expect.any(String),
-      email: expect.stringMatching(/@example\.test$/),
-    });
-    expect(response.body.every((item: object) => !("isActive" in item))).toBe(true);
+    expect(response.status).toBe(404);
   });
 
   it("is idempotent when the approved seed runs repeatedly", async () => {
     const before = {
       categories: await prisma.category.count(),
       systems: await prisma.relatedSystem.count(),
-      requesters: await prisma.requesterUser.count(),
+      requesters: await prisma.user.count(),
     };
 
     await seedDatabase(prisma);
@@ -99,25 +85,9 @@ describe("Lab 2 reference and requester APIs", () => {
 
     await expect(prisma.category.count()).resolves.toBe(before.categories);
     await expect(prisma.relatedSystem.count()).resolves.toBe(before.systems);
-    await expect(prisma.requesterUser.count()).resolves.toBe(before.requesters);
+    await expect(prisma.user.count()).resolves.toBe(before.requesters);
   });
 
-  it("returns a stable safe error when requester lookup unexpectedly fails", async () => {
-    vi.spyOn(prisma.requesterUser, "findMany").mockRejectedValueOnce(
-      new Error("database details must stay private"),
-    );
-
-    const response = await request(app).get("/api/development-requesters");
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({
-      error: {
-        code: "REQUESTER_LOOKUP_FAILED",
-        message: "Development Requesters are unavailable. Try again.",
-      },
-    });
-    expect(JSON.stringify(response.body)).not.toMatch(/database details|stack|prisma/i);
-  });
 });
 
 describe("Development Requester context middleware", () => {
@@ -145,26 +115,26 @@ describe("Development Requester context middleware", () => {
     "2147483648",
     "9007199254740992",
   ])(
-    "returns 400 for invalid header value %s",
+    "does not accept invalid legacy header value %s as authentication",
     async (header) => {
       const call = request(scopedApp).get("/probe");
       if (header !== undefined) call.set("X-Development-Requester-Id", header);
 
       const response = await call;
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(401);
       expect(response.body).toEqual({
         error: {
-          code: "INVALID_REQUESTER_CONTEXT",
-          message: "Select a valid Development Requester.",
+          code: "AUTHENTICATION_REQUIRED",
+          message: "Sign in to continue.",
         },
       });
     },
   );
 
   it("returns 403 for an inactive Requester", async () => {
-    const inactive = await prisma.requesterUser.findFirstOrThrow({
-      where: { isActive: false },
+    const inactive = await prisma.user.findFirstOrThrow({
+      where: { isActive: false, role: "REQUESTER" },
     });
 
     const response = await request(scopedApp)
@@ -176,8 +146,8 @@ describe("Development Requester context middleware", () => {
   });
 
   it("accepts an active Requester and exposes only the validated context", async () => {
-    const active = await prisma.requesterUser.findFirstOrThrow({
-      where: { isActive: true },
+    const active = await prisma.user.findFirstOrThrow({
+      where: { isActive: true, role: "REQUESTER" },
       orderBy: { id: "asc" },
     });
 

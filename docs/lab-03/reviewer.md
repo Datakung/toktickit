@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Initial record; no Lab 3 approvals or merges claimed.
+Status: Evolving Lab 3 review record. Engineering contract approved and merged; Issue #26 corrections await re-review.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -13,24 +13,37 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 
 | Issue | Scope | PR / received review / response / approval / reviewer merge |
 |---|---|---|
-| [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested; local corrections prepared; reply, re-review, approval and merge pending. |
-| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | Pending |
+| [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
+| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): Phanuwit requested four corrections; fixes and regression evidence prepared. Replies, re-review, approval and reviewer merge pending. |
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | Pending |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Pending |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
 | [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Pending |
 
-## Received contract review
+## Received contract review (completed)
 
 Phanuwit [requested changes](https://github.com/Datakung/toktickit/pull/31#pullrequestreview-5187299201) on baseline `9b1ecde`. Issue #25 moved to Fixing per Pitchai. Review was documentation-only; no runtime tests ran, and Phanuwit stated the original labsheet was unavailable, so he did not independently confirm full assignment compliance.
 
-| Finding | Local correction prepared | Reply status |
+| Finding | Correction | Reply status |
 |---|---|---|
-| [Requester status continuity](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940079) | All eight Requester status values, exact labels, preserved query/envelope and planned validation/regression tests. | Not posted yet |
-| [Terminal guards](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940081) | RESOLVED/CLOSED/CANCELLED explicitly locked; errors, UI guards and automatic-unassignment exception defined across all eight states. | Not posted yet |
-| [Stale resolution indication](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940089) | Expected version, conflict precedence, refreshed-repeat semantics, returned state and delayed-request/reopening tests. | Not posted yet |
+| [Requester status continuity](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940079) | All eight Requester status values, exact labels, preserved query/envelope and planned validation/regression tests. | Answered before re-review |
+| [Terminal guards](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940081) | RESOLVED/CLOSED/CANCELLED explicitly locked; errors, UI guards and automatic-unassignment exception defined across all eight states. | Answered before re-review |
+| [Stale resolution indication](https://github.com/Datakung/toktickit/pull/31#discussion_r3996940089) | Expected version, conflict precedence, refreshed-repeat semantics, returned state and delayed-request/reopening tests. | Answered before re-review |
 
-## Partner work reviewed by Pitchai (pending)
+## Received authentication review (corrections prepared)
+
+Phanuwit reviewed `26c3417` on 2026-09-15 and independently passed 109 backend tests, 61 client tests and both builds. His three additional component checks failed, and a malformed cookie terminated his temporary server. He did not independently rerun browser tests.
+
+| Finding | Correction and regression evidence |
+|---|---|
+| [Malformed cookie crash](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347611) | Invalid encoded cookies are ignored. Session parsing is inside error handling; async auth routes forward rejected promises to a safe handler. API tests verify malformed cookies, subsequent health requests and a failed logout database operation. |
+| [False sign-out success](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347617) | Failed revocation keeps the account visible with failure feedback and retry. Component tests cover network/500 failures; browser tests abort logout, reload the real session, retry successfully and reload the login screen. |
+| [Normal password-change route](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347620) | Every role has a Change password action and direct route; initial credentials remain gated. Component tests cover all roles; the browser changes a normal Requester's password and signs in with it. |
+| [Expired session handling](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347625) | Protected 401 responses clear CSRF and authenticated state and return to login without logout. Tests distinguish 403 errors and cover Back navigation; a browser test revokes the session through a second real login. |
+
+Reply/approval status: Corrections prepared; no peer approval or merge claimed.
+
+## Partner review links
 
 Pending actual partner PRs. Record useful review comment, partner response, Pitchai approval and reviewer merge with direct links. Do not copy Lab 2 reviews as Lab 3 evidence or invent reciprocal activity.
 

@@ -12,8 +12,8 @@ let ticketId: number;
 
 beforeAll(async () => {
   await seedDatabase(prisma);
-  const requesters = await prisma.requesterUser.findMany({
-    where: { isActive: true }, orderBy: { id: "asc" }, take: 2,
+  const requesters = await prisma.user.findMany({
+    where: { isActive: true, role: "REQUESTER" }, orderBy: { id: "asc" }, take: 2,
   });
   [requesterId, otherRequesterId] = requesters.map(({ id }) => id);
   const category = await prisma.category.findFirstOrThrow({ where: { isActive: true } });
@@ -27,6 +27,7 @@ beforeAll(async () => {
       summary: `${prefix} owned Ticket`,
       description: "Read-only detail must be visible only to the owning Requester.",
       requestedPriority: "HIGH",
+      itPriority: "HIGH",
       attachments: {
         create: [
           {
@@ -44,7 +45,7 @@ beforeAll(async () => {
             createdAt: new Date("2026-09-01T02:00:00.000Z"),
             removedAt: new Date("2026-09-01T03:00:00.000Z"),
             removalReason: "The image is no longer current.",
-            removedByRequesterId: requesterId,
+            removedByUserId: requesterId,
           },
         ],
       },
@@ -69,7 +70,7 @@ describe("GET /api/tickets/:ticketId", () => {
       id: ticketId,
       summary: `${prefix} owned Ticket`,
       requestedPriority: "HIGH",
-      itPriority: null,
+      itPriority: "HIGH",
       status: "NEW",
       requester: { id: requesterId },
       category: { id: expect.any(Number), name: expect.any(String) },

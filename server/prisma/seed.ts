@@ -13,7 +13,7 @@ export async function seedDatabase(prisma: PrismaClient = getPrisma()) {
   for (const cat of categories) {
     await prisma.category.upsert({
       where: { name: cat.name },
-      update: { isActive: true },
+      update: {},
       create: { name: cat.name, isActive: true },
     });
   }
@@ -30,7 +30,7 @@ export async function seedDatabase(prisma: PrismaClient = getPrisma()) {
   for (const name of relatedSystems) {
     await prisma.relatedSystem.upsert({
       where: { name },
-      update: { isActive: true },
+      update: {},
       create: { name, isActive: true },
     });
   }
@@ -64,21 +64,32 @@ export async function seedDatabase(prisma: PrismaClient = getPrisma()) {
   ];
 
   for (const requester of requesters) {
-    await prisma.requesterUser.upsert({
+    await prisma.user.upsert({
       where: { email: requester.email },
-      update: {
-        displayName: requester.displayName,
-        isActive: requester.isActive,
-      },
+      update: {},
       create: requester,
     });
   }
+
+  const staff = [
+    { displayName: "Mali Support", email: "mali.support@example.test", isActive: true },
+    { displayName: "Wichai Support", email: "wichai.support@example.test", isActive: true },
+    { displayName: "Suda Support", email: "suda.support@example.test", isActive: true },
+    { displayName: "Retired Support", email: "retired.support@example.test", isActive: false },
+  ];
+  for (const user of staff) {
+    await prisma.user.upsert({ where: { email: user.email }, update: {}, create: { ...user, role: "IT_STAFF" } });
+  }
+  await prisma.user.upsert({
+    where: { email: "admin@example.test" }, update: {},
+    create: { displayName: "Local Administrator", email: "admin@example.test", role: "ADMINISTRATOR" },
+  });
 }
 
 async function main() {
   const prisma = getPrisma();
   await seedDatabase(prisma);
-  console.log("Lab 2 seed completed.");
+  console.log("Lab 3 account/reference seed completed. Provision initial credentials separately.");
 }
 
 const entryPath = process.argv[1] ? path.resolve(process.argv[1]) : "";

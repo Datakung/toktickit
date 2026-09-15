@@ -35,7 +35,7 @@ function ticketDetail(attachments = [activeAttachment]): api.TicketDetail {
     summary: "Release safe-error audit",
     description: "The form and Attachment actions must remain safely recoverable.",
     requestedPriority: "MEDIUM",
-    itPriority: null,
+    itPriority: "HIGH",
     status: "NEW",
     createdAt: "2026-09-01T03:00:00.000Z",
     updatedAt: "2026-09-01T03:00:00.000Z",

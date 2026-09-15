@@ -46,7 +46,7 @@ function detail(attachments: api.AttachmentMetadata[] = [activeAttachment, remov
     summary: "Laptop screen flickers",
     description: "The screen flickers after the laptop resumes from sleep.",
     requestedPriority: "HIGH",
-    itPriority: null,
+    itPriority: "HIGH",
     status: "NEW",
     createdAt: "2026-09-01T03:00:00.000Z",
     updatedAt: "2026-09-01T04:00:00.000Z",

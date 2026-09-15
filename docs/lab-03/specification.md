@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Draft for Pitchai and peer review; not approved. Issue #25. Prepared 2026-09-12 against Lab 2 baseline `e83a981`.
+Status: Approved engineering contract. Issue #25 was peer-approved and reviewer-merged through PR #31; Issue #26 implements its authentication and preserved-data migration slice.
 
 ## 1. Sprint goal
 
@@ -130,7 +130,7 @@ See [api-spec.md](api-spec.md). Retain Requester route names with new authentica
 
 ## 10. Product Definition of Done
 
-- [ ] Contract reviewed/approved before implementation; early evidence retained.
+- [x] Contract reviewed/approved before implementation; early evidence retained.
 - [ ] FR-01 through FR-09 and AC-01 through AC-13 satisfied with linked executable tests.
 - [ ] Preserved-data migration and repeatable provisioning/seed verified; no real credentials committed.
 - [ ] Authentication/role/ownership/CSRF/conflict/safe-error checks hold on direct APIs.

@@ -11,6 +11,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PrismaClient } from "@prisma/client";
 import { seedDatabase } from "../../prisma/seed.js";
+import { hashPassword } from "../../src/auth/password.js";
 import { deployTestMigrations } from "./deploy-test-migrations.js";
 
 const serverRoot = fileURLToPath(new URL("../../", import.meta.url));
@@ -19,6 +20,7 @@ const e2eUploadRoot = path.join(defaultUploadRoot, "e2e");
 
 export const E2E_API_URL = "http://127.0.0.1:3100";
 export const E2E_EVIDENCE_TICKET_NUMBER = "TKT-20260902-EVID01";
+export const E2E_PASSWORD = "Lab3-e2e-password-2026";
 
 interface DatabaseTarget {
   database: string;
@@ -116,12 +118,16 @@ export async function prepareE2EEnvironment() {
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
     await prisma.$executeRawUnsafe(
-      'TRUNCATE TABLE "Attachment", "Ticket", "RequesterUser", "Category", "RelatedSystem" RESTART IDENTITY CASCADE',
+      'TRUNCATE TABLE "Attachment", "Ticket", "User", "Category", "RelatedSystem" RESTART IDENTITY CASCADE',
     );
     await seedDatabase(prisma);
+    const passwordHash = await hashPassword(E2E_PASSWORD);
+    await prisma.user.updateMany({
+      data: { passwordHash, mustChangePassword: false },
+    });
 
-    const requester = await prisma.requesterUser.findFirstOrThrow({
-      where: { isActive: true },
+    const requester = await prisma.user.findFirstOrThrow({
+      where: { isActive: true, role: "REQUESTER" },
       orderBy: { id: "asc" },
     });
     const category = await prisma.category.findFirstOrThrow({
@@ -142,6 +148,7 @@ export async function prepareE2EEnvironment() {
         summary: "Responsive release evidence",
         description: "Deterministic Ticket used only for reviewed responsive evidence.",
         requestedPriority: "MEDIUM",
+        itPriority: "MEDIUM",
         createdAt: fixedTime,
         updatedAt: fixedTime,
       },
@@ -155,6 +162,7 @@ export async function cleanupE2EEnvironment() {
   const { e2eUrl } = configureE2EEnvironment();
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
+    await prisma.session.deleteMany();
     await prisma.attachment.deleteMany();
     await prisma.ticket.deleteMany();
   } finally {
@@ -199,7 +207,7 @@ export async function snapshotDevelopmentState() {
     const [categories, systems, requesters, tickets, attachments] = await Promise.all([
       prisma.category.findMany({ orderBy: { id: "asc" } }),
       prisma.relatedSystem.findMany({ orderBy: { id: "asc" } }),
-      prisma.requesterUser.findMany({ orderBy: { id: "asc" } }),
+      prisma.user.findMany({ orderBy: { id: "asc" } }),
       prisma.ticket.findMany({ orderBy: { id: "asc" } }),
       prisma.attachment.findMany({ orderBy: { id: "asc" } }),
     ]);

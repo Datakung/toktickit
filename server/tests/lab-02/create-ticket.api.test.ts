@@ -12,8 +12,8 @@ let relatedSystemId: number;
 
 beforeAll(async () => {
   await seedDatabase(prisma);
-  requesterId = (await prisma.requesterUser.findFirstOrThrow({
-    where: { isActive: true },
+  requesterId = (await prisma.user.findFirstOrThrow({
+    where: { isActive: true, role: "REQUESTER" },
     orderBy: { id: "asc" },
   })).id;
   categoryId = (await prisma.category.findFirstOrThrow({
@@ -69,7 +69,7 @@ describe("POST /api/tickets", () => {
       .resolves.toMatchObject({
         requesterId,
         summary: `${testSummaryPrefix} Cannot connect to VPN`,
-        itPriority: null,
+        itPriority: "HIGH",
         status: "NEW",
       });
   });

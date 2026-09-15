@@ -12,6 +12,7 @@ test-results/
 server/uploads/
 # prisma
 server/prisma/*.db
+*.credentials.local.json
 # logs & OS
 *.log
 .DS_Store
