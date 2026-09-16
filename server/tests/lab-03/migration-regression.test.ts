@@ -55,6 +55,7 @@ it("rejects normalized duplicates before renaming tables or changing data", asyn
 }, 30000);
 it("preserves IDs, ownership, removal metadata, timestamps and non-null priorities", async () => {
   execute(migration);
+  execute(readFileSync("prisma/migrations/20260915090000_admin_assignment_safety/migration.sql", "utf8"));
   const user = await fixture.user.findUniqueOrThrow({ where: { id: 1 } });
   expect(user).toMatchObject({ id: 1, displayName: "Preserved Person", isActive: false, role: "REQUESTER", passwordHash: null, mustChangePassword: true });
   expect(user.updatedAt.toISOString()).toBe("2026-01-02T00:00:00.000Z");

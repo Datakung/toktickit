@@ -208,7 +208,8 @@ export async function snapshotDevelopmentState() {
       prisma.category.findMany({ orderBy: { id: "asc" } }),
       prisma.relatedSystem.findMany({ orderBy: { id: "asc" } }),
       prisma.user.findMany({ orderBy: { id: "asc" } }),
-      prisma.ticket.findMany({ orderBy: { id: "asc" } }),
+      // Snapshot the actual development columns even before its additive migration.
+      prisma.$queryRaw`SELECT * FROM "Ticket" ORDER BY id`,
       prisma.attachment.findMany({ orderBy: { id: "asc" } }),
     ]);
     const serialized = JSON.stringify({

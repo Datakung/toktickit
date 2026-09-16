@@ -65,7 +65,7 @@ describe("Requester Ticket Detail", () => {
     resolveDetail(detail());
     const heading = await screen.findByRole("heading", { name: "TKT-20260901-ABC123" });
     expect(heading).toBeVisible();
-    expect(heading).toHaveFocus();
+    await waitFor(() => expect(heading).toHaveFocus());
     expect(screen.getByText("Laptop screen flickers")).toBeVisible();
     expect(screen.getByText("The screen flickers after the laptop resumes from sleep.")).toBeVisible();
     expect(screen.getByText("Hardware")).toBeVisible();

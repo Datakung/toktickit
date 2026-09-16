@@ -4,6 +4,9 @@ import "./app.css";
 import { CreateTicketPage } from "./CreateTicketPage.js";
 import { MyTicketsPage } from "./MyTicketsPage.js";
 import { TicketDetailPage } from "./TicketDetailPage.js";
+import { AdminUsersPage } from "./AdminUsersPage.js";
+
+const homeFor = (user: CurrentUser) => user.role === "ADMINISTRATOR" ? "/admin/users" : user.role === "IT_STAFF" ? "/staff/tickets" : "/tickets";
 
 function ticketIdFromPath(path: string) { return path.match(/^\/tickets\/([^/]+)$/)?.[1] ?? null; }
 function LoginPage({ onLogin }: { onLogin:(user:CurrentUser)=>void }) {
@@ -20,7 +23,7 @@ function AppShell({user,currentPath,onNavigate,onLogout,onAuthenticationLost}:{u
   const [menu,setMenu]=useState(false); const ticketId=ticketIdFromPath(currentPath);
   function link(event:MouseEvent<HTMLAnchorElement>,path:string){event.preventDefault();setMenu(false);onNavigate(path)}
   const unavailable=onAuthenticationLost;
-  return <div className="app-layout"><header className="app-header"><a className="brand" href="/tickets" aria-label="TokTickIT home" onClick={e=>link(e,"/tickets")}><span>TokTickIT</span><small>IT Service Desk</small></a><button className="mobile-nav-toggle secondary-button" type="button" aria-expanded={menu} aria-controls="primary-navigation" onClick={()=>setMenu(!menu)}>Menu</button><nav className={`primary-navigation${menu?" primary-navigation-open":""}`} id="primary-navigation" aria-label="Primary navigation"><a href="/tickets" aria-current={currentPath==="/tickets"?"page":undefined} onClick={e=>link(e,"/tickets")}>My Tickets</a><a href="/tickets/new" aria-current={currentPath==="/tickets/new"?"page":undefined} onClick={e=>link(e,"/tickets/new")}>Create Ticket</a></nav><div className="requester-context"><span className="context-label">Signed in · Requester</span><strong>{user.displayName}</strong><button className="text-button" type="button" onClick={onLogout}>Sign out</button></div></header><main className="app-content">{currentPath==="/tickets/new"?<CreateTicketPage requester={user} onRequesterUnavailable={unavailable}/>:ticketId?<TicketDetailPage key={ticketId} requester={user} ticketId={ticketId} onNavigate={onNavigate} onRequesterUnavailable={unavailable}/>:<MyTicketsPage requester={user} onNavigate={onNavigate} onRequesterUnavailable={unavailable}/>}</main></div>;
+  return <div className="app-layout"><header className="app-header"><a className="brand" href="/tickets" aria-label="TokTickIT home" onClick={e=>link(e,"/tickets")}><span>TokTickIT</span><small>IT Service Desk</small></a><button className="mobile-nav-toggle secondary-button" type="button" aria-expanded={menu} aria-controls="primary-navigation" onClick={()=>setMenu(!menu)}>Menu</button><nav className={`primary-navigation${menu?" primary-navigation-open":""}`} id="primary-navigation" aria-label="Primary navigation"><a href="/tickets" aria-current={currentPath==="/tickets"?"page":undefined} onClick={e=>link(e,"/tickets")}>My Tickets</a><a href="/tickets/new" aria-current={currentPath==="/tickets/new"?"page":undefined} onClick={e=>link(e,"/tickets/new")}>Create Ticket</a></nav><div className="requester-context"><button className="text-button" onClick={() => onNavigate("/change-password")}>Change password</button><span className="context-label">Signed in · Requester</span><strong>{user.displayName}</strong><button className="text-button" type="button" onClick={onLogout}>Sign out</button></div></header><main className="app-content">{currentPath==="/tickets/new"?<CreateTicketPage requester={user} onRequesterUnavailable={unavailable}/>:ticketId?<TicketDetailPage key={ticketId} requester={user} ticketId={ticketId} onNavigate={onNavigate} onRequesterUnavailable={unavailable}/>:<MyTicketsPage requester={user} onNavigate={onNavigate} onRequesterUnavailable={unavailable}/>}</main></div>;
 }
 export default function App() {
   const [state, setState] = useState<"loading" | "anonymous" | "ready">("loading");
@@ -53,6 +56,7 @@ export default function App() {
   }, []);
   useEffect(() => {
     if (state === "anonymous" && path !== "/login") navigate("/login", true);
+    if (state === "ready" && user && !user.mustChangePassword && ["/", "/login"].includes(path)) navigate(homeFor(user), true);
     if (user?.mustChangePassword && path !== "/change-password") navigate("/change-password", true);
   }, [state, user, path, navigate]);
   async function signedOut() {
@@ -67,7 +71,7 @@ export default function App() {
   }
   if (state === "loading") return <main className="selection-page"><section className="selection-card" aria-busy="true"><h1>Loading TokTickIT…</h1></section></main>;
   if (state === "anonymous" || !user) return <LoginPage onLogin={u => {
-    setUser(u); setState("ready"); navigate(u.mustChangePassword ? "/change-password" : "/tickets");
+    setUser(u); setState("ready"); navigate(u.mustChangePassword ? "/change-password" : homeFor(u));
   }}/>;
   const passwordPage = user.mustChangePassword || path === "/change-password";
   return <>
@@ -75,12 +79,14 @@ export default function App() {
       <p>{logoutError}</p><button className="secondary-button" disabled={loggingOut} onClick={() => void signedOut()}>Retry sign out</button>
     </div>}
     {loggingOut && <p role="status">Signing out…</p>}
-    {!user.mustChangePassword && <nav aria-label="Account navigation">
-      {passwordPage ? <button className="text-button" onClick={() => navigate("/tickets")}>Back to workspace</button>
+    {!user.mustChangePassword && (passwordPage || user.role === "IT_STAFF") && <nav aria-label="Account navigation">
+      {passwordPage ? <button className="text-button" onClick={() => navigate(homeFor(user))}>Back to workspace</button>
         : <button className="text-button" onClick={() => navigate("/change-password")}>Change password</button>}
     </nav>}
-    {passwordPage ? <ChangePasswordPage user={user} onChanged={u => { setUser(u); navigate("/tickets"); }} onLogout={() => void signedOut()}/>
-      : user.role !== "REQUESTER" ? <main className="selection-page"><section className="selection-card"><h1>{user.role === "IT_STAFF" ? "IT Staff" : "Administrator"}</h1><p>Your role workspace will be delivered in the next Lab 3 Issues.</p><button className="primary-button" disabled={loggingOut} onClick={() => void signedOut()}>Sign out</button></section></main>
+    {passwordPage ? <ChangePasswordPage user={user} onChanged={u => { setUser(u); navigate(homeFor(u)); }} onLogout={() => void signedOut()}/>
+      : ((path.startsWith("/admin") && user.role !== "ADMINISTRATOR") || (path.startsWith("/staff") && user.role === "REQUESTER") || (path.startsWith("/tickets") && user.role !== "REQUESTER")) ? <main className="selection-page"><section className="selection-card"><h1>Access denied</h1><p>Your role cannot open this page.</p><button className="primary-button" onClick={() => navigate(homeFor(user))}>Go to my workspace</button></section></main>
+      : user.role === "ADMINISTRATOR" ? <div className="app-layout"><header className="app-header"><a className="brand" href="/admin/users" onClick={e => { e.preventDefault(); navigate("/admin/users"); }}><span>TokTickIT</span><small>IT Service Desk</small></a><nav className="admin-actions" aria-label="Administrator navigation"><button className="text-button" onClick={() => navigate("/admin/users")}>Users</button><button className="text-button" onClick={() => navigate("/staff/tickets")}>Ticket Queue</button></nav><div className="requester-context"><button className="text-button" onClick={() => navigate("/change-password")}>Change password</button><span className="context-label">Signed in · Administrator</span><strong>{user.displayName}</strong><button className="text-button" disabled={loggingOut} onClick={() => void signedOut()}>Sign out</button></div></header><main className="app-content">{path.startsWith("/staff") ? <section><h1>Ticket Queue</h1><p>The queue is scheduled for Issue #28.</p></section> : <AdminUsersPage currentUser={user} onSelfChanged={(saved, revoked) => { if (revoked) authenticationLost(); else setUser(saved); }}/>}</main></div>
+      : user.role === "IT_STAFF" ? <main className="selection-page"><section className="selection-card"><h1>IT Staff</h1><p>Your role workspace will be delivered in the next Lab 3 Issues.</p><button className="primary-button" disabled={loggingOut} onClick={() => void signedOut()}>Sign out</button></section></main>
       : <AppShell user={user} currentPath={path.startsWith("/tickets") ? path : "/tickets"} onNavigate={navigate} onLogout={() => void signedOut()} onAuthenticationLost={authenticationLost}/>}
   </>;
 }
