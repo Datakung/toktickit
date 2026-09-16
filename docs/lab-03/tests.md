@@ -1,6 +1,17 @@
 # Lab 3 Planned Tests and Traceability
 
-Status: Evolving traceability record. Issue #25 established the plan; Issues #26–27 have executable branch-level evidence. Later-Issue paths and final release results remain planned until implemented.
+Status: Evolving traceability record. Issue #25 established the plan; Issues #26–28 have executable branch-level evidence. Later-Issue paths and final release results remain planned until implemented.
+
+## Issue #28 branch verification (2026-09-16)
+
+- Backend: 19 files / 137 tests passed. Six new Staff queue API scenarios cover anonymous/Requester/mandatory-change denial, Staff and Administrator access, safe DTOs, literal `%_` search, combined reference/owner/assignment/status/priority filters, strict invalid queries, deterministic ordering/pagination, active eligible owners and safe injected failure. Requester regression checks now exercise all eight accepted status values.
+- Client: 12 files / 88 tests passed. Four queue component scenarios cover loading, useful assigned/unassigned summaries, detail navigation, combined controls/page reset/clear, empty/no-results, safe failure/retry and retained reference choices. The inherited My Tickets suite verifies all eight exact status labels.
+- Browser: all 26 Chromium scenarios passed with real cookie sessions and the isolated E2E database. Five new queue scenarios cover filter/sort/pagination/detail destination, Requester UI/API denial and inspected 1440/768/390px layouts with no page overflow; the other 21 preserve Lab 2, authentication and Administrator flows. Development database/uploads SHA-256 matched before/after: `d874e28e612c7c7f3cafd8560bd021d8b9a576fdd34382c6ff7ab0407e8b8175`.
+- Both production builds passed. The first browser launch failed before tests because Windows returned ENOMEM while starting `tsx`; the isolated rerun passed all five and is the result reported above. No development migration or seed was run by these tests.
+
+Author manual checks (local development branch, 2026-09-17, screenshots and confirmation supplied in conversation): Administrator and Mali Support (IT Staff) both opened the shared queue with 24 Tickets across three pages; the IT Staff identity and navigation were correct; at the 390px mobile width the filters and labeled Ticket cards remained readable and an Inspect-console measurement reported no page-level horizontal overflow; a Requester navigating directly to `/staff/tickets` received the safe Access denied screen with no queue data displayed. Search/filter/order behavior and the other responsive widths remain supported by the automated browser evidence above rather than claimed as separate manual checks.
+
+These are local branch results and author checks, not peer approval or final-main release evidence.
 
 ## Issue #27 branch verification (2026-09-15)
 
@@ -57,12 +68,12 @@ Each row represents a suite of named scenarios, not a single assertion. Every li
 | MIG-01 | Migration | FR-03 / AC-03 | Populated Lab 2 fixture -> preserved IDs/FKs/counts/timestamps/removed metadata/file hashes; null priority backfill; duplicate normalized email fails preflight; seeds twice preserve changed credentials and records. | server/tests/lab-03/migration-regression.test.ts | Planned |
 | REG-01 | API/UI | FR-02, FR-03 / AC-04, AC-11 | Authenticated create/list/detail/upload/download/remove; two Requesters, removed files, invalid uploads and legacy selector removal -> Lab 2 continuity with real identity. | server/tests/lab-03/requester-regression.api.test.ts | Planned |
 | ADM-01 | API | FR-04 / AC-05, AC-06 | List/search/create/edit/reset; normalized duplicate email, invalid role/input; self-deactivation, last-Admin demotion and concurrent changes; revoked sessions/unassignment -> valid operations only. | server/tests/lab-03/admin-users.api.test.ts | Passed on Issue #27 branch; future assignment races remain OPS-01 |
-| QUE-01 | API | FR-05 / AC-07 | Literal search special characters; combined filters; ordering ties; every page size; beyond-last/empty; invalid query values and authorization -> accurate deterministic metadata/results. | server/tests/lab-03/staff-queue.api.test.ts | Planned |
+| QUE-01 | API | FR-05 / AC-07 | Literal search special characters; combined filters; ordering ties; every page size; beyond-last/empty; invalid query values and authorization -> accurate deterministic metadata/results. | server/tests/lab-03/staff-queue.api.test.ts | Passed on Issue #28 branch |
 | OPS-01 | API | FR-06 / AC-08, AC-09 | Claim race, stale versions, inactive owner, unassign, priority; every status pair x role; indication twice and reopen clearing -> atomic allowed changes only. | server/tests/lab-03/staff-ticket-detail.api.test.ts | Planned |
 | COM-01 | API | FR-07, FR-08 / AC-09, AC-10 | Own/foreign comments; no notes in Requester JSON; note endpoints denied; 0/1/4000/4001 trimmed content; author/time forgery; pagination and absent edits/deletes. | server/tests/lab-03/comments-notes.api.test.ts | Planned |
 | ATT-01 | API | FR-03, FR-06 / AC-11 | Staff/Admin active download and removed denial; foreign attachment/ticket IDs; no Staff mutation; removal history survives migration. | server/tests/lab-03/attachments.api.test.ts | Planned |
 | UI-01 | Component | FR-01, FR-02 / AC-01, AC-02 | Login busy/error and forced-change validation; role shell; logout/back/reload/expiry clear stale data. | client/tests/lab-03/Login.test.tsx; client/tests/lab-03/ChangePassword.test.tsx | Planned |
-| UI-02 | Component | FR-05 / AC-07, AC-12 | Queue controls/page resets/loading/empty/no-results/failure/forbidden and detail navigation. | client/tests/lab-03/StaffTicketQueue.test.tsx | Planned |
+| UI-02 | Component | FR-05 / AC-07, AC-12 | Queue controls/page resets/loading/empty/no-results/failure/forbidden and detail navigation. | client/tests/lab-03/StaffTicketQueue.test.tsx | Passed on Issue #28 branch |
 | UI-03 | Component | FR-06-08 / AC-08-12 | Detail saves/conflicts/dialog keyboard focus, indication, comments/notes separation, safe text, download states. | client/tests/lab-03/StaffTicketDetail.test.tsx; client/tests/lab-03/RequesterTicketDetail.test.tsx | Planned |
 | UI-04 | Component | FR-04 / AC-05, AC-06, AC-12 | Admin form validation, duplicate/stale errors, input preservation, reset/busy prevention, forbidden and failure states. | client/tests/lab-03/AdminUsers.test.tsx | Passed on Issue #27 branch |
 | ERR-01 | API | FR-09 / AC-13 | Inject persistence/storage failures into every capability; verify safe 500 shapes, no secrets/notes and atomic rollback. | server/tests/lab-03/unexpected-errors.api.test.ts | Planned |

@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Engineering contract and Issue #26 approved and peer-merged. Issue #27 automated verification and author manual checks are recorded; commits, PR and peer review remain pending.
+Status: Engineering contract and Issues #26–#27 approved and peer-merged. Issue #28 branch implementation and automated verification are recorded; author manual checks, commits, PR and peer review remain pending.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -15,8 +15,8 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 |---|---|---|
 | [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
 | [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): all four findings answered and corrected in f5f21ba. Phanuwit re-reviewed, approved and merged on 2026-09-15. |
-| [#27](https://github.com/Datakung/toktickit/issues/27) | User management | Local implementation, automated verification and author manual checks recorded in tests.md; commits, PR and peer review pending. |
-| [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Pending |
+| [#27](https://github.com/Datakung/toktickit/issues/27) | User management | [PR #33](https://github.com/Datakung/toktickit/pull/33): Phanuwit [approved `5ed6a54`](https://github.com/Datakung/toktickit/pull/33#pullrequestreview-5219828249) and merged as `b9e23f3` on 2026-09-16. |
+| [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Local implementation and automated verification recorded in tests.md; author manual checks, commits, PR and peer review pending. |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
 | [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Pending |
 
@@ -42,6 +42,10 @@ Phanuwit reviewed `26c3417` on 2026-09-15 and independently passed 109 backend t
 | [Expired session handling](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347625) | Protected 401 responses clear CSRF and authenticated state and return to login without logout. Tests distinguish 403 errors and cover Back navigation; a browser test revokes the session through a second real login. |
 
 Reply/approval status: Phanuwit verified the four author replies and approved f5f21ba, then merged PR #32 on 2026-09-15. He independently passed 111 backend tests, 75 client tests (serial rerun), both builds and 17 browser tests, including the malformed-cookie process reproduction. His first parallel client run had an inherited focus-assertion failure; Issue #27 changes that assertion to wait for the focus effect, as he suggested.
+
+## Received Administrator review (completed)
+
+Phanuwit reviewed exact revision `5ed6a54` with no blocking findings and approved it on 2026-09-16. His independent isolated run passed 123 backend tests, 83 serial client tests, 21 Chromium scenarios and both production builds. He explicitly checked authorization/CSRF, normalized uniqueness, strict validation, conflicts, Administrator invariants, transactional revocation/unassignment, migration and responsive user-management flows. He also confirmed that queue/status/assignment work remained correctly scoped to Issues #28–#29. Phanuwit then merged PR #33 into `lab3-staging`; this approval is evidence for Issue #27 only, not pre-approval of Issue #28.
 
 ## Partner review links
 

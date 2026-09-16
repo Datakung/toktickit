@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Approved engineering contract. Issue #25 was peer-approved and reviewer-merged through PR #31; Issue #26 authentication was approved and merged through PR #32. Issue #27 implements Administrator user management and additive owner/version groundwork for automatic unassignment; peer acceptance is pending.
+Status: Approved engineering contract. Issues #25–#27 were peer-approved and reviewer-merged through PRs #31–#33. Issue #28 implements the authorized shared Staff Ticket Queue and eight-status read continuity; peer acceptance is pending.
 
 ## 1. Sprint goal
 
