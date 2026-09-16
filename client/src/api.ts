@@ -86,7 +86,19 @@ export interface AttachmentMetadata {
   removedByRequesterId: number | null;
 }
 
-export type TicketStatus = "NEW";
+export const ticketStatuses = ["NEW", "OPEN", "IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CLOSED", "REOPENED", "CANCELLED"] as const;
+export type TicketStatus = typeof ticketStatuses[number];
+export const statusLabel = (value: TicketStatus) => ({ NEW: "New", OPEN: "Open", IN_PROGRESS: "In Progress", WAITING_FOR_REQUESTER: "Waiting for Requester", RESOLVED: "Resolved", CLOSED: "Closed", REOPENED: "Reopened", CANCELLED: "Cancelled" })[value];
+export interface QueueQuery { q: string; categoryId: string; relatedSystemId: string; ownerId: string; unassigned: string; status: string; itPriority: string; sort: string; direction: string; page: number; pageSize: number }
+export interface QueueItem extends TicketListItem { requester: { id: number; displayName: string }; owner: { id: number; displayName: string } | null; version: number }
+export interface QueueResponse { items: QueueItem[]; page: number; pageSize: number; total: number; totalPages: number }
+export interface StaffOwner { id: number; displayName: string; role: UserRole }
+export function getStaffOwners(): Promise<{ items: StaffOwner[] }> { return getJson("/api/staff/owners"); }
+export function getStaffQueue(query: QueueQuery): Promise<QueueResponse> {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) if (value !== "") params.set(key, String(value));
+  return getJson(`/api/staff/tickets?${params}`);
+}
 export type TicketListSort = "updatedAt" | "createdAt" | "ticketNumber";
 export type SortDirection = "asc" | "desc";
 

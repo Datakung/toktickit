@@ -95,8 +95,13 @@ describe("Lab 3 authenticated shell", () => {
     await user.type(screen.getByLabelText("Current password"),"initial-fixture-password"); await user.type(screen.getByLabelText("New password"),"changed-fixture-password"); await user.type(screen.getByLabelText("Confirm new password"),"changed-fixture-password"); await user.click(screen.getByRole("button",{name:"Change password"}));
     expect(await screen.findByRole("heading",{name:"My Tickets"})).toBeInTheDocument(); expect(screen.getByText("Signed in · Requester")).toBeInTheDocument();
   });
-  it("renders role-specific placeholders instead of Requester navigation", async () => {
-    vi.spyOn(api,"getCurrentUser").mockResolvedValue({...requester,role:"IT_STAFF"}); render(<App/>);
-    expect(await screen.findByRole("heading",{name:"IT Staff"})).toBeInTheDocument(); expect(screen.queryByText("Create Ticket")).not.toBeInTheDocument();
+  it("routes IT Staff to the Ticket Queue instead of Requester navigation", async () => {
+    vi.spyOn(api,"getCurrentUser").mockResolvedValue({...requester,role:"IT_STAFF"});
+    vi.spyOn(api,"getCategories").mockResolvedValue([]);
+    vi.spyOn(api,"getRelatedSystems").mockResolvedValue([]);
+    vi.spyOn(api,"getStaffOwners").mockResolvedValue({items:[]});
+    vi.spyOn(api,"getStaffQueue").mockResolvedValue({items:[],page:1,pageSize:10,total:0,totalPages:1});
+    render(<App/>);
+    expect(await screen.findByRole("heading",{name:"Ticket Queue"})).toBeInTheDocument(); expect(screen.queryByText("Create Ticket")).not.toBeInTheDocument();
   });
 });

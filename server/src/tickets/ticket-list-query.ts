@@ -100,10 +100,10 @@ export function parseTicketListQuery(query: Record<string, unknown>): TicketList
   const rawStatus = singleValue(query, "status", fields);
   const status = rawStatus === undefined
     ? null
-    : rawStatus === TicketStatus.NEW
-      ? TicketStatus.NEW
+    : Object.values(TicketStatus).includes(rawStatus as TicketStatus)
+      ? rawStatus as TicketStatus
       : null;
-  if (rawStatus !== undefined && status === null) fields.status = "status must be NEW.";
+  if (rawStatus !== undefined && status === null) fields.status = "Choose a permitted Ticket status.";
 
   const rawSort = singleValue(query, "sort", fields);
   const sort: TicketListSort = rawSort === undefined

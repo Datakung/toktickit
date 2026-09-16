@@ -6,6 +6,7 @@ import { attachmentRouter } from "./attachments/attachment-routes.js";
 import { authRouter } from "./auth/auth-routes.js";
 import { requireNormalSession } from "./auth/auth-middleware.js";
 import { userRouter } from "./admin/user-routes.js";
+import { staffRouter } from "./staff/queue-routes.js";
 
 // The Express app is exported separately from app.listen() (see index.ts) so
 // Supertest can import `app` without opening a port. Do not merge these files.
@@ -33,6 +34,7 @@ app.use((error: unknown, _request: Request, response: Response, next: (error?: u
 });
 app.use("/api/auth", authRouter);
 app.use("/api/admin/users", userRouter);
+app.use("/api/staff", staffRouter);
 app.use("/api/tickets", ticketRouter);
 app.use("/api/tickets/:ticketId/attachments", attachmentRouter);
 

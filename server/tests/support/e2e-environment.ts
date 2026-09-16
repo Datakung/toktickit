@@ -9,7 +9,7 @@ import {
 import { loadEnvFile } from "node:process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TicketStatus, type Prisma } from "@prisma/client";
 import { seedDatabase } from "../../prisma/seed.js";
 import { hashPassword } from "../../src/auth/password.js";
 import { deployTestMigrations } from "./deploy-test-migrations.js";
@@ -153,6 +153,24 @@ export async function prepareE2EEnvironment() {
         updatedAt: fixedTime,
       },
     });
+    const queueRequester = await prisma.user.findUniqueOrThrow({ where: { email: "kanya.srisuk@example.test" } });
+    const queueOwner = await prisma.user.findUniqueOrThrow({ where: { email: "mali.support@example.test" } });
+    const statuses = Object.values(TicketStatus);
+    const queueTickets: Prisma.TicketCreateManyInput[] = Array.from({ length: 12 }, (_, index) => ({
+      ticketNumber: `TKT-20260916-QUEUE${String(index + 1).padStart(2, "0")}`,
+      requesterId: queueRequester.id,
+      categoryId: category.id,
+      relatedSystemId: relatedSystem.id,
+      ownerId: index % 2 ? queueOwner.id : null,
+      summary: `Staff queue fixture ${String(index + 1).padStart(2, "0")}: VPN connection fails`,
+      description: "Deterministic shared queue evidence in the isolated E2E database only.",
+      requestedPriority: "HIGH",
+      itPriority: index % 3 === 0 ? "LOW" : index % 3 === 1 ? "MEDIUM" : "HIGH",
+      status: statuses[index] ?? "NEW",
+      createdAt: fixedTime,
+      updatedAt: fixedTime,
+    }));
+    await prisma.ticket.createMany({ data: queueTickets });
   } finally {
     await prisma.$disconnect();
   }

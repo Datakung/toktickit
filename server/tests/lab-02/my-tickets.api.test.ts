@@ -215,12 +215,30 @@ describe("GET /api/tickets", () => {
     });
   });
 
+  it.each(["NEW", "OPEN", "IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CLOSED", "REOPENED", "CANCELLED"])(
+    "accepts the inherited %s status while preserving Requester ownership",
+    async (status) => {
+      const id = requesterATicketIds[0];
+      await prisma.ticket.update({ where: { id }, data: { status: status as never } });
+      try {
+        const response = await request(app)
+          .get(`/api/tickets?search=TKT-20260901-L00000&status=${status}`)
+          .set("X-Development-Requester-Id", String(requesterA));
+        expect(response.status).toBe(200);
+        expect(response.body.data.map((item: { id: number }) => item.id)).toEqual([id]);
+        expect(response.body.meta.filters.status).toBe(status);
+      } finally {
+        await prisma.ticket.update({ where: { id }, data: { status: "NEW" } });
+      }
+    },
+  );
+
   it.each([
     ["unknown parameter", "/api/tickets?requesterId=1", "requesterId"],
     ["overlong search", `/api/tickets?search=${"x".repeat(101)}`, "search"],
     ["invalid Category", "/api/tickets?categoryId=0", "categoryId"],
     ["invalid priority", "/api/tickets?requestedPriority=URGENT", "requestedPriority"],
-    ["invalid status", "/api/tickets?status=CLOSED", "status"],
+    ["invalid status", "/api/tickets?status=NOT_A_STATUS", "status"],
     ["invalid sort", "/api/tickets?sort=summary", "sort"],
     ["invalid direction", "/api/tickets?direction=sideways", "direction"],
     ["invalid page", "/api/tickets?page=-1", "page"],
