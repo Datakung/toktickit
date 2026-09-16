@@ -40,6 +40,7 @@ model User {
   tickets            Ticket[]     @relation("TicketRequester")
   removedAttachments Attachment[] @relation("AttachmentRemovedBy")
   sessions           Session[]
+  ownedTickets       Ticket[]     @relation("TicketOwner")
 }
 
 model Session {
@@ -75,6 +76,9 @@ model RelatedSystem {
 
 model Ticket {
   id                Int                @id @default(autoincrement())
+  ownerId           Int?
+  version           Int                @default(1)
+  owner             User?              @relation("TicketOwner", fields: [ownerId], references: [id], onDelete: Restrict)
   ticketNumber      String             @unique @db.VarChar(32)
   requesterId       Int
   categoryId        Int
@@ -92,6 +96,7 @@ model Ticket {
   attachments       Attachment[]
 
   @@index([requesterId, updatedAt])
+  @@index([ownerId, status])
   @@index([requesterId, status])
   @@index([categoryId])
   @@index([relatedSystemId])

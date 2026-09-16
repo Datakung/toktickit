@@ -1,6 +1,28 @@
 # TokTickIT
 
-## Current Lab 3 authentication increment
+## Current Lab 3 authentication and user-management increment
+
+Issue #27 adds the Administrator Users screen at `/admin/users`: literal name/email
+search, combined role and Active/Inactive filtering, create/edit, activation and separate initial-password reset.
+Only Administrators with completed password change can use its UI and APIs.
+Passwords are write-only; resets require a new password change at next login.
+Role changes, deactivation and resets revoke sessions. Stale edits return a conflict;
+reload and review the account before explicitly submitting again.
+
+Before running this branch locally, apply the additive owner/version migration:
+
+```powershell
+cd server
+npx prisma migrate deploy
+npx prisma generate
+cd ..
+```
+
+Use your provisioned `admin@example.test` credentials, complete the initial password
+change if required, and open Users. No new provisioning or database reset is needed.
+Deactivation preserves accounts and Ticket history. It unassigns owned Tickets;
+the backend prevents self-deactivation and removing the final active Administrator.
+Staff queue and Ticket operations remain scheduled for Issues #28–29.
 
 Issue #26 replaces the Lab 2 Development Requester selector and trusted header
 with database-backed authentication. Active users sign in with email/password,

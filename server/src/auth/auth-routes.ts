@@ -47,10 +47,13 @@ authRouter.post("/login", asyncRoute(async (request, response) => {
     }
     clearLoginFailures(email);
     const raw = newToken(); const csrfToken = sessionCsrf(raw);
-    await getPrisma().$transaction([
-      getPrisma().session.deleteMany({ where: { userId: user.id } }),
-      getPrisma().session.create({ data: { tokenHash: sha256(raw), csrfHash: csrfHash(csrfToken), userId: user.id, expiresAt: sessionExpiry() } }),
-    ]);
+    await getPrisma().$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM "User" WHERE id = ${user.id} FOR UPDATE`;
+      const latest = await tx.user.findUniqueOrThrow({ where: { id: user.id } });
+      if (!latest.isActive || latest.version !== user.version || latest.passwordHash !== user.passwordHash) throw new Error("Account changed during login");
+      await tx.session.deleteMany({ where: { userId: user.id } });
+      await tx.session.create({ data: { tokenHash: sha256(raw), csrfHash: csrfHash(csrfToken), userId: user.id, expiresAt: sessionExpiry() } });
+    });
     setSessionCookie(response, raw);
     response.json({ user: safe(user), csrfToken });
   } catch { response.status(500).json({ error: { code: "LOGIN_FAILED", message: "Sign in is unavailable. Try again." } }); }
@@ -86,6 +89,10 @@ authRouter.post("/change-password", requireSession, requireCsrf, asyncRoute(asyn
     if (!await verifyPassword(currentPassword, stored.passwordHash) || await verifyPassword(newPassword, stored.passwordHash)) return void response.status(400).json({ error: { code: "VALIDATION_ERROR", message: "Check the password fields.", fields: { currentPassword: "Current password is incorrect, or the new password is unchanged." } } });
     const passwordHash = await hashPassword(newPassword); const raw = newToken(); const csrfToken = sessionCsrf(raw);
     const user = await getPrisma().$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM "User" WHERE id = ${stored.id} FOR UPDATE`;
+      const latest = await tx.user.findUniqueOrThrow({ where: { id: stored.id } });
+      const currentSession = await tx.session.findUnique({ where: { id: locals.sessionId } });
+      if (!latest.isActive || latest.version !== stored.version || latest.passwordHash !== stored.passwordHash || !currentSession || currentSession.expiresAt <= new Date()) throw new Error("Account or session changed during password update");
       await tx.session.deleteMany({ where: { userId: stored.id } });
       const updated = await tx.user.update({ where: { id: stored.id }, data: { passwordHash, mustChangePassword: false, version: { increment: 1 } } });
       await tx.session.create({ data: { userId: stored.id, tokenHash: sha256(raw), csrfHash: csrfHash(csrfToken), expiresAt: sessionExpiry() } });

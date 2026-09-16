@@ -23,6 +23,25 @@ export interface CurrentUser extends DevelopmentRequester {
   mustChangePassword: boolean;
 }
 
+export interface AdminUser extends CurrentUser { version: number; createdAt: string; updatedAt: string }
+export interface UserInput { displayName: string; email: string; role: UserRole; isActive: boolean }
+export async function getAdminUsers(q = "", role = "", isActive = ""): Promise<{ items: AdminUser[] }> {
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  if (role) params.set("role", role);
+  if (isActive) params.set("isActive", isActive);
+  return getJson(`/api/admin/users?${params}`);
+}
+async function adminMutation(path: string, method: string, input: unknown): Promise<AdminUser> {
+  return parseApiResponse(await fetch(`${API_URL}/api/admin/users${path}`, {
+    method, credentials: requestCredentials,
+    headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken }, body: JSON.stringify(input),
+  }));
+}
+export const createAdminUser = (input: UserInput & { initialPassword: string }) => adminMutation("", "POST", input);
+export const editAdminUser = (id: number, input: UserInput & { version: number }) => adminMutation(`/${id}`, "PATCH", input);
+export const resetAdminPassword = (id: number, input: { initialPassword: string; version: number }) => adminMutation(`/${id}/initial-password`, "POST", input);
+
 let csrfToken = "";
 export const AUTHENTICATION_LOST = "toktickit:authentication-lost";
 export function clearAuthentication() { csrfToken = ""; }

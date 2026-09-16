@@ -9,6 +9,7 @@ describe("Lab 3 authenticated shell", () => {
   beforeEach(() => { window.history.replaceState({},"","/login"); });
   afterEach(() => vi.restoreAllMocks());
   function mockTickets() {
+    vi.spyOn(api,"getAdminUsers").mockResolvedValue({ items: [] });
     vi.spyOn(api,"getCategories").mockResolvedValue([]);
     vi.spyOn(api,"getRelatedSystems").mockResolvedValue([]);
     return vi.spyOn(api,"getTickets").mockResolvedValue({data:[],meta:{page:1,pageSize:10,totalItems:0,totalPages:0,search:"",filters:{categoryId:null,relatedSystemId:null,requestedPriority:null,status:null},sort:"updatedAt",direction:"desc"}});
@@ -25,7 +26,7 @@ describe("Lab 3 authenticated shell", () => {
     await user.type(screen.getByLabelText("New password"), "another-private-password");
     await user.type(screen.getByLabelText("Confirm new password"), "another-private-password");
     await user.click(screen.getByRole("button", { name: "Change password" }));
-    await waitFor(() => expect(location.pathname).toBe("/tickets"));
+    await waitFor(() => expect(location.pathname).toBe(role === "ADMINISTRATOR" ? "/admin/users" : role === "IT_STAFF" ? "/staff/tickets" : "/tickets"));
     await user.click(screen.getByRole("button", { name: "Change password" }));
     expect(await screen.findByRole("heading", { name: "Change your password" })).toBeInTheDocument();
   });
