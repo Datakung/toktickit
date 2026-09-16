@@ -48,7 +48,8 @@ Requester resolution submits the displayed Ticket version. A successful response
 - Staff Detail: immutable Ticket context/description; separate owner/priority/status forms. Eligible owner dropdown includes Unassigned. Show Claim only when available. Confirm terminal transitions. A stale version shows conflict with Reload and preserves intended input; user reviews current values before retrying.
 - Comments/Notes: visibly separate headings, forms and explanations; Internal Notes clearly labeled Staff/Admin only. No shared visibility toggle, edit or delete. Disable posting duplicates while busy; preserve text on errors, clear only after confirmed success. Render submitted content as text.
 - Requester detail: existing attachments plus Public Comments and Problem Appears Resolved for eligible states. Show backend indication timestamp after success; no formal resolution/closure control.
-- Admin: list Name/Email/Role/Status/Edit; name/email search, optional role filter. Create/edit requires labeled basic fields and one-role select. Initial-password field is write-only; reset uses a separate confirmed form. Explain deactivation consequences, including unassignment/session revocation. Backend self/last-Admin errors appear clearly; do not rely on disabled controls alone.
+- Admin: list Name/Email/Role/Status/Edit; name/email search, optional role and All statuses/Active/Inactive filters combined with AND. Clear filters resets all three. This status filter is a user-approved Issue #27 extension. Create/edit requires labeled basic fields and one-role select. Initial-password field is write-only; reset uses a separate confirmed form. Explain deactivation consequences, including unassignment/session revocation. Backend self/last-Admin errors appear clearly; do not rely on disabled controls alone.
+- Administrator and Requester headers place Change password above the signed-in identity. User-row Edit and Reset password actions share a horizontal row with adequate Actions-column space and 44px minimum button height; mobile cards retain both actions without page overflow.
 - All screens: initial loading, processing, validation, success, empty/no-results where applicable, forbidden/not-found, conflict and safe API failure with useful retry. Preserve nonsecret edits on recoverable errors. Do not show a generic offline state for every authorization error.
 
 ## Accessibility and responsive checks
@@ -60,6 +61,8 @@ At 1440px use desktop table/forms; at 768px adapt columns/stack panels; at 390px
 Labels, aria-invalid/describedby, error summary focus, live status announcements and one h1 per route are required. Dialogs trap focus, support Escape when safe and restore focus to their trigger. Route changes focus the heading. Modal destructive confirmation cannot be submitted twice.
 
 ## Planned evidence
+
+Issue #27 development verification: Administrator list/create editor inspected at 1440, 768 and 390px. Desktop table becomes labeled cards at smaller widths. Forms stack without page overflow. Browser checks cover heading/field focus and returning focus after Cancel. Reset and access-changing edits use an inline confirmation checkbox and separate submit action, not a modal. Component checks cover safe failure/retry, password clearing, stale edits with explicit reload and forbidden role routes. Remaining screens and final evidence checkboxes below stay pending.
 
 Screenshot folders: `artifacts/lab-03/screenshots/authentication/`, `staff-queue/`, `staff-ticket-detail/`, `user-management/`. Capture desktop/tablet/mobile for each major screen, plus first-password and Requester comment/resolution regression evidence. Routine E2E uses temporary output; deterministic evidence generation is explicit.
 

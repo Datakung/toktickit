@@ -1,6 +1,6 @@
 # Lab 3 API Contract
 
-Status: Proposed; review with [specification.md](specification.md). API routes below are planned, not implemented.
+Status: Approved contract; authentication is implemented through Issue #26 and Administrator endpoints through Issue #27. Staff/communication routes remain planned. See [specification.md](specification.md).
 
 ## Shared contract
 
@@ -70,11 +70,17 @@ Resolution indication checks ownership, validates positive integer version, then
 
 ## Administrator
 
+User-requested Issue #27 extension: omitted isActive means both active and inactive accounts. Only literal scalar strings true/false are valid; empty, repeated, nested or other values return 400 INVALID_QUERY. Search, role and status combine with AND.
+
+Issue #27 implements these four endpoints. All account mutations take PostgreSQL transaction advisory lock `2730001`, then recheck the acting Administrator's current session/role. Target rows are locked before checking the expected version; account/session/Ticket changes commit together. Future assignment mutations must take the same advisory lock before checking owner eligibility. Login and password-change transactions also lock and recheck the User row to prevent late credentials from restoring a revoked session.
+
+The additive `20260915090000_admin_assignment_safety` migration introduces nullable Ticket ownerId and version=1 without altering existing timestamps or relationships. Automatic unassignment has no status filter. Expanded statuses and assignment endpoints remain Issue #28–29 work; their later tests must exercise this rule across all eight states and assignment races.
+
 AdminUser = SafeUser plus `{version,createdAt,updatedAt}`. Never return hashes. All endpoints require ADMINISTRATOR and completed password change.
 
 | Method/path | Input | Success |
 |---|---|---|
-| GET /admin/users | optional q (name/email literal substring, max 120), role | 200 `{items:AdminUser[]}` ordered displayName then id; no required pagination |
+| GET /admin/users | optional q (name/email literal substring, max 120), role, isActive=true/false | 200 `{items:AdminUser[]}` ordered displayName then id; no required pagination |
 | POST /admin/users | `{displayName,email,role,isActive,initialPassword}` | 201 AdminUser; mustChangePassword=true |
 | PATCH /admin/users/:id | `{displayName,email,role,isActive,version}` | 200 AdminUser |
 | POST /admin/users/:id/initial-password | `{initialPassword,version}` | 200 AdminUser; mandatory change, session revocation, version increment |

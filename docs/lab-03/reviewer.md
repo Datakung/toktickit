@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Evolving Lab 3 review record. Engineering contract approved and merged; Issue #26 corrections await re-review.
+Status: Engineering contract and Issue #26 approved and peer-merged. Issue #27 automated verification and author manual checks are recorded; commits, PR and peer review remain pending.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -14,8 +14,8 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | Issue | Scope | PR / received review / response / approval / reviewer merge |
 |---|---|---|
 | [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
-| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): Phanuwit requested four corrections; fixes and regression evidence prepared. Replies, re-review, approval and reviewer merge pending. |
-| [#27](https://github.com/Datakung/toktickit/issues/27) | User management | Pending |
+| [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): all four findings answered and corrected in f5f21ba. Phanuwit re-reviewed, approved and merged on 2026-09-15. |
+| [#27](https://github.com/Datakung/toktickit/issues/27) | User management | Local implementation, automated verification and author manual checks recorded in tests.md; commits, PR and peer review pending. |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Pending |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
 | [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Pending |
@@ -41,7 +41,7 @@ Phanuwit reviewed `26c3417` on 2026-09-15 and independently passed 109 backend t
 | [Normal password-change route](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347620) | Every role has a Change password action and direct route; initial credentials remain gated. Component tests cover all roles; the browser changes a normal Requester's password and signs in with it. |
 | [Expired session handling](https://github.com/Datakung/toktickit/pull/32#discussion_r4011347625) | Protected 401 responses clear CSRF and authenticated state and return to login without logout. Tests distinguish 403 errors and cover Back navigation; a browser test revokes the session through a second real login. |
 
-Reply/approval status: Corrections prepared; no peer approval or merge claimed.
+Reply/approval status: Phanuwit verified the four author replies and approved f5f21ba, then merged PR #32 on 2026-09-15. He independently passed 111 backend tests, 75 client tests (serial rerun), both builds and 17 browser tests, including the malformed-cookie process reproduction. His first parallel client run had an inherited focus-assertion failure; Issue #27 changes that assertion to wait for the focus effect, as he suggested.
 
 ## Partner review links
 

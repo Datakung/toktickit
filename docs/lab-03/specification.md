@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Approved engineering contract. Issue #25 was peer-approved and reviewer-merged through PR #31; Issue #26 implements its authentication and preserved-data migration slice.
+Status: Approved engineering contract. Issue #25 was peer-approved and reviewer-merged through PR #31; Issue #26 authentication was approved and merged through PR #32. Issue #27 implements Administrator user management and additive owner/version groundwork for automatic unassignment; peer acceptance is pending.
 
 ## 1. Sprint goal
 
@@ -23,7 +23,7 @@ Excluded: registration, email delivery/reset links, MFA/SSO, Actions Taken, SLA/
 | FR-01 | Authenticate active users; expose safe current-user data; invalidate logout; require initial-password change before normal access. | #26 |
 | FR-02 | Enforce roles and Requester ownership on every protected operation; remove development selector and header trust. | #26 |
 | FR-03 | Preserve users, Ticket ownership, Attachment metadata and stored files during migration and authenticated regression. | #26 |
-| FR-04 | Provide minimal Administrator listing/search/create/edit/reset and account safety rules. | #27 |
+| FR-04 | Provide minimal Administrator listing/search/create/edit/reset and account safety rules; user-approved extension combines role and Active/Inactive filtering. | #27 |
 | FR-05 | Provide authorized shared queue queries and responsive display with meaningful states. | #28 |
 | FR-06 | Provide Staff detail, eligible assignment, IT Priority and permitted status transitions. | #29 |
 | FR-07 | Allow owners to indicate apparent resolution without formally resolving or closing tickets. | #29 |
