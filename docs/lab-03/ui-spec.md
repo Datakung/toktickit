@@ -1,6 +1,6 @@
 # Lab 3 UI Specification
 
-Status: Draft; no visual checks completed yet. Reuse [Lab 2 design tokens and component rules](../lab-02/ui-spec.md); this document overrides only identity/navigation and adds Lab 3 screens.
+Status: Evolving implementation record. Issue #27 Administrator and Issue #28 Staff queue branch layouts have automated responsive checks and author-side visual inspection; final release evidence remains pending. Reuse [Lab 2 design tokens and component rules](../lab-02/ui-spec.md); this document overrides only identity/navigation and adds Lab 3 screens.
 
 ## Shared shell and routes
 
@@ -62,7 +62,9 @@ Labels, aria-invalid/describedby, error summary focus, live status announcements
 
 ## Planned evidence
 
-Issue #27 development verification: Administrator list/create editor inspected at 1440, 768 and 390px. Desktop table becomes labeled cards at smaller widths. Forms stack without page overflow. Browser checks cover heading/field focus and returning focus after Cancel. Reset and access-changing edits use an inline confirmation checkbox and separate submit action, not a modal. Component checks cover safe failure/retry, password clearing, stale edits with explicit reload and forbidden role routes. Remaining screens and final evidence checkboxes below stay pending.
+Issue #27 development verification: Administrator list/create editor inspected at 1440, 768 and 390px. Desktop table becomes labeled cards at smaller widths. Forms stack without page overflow. Browser checks cover heading/field focus and returning focus after Cancel. Reset and access-changing edits use an inline confirmation checkbox and separate submit action, not a modal. Component checks cover safe failure/retry, password clearing, stale edits with explicit reload and forbidden role routes.
+
+Issue #28 development verification: realistic assigned/unassigned queue records and all eight status labels were inspected at 1440, 768 and 390px. Desktop uses a readable table; tablet/mobile use labeled cards; search and filters stack; automated checks prove heading/input focus, direct Requester denial and no page-level horizontal overflow. On 2026-09-17 the author also confirmed the Mali Support IT Staff queue at 390px, measured no page-level horizontal overflow through the browser Inspect console, and captured the safe Access denied result for a Requester opening `/staff/tickets`. These conversation screenshots and ignored Playwright-output screenshots are development evidence, not final PDF evidence. Final Staff detail and final-revision evidence remain pending.
 
 Screenshot folders: `artifacts/lab-03/screenshots/authentication/`, `staff-queue/`, `staff-ticket-detail/`, `user-management/`. Capture desktop/tablet/mobile for each major screen, plus first-password and Requester comment/resolution regression evidence. Routine E2E uses temporary output; deterministic evidence generation is explicit.
 

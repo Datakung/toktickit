@@ -9,6 +9,7 @@ import {
 } from "react";
 import {
   ApiError,
+  statusLabel,
   getAttachmentContent,
   getTicket,
   isRequesterUnavailable,
@@ -429,7 +430,7 @@ export function TicketDetailPage({
           <p className="eyebrow">Requester Ticket Detail</p>
           <h1 id="ticket-detail-title" ref={headingRef} tabIndex={-1}>{ticket.ticketNumber}</h1>
         </div>
-        <span className="badge status-new">New</span>
+        <span className={`badge status-${ticket.status.toLowerCase()}`}>{statusLabel(ticket.status)}</span>
       </div>
 
       <section className="detail-panel" aria-labelledby="ticket-context-title">
@@ -440,7 +441,7 @@ export function TicketDetailPage({
           <div><dt>Related System</dt><dd>{ticket.relatedSystem.name}</dd></div>
           <div><dt>Requested Priority</dt><dd><span className={`badge priority-${ticket.requestedPriority.toLowerCase()}`}>{labelPriority(ticket.requestedPriority)}</span></dd></div>
           <div><dt>IT Priority</dt><dd>{labelPriority(ticket.itPriority)}</dd></div>
-          <div><dt>Current Status</dt><dd>New</dd></div>
+          <div><dt>Current Status</dt><dd>{statusLabel(ticket.status)}</dd></div>
           <div><dt>Created</dt><dd>{formatDate(ticket.createdAt)}</dd></div>
           <div><dt>Last Updated</dt><dd>{formatDate(ticket.updatedAt)}</dd></div>
         </dl>

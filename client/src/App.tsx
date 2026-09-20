@@ -5,6 +5,7 @@ import { CreateTicketPage } from "./CreateTicketPage.js";
 import { MyTicketsPage } from "./MyTicketsPage.js";
 import { TicketDetailPage } from "./TicketDetailPage.js";
 import { AdminUsersPage } from "./AdminUsersPage.js";
+import { StaffTicketQueuePage } from "./StaffTicketQueuePage.js";
 
 const homeFor = (user: CurrentUser) => user.role === "ADMINISTRATOR" ? "/admin/users" : user.role === "IT_STAFF" ? "/staff/tickets" : "/tickets";
 
@@ -79,14 +80,13 @@ export default function App() {
       <p>{logoutError}</p><button className="secondary-button" disabled={loggingOut} onClick={() => void signedOut()}>Retry sign out</button>
     </div>}
     {loggingOut && <p role="status">Signing out…</p>}
-    {!user.mustChangePassword && (passwordPage || user.role === "IT_STAFF") && <nav aria-label="Account navigation">
+    {!user.mustChangePassword && passwordPage && <nav aria-label="Account navigation">
       {passwordPage ? <button className="text-button" onClick={() => navigate(homeFor(user))}>Back to workspace</button>
         : <button className="text-button" onClick={() => navigate("/change-password")}>Change password</button>}
     </nav>}
     {passwordPage ? <ChangePasswordPage user={user} onChanged={u => { setUser(u); navigate(homeFor(u)); }} onLogout={() => void signedOut()}/>
       : ((path.startsWith("/admin") && user.role !== "ADMINISTRATOR") || (path.startsWith("/staff") && user.role === "REQUESTER") || (path.startsWith("/tickets") && user.role !== "REQUESTER")) ? <main className="selection-page"><section className="selection-card"><h1>Access denied</h1><p>Your role cannot open this page.</p><button className="primary-button" onClick={() => navigate(homeFor(user))}>Go to my workspace</button></section></main>
-      : user.role === "ADMINISTRATOR" ? <div className="app-layout"><header className="app-header"><a className="brand" href="/admin/users" onClick={e => { e.preventDefault(); navigate("/admin/users"); }}><span>TokTickIT</span><small>IT Service Desk</small></a><nav className="admin-actions" aria-label="Administrator navigation"><button className="text-button" onClick={() => navigate("/admin/users")}>Users</button><button className="text-button" onClick={() => navigate("/staff/tickets")}>Ticket Queue</button></nav><div className="requester-context"><button className="text-button" onClick={() => navigate("/change-password")}>Change password</button><span className="context-label">Signed in · Administrator</span><strong>{user.displayName}</strong><button className="text-button" disabled={loggingOut} onClick={() => void signedOut()}>Sign out</button></div></header><main className="app-content">{path.startsWith("/staff") ? <section><h1>Ticket Queue</h1><p>The queue is scheduled for Issue #28.</p></section> : <AdminUsersPage currentUser={user} onSelfChanged={(saved, revoked) => { if (revoked) authenticationLost(); else setUser(saved); }}/>}</main></div>
-      : user.role === "IT_STAFF" ? <main className="selection-page"><section className="selection-card"><h1>IT Staff</h1><p>Your role workspace will be delivered in the next Lab 3 Issues.</p><button className="primary-button" disabled={loggingOut} onClick={() => void signedOut()}>Sign out</button></section></main>
+      : (user.role === "ADMINISTRATOR" || user.role === "IT_STAFF") ? <div className="app-layout"><header className="app-header"><a className="brand" href={homeFor(user)} onClick={e => { e.preventDefault(); navigate(homeFor(user)); }}><span>TokTickIT</span><small>IT Service Desk</small></a><nav className="admin-actions" aria-label="Staff navigation">{user.role === "ADMINISTRATOR" && <button className="text-button" onClick={() => navigate("/admin/users")}>Users</button>}<button className="text-button" onClick={() => navigate("/staff/tickets")}>Ticket Queue</button></nav><div className="requester-context"><button className="text-button" onClick={() => navigate("/change-password")}>Change password</button><span className="context-label">Signed in · {user.role === "ADMINISTRATOR" ? "Administrator" : "IT Staff"}</span><strong>{user.displayName}</strong><button className="text-button" disabled={loggingOut} onClick={() => void signedOut()}>Sign out</button></div></header><main className="app-content">{path.startsWith("/admin") ? <AdminUsersPage currentUser={user} onSelfChanged={(saved, revoked) => { if (revoked) authenticationLost(); else setUser(saved); }}/> : /^\/staff\/tickets\/[1-9]\d*$/.test(path) ? <section><h1>Ticket Detail</h1><p>Ticket operations will be available after Issue #29 is completed.</p><button className="secondary-button" onClick={() => navigate("/staff/tickets")}>Back to Ticket Queue</button></section> : <StaffTicketQueuePage onNavigate={navigate}/>}</main></div>
       : <AppShell user={user} currentPath={path.startsWith("/tickets") ? path : "/tickets"} onNavigate={navigate} onLogout={() => void signedOut()} onAuthenticationLost={authenticationLost}/>}
   </>;
 }

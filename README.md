@@ -1,6 +1,30 @@
 # TokTickIT
 
-## Current Lab 3 authentication and user-management increment
+## Current Lab 3 Staff Ticket Queue increment
+
+Issue #28 adds an authorized shared Ticket Queue at `/staff/tickets` for IT Staff
+and Administrators. It supports literal Ticket Number/Summary search; Category,
+Related System, owner, assigned/unassigned, Status and IT Priority filters;
+semantic priority sorting; deterministic pagination; and safe loading, empty,
+no-results, forbidden and failure states. Desktop uses a table and smaller screens
+use labeled cards without horizontal page overflow. The Open action establishes
+the Staff Ticket Detail destination; its operational controls remain Issue #29.
+
+Before running this branch locally, apply the additive Ticket-status migration:
+
+```powershell
+cd server
+npx prisma migrate deploy
+npx prisma generate
+cd ..
+```
+
+The migration adds the seven remaining approved status values without resetting
+Tickets. Requester My Tickets now accepts and labels all eight statuses. Queue
+tests use only isolated test/E2E databases; they do not migrate or seed the
+development database.
+
+## Lab 3 authentication and user-management foundation
 
 Issue #27 adds the Administrator Users screen at `/admin/users`: literal name/email
 search, combined role and Active/Inactive filtering, create/edit, activation and separate initial-password reset.
@@ -22,7 +46,7 @@ Use your provisioned `admin@example.test` credentials, complete the initial pass
 change if required, and open Users. No new provisioning or database reset is needed.
 Deactivation preserves accounts and Ticket history. It unassigns owned Tickets;
 the backend prevents self-deactivation and removing the final active Administrator.
-Staff queue and Ticket operations remain scheduled for Issues #28–29.
+Staff Ticket operations remain scheduled for Issue #29.
 
 Issue #26 replaces the Lab 2 Development Requester selector and trusted header
 with database-backed authentication. Active users sign in with email/password,
@@ -268,6 +292,8 @@ Detail. This is development context for Lab 2, not authentication.
 | `GET` | `/api/auth/me` | Returns safe current-user data for an active session |
 | `POST` | `/api/auth/change-password` | Changes an initial/current password and rotates all session state |
 | `POST` | `/api/auth/logout` | Revokes the current session and expires its cookie |
+| `GET` | `/api/staff/tickets` | Returns the authorized shared queue with strict search/filter/sort/pagination |
+| `GET` | `/api/staff/owners` | Returns active eligible Staff/Administrator owner choices |
 | `GET` | `/api/tickets` | Returns only the selected Requester's Tickets with validated search, filters, sorting, and pagination |
 | `POST` | `/api/tickets` | Creates one validated Ticket for the selected Development Requester |
 | `GET` | `/api/tickets/:ticketId` | Returns an owned read-only Ticket with ordered Attachment metadata |

@@ -21,7 +21,9 @@ Agent used: OpenAI Codex. Model identification for this draft session: GPT-6 (pe
 
 | 9 | Add Active/Inactive filtering, move Change password above the signed-in identity, and align account actions. | Explicitly extended the original role-only filtering scope after checking the contract. Updated API validation, combined-filter tests, responsive browser checks and documentation rather than treating the screenshot preference as an existing requirement. |
 
-Nine actual selected prompts are now recorded. Add only materially useful later review/implementation interactions, up to ten.
+| 10 | After Phanuwit merged user management, continue with the next Issue and leave Git actions for me. | Implemented the shared Staff queue within the approved Issue #28 boundary, including all eight inherited statuses, strict combined queries, role enforcement, responsive table/cards, realistic isolated browser fixtures and preserved Requester status behavior. Kept Staff-detail mutations explicitly deferred to Issue #29. |
+
+Ten actual selected prompts are now recorded. Do not add routine follow-ups; retain only these materially useful interactions.
 
 ## My Reflection
 
