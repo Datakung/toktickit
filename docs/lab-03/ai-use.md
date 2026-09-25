@@ -25,6 +25,8 @@ Agent used: OpenAI Codex. Model identification for this draft session: GPT-6 (pe
 
 Ten actual selected prompts are now recorded. Do not add routine follow-ups; retain only these materially useful interactions.
 
+PR #35 review follow-up: Phanuwit reproduced inaccessible communication entries after the first 20, a stale Staff Ticket response after navigation, and broken older client fixtures. The agent treated these as correctness findings, added paged histories and request-generation guards, repaired the mocks, and reran full suites. The earlier green author run did not reveal the missing mocks in the reviewer's environment; independent review changed the regression scope. Peer approval remains pending.
+
 ## My Reflection
 
 Draft for Pitchai to revise in his own words: Specifying six Issues made the planning request clearer, but the larger authentication and Ticket operations groups still required focused commits and review. I learned to translate ambiguous workflow ideas into an explicit transition matrix, protect stale updates with versions, and prove privacy through direct API denial rather than relying on hidden UI. Browser evidence also reminded me to distinguish a test synchronization defect from a product defect. I still need to complete peer review and final-main release evidence before claiming the lab is finished.
