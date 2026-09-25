@@ -142,6 +142,7 @@ describe("release-wide safe and recoverable UI failures", () => {
   });
 
   it("retries detail metadata, upload, content, and removal without exposing internals", async () => {
+    vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
     vi.spyOn(api, "getTicket")
       .mockRejectedValueOnce(new api.ApiError(
         500,

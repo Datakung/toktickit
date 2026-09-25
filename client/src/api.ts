@@ -419,9 +419,9 @@ export const claimStaffTicket = (id: number, version: number) => jsonMutation<St
 export const setStaffTicketOwner = (id: number, ownerId: number | null, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/owner`, "PATCH", { ownerId, version });
 export const setStaffTicketPriority = (id: number, itPriority: RequestedPriority, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/priority`, "PATCH", { itPriority, version });
 export const setStaffTicketStatus = (id: number, status: TicketStatus, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/status`, "PATCH", { status, version });
-export const getPublicComments = (id: number) => getJson<EntryPage>(`/api/tickets/${id}/comments`);
+export const getPublicComments = (id: number, page = 1) => getJson<EntryPage>(`/api/tickets/${id}/comments?page=${page}&pageSize=20`);
 export const postPublicComment = (id: number, body: string) => jsonMutation<CommunicationEntry>(`/api/tickets/${id}/comments`, "POST", { body });
-export const getInternalNotes = (id: number) => getJson<EntryPage>(`/api/staff/tickets/${id}/notes`);
+export const getInternalNotes = (id: number, page = 1) => getJson<EntryPage>(`/api/staff/tickets/${id}/notes?page=${page}&pageSize=20`);
 export const postInternalNote = (id: number, body: string) => jsonMutation<CommunicationEntry>(`/api/staff/tickets/${id}/notes`, "POST", { body });
 export const indicateTicketResolution = (id: number, version: number) => jsonMutation<{ id:number; status:TicketStatus; version:number; requesterResolutionIndicatedAt:string|null; updatedAt:string }>(`/api/tickets/${id}/resolution-indication`, "POST", { version });
 export async function getStaffAttachmentContent(ticketId: number, attachmentId: number): Promise<AttachmentContent> {

@@ -40,6 +40,7 @@ function renderDetail({
   onNavigate?: (path: string) => void;
   onRequesterUnavailable?: () => void;
 } = {}) {
+  vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
   render(
     <TicketDetailPage
       requester={requester}

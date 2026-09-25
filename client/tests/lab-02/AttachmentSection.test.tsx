@@ -71,6 +71,7 @@ function renderDetail(onRequesterUnavailable = vi.fn()) {
 
 beforeEach(() => {
   vi.spyOn(api, "getTicket").mockResolvedValue(detail());
+  vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
   Object.defineProperty(URL, "createObjectURL", {
     configurable: true,
     value: vi.fn(() => "blob:attachment-preview"),

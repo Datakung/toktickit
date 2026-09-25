@@ -944,6 +944,7 @@ h2 {
 .communication-list li { padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #f9fcfa; }
 .communication-list p { margin: 0 0 8px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .communication-list small { color: var(--muted); }
+.communication-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
 .internal-notes { border-inline-start: 5px solid #826300; }
 .resolution-indication { padding: 14px; border-radius: 10px; background: #e8f5ec; color: #14532d; font-weight: 700; }
 .preserve-text { white-space: pre-wrap; overflow-wrap: anywhere; }
