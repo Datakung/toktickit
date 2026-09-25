@@ -1,6 +1,6 @@
 # Lab 3 API Contract
 
-Status: Approved contract; authentication, Administrator endpoints and Issue #28 Staff queue reads are implemented. Staff detail mutations and communication remain planned for Issue #29. See [specification.md](specification.md).
+Status: Approved contract; authentication, Administrator endpoints, Staff queue, Ticket operations and communication are implemented through Issue #29. See [specification.md](specification.md).
 
 ## Shared contract
 
@@ -74,7 +74,7 @@ User-requested Issue #27 extension: omitted isActive means both active and inact
 
 Issue #27 implements these four endpoints. All account mutations take PostgreSQL transaction advisory lock `2730001`, then recheck the acting Administrator's current session/role. Target rows are locked before checking the expected version; account/session/Ticket changes commit together. Future assignment mutations must take the same advisory lock before checking owner eligibility. Login and password-change transactions also lock and recheck the User row to prevent late credentials from restoring a revoked session.
 
-The additive `20260915090000_admin_assignment_safety` migration introduces nullable Ticket ownerId and version=1 without altering existing timestamps or relationships. Automatic unassignment has no status filter. Issue #28's additive `20260916090000_staff_queue_statuses` migration introduces the seven remaining approved TicketStatus enum values; queue and Requester reads support all eight. Assignment endpoints remain Issue #29 work and must exercise automatic unassignment across all eight states and assignment races.
+The additive `20260915090000_admin_assignment_safety` migration introduces nullable Ticket ownerId and version=1 without altering existing timestamps or relationships. Automatic unassignment has no status filter. Issue #28's additive `20260916090000_staff_queue_statuses` migration introduces the seven remaining approved TicketStatus enum values; queue and Requester reads support all eight. Issue #29's additive `20260925090000_ticket_operations_communication` migration adds requesterResolutionIndicatedAt and separate restrictive PublicComment/InternalNote history tables. Assignment endpoints share the Administrator advisory lock before owner eligibility checks, and Ticket mutations lock the Ticket row before version/state decisions.
 
 AdminUser = SafeUser plus `{version,createdAt,updatedAt}`. Never return hashes. All endpoints require ADMINISTRATOR and completed password change.
 

@@ -66,6 +66,10 @@ Issue #27 development verification: Administrator list/create editor inspected a
 
 Issue #28 development verification: realistic assigned/unassigned queue records and all eight status labels were inspected at 1440, 768 and 390px. Desktop uses a readable table; tablet/mobile use labeled cards; search and filters stack; automated checks prove heading/input focus, direct Requester denial and no page-level horizontal overflow. On 2026-09-17 the author also confirmed the Mali Support IT Staff queue at 390px, measured no page-level horizontal overflow through the browser Inspect console, and captured the safe Access denied result for a Requester opening `/staff/tickets`. These conversation screenshots and ignored Playwright-output screenshots are development evidence, not final PDF evidence. Final Staff detail and final-revision evidence remain pending.
 
+Issue #29 automated verification: Staff Ticket Detail was exercised at 1440, 768 and 390px with heading focus and no page-level horizontal overflow. A real-session workflow covered the separate operation forms, active Attachment download, visibly separated Public Comments/Internal Notes, Requester public-only view, direct note API denial and apparent-resolution indication without changing formal status. These temporary Playwright screenshots are development evidence; author visual/manual acceptance and final PDF capture remain pending.
+
+Issue #29 author acceptance on 2026-09-25 confirmed the operational controls and separated communication flow in the local development UI. Anan's **Problem Appears Resolved** action added the indication while the Ticket remained formally Open, as required. Final peer review and final-revision PDF capture remain pending.
+
 Screenshot folders: `artifacts/lab-03/screenshots/authentication/`, `staff-queue/`, `staff-ticket-detail/`, `user-management/`. Capture desktop/tablet/mobile for each major screen, plus first-password and Requester comment/resolution regression evidence. Routine E2E uses temporary output; deterministic evidence generation is explicit.
 
 - [ ] Tokens, typography, controls and role navigation consistent.

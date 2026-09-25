@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Engineering contract and Issues #26–#27 approved and peer-merged. Issue #28 branch implementation and automated verification are recorded; author manual checks, commits, PR and peer review remain pending.
+Status: Engineering contract and Issues #26–#28 approved and peer-merged. Issue #29 implementation, automated verification and author manual acceptance are recorded; commits, PR and peer review remain pending.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -16,8 +16,8 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
 | [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): all four findings answered and corrected in f5f21ba. Phanuwit re-reviewed, approved and merged on 2026-09-15. |
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | [PR #33](https://github.com/Datakung/toktickit/pull/33): Phanuwit [approved `5ed6a54`](https://github.com/Datakung/toktickit/pull/33#pullrequestreview-5219828249) and merged as `b9e23f3` on 2026-09-16. |
-| [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Local implementation and automated verification recorded in tests.md; author manual checks, commits, PR and peer review pending. |
-| [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
+| [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | [PR #34](https://github.com/Datakung/toktickit/pull/34): Phanuwit reviewed and merged as `bdca390` on 2026-09-25. |
+| [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Local implementation, automated verification and author manual acceptance recorded in tests.md; commits, PR and peer review pending. |
 | [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Pending |
 
 ## Received contract review (completed)

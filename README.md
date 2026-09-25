@@ -1,14 +1,14 @@
 # TokTickIT
 
-## Current Lab 3 Staff Ticket Queue increment
+## Current Lab 3 Ticket operations and communication increment
 
-Issue #28 adds an authorized shared Ticket Queue at `/staff/tickets` for IT Staff
-and Administrators. It supports literal Ticket Number/Summary search; Category,
-Related System, owner, assigned/unassigned, Status and IT Priority filters;
-semantic priority sorting; deterministic pagination; and safe loading, empty,
-no-results, forbidden and failure states. Desktop uses a table and smaller screens
-use labeled cards without horizontal page overflow. The Open action establishes
-the Staff Ticket Detail destination; its operational controls remain Issue #29.
+Issue #29 completes `/staff/tickets/:id` for IT Staff and Administrators with
+atomic claim/reassignment, IT Priority, approved status transitions, active
+Attachment download, Public Comments and private Internal Notes. Requesters can
+read/post Public Comments on their own Tickets and indicate that a problem appears
+resolved without changing the formal status. Optimistic versions prevent stale
+updates, terminal Ticket guards remain explicit, and note access is enforced by
+the API rather than UI visibility alone.
 
 Before running this branch locally, apply the additive Ticket-status migration:
 
@@ -19,10 +19,10 @@ npx prisma generate
 cd ..
 ```
 
-The migration adds the seven remaining approved status values without resetting
-Tickets. Requester My Tickets now accepts and labels all eight statuses. Queue
-tests use only isolated test/E2E databases; they do not migrate or seed the
-development database.
+The new additive migration records Requester resolution indications and creates
+separate append-only Public Comment and Internal Note tables. It preserves Ticket,
+User and Attachment history. Automated tests use only isolated test/E2E databases;
+they do not migrate or seed the development database.
 
 ## Lab 3 authentication and user-management foundation
 
@@ -46,7 +46,7 @@ Use your provisioned `admin@example.test` credentials, complete the initial pass
 change if required, and open Users. No new provisioning or database reset is needed.
 Deactivation preserves accounts and Ticket history. It unassigns owned Tickets;
 the backend prevents self-deactivation and removing the final active Administrator.
-Staff Ticket operations remain scheduled for Issue #29.
+Staff Ticket operations and communication are implemented by Issue #29.
 
 Issue #26 replaces the Lab 2 Development Requester selector and trusted header
 with database-backed authentication. Active users sign in with email/password,

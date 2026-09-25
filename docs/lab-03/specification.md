@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Approved engineering contract. Issues #25–#27 were peer-approved and reviewer-merged through PRs #31–#33. Issue #28 implements the authorized shared Staff Ticket Queue and eight-status read continuity; peer acceptance is pending.
+Status: Approved engineering contract. Issues #25–#28 were peer-approved and reviewer-merged through PRs #31–#34. Issue #29 implements the approved Ticket operations and communication contract; peer acceptance is pending.
 
 ## 1. Sprint goal
 
@@ -141,6 +141,6 @@ See [api-spec.md](api-spec.md). Retain Requester route names with new authentica
 - [ ] Release merged through lab3-staging to main; final main verified and all Issues Done after acceptance.
 - [ ] One concise PDF uses Answer Part 1-9 with required rendered docs and readable captioned evidence.
 
-## 11. Decisions awaiting approval
+## 11. Approved design decisions
 
-Review the explicit Admin operational permission set, cookie-session design/password policy, transition matrix, resolution-indication behavior, automatic unassignment, and Staff read-only Attachment access. These are proposals, not additional requirements claimed to come from the sheet. No application code is authorized by this draft alone.
+PR #31 approved the explicit Administrator operational permission set, cookie-session design/password policy, transition matrix, resolution-indication behavior, automatic unassignment, and Staff read-only Attachment access. Issue #29 implements those reviewed decisions without adding Actions Taken or other excluded scope.
