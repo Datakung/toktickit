@@ -11,6 +11,7 @@ import {
   ApiError,
   statusLabel,
   getAttachmentContent,
+  indicateTicketResolution,
   getTicket,
   isRequesterUnavailable,
   removeTicketAttachment,
@@ -21,6 +22,7 @@ import {
   type TicketDetail,
 } from "./api.js";
 import { attachmentSelectionError } from "./CreateTicketPage.js";
+import { CommunicationPanel } from "./CommunicationPanel.js";
 
 type DetailState = "loading" | "ready" | "unavailable" | "error";
 type UploadState = "selected" | "uploading" | "failed";
@@ -132,6 +134,8 @@ export function TicketDetailPage({
   const [removeReason, setRemoveReason] = useState("");
   const [removeError, setRemoveError] = useState("");
   const [isRemoving, setIsRemoving] = useState(false);
+  const [resolutionBusy, setResolutionBusy] = useState(false);
+  const [resolutionError, setResolutionError] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previewCloseRef = useRef<HTMLButtonElement>(null);
   const removalReasonRef = useRef<HTMLTextAreaElement>(null);
@@ -233,6 +237,17 @@ export function TicketDetailPage({
         : "The Attachment could not be uploaded. Try again.";
       setSelectedUpload({ file, state: "failed", error: message });
     }
+  }
+
+  async function indicateResolution() {
+    if (!ticket || resolutionBusy) return;
+    setResolutionBusy(true); setResolutionError("");
+    try {
+      const updated = await indicateTicketResolution(ticket.id, ticket.version);
+      setTicket(current => current ? { ...current, ...updated } : current);
+    } catch (error) {
+      setResolutionError(error instanceof ApiError ? error.message : "Resolution could not be indicated. Try again.");
+    } finally { setResolutionBusy(false); }
   }
 
   async function previewAttachment(
@@ -454,6 +469,17 @@ export function TicketDetailPage({
           <div><dt>Description</dt><dd>{ticket.description}</dd></div>
         </dl>
       </section>
+
+      <section className="detail-panel" aria-labelledby="resolution-title">
+        <h2 id="resolution-title">Problem Appears Resolved</h2>
+        {ticket.requesterResolutionIndicatedAt ? <p className="resolution-indication">You indicated apparent resolution at {formatDate(ticket.requesterResolutionIndicatedAt)}. IT Staff still controls formal resolution and closure.</p> : <>
+          <p>This does not formally resolve or close the Ticket. It tells the service desk that the problem appears resolved.</p>
+          <button className="primary-button" type="button" disabled={resolutionBusy || !["OPEN","IN_PROGRESS","WAITING_FOR_REQUESTER","REOPENED"].includes(ticket.status)} onClick={()=>void indicateResolution()}>{resolutionBusy?"Sending…":"Problem Appears Resolved"}</button>
+        </>}
+        {resolutionError&&<div className="feedback-panel feedback-panel-error" role="alert"><p>{resolutionError}</p>{resolutionError.toLowerCase().includes("changed")&&<button className="secondary-button" onClick={()=>void loadTicket()}>Reload Ticket</button>}</div>}
+      </section>
+
+      <CommunicationPanel ticketId={ticket.id} kind="comments" />
 
       <section className="detail-panel attachment-section" aria-labelledby="attachments-title">
         <div className="attachment-section-heading">

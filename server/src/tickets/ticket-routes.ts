@@ -4,7 +4,7 @@ import {
   developmentRequesterContext,
   type DevelopmentRequesterLocals,
 } from "../middleware/development-requester-context.js";
-import { requireCsrf } from "../auth/auth-middleware.js";
+import { requireCsrf, requireNormalSession, type AuthLocals } from "../auth/auth-middleware.js";
 import { retryTicketNumberCollision } from "./ticket-number.js";
 import { validateCreateTicketInput, type TicketFieldErrors } from "./ticket-validation.js";
 import {
@@ -16,6 +16,8 @@ import {
   attachmentMetadataSelect,
   toAttachmentMetadata,
 } from "../attachments/attachment-metadata.js";
+import { addComment, indicateResolution, listComments } from "./communication.js";
+import { OperationError } from "../staff/ticket-operations.js";
 
 export const ticketRouter = Router();
 const POSTGRES_INTEGER_MAX = 2_147_483_647;
@@ -199,11 +201,14 @@ ticketRouter.get(
           requestedPriority: true,
           itPriority: true,
           status: true,
+          version: true,
+          requesterResolutionIndicatedAt: true,
           createdAt: true,
           updatedAt: true,
           requester: {
             select: { id: true, displayName: true, email: true },
           },
+          owner: { select: { id: true, displayName: true } },
           category: { select: { id: true, name: true } },
           relatedSystem: { select: { id: true, name: true } },
           attachments: {
@@ -236,3 +241,31 @@ ticketRouter.get(
     }
   },
 );
+
+function communicationFailure(response: Response, error: unknown, fallback: string) {
+  if (error instanceof OperationError) {
+    response.status(error.status).json({ error: { code: error.code, message: error.message, ...(Object.keys(error.fields).length ? { fields: error.fields } : {}) } });
+    return;
+  }
+  response.status(500).json({ error: { code: "COMMUNICATION_FAILED", message: fallback } });
+}
+
+ticketRouter.post("/:ticketId/resolution-indication", developmentRequesterContext, requireCsrf, async (request, response: Response<unknown, DevelopmentRequesterLocals>) => {
+  const ticketId = parseTicketId(request.params.ticketId);
+  if (ticketId === null) return void response.status(404).json({ error: { code: "TICKET_NOT_FOUND", message: "Ticket not found." } });
+  try { response.json(await indicateResolution(response.locals, ticketId, request.body)); }
+  catch (error) { communicationFailure(response, error, "Resolution could not be indicated. Try again."); }
+});
+
+ticketRouter.get("/:ticketId/comments", requireNormalSession, async (request, response) => {
+  const ticketId = parseTicketId(request.params.ticketId);
+  if (ticketId === null) return void response.status(404).json({ error: { code: "TICKET_NOT_FOUND", message: "Ticket not found." } });
+  try { response.json(await listComments(response.locals as AuthLocals, ticketId, request.query as Record<string, unknown>)); }
+  catch (error) { communicationFailure(response, error, "Public Comments could not be loaded. Try again."); }
+});
+ticketRouter.post("/:ticketId/comments", requireNormalSession, requireCsrf, async (request, response) => {
+  const ticketId = parseTicketId(request.params.ticketId);
+  if (ticketId === null) return void response.status(404).json({ error: { code: "TICKET_NOT_FOUND", message: "Ticket not found." } });
+  try { response.status(201).json(await addComment(response.locals as AuthLocals, ticketId, request.body)); }
+  catch (error) { communicationFailure(response, error, "The Public Comment could not be posted. Try again."); }
+});

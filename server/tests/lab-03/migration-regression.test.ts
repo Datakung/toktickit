@@ -57,13 +57,18 @@ it("preserves IDs, ownership, removal metadata, timestamps and non-null prioriti
   execute(migration);
   execute(readFileSync("prisma/migrations/20260915090000_admin_assignment_safety/migration.sql", "utf8"));
   execute(readFileSync("prisma/migrations/20260916090000_staff_queue_statuses/migration.sql", "utf8"));
+  execute(readFileSync("prisma/migrations/20260925090000_ticket_operations_communication/migration.sql", "utf8"));
   const user = await fixture.user.findUniqueOrThrow({ where: { id: 1 } });
   expect(user).toMatchObject({ id: 1, displayName: "Preserved Person", isActive: false, role: "REQUESTER", passwordHash: null, mustChangePassword: true });
   expect(user.updatedAt.toISOString()).toBe("2026-01-02T00:00:00.000Z");
   const tickets = await fixture.ticket.findMany({ orderBy: { id: "asc" } });
   expect(tickets.map(t => [t.id, t.requesterId, t.itPriority])).toEqual([[1, 1, "HIGH"], [2, 1, "HIGH"]]);
+  expect(tickets.every(t => t.version === 1 && t.requesterResolutionIndicatedAt === null)).toBe(true);
   expect(tickets.every(t => t.updatedAt.toISOString() === "2026-01-02T00:00:00.000Z")).toBe(true);
   expect(await fixture.attachment.findFirst()).toMatchObject({ id: 1, ticketId: 1, storedName: "unchanged-file-key", removedByUserId: 1, removalReason: "Historic removal", sizeBytes: 123 });
+  const comment = await fixture.publicComment.create({ data: { ticketId: 1, authorId: 1, body: "Preserved public history" } });
+  const note = await fixture.internalNote.create({ data: { ticketId: 1, authorId: 1, body: "Preserved private history" } });
+  expect([comment.ticketId, note.ticketId]).toEqual([1, 1]);
   const next = await fixture.user.create({ data: { email: "next@example.test", displayName: "Next" } });
   expect(next.id).toBeGreaterThan(1);
 }, 30000);

@@ -48,6 +48,8 @@ model User {
   removedAttachments Attachment[] @relation("AttachmentRemovedBy")
   sessions           Session[]
   ownedTickets       Ticket[]     @relation("TicketOwner")
+  publicComments     PublicComment[]
+  internalNotes      InternalNote[]
 }
 
 model Session {
@@ -85,6 +87,7 @@ model Ticket {
   id                Int                @id @default(autoincrement())
   ownerId           Int?
   version           Int                @default(1)
+  requesterResolutionIndicatedAt DateTime?
   owner             User?              @relation("TicketOwner", fields: [ownerId], references: [id], onDelete: Restrict)
   ticketNumber      String             @unique @db.VarChar(32)
   requesterId       Int
@@ -101,12 +104,38 @@ model Ticket {
   category          Category           @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   relatedSystem     RelatedSystem      @relation(fields: [relatedSystemId], references: [id], onDelete: Restrict)
   attachments       Attachment[]
+  publicComments    PublicComment[]
+  internalNotes     InternalNote[]
 
   @@index([requesterId, updatedAt])
   @@index([ownerId, status])
   @@index([requesterId, status])
   @@index([categoryId])
   @@index([relatedSystemId])
+}
+
+model PublicComment {
+  id        Int      @id @default(autoincrement())
+  ticketId  Int
+  authorId  Int
+  body      String   @db.VarChar(4000)
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt, id])
+}
+
+model InternalNote {
+  id        Int      @id @default(autoincrement())
+  ticketId  Int
+  authorId  Int
+  body      String   @db.VarChar(4000)
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt, id])
 }
 
 model Attachment {

@@ -32,8 +32,8 @@ test("Staff searches, combines filters, sorts, paginates and opens the detail de
   await expect(page.getByRole("cell", { name: "Unassigned", exact: true })).toBeVisible();
   await page.getByRole("link", { name: /^Open TKT-/ }).click();
   await expect(page).toHaveURL(/\/staff\/tickets\/\d+$/);
-  await expect(page.getByRole("button", { name: "Back to Ticket Queue" })).toBeVisible();
-  await page.getByRole("button", { name: "Back to Ticket Queue" }).click();
+  await expect(page.getByRole("link", { name: "Back to Ticket Queue" })).toBeVisible();
+  await page.getByRole("link", { name: "Back to Ticket Queue" }).click();
   await page.getByLabel("Ticket Number or Summary").fill("No matching queue fixture");
   await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect(page.getByText("No tickets match these filters.")).toBeVisible();

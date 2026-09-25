@@ -18,6 +18,9 @@ const detail = {
   requestedPriority: "HIGH",
   itPriority: "HIGH",
   status: "NEW",
+  owner: null,
+  version: 1,
+  requesterResolutionIndicatedAt: null,
   createdAt: "2026-09-01T03:00:00.000Z",
   updatedAt: "2026-09-01T04:00:00.000Z",
   attachments: [{
@@ -38,6 +41,11 @@ async function mockDetail(page: import("@playwright/test").Page) {
   await mockSignedInRequester(page);
   await page.route("**/api/tickets/41", (route) => route.fulfill({
     status: 200, contentType: "application/json", body: JSON.stringify({ data: detail }),
+  }));
+  await page.route("**/api/tickets/41/comments**", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 }),
   }));
 }
 

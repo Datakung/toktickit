@@ -118,8 +118,15 @@ export interface TicketListItem {
 export interface TicketDetail extends TicketListItem {
   description: string;
   requester: DevelopmentRequester;
+  owner: { id: number; displayName: string } | null;
+  version: number;
+  requesterResolutionIndicatedAt: string | null;
   attachments: AttachmentMetadata[];
 }
+
+export interface StaffTicketDetail extends TicketDetail {}
+export interface CommunicationEntry { id: number; body: string; author: { id: number; displayName: string }; createdAt: string }
+export interface EntryPage { items: CommunicationEntry[]; page: number; pageSize: number; total: number; totalPages: number }
 
 export interface AttachmentContent {
   blob: Blob;
@@ -402,4 +409,23 @@ export async function removeTicketAttachment(
   });
   const body = await parseApiResponse<{ data: AttachmentMetadata }>(response);
   return body.data;
+}
+
+async function jsonMutation<T>(path: string, method: "POST" | "PATCH", body: unknown): Promise<T> {
+  return parseApiResponse(await fetch(`${API_URL}${path}`, { method, credentials: requestCredentials, headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken }, body: JSON.stringify(body) }));
+}
+export const getStaffTicket = (id: number | string) => getJson<StaffTicketDetail>(`/api/staff/tickets/${encodeURIComponent(String(id))}`);
+export const claimStaffTicket = (id: number, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/claim`, "POST", { version });
+export const setStaffTicketOwner = (id: number, ownerId: number | null, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/owner`, "PATCH", { ownerId, version });
+export const setStaffTicketPriority = (id: number, itPriority: RequestedPriority, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/priority`, "PATCH", { itPriority, version });
+export const setStaffTicketStatus = (id: number, status: TicketStatus, version: number) => jsonMutation<StaffTicketDetail>(`/api/staff/tickets/${id}/status`, "PATCH", { status, version });
+export const getPublicComments = (id: number) => getJson<EntryPage>(`/api/tickets/${id}/comments`);
+export const postPublicComment = (id: number, body: string) => jsonMutation<CommunicationEntry>(`/api/tickets/${id}/comments`, "POST", { body });
+export const getInternalNotes = (id: number) => getJson<EntryPage>(`/api/staff/tickets/${id}/notes`);
+export const postInternalNote = (id: number, body: string) => jsonMutation<CommunicationEntry>(`/api/staff/tickets/${id}/notes`, "POST", { body });
+export const indicateTicketResolution = (id: number, version: number) => jsonMutation<{ id:number; status:TicketStatus; version:number; requesterResolutionIndicatedAt:string|null; updatedAt:string }>(`/api/tickets/${id}/resolution-indication`, "POST", { version });
+export async function getStaffAttachmentContent(ticketId: number, attachmentId: number): Promise<AttachmentContent> {
+  const response = await fetch(`${API_URL}/api/staff/tickets/${ticketId}/attachments/${attachmentId}/download`, { credentials: requestCredentials });
+  if (!response.ok) await parseApiResponse<never>(response);
+  return { blob: await response.blob(), filename: responseFilename(response), mimeType: response.headers.get("Content-Type")?.split(";")[0] ?? "application/octet-stream" };
 }
