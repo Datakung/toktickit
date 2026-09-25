@@ -41,6 +41,9 @@ function detail(attachments: api.AttachmentMetadata[] = [activeAttachment, remov
     id: 41,
     ticketNumber: "TKT-20260901-ABC123",
     requester,
+    owner: null,
+    version: 1,
+    requesterResolutionIndicatedAt: null,
     category: { id: 1, name: "Hardware" },
     relatedSystem: { id: 2, name: "Student Information System" },
     summary: "Laptop screen flickers",
@@ -68,6 +71,7 @@ function renderDetail(onRequesterUnavailable = vi.fn()) {
 
 beforeEach(() => {
   vi.spyOn(api, "getTicket").mockResolvedValue(detail());
+  vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
   Object.defineProperty(URL, "createObjectURL", {
     configurable: true,
     value: vi.fn(() => "blob:attachment-preview"),

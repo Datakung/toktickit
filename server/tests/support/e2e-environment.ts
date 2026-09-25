@@ -5,6 +5,7 @@ import {
   readFileSync,
   readdirSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { loadEnvFile } from "node:process";
 import path from "node:path";
@@ -20,6 +21,7 @@ const e2eUploadRoot = path.join(defaultUploadRoot, "e2e");
 
 export const E2E_API_URL = "http://127.0.0.1:3100";
 export const E2E_EVIDENCE_TICKET_NUMBER = "TKT-20260902-EVID01";
+export const E2E_OPERATIONS_TICKET_NUMBER = "TKT-20260916-QUEUE01";
 export const E2E_PASSWORD = "Lab3-e2e-password-2026";
 
 interface DatabaseTarget {
@@ -171,6 +173,22 @@ export async function prepareE2EEnvironment() {
       updatedAt: fixedTime,
     }));
     await prisma.ticket.createMany({ data: queueTickets });
+    const operationsTicket = await prisma.ticket.findUniqueOrThrow({
+      where: { ticketNumber: E2E_OPERATIONS_TICKET_NUMBER },
+    });
+    const storedName = "issue-29-e2e-evidence.png";
+    const content = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nQAAAABJRU5ErkJggg==", "base64");
+    writeFileSync(path.join(e2eUploadRoot, storedName), content);
+    await prisma.attachment.create({
+      data: {
+        ticketId: operationsTicket.id,
+        originalName: "issue-29-evidence.png",
+        storedName,
+        mimeType: "image/png",
+        sizeBytes: content.length,
+        createdAt: fixedTime,
+      },
+    });
   } finally {
     await prisma.$disconnect();
   }
@@ -181,6 +199,8 @@ export async function cleanupE2EEnvironment() {
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
     await prisma.session.deleteMany();
+    await prisma.internalNote.deleteMany();
+    await prisma.publicComment.deleteMany();
     await prisma.attachment.deleteMany();
     await prisma.ticket.deleteMany();
   } finally {

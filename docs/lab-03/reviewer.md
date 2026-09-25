@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Engineering contract and Issues #26–#27 approved and peer-merged. Issue #28 branch implementation and automated verification are recorded; author manual checks, commits, PR and peer review remain pending.
+Status: Engineering contract and Issues #26–#28 approved and peer-merged. Issue #29 is under review in PR #35; Phanuwit requested changes, and author corrections are being prepared for re-review. No approval or merge is claimed.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -16,8 +16,8 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | [#25](https://github.com/Datakung/toktickit/issues/25) | Engineering contract | [PR #31](https://github.com/Datakung/toktickit/pull/31): changes requested, corrections discussed, Phanuwit approved and merged. |
 | [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): all four findings answered and corrected in f5f21ba. Phanuwit re-reviewed, approved and merged on 2026-09-15. |
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | [PR #33](https://github.com/Datakung/toktickit/pull/33): Phanuwit [approved `5ed6a54`](https://github.com/Datakung/toktickit/pull/33#pullrequestreview-5219828249) and merged as `b9e23f3` on 2026-09-16. |
-| [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | Local implementation and automated verification recorded in tests.md; author manual checks, commits, PR and peer review pending. |
-| [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | Pending |
+| [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | [PR #34](https://github.com/Datakung/toktickit/pull/34): Phanuwit reviewed and merged as `bdca390` on 2026-09-25. |
+| [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | [PR #35](https://github.com/Datakung/toktickit/pull/35): [changes requested](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640). Author correction pending commit/push and peer re-review. |
 | [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Pending |
 
 ## Received contract review (completed)
@@ -46,6 +46,18 @@ Reply/approval status: Phanuwit verified the four author replies and approved f5
 ## Received Administrator review (completed)
 
 Phanuwit reviewed exact revision `5ed6a54` with no blocking findings and approved it on 2026-09-16. His independent isolated run passed 123 backend tests, 83 serial client tests, 21 Chromium scenarios and both production builds. He explicitly checked authorization/CSRF, normalized uniqueness, strict validation, conflicts, Administrator invariants, transactional revocation/unassignment, migration and responsive user-management flows. He also confirmed that queue/status/assignment work remained correctly scoped to Issues #28–#29. Phanuwit then merged PR #33 into `lab3-staging`; this approval is evidence for Issue #27 only, not pre-approval of Issue #28.
+
+## Received Ticket operations review (corrections prepared)
+
+Phanuwit [requested changes on PR #35](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640). His isolated backend run passed 146 tests and both builds passed. He reported 85 client tests passed, 8 failed and 9 unhandled errors because older Ticket Detail fixtures did not mock the new communication read; his isolated requester-detail retry also failed. These results are reviewer findings, not approval.
+
+| Finding | Author correction and regression evidence |
+|---|---|
+| [History after 20 entries](https://github.com/Datakung/toktickit/pull/35#discussion_r4106630226) | Both Public Comments and Internal Notes now request numbered 20-entry pages, show total/page controls and reload the last page after posting. Component regressions cover 21+ entries, posting and remounting. |
+| [Stale Ticket response](https://github.com/Datakung/toktickit/pull/35#discussion_r4106630253) | The Staff Detail route remounts by Ticket ID, and the detail/action response handlers ignore obsolete requests. Regressions resolve old detail and action responses after navigation. |
+| Existing client regressions | Lab 2 Ticket Detail and Attachment fixtures now mock the communication read. The complete client suite passes, including the isolated requester retry. |
+
+Corrections are local until the author commits and pushes them. Peer re-review and approval remain pending.
 
 ## Partner review links
 
