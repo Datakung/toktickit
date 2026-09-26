@@ -101,6 +101,7 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
   await page.setViewportSize({ width: 1440, height: 900 });
   await login(page, "mali.support@example.test");
   await expect(page.getByRole("heading", { name: "Ticket Queue", exact: true })).toBeVisible();
+  await expect(page.locator(".queue-table tbody tr").first()).toBeVisible();
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });
     await capture(page, info, `staff-queue/queue-${width.name}.png`);

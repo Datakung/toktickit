@@ -11,3 +11,5 @@ Regenerate deliberately with `npm --prefix client run test:e2e:lab3-evidence`; r
 - `requester/`: owned Ticket/Create Ticket continuation, public-only communication, resolution indication and forbidden Staff route.
 
 The evidence journey also asserted a Requester `GET /api/staff/tickets/1/notes` response of 403 with the private note text absent. Screenshot close-ups are intended for readable PDF placement; full-page images preserve the surrounding page context. Re-run and visually inspect on reviewed final `main` before submitting the PDF.
+
+After PR #36 review, queue capture waits for populated ticket rows. The regenerated desktop queue image was visually inspected with its rows and pagination present, not the transient loading message.
