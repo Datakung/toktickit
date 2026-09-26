@@ -1,10 +1,10 @@
 # Lab 3 UI Specification
 
-Status: Evolving implementation record. Issue #27 Administrator and Issue #28 Staff queue branch layouts have automated responsive checks and author-side visual inspection; final release evidence remains pending. Reuse [Lab 2 design tokens and component rules](../lab-02/ui-spec.md); this document overrides only identity/navigation and adds Lab 3 screens.
+Status: Evolving implementation record. Issues #25–#29 are staged and reviewed. Issue #30 captured integrated branch screenshots at 1440/768/390px; full author visual sign-off and final-main recapture remain pending. Reuse [Lab 2 design tokens and component rules](../lab-02/ui-spec.md); this document overrides only identity/navigation and adds Lab 3 screens.
 
 ## Shared shell and routes
 
-Show authenticated displayName, one role badge, Change Password and Logout. REQUESTER navigation: My Tickets/Create Ticket. IT_STAFF: Ticket Queue. ADMINISTRATOR: Users and Ticket Queue (explicit proposed authorization). Remove Development Requester/Change Requester and clear obsolete selection storage during migration.
+Show authenticated displayName, one role badge, Change Password and Logout. REQUESTER navigation: My Tickets/Create Ticket. IT_STAFF: Ticket Queue. ADMINISTRATOR: Users and Ticket Queue (approved explicit authorization). Remove Development Requester/Change Requester and clear obsolete selection storage during migration.
 
 | Route | Role/mode | Main content |
 |---|---|---|
@@ -60,7 +60,7 @@ At 1440px use desktop table/forms; at 768px adapt columns/stack panels; at 390px
 
 Labels, aria-invalid/describedby, error summary focus, live status announcements and one h1 per route are required. Dialogs trap focus, support Escape when safe and restore focus to their trigger. Route changes focus the heading. Modal destructive confirmation cannot be submitted twice.
 
-## Planned evidence
+## Evidence and remaining inspection
 
 Issue #27 development verification: Administrator list/create editor inspected at 1440, 768 and 390px. Desktop table becomes labeled cards at smaller widths. Forms stack without page overflow. Browser checks cover heading/field focus and returning focus after Cancel. Reset and access-changing edits use an inline confirmation checkbox and separate submit action, not a modal. Component checks cover safe failure/retry, password clearing, stale edits with explicit reload and forbidden role routes.
 
@@ -68,9 +68,11 @@ Issue #28 development verification: realistic assigned/unassigned queue records 
 
 Issue #29 automated verification: Staff Ticket Detail was exercised at 1440, 768 and 390px with heading focus and no page-level horizontal overflow. A real-session workflow covered the separate operation forms, active Attachment download, visibly separated Public Comments/Internal Notes, Requester public-only view, direct note API denial and apparent-resolution indication without changing formal status. These temporary Playwright screenshots are development evidence; author visual/manual acceptance and final PDF capture remain pending.
 
-Issue #29 author acceptance on 2026-09-25 confirmed the operational controls and separated communication flow in the local development UI. Anan's **Problem Appears Resolved** action added the indication while the Ticket remained formally Open, as required. Final peer review and final-revision PDF capture remain pending.
+Issue #29 author acceptance on 2026-09-25 confirmed the operational controls and separated communication flow in the local development UI. Anan's **Problem Appears Resolved** action added the indication while the Ticket remained formally Open, as required. PR #35 was subsequently corrected, approved and merged; final-main PDF capture remains pending.
 
-Screenshot folders: `artifacts/lab-03/screenshots/authentication/`, `staff-queue/`, `staff-ticket-detail/`, `user-management/`. Capture desktop/tablet/mobile for each major screen, plus first-password and Requester comment/resolution regression evidence. Routine E2E uses temporary output; deterministic evidence generation is explicit.
+Issue #30 automated captures (2026-09-26): `npm --prefix client run test:e2e:lab3-evidence` saved 56 real Chromium screenshots in the isolated environment, with development database/uploads unchanged. Representative readable close-ups: [mobile Staff queue card](../../artifacts/lab-03/screenshots/staff-queue/ticket-row-mobile.png), [mobile Staff filters](../../artifacts/lab-03/screenshots/staff-queue/filters-mobile.png), [mobile Staff operations](../../artifacts/lab-03/screenshots/staff-ticket-detail/operations-mobile.png), [separate mobile Internal Notes](../../artifacts/lab-03/screenshots/staff-ticket-detail/internal-notes-mobile.png), [Requester Public Comments](../../artifacts/lab-03/screenshots/requester/public-comments-mobile.png), [mobile Administrator row](../../artifacts/lab-03/screenshots/user-management/user-row-mobile.png), [Administrator create form](../../artifacts/lab-03/screenshots/user-management/create-form-mobile.png), and [mandatory password change](../../artifacts/lab-03/screenshots/authentication/mandatory-change-mobile.png). The full-page captures cover each major screen at desktop/tablet/mobile; close-ups keep dense mobile content readable for the PDF. Automated no-horizontal-overflow checks passed at every captured width. Only selected captures have been visually inspected so far; the author's full visual checklist remains open.
+
+Screenshot folders: `artifacts/lab-03/screenshots/authentication/`, `staff-queue/`, `staff-ticket-detail/`, `user-management/`, `requester/`. The explicit Lab 3 evidence command writes this branch's deterministic set; routine E2E uses temporary output. Repeat capture and inspect on reviewed final `main` before PDF submission.
 
 - [ ] Tokens, typography, controls and role navigation consistent.
 - [ ] Create/view/edit, required feedback and public/internal separation checked.

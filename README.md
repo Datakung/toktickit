@@ -1,6 +1,31 @@
 # TokTickIT
 
-## Current Lab 3 Ticket operations and communication increment
+## Current Lab 3 quality/release preparation
+
+Issues #25–#29 are reviewer-merged into `lab3-staging`. Issue #30 verifies the
+integrated increment before a reviewed release to `main`; branch-level results
+are not final-main evidence. The full integrated gate and actual results are in
+[Lab 3 tests](docs/lab-03/tests.md), with the [peer review record](docs/lab-03/reviewer.md)
+and [visual checklist](docs/lab-03/ui-spec.md).
+
+After starting the existing PostgreSQL container, run the isolated gate:
+
+```powershell
+npm --prefix server test
+npm --prefix client test
+npm --prefix client run test:e2e
+npm --prefix server run build
+npm --prefix client run build
+```
+
+Routine E2E keeps screenshots in ignored test output. To deliberately refresh
+the Lab 3 submission images, run `npm --prefix client run test:e2e:lab3-evidence`.
+It writes `artifacts/lab-03/screenshots/` from the isolated E2E database, checks
+desktop/tablet/mobile overflow and verifies that development database/uploads
+remain unchanged. Re-run and inspect this evidence on reviewed final `main`
+before assembling the nine-part PDF. Never use real passwords in screenshots.
+
+## Lab 3 Ticket operations and communication increment
 
 Issue #29 completes `/staff/tickets/:id` for IT Staff and Administrators with
 atomic claim/reassignment, IT Priority, approved status transitions, active
@@ -386,3 +411,8 @@ and verified in `lab2-staging`, a final reviewed release Pull Request targets
 - `docs/lab-02/tests.md` - planned-test traceability and verified results
 - `docs/lab-02/reviewer.md` - PR discussion, approval, merge, and Kanban record
 - `docs/lab-02/ai-use.md` - selected prompts and critical reflection
+- `docs/lab-03/specification.md` - approved Lab 3 requirements, rules, migration and Definition of Done
+- `docs/lab-03/api-spec.md` and `ui-spec.md` - authenticated API and Zen Green UI contracts
+- `docs/lab-03/tests.md` - executable traceability and branch/final-main evidence
+- `docs/lab-03/reviewer.md` - received and reciprocal Lab 3 peer-review record
+- `docs/lab-03/ai-use.md` - selected prompts and reflection draft for author sign-off

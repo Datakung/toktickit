@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Approved engineering contract. Issues #25–#28 were peer-approved and reviewer-merged through PRs #31–#34. Issue #29 implements the approved Ticket operations and communication contract; peer acceptance is pending.
+Status: Approved engineering contract. Issues #25–#29 were peer-approved and reviewer-merged through PRs #31–#35 into `lab3-staging`. Issue #30 integration/release work is in progress; final-main acceptance and the PDF remain pending.
 
 ## 1. Sprint goal
 
@@ -32,7 +32,7 @@ Excluded: registration, email delivery/reset links, MFA/SSO, Actions Taken, SLA/
 
 ## 5. Business rules and authorization
 
-Proposed permission matrix. Administrator operational permissions below are explicit because the sheet permits Administrator ownership, priority changes and note visibility. They do not imply multiple roles or Requester impersonation.
+Approved permission matrix. Administrator operational permissions below are explicit because the sheet permits Administrator ownership, priority changes and note visibility. They do not imply multiple roles or Requester impersonation.
 
 | Operation | Requester | IT Staff | Administrator |
 |---|---|---|---|
@@ -51,11 +51,11 @@ Proposed permission matrix. Administrator operational permissions below are expl
 - BR-03: Authenticated identity supplies requester ownership and comment authorship; reject forged requester/author fields. Ignore no legacy header as an authentication source.
 - BR-04: Requesters never receive another owner's protected resources or any Internal Note content. Missing and non-owned Requester resources use identical safe 404 responses.
 - BR-05: Passwords are 12-128 characters, allow spaces/Unicode, are not trimmed, and new passwords must differ from the current password. Confirmation must match. Never log/return stored hashes or credentials.
-- BR-06: Proposed hashing: versioned Node scrypt records with random 16-byte salt, N=131072, r=8, p=1, maxmem at least 256 MiB, 64-byte output and timing-safe comparison. Benchmark and validate resource limits before implementation approval; hashing parameters are not client-controlled.
-- BR-07: Proposed sessions: 32 random bytes in an HttpOnly, SameSite=Lax cookie, Path=/, Secure under HTTPS. Store only token digest in PostgreSQL; absolute expiry 8 hours. Local HTTP exception is documented. No auth tokens in localStorage.
+- BR-06: Use versioned Node scrypt records with random 16-byte salt, N=131072, r=8, p=1, maxmem at least 256 MiB, 64-byte output and timing-safe comparison. Bound concurrent derivations; hashing parameters are not client-controlled.
+- BR-07: Use 32 random bytes in an HttpOnly, SameSite=Lax cookie, Path=/, Secure under HTTPS. Store only token digest in PostgreSQL; absolute expiry 8 hours. Local HTTP exception is documented. No auth tokens in localStorage.
 - BR-08: Every protected request checks session expiry, active account and forced-change state. Logout deletes session and expires cookie. Password change/reset, role change and deactivation revoke all sessions; successful password change creates a fresh session.
 - BR-09: Allow only configured frontend origins with credentials. Unsafe requests including login require matching Origin and a server-issued CSRF token bound to the browser/session; define bootstrap in API contract. Missing/invalid tokens yield 403.
-- BR-10: Proposed login throttling: 5 failed attempts per normalized email per 15 minutes and 30 per source IP per 15 minutes; 429 with Retry-After. Invalid, absent and inactive credentials receive the same safe login response. Use bounded expiring records; no permanent account lock.
+- BR-10: Login throttling permits 5 failed attempts per normalized email per 15 minutes and 30 per source IP per 15 minutes; 429 includes Retry-After. Invalid, absent and inactive credentials receive the same safe login response. Use bounded expiring records; no permanent account lock.
 - BR-11: Name trims to 1-120 characters; email trims/lowercases to a syntactically valid maximum 320 characters and is unique after normalization. Preflight existing normalized duplicates before migration; stop with a report, never merge people automatically.
 - BR-12: Administrators cannot deactivate themselves or remove the final active Administrator by role change/deactivation. Serialize account changes affecting these invariants in a database transaction. Use deactivation, never deletion.
 - BR-13: Assignment is null or one active Staff/Administrator. Claim succeeds only if unassigned; a conflicting claim or stale mutation returns 409. Deactivation or change to REQUESTER automatically unassigns that user's owned tickets in the same transaction and preserves historical authorship.
@@ -63,11 +63,11 @@ Proposed permission matrix. Administrator operational permissions below are expl
 - BR-15: Status transitions follow the table below. Operational updates require expected version, increment version and update updatedAt atomically. For claim, manual owner changes (including unassignment) and priority changes, the locked terminal set is exactly RESOLVED, CLOSED and CANCELLED; these operations return 409 TICKET_TERMINAL even if the requested value is unchanged. NEW, OPEN, IN_PROGRESS, WAITING_FOR_REQUESTER and REOPENED permit these operations subject to role, version, ownership and eligibility checks. Terminal status does not forbid the listed status transitions, reads or Public Comments/Notes. BR-13 automatic unassignment is a system-integrity exception: it applies in all eight statuses during account deactivation/role change, increments version/updatedAt atomically and leaves status unchanged. It is not a manual-owner endpoint bypass.
 - BR-16: Problem Appears Resolved records an owner indication with backend time for OPEN, IN_PROGRESS, WAITING_FOR_REQUESTER or REOPENED only; it does not change status. The request must include the last-read Ticket version. Within a Ticket transaction, reject a stale version with 409 VERSION_CONFLICT before checking eligibility or an existing indication. A matching version in an ineligible status returns 409 RESOLUTION_INDICATION_NOT_ALLOWED. A matching version with an existing indication returns current state unchanged; otherwise store time and increment version/updatedAt once. Reopening clears the indication and increments version atomically. Thus replaying an old successful request returns a conflict, while an explicit repeat using refreshed current state is idempotent; no new cycle can accept an old request.
 - BR-17: Public Comments/Internal Notes trim to 1-4000 characters, render as plain text and are append-only. The 4000-character limit matches the existing description bound and permits useful explanations while bounding payloads. Author/time are backend-generated; never accept visibility conversion, edit or deletion.
-- BR-18: Existing Requester upload/removal rules remain, including 5 MiB/file, five active files, signature validation, authorized Blob download, retained removal metadata and blocked removed-file access. Staff/Admin can read metadata and download active files but cannot mutate Attachments in this proposed scope.
+- BR-18: Existing Requester upload/removal rules remain, including 5 MiB/file, five active files, signature validation, authorized Blob download, retained removal metadata and blocked removed-file access. Staff/Admin can read metadata and download active files but cannot mutate Attachments in this approved scope.
 - BR-19: Repeatable seeds must not reset changed credentials, edited accounts or existing tickets. Provide at least 4 active + 1 inactive Requester, 3 active + 1 inactive Staff and 1 active Admin, plus realistic workflow records and comments/notes. Local initial credentials are supplied through documented local provisioning, never real personal secrets.
 - BR-20: Login failure never reveals account existence. Unexpected errors never expose SQL, stack traces, paths or note content. Validation preserves non-password form input; passwords are cleared on failed submission.
 
-### Proposed transition matrix
+### Approved transition matrix
 
 Only IT_STAFF and ADMINISTRATOR may perform these transitions. All other pairs and same-state requests fail validation. Confirm Resolved, Closed and Cancelled in the UI; no Actions Taken dependency in Lab 3.
 
@@ -90,7 +90,7 @@ See [ui-spec.md](ui-spec.md) for routes, state feedback, role navigation and vis
 
 ## 7. Data changes and migration
 
-| Entity | Proposed change |
+| Entity | Approved change |
 |---|---|
 | User | Rename RequesterUser table/model preserving integer IDs, sequence, existing name/email/active/timestamps; add role, passwordHash, mustChangePassword and version. Existing users become REQUESTER. |
 | Session | ID, unique token digest, User FK, createdAt, expiresAt and CSRF binding; index userId and expiresAt. Delete on revocation. |
