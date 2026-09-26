@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Engineering contract and Issues #26–#28 approved and peer-merged. Issue #29 is under review in PR #35; Phanuwit requested changes, and author corrections are being prepared for re-review. No approval or merge is claimed.
+Status: Issues #25–#29 were peer-approved and merged into `lab3-staging`. Issue #30 quality/release verification is in progress; its quality and release PRs, final-main checks and PDF are not complete.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -17,8 +17,8 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | [#26](https://github.com/Datakung/toktickit/issues/26) | Authentication/migration | [PR #32](https://github.com/Datakung/toktickit/pull/32): all four findings answered and corrected in f5f21ba. Phanuwit re-reviewed, approved and merged on 2026-09-15. |
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | [PR #33](https://github.com/Datakung/toktickit/pull/33): Phanuwit [approved `5ed6a54`](https://github.com/Datakung/toktickit/pull/33#pullrequestreview-5219828249) and merged as `b9e23f3` on 2026-09-16. |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | [PR #34](https://github.com/Datakung/toktickit/pull/34): Phanuwit reviewed and merged as `bdca390` on 2026-09-25. |
-| [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | [PR #35](https://github.com/Datakung/toktickit/pull/35): [changes requested](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640). Author correction pending commit/push and peer re-review. |
-| [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Pending |
+| [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | [PR #35](https://github.com/Datakung/toktickit/pull/35): [changes requested](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640), corrections in `a522dc6`/`10dfbed`, [approved by Phanuwit](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5323222675), merged as `23ab582` on 2026-09-26 (Bangkok). |
+| [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Integration/evidence work in progress on `feature/30-quality-release`; PR and approval pending. |
 
 ## Received contract review (completed)
 
@@ -47,7 +47,7 @@ Reply/approval status: Phanuwit verified the four author replies and approved f5
 
 Phanuwit reviewed exact revision `5ed6a54` with no blocking findings and approved it on 2026-09-16. His independent isolated run passed 123 backend tests, 83 serial client tests, 21 Chromium scenarios and both production builds. He explicitly checked authorization/CSRF, normalized uniqueness, strict validation, conflicts, Administrator invariants, transactional revocation/unassignment, migration and responsive user-management flows. He also confirmed that queue/status/assignment work remained correctly scoped to Issues #28–#29. Phanuwit then merged PR #33 into `lab3-staging`; this approval is evidence for Issue #27 only, not pre-approval of Issue #28.
 
-## Received Ticket operations review (corrections prepared)
+## Received Ticket operations review (completed)
 
 Phanuwit [requested changes on PR #35](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640). His isolated backend run passed 146 tests and both builds passed. He reported 85 client tests passed, 8 failed and 9 unhandled errors because older Ticket Detail fixtures did not mock the new communication read; his isolated requester-detail retry also failed. These results are reviewer findings, not approval.
 
@@ -57,11 +57,19 @@ Phanuwit [requested changes on PR #35](https://github.com/Datakung/toktickit/pul
 | [Stale Ticket response](https://github.com/Datakung/toktickit/pull/35#discussion_r4106630253) | The Staff Detail route remounts by Ticket ID, and the detail/action response handlers ignore obsolete requests. Regressions resolve old detail and action responses after navigation. |
 | Existing client regressions | Lab 2 Ticket Detail and Attachment fixtures now mock the communication read. The complete client suite passes, including the isolated requester retry. |
 
-Corrections are local until the author commits and pushes them. Peer re-review and approval remain pending.
+Pitchai committed/pushed the corrections as `a522dc6` and `10dfbed`. Phanuwit [re-reviewed and approved](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5323222675): 97 submitted client tests plus three reviewer regressions passed (100/100), and the client build/whitespace checks passed. He explicitly did not rerun browser E2E on the correction. The unchanged server revision had passed his earlier 146-test isolated run and build. PR #35 then merged into `lab3-staging` as `23ab582`.
 
-## Partner review links
+## Reciprocal Lab 3 reviews on Phanuwit's repository
 
-Pending actual partner PRs. Record useful review comment, partner response, Pitchai approval and reviewer merge with direct links. Do not copy Lab 2 reviews as Lab 3 evidence or invent reciprocal activity.
+These are Pitchai's reviews of Phanuwit's Lab 3 work, separate from the received reviews above. All five partner PRs were merged by the author after review.
+
+| Partner PR | Pitchai review and useful exchange | Final decision |
+|---|---|---|
+| [#31 contract](https://github.com/auto4496/toktickit/pull/31) | [Board-state correction requested](https://github.com/auto4496/toktickit/pull/31#discussion_r3995408941); [Phanuwit replied with the corrected workflow and documentation](https://github.com/auto4496/toktickit/pull/31#discussion_r3996923544). Documentation-only verification, no runtime-test claim. | [Approved](https://github.com/auto4496/toktickit/pull/31#pullrequestreview-5189566674), merged 2026-09-13. |
+| [#32 authentication](https://github.com/auto4496/toktickit/pull/32) | [Stale-CSRF retry](https://github.com/auto4496/toktickit/pull/32#discussion_r4011398678) and [intended-route restoration](https://github.com/auto4496/toktickit/pull/32#discussion_r4011398684) requested; [Phanuwit answered CSRF](https://github.com/auto4496/toktickit/pull/32#discussion_r4011488804) and [route](https://github.com/auto4496/toktickit/pull/32#discussion_r4011489526) with regressions. | [Approved](https://github.com/auto4496/toktickit/pull/32#pullrequestreview-5206907193), merged 2026-09-15. |
+| [#33 Staff workflow](https://github.com/auto4496/toktickit/pull/33) | [Lost-response pagination/duplicate-post risk](https://github.com/auto4496/toktickit/pull/33#discussion_r4023073618) requested; [Phanuwit replied with the recovery fix and tests](https://github.com/auto4496/toktickit/pull/33#discussion_r4023585808). | [Approved](https://github.com/auto4496/toktickit/pull/33#pullrequestreview-5220033518), merged 2026-09-16. |
+| [#34 user management](https://github.com/auto4496/toktickit/pull/34) | [Unsaved-edit navigation guard](https://github.com/auto4496/toktickit/pull/34#discussion_r4060222962) and [ambiguous success assertion](https://github.com/auto4496/toktickit/pull/34#discussion_r4060222970) requested; [Phanuwit replied on navigation](https://github.com/auto4496/toktickit/pull/34#discussion_r4072766062) and [test timing](https://github.com/auto4496/toktickit/pull/34#discussion_r4072767621). | [Approved](https://github.com/auto4496/toktickit/pull/34#pullrequestreview-5279498891), merged 2026-09-22. |
+| [#35 integration](https://github.com/auto4496/toktickit/pull/35) | Independent integration review reported 389 tests, 17 browser journeys, two builds and 109 matching screenshot checksums; no blocking finding. Remaining final-main/PDF work was reserved for Issue #30. | [Approved](https://github.com/auto4496/toktickit/pull/35#pullrequestreview-5321011435), merged 2026-09-26 (Bangkok). |
 
 ## Workflow evidence
 
