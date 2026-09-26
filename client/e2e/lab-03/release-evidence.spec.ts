@@ -115,17 +115,32 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
   await page.getByRole("button", { name: "Clear filters" }).click();
   await page.getByLabel("Ticket Number or Summary").fill(ticketNumber);
   await page.getByRole("button", { name: "Search", exact: true }).click();
+  let releaseCommunication!: () => void;
+  const communicationGate = new Promise<void>(resolve => { releaseCommunication = resolve; });
+  await page.route(/\/api\/(?:staff\/tickets\/\d+\/notes|tickets\/\d+\/comments)\?/, async route => {
+    if (route.request().method() === "GET") await communicationGate;
+    await route.continue();
+  });
   await page.getByRole("link", { name: `Open ${ticketNumber}` }).click();
   await expect(page.getByRole("heading", { name: ticketNumber })).toBeVisible();
   const ticketId = Number(new URL(page.url()).pathname.split("/").at(-1));
-  await page.getByRole("button", { name: "Claim Ticket" }).click();
-  await expect(page.getByRole("status")).toContainText("Claim saved");
-  await page.getByLabel("IT Priority", { exact: true }).selectOption("HIGH");
-  await page.getByRole("button", { name: "Save IT Priority" }).click();
-  await expect(page.getByRole("status")).toContainText("IT Priority saved");
-  await page.getByLabel("Status", { exact: true }).selectOption("OPEN");
-  await page.getByRole("button", { name: "Save Status" }).click();
-  await expect(page.getByRole("status")).toContainText("Status saved");
+  try {
+    await expect(page.getByRole("status").filter({ hasText: "Loading Public Comments" })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "Loading Internal Notes" })).toBeVisible();
+    await page.getByRole("button", { name: "Claim Ticket" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Claim saved" })).toBeVisible();
+    await page.getByLabel("IT Priority", { exact: true }).selectOption("HIGH");
+    await page.getByRole("button", { name: "Save IT Priority" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "IT Priority saved" })).toBeVisible();
+    await page.getByLabel("Status", { exact: true }).selectOption("OPEN");
+    await page.getByRole("button", { name: "Save Status" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Status saved" })).toBeVisible();
+  } finally {
+    releaseCommunication();
+  }
+  await expect(page.getByRole("status").filter({ hasText: "Loading Public Comments" })).toHaveCount(0);
+  await expect(page.getByRole("status").filter({ hasText: "Loading Internal Notes" })).toHaveCount(0);
+  await page.unroute(/\/api\/(?:staff\/tickets\/\d+\/notes|tickets\/\d+\/comments)\?/);
   const comments = page.locator("section.communication-panel").filter({ has: page.getByRole("heading", { name: "Public Comments" }) });
   const notes = page.locator("section.communication-panel").filter({ has: page.getByRole("heading", { name: "Internal Notes" }) });
   await comments.getByLabel("Add a Public Comment").fill("Service desk is investigating the reported issue.");

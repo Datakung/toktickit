@@ -26,16 +26,16 @@ test("Staff operates a Ticket and communicates without exposing Internal Notes",
   const ticketId = Number(new URL(staffUrl).pathname.split("/").at(-1));
 
   await page.getByRole("button", { name: "Claim Ticket" }).click();
-  await expect(page.getByRole("status")).toContainText("Claim saved");
+  await expect(page.getByRole("status").filter({ hasText: "Claim saved" })).toBeVisible();
   await expect(page.getByText("Mali Support", { exact: true }).first()).toBeVisible();
 
   await page.getByLabel("IT Priority", { exact: true }).selectOption("HIGH");
   await page.getByRole("button", { name: "Save IT Priority" }).click();
-  await expect(page.getByRole("status")).toContainText("IT Priority saved");
+  await expect(page.getByRole("status").filter({ hasText: "IT Priority saved" })).toBeVisible();
 
   await page.getByLabel("Status", { exact: true }).selectOption("OPEN");
   await page.getByRole("button", { name: "Save Status" }).click();
-  await expect(page.getByRole("status")).toContainText("Status saved");
+  await expect(page.getByRole("status").filter({ hasText: "Status saved" })).toBeVisible();
   await expect(page.getByText("Open", { exact: true }).first()).toBeVisible();
 
   const comments = page.locator("section.communication-panel").filter({ has: page.getByRole("heading", { name: "Public Comments" }) });
