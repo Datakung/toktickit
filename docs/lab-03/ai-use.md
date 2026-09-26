@@ -1,8 +1,8 @@
 # Lab 3 AI Use and Reflection
 
-Status: Initial planning record, 2026-09-12. Add real implementation/review interactions as they happen.
+Status: Evolving Lab 3 interaction record through Issue #30; final-main and PDF reflection check remain pending.
 
-Agent used: OpenAI Codex. Model identification for this draft session: GPT-6 (per session configuration); record the exact selectable model label used for subsequent implementation sessions before submission.
+Agent used: OpenAI Codex. The author should verify the exact model label shown in the app before submission rather than infer it from this document.
 
 ## Selected key prompts
 
@@ -25,7 +25,13 @@ Agent used: OpenAI Codex. Model identification for this draft session: GPT-6 (pe
 
 Ten actual selected prompts are now recorded. Do not add routine follow-ups; retain only these materially useful interactions.
 
-PR #35 review follow-up: Phanuwit reproduced inaccessible communication entries after the first 20, a stale Staff Ticket response after navigation, and broken older client fixtures. The agent treated these as correctness findings, added paged histories and request-generation guards, repaired the mocks, and reran full suites. The earlier green author run did not reveal the missing mocks in the reviewer's environment; independent review changed the regression scope. Peer approval remains pending.
+PR #35 review follow-up: Phanuwit reproduced inaccessible communication entries after the first 20, a stale Staff Ticket response after navigation, and broken older client fixtures. The agent treated these as correctness findings, added paged histories and request-generation guards, repaired the mocks, and reran full suites. The earlier green author run did not reveal the missing mocks in the reviewer's environment; independent review changed the regression scope. Phanuwit re-reviewed, approved and merged the correction.
+
+Issue #30 continuation: after the user asked to move on, the agent verified the PR #35 merge, read the quality/release Issue and original handout, synchronized `lab3-staging`, and built an isolated screenshot workflow. It recorded branch-level tests and screenshot provenance separately from the still-pending final-main PDF, and verified reciprocal review links from Phanuwit's PRs instead of inventing participation. The author retains commit/push and final visual-sign-off decisions.
+
+PR #36 review follow-up: Phanuwit's independent browser run found a strict locator race that the author's green run missed: loading Public Comments and Internal Notes shared the same status role as the successful claim message. The agent scoped all three operation-success assertions and held both communication responses open during a regression run to reproduce the timing deterministically. The focused evidence test and complete browser suite passed; the author committed/pushed the correction, and Phanuwit independently confirmed 31/31 on the new revision.
+
+Phanuwit's second PR #36 review passed all 31 browser scenarios but noticed the desktop queue screenshot represented the transient loading state. The evidence journey now waits for a populated queue row before any queue capture. The regenerated desktop image was visually checked; peer confirmation of this second correction remains pending.
 
 ## My Reflection
 
