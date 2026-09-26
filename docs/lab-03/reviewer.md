@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Issues #25–#29 were peer-approved and merged into `lab3-staging`. Issue #30 quality/release verification is in progress; its quality and release PRs, final-main checks and PDF are not complete.
+Status: Issues #25–#29 were peer-approved and merged into `lab3-staging`. Issue #30 quality PR #36 has changes requested; correction is local pending author commit/push and peer re-review. The release PR, final-main checks and PDF are not complete.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -18,7 +18,7 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | [PR #33](https://github.com/Datakung/toktickit/pull/33): Phanuwit [approved `5ed6a54`](https://github.com/Datakung/toktickit/pull/33#pullrequestreview-5219828249) and merged as `b9e23f3` on 2026-09-16. |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | [PR #34](https://github.com/Datakung/toktickit/pull/34): Phanuwit reviewed and merged as `bdca390` on 2026-09-25. |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | [PR #35](https://github.com/Datakung/toktickit/pull/35): [changes requested](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640), corrections in `a522dc6`/`10dfbed`, [approved by Phanuwit](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5323222675), merged as `23ab582` on 2026-09-26 (Bangkok). |
-| [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | Integration/evidence work in progress on `feature/30-quality-release`; PR and approval pending. |
+| [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | [PR #36](https://github.com/Datakung/toktickit/pull/36): [changes requested](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5325573348); test correction local pending author commit/push and peer re-review. |
 
 ## Received contract review (completed)
 

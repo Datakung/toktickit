@@ -29,6 +29,8 @@ PR #35 review follow-up: Phanuwit reproduced inaccessible communication entries 
 
 Issue #30 continuation: after the user asked to move on, the agent verified the PR #35 merge, read the quality/release Issue and original handout, synchronized `lab3-staging`, and built an isolated screenshot workflow. It recorded branch-level tests and screenshot provenance separately from the still-pending final-main PDF, and verified reciprocal review links from Phanuwit's PRs instead of inventing participation. The author retains commit/push and final visual-sign-off decisions.
 
+PR #36 review follow-up: Phanuwit's independent browser run found a strict locator race that the author's green run missed: loading Public Comments and Internal Notes shared the same status role as the successful claim message. The agent scoped all three operation-success assertions and held both communication responses open during a regression run to reproduce the timing deterministically. The focused evidence test and complete browser suite passed locally; the author still needs to commit/push the correction and obtain peer re-review.
+
 ## My Reflection
 
 Draft for Pitchai to revise in his own words: Specifying six Issues made the planning request clearer, but the larger authentication and Ticket operations groups still required focused commits and review. I learned to translate ambiguous workflow ideas into an explicit transition matrix, protect stale updates with versions, and prove privacy through direct API denial rather than relying on hidden UI. Browser evidence also reminded me to distinguish a test synchronization defect from a product defect. I still need to complete peer review and final-main release evidence before claiming the lab is finished.
