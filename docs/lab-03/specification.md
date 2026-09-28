@@ -1,6 +1,6 @@
 # Lab 3 Sprint Engineering Specification
 
-Status: Approved engineering contract. Issues #25–#29 were peer-approved and reviewer-merged through PRs #31–#35 into `lab3-staging`. Issue #30 integration/release work is in progress; final-main acceptance and the PDF remain pending.
+Status: Approved engineering contract, implemented through Issues #25–#30 and reviewer-merged through `lab3-staging` into `main` at `9fcae33` ([release PR #37](https://github.com/Datakung/toktickit/pull/37)). Final-main automated acceptance passed on 2026-09-28; the single PDF was prepared separately for submission.
 
 ## 1. Sprint goal
 
@@ -131,14 +131,14 @@ See [api-spec.md](api-spec.md). Retain Requester route names with new authentica
 ## 10. Product Definition of Done
 
 - [x] Contract reviewed/approved before implementation; early evidence retained.
-- [ ] FR-01 through FR-09 and AC-01 through AC-13 satisfied with linked executable tests.
-- [ ] Preserved-data migration and repeatable provisioning/seed verified; no real credentials committed.
-- [ ] Authentication/role/ownership/CSRF/conflict/safe-error checks hold on direct APIs.
-- [ ] All feature tests, builds and isolated E2E pass with no required skips.
-- [ ] Major screens inspected at three widths and by keyboard; visual checklist complete.
-- [ ] All six docs and README reflect actual behavior and evidence; AI reflection remains honest.
-- [ ] PRs linked, review findings answered, peer approvals and reviewer merges recorded in both directions.
-- [ ] Release merged through lab3-staging to main; final main verified and all Issues Done after acceptance.
+- [x] FR-01 through FR-09 and AC-01 through AC-13 satisfied with linked executable tests.
+- [x] Preserved-data migration and repeatable provisioning/seed verified; no real credentials committed.
+- [x] Authentication/role/ownership/CSRF/conflict/safe-error checks hold on direct APIs.
+- [x] All feature tests, builds and isolated E2E pass with no required skips.
+- [x] Major screens inspected at three widths; keyboard/focus behavior covered by browser and component checks. See the visual checklist for provenance.
+- [x] All six docs and README reflect actual behavior and evidence; the author approved the AI reflection draft on 2026-09-28.
+- [x] PRs linked, review findings answered, peer approvals and reviewer merges recorded in both directions.
+- [x] Release merged through lab3-staging to main; final main verified and all six Lab 3 Issues closed/Done after acceptance.
 - [ ] One concise PDF uses Answer Part 1-9 with required rendered docs and readable captioned evidence.
 
 ## 11. Approved design decisions

@@ -1,10 +1,13 @@
 # TokTickIT
 
-## Current Lab 3 quality/release preparation
+## Lab 3 reviewed release
 
-Issues #25–#29 are reviewer-merged into `lab3-staging`. Issue #30 verifies the
-integrated increment before a reviewed release to `main`; branch-level results
-are not final-main evidence. The full integrated gate and actual results are in
+Issues #25–#30 are closed and Done. Phanuwit approved and merged the quality
+PR [#36](https://github.com/Datakung/toktickit/pull/36) into `lab3-staging` and
+the release PR [#37](https://github.com/Datakung/toktickit/pull/37) into `main`
+(`9fcae33`). The complete final-main gate passed on 2026-09-28: 146 server
+tests, 97 client tests, 31 browser scenarios, one evidence journey, both builds,
+and production dependency audits with zero reported vulnerabilities. Details are in
 [Lab 3 tests](docs/lab-03/tests.md), with the [peer review record](docs/lab-03/reviewer.md)
 and [visual checklist](docs/lab-03/ui-spec.md).
 
@@ -23,7 +26,8 @@ the Lab 3 submission images, run `npm --prefix client run test:e2e:lab3-evidence
 It writes `artifacts/lab-03/screenshots/` from the isolated E2E database, checks
 desktop/tablet/mobile overflow and verifies that development database/uploads
 remain unchanged. Re-run and inspect this evidence on reviewed final `main`
-before assembling the nine-part PDF. Never use real passwords in screenshots.
+before assembling the nine-part PDF. The submission images were regenerated
+from reviewed `main` at `9fcae33`; never use real passwords in screenshots.
 
 ## Lab 3 Ticket operations and communication increment
 
@@ -415,4 +419,4 @@ and verified in `lab2-staging`, a final reviewed release Pull Request targets
 - `docs/lab-03/api-spec.md` and `ui-spec.md` - authenticated API and Zen Green UI contracts
 - `docs/lab-03/tests.md` - executable traceability and branch/final-main evidence
 - `docs/lab-03/reviewer.md` - received and reciprocal Lab 3 peer-review record
-- `docs/lab-03/ai-use.md` - selected prompts and reflection draft for author sign-off
+- `docs/lab-03/ai-use.md` - selected prompts and author-approved reflection
