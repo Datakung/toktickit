@@ -10,6 +10,7 @@ import {
   developmentRequesterContext,
   type DevelopmentRequesterLocals,
 } from "../middleware/development-requester-context.js";
+import { requireCsrf } from "../auth/auth-middleware.js";
 import { MAX_ATTACHMENT_BYTES, validateAttachment } from "./attachment-validation.js";
 import {
   attachmentMetadataSelect,
@@ -169,6 +170,7 @@ attachmentRouter.get(
 attachmentRouter.post(
   "/",
   developmentRequesterContext,
+  requireCsrf,
   ticketOwnership,
   parseSingleFile,
   async (request, response: Response<unknown, AttachmentLocals>) => {
@@ -345,6 +347,7 @@ attachmentRouter.get(
 attachmentRouter.delete(
   "/:attachmentId",
   developmentRequesterContext,
+  requireCsrf,
   async (request, response: Response<unknown, DevelopmentRequesterLocals>) => {
     const ticketId = positiveRouteId(request.params.ticketId);
     const attachmentId = positiveRouteId(request.params.attachmentId);
@@ -385,7 +388,7 @@ attachmentRouter.delete(
           data: {
             removedAt: new Date(),
             removalReason: reason,
-            removedByRequesterId: requesterId,
+            removedByUserId: requesterId,
           },
         });
         if (update.count !== 1) throw new AttachmentAlreadyRemovedError();

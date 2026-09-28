@@ -1,11 +1,126 @@
 # TokTickIT
 
+## Current Lab 3 quality/release preparation
+
+Issues #25–#29 are reviewer-merged into `lab3-staging`. Issue #30 verifies the
+integrated increment before a reviewed release to `main`; branch-level results
+are not final-main evidence. The full integrated gate and actual results are in
+[Lab 3 tests](docs/lab-03/tests.md), with the [peer review record](docs/lab-03/reviewer.md)
+and [visual checklist](docs/lab-03/ui-spec.md).
+
+After starting the existing PostgreSQL container, run the isolated gate:
+
+```powershell
+npm --prefix server test
+npm --prefix client test
+npm --prefix client run test:e2e
+npm --prefix server run build
+npm --prefix client run build
+```
+
+Routine E2E keeps screenshots in ignored test output. To deliberately refresh
+the Lab 3 submission images, run `npm --prefix client run test:e2e:lab3-evidence`.
+It writes `artifacts/lab-03/screenshots/` from the isolated E2E database, checks
+desktop/tablet/mobile overflow and verifies that development database/uploads
+remain unchanged. Re-run and inspect this evidence on reviewed final `main`
+before assembling the nine-part PDF. Never use real passwords in screenshots.
+
+## Lab 3 Ticket operations and communication increment
+
+Issue #29 completes `/staff/tickets/:id` for IT Staff and Administrators with
+atomic claim/reassignment, IT Priority, approved status transitions, active
+Attachment download, Public Comments and private Internal Notes. Requesters can
+read/post Public Comments on their own Tickets and indicate that a problem appears
+resolved without changing the formal status. Optimistic versions prevent stale
+updates, terminal Ticket guards remain explicit, and note access is enforced by
+the API rather than UI visibility alone.
+
+Before running this branch locally, apply the additive Ticket-status migration:
+
+```powershell
+cd server
+npx prisma migrate deploy
+npx prisma generate
+cd ..
+```
+
+The new additive migration records Requester resolution indications and creates
+separate append-only Public Comment and Internal Note tables. It preserves Ticket,
+User and Attachment history. Automated tests use only isolated test/E2E databases;
+they do not migrate or seed the development database.
+
+## Lab 3 authentication and user-management foundation
+
+Issue #27 adds the Administrator Users screen at `/admin/users`: literal name/email
+search, combined role and Active/Inactive filtering, create/edit, activation and separate initial-password reset.
+Only Administrators with completed password change can use its UI and APIs.
+Passwords are write-only; resets require a new password change at next login.
+Role changes, deactivation and resets revoke sessions. Stale edits return a conflict;
+reload and review the account before explicitly submitting again.
+
+Before running this branch locally, apply the additive owner/version migration:
+
+```powershell
+cd server
+npx prisma migrate deploy
+npx prisma generate
+cd ..
+```
+
+Use your provisioned `admin@example.test` credentials, complete the initial password
+change if required, and open Users. No new provisioning or database reset is needed.
+Deactivation preserves accounts and Ticket history. It unassigns owned Tickets;
+the backend prevents self-deactivation and removing the final active Administrator.
+Staff Ticket operations and communication are implemented by Issue #29.
+
+Issue #26 replaces the Lab 2 Development Requester selector and trusted header
+with database-backed authentication. Active users sign in with email/password,
+receive a revocable HttpOnly cookie session, and must change provisioned initial
+passwords before entering their role workspace. Requester Ticket and Attachment
+authorization now derives only from the authenticated session.
+
+The data-preserving migration renames `RequesterUser` to `User` without changing
+existing IDs, ownership, timestamps, removal history, or stored files. It adds
+roles, password state, versioning, and database session records. The repeatable
+seed preserves edited accounts and existing credentials; it never supplies real
+passwords.
+
+### Lab 3 local account provisioning
+
+Add distinct 32-character-or-longer `SESSION_SECRET` and `CSRF_SECRET` values to
+the ignored `server/.env`. Copy the structure below into an ignored file such as
+`server/lab3.credentials.local.json`, include every account whose password hash
+is still null, and choose private initial passwords of 12–128 characters:
+
+```json
+[
+  {
+    "email": "anan.chaiyasit@example.test",
+    "initialPassword": "replace-with-a-private-initial-password"
+  }
+]
+```
+
+After applying migrations and running the repeatable seed, provision once:
+
+```powershell
+cd server
+npx prisma migrate deploy
+npm run prisma:seed
+npm run prisma:provision -- lab3.credentials.local.json
+```
+
+Provisioning validates the entire file before writing, hashes passwords with the
+documented scrypt policy, requires complete coverage, and skips accounts that
+already have hashes. It does not print or overwrite credentials. The local
+credential file matches `*.credentials.local.json` and must never be committed.
+
 TokTickIT is an IT service desk application developed for CPE334. Lab 2 extends
 the verified Lab 1 vertical slice with the data foundation, temporary
 Development Requester context, Ticket creation and discovery, owned Ticket
 Detail, and Attachment lifecycle needed by the Requester Ticketing MVP.
 
-## Current Lab 2 increment
+## Completed Lab 2 increment (historical baseline)
 
 Through the verified Issue #16 quality gate and final release to `main`, the
 current increment provides:
@@ -183,10 +298,9 @@ cd client
 npm run dev
 ```
 
-Open `http://localhost:5173` in a browser. Choose an active Development
-Requester and select **Continue**. The application stores only that temporary
-development selection in the current browser tab, opens the requester shell,
-and allows it to be cleared with **Change Requester**. Select **Create Ticket**
+Open `http://localhost:5173` in a browser and sign in with an active provisioned
+account. The application forces an initial password change, then opens the
+correct role workspace. Select **Create Ticket**
 to submit a validated request and optional initial files, or open **My Tickets**
 to search owned Tickets and manage permitted Attachments from read-only Ticket
 Detail. This is development context for Lab 2, not authentication.
@@ -198,7 +312,13 @@ Detail. This is development context for Lab 2, not authentication.
 | `GET` | `/api/health` | Returns `200` with `{ "status": "ok", "service": "TokTickIT API" }` |
 | `GET` | `/api/categories` | Returns active category IDs and names from PostgreSQL in ID order |
 | `GET` | `/api/related-systems` | Returns active related systems in name order |
-| `GET` | `/api/development-requesters` | Returns active Development Requesters in display-name order |
+| `GET` | `/api/auth/csrf` | Bootstraps browser-bound CSRF protection for sign-in |
+| `POST` | `/api/auth/login` | Authenticates an active account and creates a revocable cookie session |
+| `GET` | `/api/auth/me` | Returns safe current-user data for an active session |
+| `POST` | `/api/auth/change-password` | Changes an initial/current password and rotates all session state |
+| `POST` | `/api/auth/logout` | Revokes the current session and expires its cookie |
+| `GET` | `/api/staff/tickets` | Returns the authorized shared queue with strict search/filter/sort/pagination |
+| `GET` | `/api/staff/owners` | Returns active eligible Staff/Administrator owner choices |
 | `GET` | `/api/tickets` | Returns only the selected Requester's Tickets with validated search, filters, sorting, and pagination |
 | `POST` | `/api/tickets` | Creates one validated Ticket for the selected Development Requester |
 | `GET` | `/api/tickets/:ticketId` | Returns an owned read-only Ticket with ordered Attachment metadata |
@@ -221,8 +341,8 @@ npm run prisma:seed
 ```
 
 The seed uses unique-key upserts, so it is safe to run more than once. It creates
-the four Lab 1 Categories, six Related Systems, four active Development
-Requesters, and one inactive Requester without duplicates.
+the four Lab 1 Categories, six Related Systems, five Requester fixtures, four IT
+Staff fixtures, and one Administrator without duplicates or credential resets.
 
 ## Test and build
 
@@ -291,3 +411,8 @@ and verified in `lab2-staging`, a final reviewed release Pull Request targets
 - `docs/lab-02/tests.md` - planned-test traceability and verified results
 - `docs/lab-02/reviewer.md` - PR discussion, approval, merge, and Kanban record
 - `docs/lab-02/ai-use.md` - selected prompts and critical reflection
+- `docs/lab-03/specification.md` - approved Lab 3 requirements, rules, migration and Definition of Done
+- `docs/lab-03/api-spec.md` and `ui-spec.md` - authenticated API and Zen Green UI contracts
+- `docs/lab-03/tests.md` - executable traceability and branch/final-main evidence
+- `docs/lab-03/reviewer.md` - received and reciprocal Lab 3 peer-review record
+- `docs/lab-03/ai-use.md` - selected prompts and reflection draft for author sign-off

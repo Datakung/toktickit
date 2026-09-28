@@ -30,12 +30,15 @@ function ticketDetail(attachments = [activeAttachment]): api.TicketDetail {
     id: 41,
     ticketNumber: "TKT-20260901-QA0001",
     requester,
+    owner: null,
+    version: 1,
+    requesterResolutionIndicatedAt: null,
     category: { id: 1, name: "Hardware" },
     relatedSystem: { id: 2, name: "Network and VPN" },
     summary: "Release safe-error audit",
     description: "The form and Attachment actions must remain safely recoverable.",
     requestedPriority: "MEDIUM",
-    itPriority: null,
+    itPriority: "HIGH",
     status: "NEW",
     createdAt: "2026-09-01T03:00:00.000Z",
     updatedAt: "2026-09-01T03:00:00.000Z",
@@ -139,6 +142,7 @@ describe("release-wide safe and recoverable UI failures", () => {
   });
 
   it("retries detail metadata, upload, content, and removal without exposing internals", async () => {
+    vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
     vi.spyOn(api, "getTicket")
       .mockRejectedValueOnce(new api.ApiError(
         500,

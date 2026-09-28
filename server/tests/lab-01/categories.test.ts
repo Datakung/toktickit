@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest";
 import request from "supertest";
 import { app } from "../../src/app.js";
+import { getPrisma } from "../../src/prisma.js";
 
 describe("GET /api/categories", () => {
   it("returns the four seeded categories in id order", async () => {
-    const res = await request(app).get("/api/categories");
+    const requester = await getPrisma().user.findFirstOrThrow({ where: { role: "REQUESTER", isActive: true } });
+    const res = await request(app).get("/api/categories").set("X-Development-Requester-Id", String(requester.id));
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveLength(4);

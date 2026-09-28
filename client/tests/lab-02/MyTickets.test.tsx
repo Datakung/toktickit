@@ -15,7 +15,7 @@ const ticket: api.TicketListItem = {
   ticketNumber: "TKT-20260901-ABC123",
   summary: "Cannot connect to VPN",
   requestedPriority: "HIGH",
-  itPriority: null,
+  itPriority: "HIGH",
   status: "NEW",
   createdAt: "2026-09-01T03:00:00.000Z",
   updatedAt: "2026-09-01T04:00:00.000Z",
@@ -116,6 +116,25 @@ describe("My Tickets", () => {
         pageSize: 20,
       });
     });
+  });
+
+  it("offers and renders all eight inherited status labels", async () => {
+    const statuses = api.ticketStatuses;
+    const tickets = statuses.map((status, index) => ({
+      ...ticket,
+      id: index + 100,
+      ticketNumber: `TKT-STATUS-${index}`,
+      summary: `Status fixture ${index}`,
+      status,
+    }));
+    vi.spyOn(api, "getTickets").mockResolvedValue(response(tickets));
+    render(<MyTicketsPage requester={requester} onNavigate={vi.fn()} onRequesterUnavailable={vi.fn()} />);
+    await screen.findAllByText("Status fixture 0");
+    const filter = screen.getByRole("combobox", { name: "Status filter" });
+    expect(Array.from(filter.querySelectorAll("option")).map(option => option.textContent)).toEqual([
+      "All Statuses", "New", "Open", "In Progress", "Waiting for Requester", "Resolved", "Closed", "Reopened", "Cancelled",
+    ]);
+    for (const status of statuses) expect(screen.getAllByText(api.statusLabel(status)).length).toBeGreaterThan(0);
   });
 
   it("distinguishes an empty account from an active query with no results", async () => {

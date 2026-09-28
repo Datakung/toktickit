@@ -17,8 +17,8 @@ let ticketId: number;
 
 beforeAll(async () => {
   await seedDatabase(prisma);
-  requesterId = (await prisma.requesterUser.findFirstOrThrow({
-    where: { isActive: true },
+  requesterId = (await prisma.user.findFirstOrThrow({
+    where: { isActive: true, role: "REQUESTER" },
     orderBy: { id: "asc" },
   })).id;
   categoryId = (await prisma.category.findFirstOrThrow({
@@ -38,6 +38,7 @@ beforeAll(async () => {
       summary: fixtureSummary,
       description: "A temporary Ticket used only for the release safe-error audit.",
       requestedPriority: "MEDIUM",
+      itPriority: "MEDIUM",
     },
     select: { id: true },
   })).id;
@@ -73,13 +74,13 @@ describe("release-wide safe unexpected API failures", () => {
   it("protects Category and Related System lookup failures", async () => {
     const categoryFailure = vi.spyOn(prisma.category, "findMany")
       .mockRejectedValueOnce(privateFailure);
-    const categories = await request(app).get("/api/categories");
+    const categories = await requester(request(app).get("/api/categories"));
     expectSafeFailure(categories, "REFERENCE_DATA_FAILED");
     categoryFailure.mockRestore();
 
     const systemFailure = vi.spyOn(prisma.relatedSystem, "findMany")
       .mockRejectedValueOnce(privateFailure);
-    const systems = await request(app).get("/api/related-systems");
+    const systems = await requester(request(app).get("/api/related-systems"));
     expectSafeFailure(systems, "REFERENCE_DATA_FAILED");
     systemFailure.mockRestore();
   });
@@ -146,16 +147,8 @@ describe("release-wide safe unexpected API failures", () => {
     removalFailure.mockRestore();
   });
 
-  // Prisma's generated findUnique delegate cannot be restored reliably after
-  // spying, so this intentionally poisoned context capability runs last.
-  it("protects Development Requester lookup and context failures", async () => {
-    const lookupFailure = vi.spyOn(prisma.requesterUser, "findMany")
-      .mockRejectedValueOnce(privateFailure);
-    const lookup = await request(app).get("/api/development-requesters");
-    expectSafeFailure(lookup, "REQUESTER_LOOKUP_FAILED");
-    lookupFailure.mockRestore();
-
-    vi.spyOn(prisma.requesterUser, "findUnique").mockRejectedValueOnce(privateFailure);
+  it("protects authenticated Requester context failures", async () => {
+    vi.spyOn(prisma.user, "findFirst").mockRejectedValueOnce(privateFailure);
     const context = await requester(request(app).get("/api/tickets"));
     expectSafeFailure(context, "REQUESTER_CONTEXT_FAILED");
   });

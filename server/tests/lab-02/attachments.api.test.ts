@@ -21,8 +21,8 @@ const physicalNames: string[] = [];
 
 beforeAll(async () => {
   await seedDatabase(prisma);
-  const requesters = await prisma.requesterUser.findMany({
-    where: { isActive: true }, orderBy: { id: "asc" }, take: 2,
+  const requesters = await prisma.user.findMany({
+    where: { isActive: true, role: "REQUESTER" }, orderBy: { id: "asc" }, take: 2,
   });
   [requesterId, otherRequesterId] = requesters.map(({ id }) => id);
   const category = await prisma.category.findFirstOrThrow({ where: { isActive: true } });
@@ -36,6 +36,7 @@ beforeAll(async () => {
       summary: `${prefix} owned Ticket`,
       description: "A Ticket used to verify the complete Attachment lifecycle.",
       requestedPriority: "MEDIUM",
+      itPriority: "MEDIUM",
     },
   });
   ticketId = ticket.id;
@@ -60,7 +61,7 @@ beforeAll(async () => {
       mimeType: "application/pdf", sizeBytes: 25,
       createdAt: new Date("2026-09-01T02:00:00.000Z"),
       removedAt: new Date("2026-09-01T03:00:00.000Z"),
-      removalReason: "This document is outdated.", removedByRequesterId: requesterId,
+      removalReason: "This document is outdated.", removedByUserId: requesterId,
     } }),
     prisma.attachment.create({ data: {
       ticketId, originalName: "remove-me.png", storedName: removableStoredName,

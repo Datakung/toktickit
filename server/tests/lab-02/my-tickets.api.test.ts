@@ -18,8 +18,8 @@ beforeAll(async () => {
   await seedDatabase(prisma);
   await prisma.ticket.deleteMany({ where: { summary: { startsWith: prefix } } });
 
-  const requesters = await prisma.requesterUser.findMany({
-    where: { isActive: true },
+  const requesters = await prisma.user.findMany({
+    where: { isActive: true, role: "REQUESTER" },
     orderBy: { id: "desc" },
     take: 2,
   });
@@ -49,6 +49,7 @@ beforeAll(async () => {
         summary: `${prefix} ${even ? "VPN outage" : "Printer issue"} ${index}`,
         description: "A database-backed Ticket used to verify My Tickets behavior.",
         requestedPriority: even ? "HIGH" : "LOW",
+        itPriority: even ? "HIGH" : "LOW",
         createdAt: timestamp,
         updatedAt: timestamp,
       },
@@ -66,6 +67,7 @@ beforeAll(async () => {
       summary: `${prefix} VPN outage belonging to B`,
       description: "This Ticket must never appear for Requester A.",
       requestedPriority: "HIGH",
+      itPriority: "HIGH",
     },
   });
 });
@@ -164,6 +166,7 @@ describe("GET /api/tickets", () => {
         summary: `${prefix} literal ${character} search marker`,
         description: "A Ticket used to verify literal PostgreSQL search behavior.",
         requestedPriority: "MEDIUM",
+        itPriority: "MEDIUM",
       },
       select: { id: true, ticketNumber: true },
     });
@@ -212,12 +215,30 @@ describe("GET /api/tickets", () => {
     });
   });
 
+  it.each(["NEW", "OPEN", "IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CLOSED", "REOPENED", "CANCELLED"])(
+    "accepts the inherited %s status while preserving Requester ownership",
+    async (status) => {
+      const id = requesterATicketIds[0];
+      await prisma.ticket.update({ where: { id }, data: { status: status as never } });
+      try {
+        const response = await request(app)
+          .get(`/api/tickets?search=TKT-20260901-L00000&status=${status}`)
+          .set("X-Development-Requester-Id", String(requesterA));
+        expect(response.status).toBe(200);
+        expect(response.body.data.map((item: { id: number }) => item.id)).toEqual([id]);
+        expect(response.body.meta.filters.status).toBe(status);
+      } finally {
+        await prisma.ticket.update({ where: { id }, data: { status: "NEW" } });
+      }
+    },
+  );
+
   it.each([
     ["unknown parameter", "/api/tickets?requesterId=1", "requesterId"],
     ["overlong search", `/api/tickets?search=${"x".repeat(101)}`, "search"],
     ["invalid Category", "/api/tickets?categoryId=0", "categoryId"],
     ["invalid priority", "/api/tickets?requestedPriority=URGENT", "requestedPriority"],
-    ["invalid status", "/api/tickets?status=CLOSED", "status"],
+    ["invalid status", "/api/tickets?status=NOT_A_STATUS", "status"],
     ["invalid sort", "/api/tickets?sort=summary", "sort"],
     ["invalid direction", "/api/tickets?direction=sideways", "direction"],
     ["invalid page", "/api/tickets?page=-1", "page"],

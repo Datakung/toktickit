@@ -15,12 +15,15 @@ function detail(): api.TicketDetail {
     id: 41,
     ticketNumber: "TKT-20260901-ABC123",
     requester,
+    owner: null,
+    version: 1,
+    requesterResolutionIndicatedAt: null,
     category: { id: 1, name: "Hardware" },
     relatedSystem: { id: 2, name: "Student Information System" },
     summary: "Laptop screen flickers",
     description: "The screen flickers after the laptop resumes from sleep.",
     requestedPriority: "HIGH",
-    itPriority: null,
+    itPriority: "HIGH",
     status: "NEW",
     createdAt: "2026-09-01T03:00:00.000Z",
     updatedAt: "2026-09-01T04:00:00.000Z",
@@ -37,6 +40,7 @@ function renderDetail({
   onNavigate?: (path: string) => void;
   onRequesterUnavailable?: () => void;
 } = {}) {
+  vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
   render(
     <TicketDetailPage
       requester={requester}
@@ -65,12 +69,12 @@ describe("Requester Ticket Detail", () => {
     resolveDetail(detail());
     const heading = await screen.findByRole("heading", { name: "TKT-20260901-ABC123" });
     expect(heading).toBeVisible();
-    expect(heading).toHaveFocus();
+    await waitFor(() => expect(heading).toHaveFocus());
     expect(screen.getByText("Laptop screen flickers")).toBeVisible();
     expect(screen.getByText("The screen flickers after the laptop resumes from sleep.")).toBeVisible();
     expect(screen.getByText("Hardware")).toBeVisible();
     expect(screen.getByText("Student Information System")).toBeVisible();
-    expect(screen.getByText("Not assigned")).toBeVisible();
+    expect(screen.getAllByText("High")).toHaveLength(2);
     expect(screen.queryByRole("textbox", { name: /Summary/i })).not.toBeInTheDocument();
     expect(api.getTicket).toHaveBeenCalledWith(requester.id, "41");
   });

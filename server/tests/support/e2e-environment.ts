@@ -5,12 +5,14 @@ import {
   readFileSync,
   readdirSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { loadEnvFile } from "node:process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TicketStatus, type Prisma } from "@prisma/client";
 import { seedDatabase } from "../../prisma/seed.js";
+import { hashPassword } from "../../src/auth/password.js";
 import { deployTestMigrations } from "./deploy-test-migrations.js";
 
 const serverRoot = fileURLToPath(new URL("../../", import.meta.url));
@@ -19,6 +21,8 @@ const e2eUploadRoot = path.join(defaultUploadRoot, "e2e");
 
 export const E2E_API_URL = "http://127.0.0.1:3100";
 export const E2E_EVIDENCE_TICKET_NUMBER = "TKT-20260902-EVID01";
+export const E2E_OPERATIONS_TICKET_NUMBER = "TKT-20260916-QUEUE01";
+export const E2E_PASSWORD = "Lab3-e2e-password-2026";
 
 interface DatabaseTarget {
   database: string;
@@ -116,12 +120,16 @@ export async function prepareE2EEnvironment() {
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
     await prisma.$executeRawUnsafe(
-      'TRUNCATE TABLE "Attachment", "Ticket", "RequesterUser", "Category", "RelatedSystem" RESTART IDENTITY CASCADE',
+      'TRUNCATE TABLE "Attachment", "Ticket", "User", "Category", "RelatedSystem" RESTART IDENTITY CASCADE',
     );
     await seedDatabase(prisma);
+    const passwordHash = await hashPassword(E2E_PASSWORD);
+    await prisma.user.updateMany({
+      data: { passwordHash, mustChangePassword: false },
+    });
 
-    const requester = await prisma.requesterUser.findFirstOrThrow({
-      where: { isActive: true },
+    const requester = await prisma.user.findFirstOrThrow({
+      where: { isActive: true, role: "REQUESTER" },
       orderBy: { id: "asc" },
     });
     const category = await prisma.category.findFirstOrThrow({
@@ -142,8 +150,43 @@ export async function prepareE2EEnvironment() {
         summary: "Responsive release evidence",
         description: "Deterministic Ticket used only for reviewed responsive evidence.",
         requestedPriority: "MEDIUM",
+        itPriority: "MEDIUM",
         createdAt: fixedTime,
         updatedAt: fixedTime,
+      },
+    });
+    const queueRequester = await prisma.user.findUniqueOrThrow({ where: { email: "kanya.srisuk@example.test" } });
+    const queueOwner = await prisma.user.findUniqueOrThrow({ where: { email: "mali.support@example.test" } });
+    const statuses = Object.values(TicketStatus);
+    const queueTickets: Prisma.TicketCreateManyInput[] = Array.from({ length: 12 }, (_, index) => ({
+      ticketNumber: `TKT-20260916-QUEUE${String(index + 1).padStart(2, "0")}`,
+      requesterId: queueRequester.id,
+      categoryId: category.id,
+      relatedSystemId: relatedSystem.id,
+      ownerId: index % 2 ? queueOwner.id : null,
+      summary: `Staff queue fixture ${String(index + 1).padStart(2, "0")}: VPN connection fails`,
+      description: "Deterministic shared queue evidence in the isolated E2E database only.",
+      requestedPriority: "HIGH",
+      itPriority: index % 3 === 0 ? "LOW" : index % 3 === 1 ? "MEDIUM" : "HIGH",
+      status: statuses[index] ?? "NEW",
+      createdAt: fixedTime,
+      updatedAt: fixedTime,
+    }));
+    await prisma.ticket.createMany({ data: queueTickets });
+    const operationsTicket = await prisma.ticket.findUniqueOrThrow({
+      where: { ticketNumber: E2E_OPERATIONS_TICKET_NUMBER },
+    });
+    const storedName = "issue-29-e2e-evidence.png";
+    const content = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nQAAAABJRU5ErkJggg==", "base64");
+    writeFileSync(path.join(e2eUploadRoot, storedName), content);
+    await prisma.attachment.create({
+      data: {
+        ticketId: operationsTicket.id,
+        originalName: "issue-29-evidence.png",
+        storedName,
+        mimeType: "image/png",
+        sizeBytes: content.length,
+        createdAt: fixedTime,
       },
     });
   } finally {
@@ -155,6 +198,9 @@ export async function cleanupE2EEnvironment() {
   const { e2eUrl } = configureE2EEnvironment();
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
+    await prisma.session.deleteMany();
+    await prisma.internalNote.deleteMany();
+    await prisma.publicComment.deleteMany();
     await prisma.attachment.deleteMany();
     await prisma.ticket.deleteMany();
   } finally {
@@ -199,8 +245,9 @@ export async function snapshotDevelopmentState() {
     const [categories, systems, requesters, tickets, attachments] = await Promise.all([
       prisma.category.findMany({ orderBy: { id: "asc" } }),
       prisma.relatedSystem.findMany({ orderBy: { id: "asc" } }),
-      prisma.requesterUser.findMany({ orderBy: { id: "asc" } }),
-      prisma.ticket.findMany({ orderBy: { id: "asc" } }),
+      prisma.user.findMany({ orderBy: { id: "asc" } }),
+      // Snapshot the actual development columns even before its additive migration.
+      prisma.$queryRaw`SELECT * FROM "Ticket" ORDER BY id`,
       prisma.attachment.findMany({ orderBy: { id: "asc" } }),
     ]);
     const serialized = JSON.stringify({

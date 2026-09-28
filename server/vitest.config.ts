@@ -9,6 +9,7 @@ export default defineConfig({
     env: {
       DATABASE_URL: testDatabaseUrl,
       NODE_ENV: "test",
+      LEGACY_TEST_AUTH: "enabled",
     },
     globalSetup: ["./tests/global-setup.ts"],
     include: ["tests/**/*.test.ts"],

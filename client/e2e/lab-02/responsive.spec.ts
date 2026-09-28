@@ -2,6 +2,7 @@ import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { expect, test, type Page, type TestInfo } from "@playwright/test";
+import { signIn } from "../support/auth.js";
 
 const committedScreenshotRoot = fileURLToPath(
   new URL("../../../artifacts/lab-02/screenshots/", import.meta.url),
@@ -44,17 +45,11 @@ test("validates and captures Create, My Tickets, and Ticket Detail at all contra
   page,
   request,
 }, testInfo) => {
-  const requesters = await (await request.get(`${api}/api/development-requesters`)).json();
-  const categories = await (await request.get(`${api}/api/categories`)).json();
-  const requester = requesters[0] as { id: number; displayName: string };
+  await signIn(page);
+  const categories = await (await page.request.get(`${api}/api/categories`)).json();
 
-  const ticketResponse = await request.get(
+  const ticketResponse = await page.request.get(
     `${api}/api/tickets?search=${encodeURIComponent(evidenceTicketNumber)}`,
-    {
-      headers: {
-        "X-Development-Requester-Id": String(requester.id),
-      },
-    },
   );
   expect(ticketResponse.status()).toBe(200);
   const ticketList = (await ticketResponse.json()).data as Array<{
@@ -64,12 +59,6 @@ test("validates and captures Create, My Tickets, and Ticket Detail at all contra
   expect(ticketList).toHaveLength(1);
   expect(ticketList[0].ticketNumber).toBe(evidenceTicketNumber);
   const ticket = ticketList[0];
-
-  await page.goto("/select-requester");
-  const requesterSelect = page.getByRole("combobox", { name: /Development Requester/i });
-  await expect(requesterSelect).toBeEnabled();
-  await requesterSelect.selectOption(String(requester.id));
-  await page.getByRole("button", { name: "Continue" }).click();
 
   for (const viewport of viewports) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });

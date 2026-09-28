@@ -18,8 +18,8 @@ const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
 
 beforeAll(async () => {
   await seedDatabase(prisma);
-  const requesters = await prisma.requesterUser.findMany({
-    where: { isActive: true }, orderBy: { id: "asc" }, take: 2,
+  const requesters = await prisma.user.findMany({
+    where: { isActive: true, role: "REQUESTER" }, orderBy: { id: "asc" }, take: 2,
   });
   requesterId = requesters[0].id;
   otherRequesterId = requesters[1].id;
@@ -34,6 +34,7 @@ beforeAll(async () => {
       summary: `${prefix} upload target`,
       description: "A Ticket used to verify initial Attachment uploads.",
       requestedPriority: "MEDIUM",
+      itPriority: "MEDIUM",
     },
   });
   ticketId = ticket.id;
@@ -125,6 +126,7 @@ describe("POST /api/tickets/:ticketId/attachments", () => {
         summary: `${prefix} concurrent target`,
         description: "A Ticket used to verify atomic Attachment admission.",
         requestedPriority: "LOW",
+        itPriority: "LOW",
         attachments: {
           create: Array.from({ length: 4 }, (_, index) => ({
             originalName: `existing-${index}.png`,

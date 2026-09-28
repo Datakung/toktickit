@@ -3,6 +3,8 @@ import {
   getCategories,
   getRelatedSystems,
   getTickets,
+  statusLabel,
+  ticketStatuses,
   isRequesterUnavailable,
   type Category,
   type DevelopmentRequester,
@@ -224,7 +226,7 @@ export function MyTicketsPage({
               })}
             >
               <option value="">All Statuses</option>
-              <option value="NEW">New</option>
+              {ticketStatuses.map(status => <option key={status} value={status}>{statusLabel(status)}</option>)}
             </select>
           </label>
           <label>Sort by
@@ -313,7 +315,7 @@ export function MyTicketsPage({
                   <td><span className={`badge priority-${ticket.requestedPriority.toLowerCase()}`}>
                     {labelPriority(ticket.requestedPriority)}
                   </span></td>
-                  <td><span className="badge status-new">New</span></td>
+                  <td><span className={`badge status-${ticket.status.toLowerCase()}`}>{statusLabel(ticket.status)}</span></td>
                   <td>{formatDate(ticket.updatedAt)}</td>
                 </tr>
               ))}</tbody>
@@ -325,7 +327,7 @@ export function MyTicketsPage({
               <article className="ticket-card" key={ticket.id}>
                 <div className="ticket-card-heading">
                   <strong>{ticket.ticketNumber}</strong>
-                  <span className="badge status-new">New</span>
+                  <span className={`badge status-${ticket.status.toLowerCase()}`}>{statusLabel(ticket.status)}</span>
                 </div>
                 <h2>{ticket.summary}</h2>
                 <dl>

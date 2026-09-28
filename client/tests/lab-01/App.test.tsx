@@ -11,11 +11,12 @@ describe("Lab 1 regressions", () => {
   });
 
   it("retains the TokTickIT product heading", () => {
-    vi.spyOn(api, "getDevelopmentRequesters").mockReturnValue(new Promise(() => {}));
+    vi.spyOn(api, "getCurrentUser").mockReturnValue(new Promise(() => {}));
 
     render(<App />);
 
-    expect(screen.getByText(/TokTickIT IT Service Desk/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Loading TokTickIT…" }))
+      .toBeInTheDocument();
   });
 
   it("retains the Lab 1 health and category helper", async () => {
