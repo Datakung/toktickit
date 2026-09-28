@@ -1,8 +1,8 @@
 # Lab 3 AI Use and Reflection
 
-Status: Evolving Lab 3 interaction record through Issue #30; final-main and PDF reflection check remain pending.
+Status: Lab 3 interaction record through final-main verification on 2026-09-28. Pitchai approved the reflection draft for submission; the single PDF was prepared separately.
 
-Agent used: OpenAI Codex. The author should verify the exact model label shown in the app before submission rather than infer it from this document.
+Agent used: OpenAI Codex. The exact per-turn model label is not asserted here because it was not independently recorded for every interaction.
 
 ## Selected key prompts
 
@@ -31,8 +31,8 @@ Issue #30 continuation: after the user asked to move on, the agent verified the 
 
 PR #36 review follow-up: Phanuwit's independent browser run found a strict locator race that the author's green run missed: loading Public Comments and Internal Notes shared the same status role as the successful claim message. The agent scoped all three operation-success assertions and held both communication responses open during a regression run to reproduce the timing deterministically. The focused evidence test and complete browser suite passed; the author committed/pushed the correction, and Phanuwit independently confirmed 31/31 on the new revision.
 
-Phanuwit's second PR #36 review passed all 31 browser scenarios but noticed the desktop queue screenshot represented the transient loading state. The evidence journey now waits for a populated queue row before any queue capture. The regenerated desktop image was visually checked; peer confirmation of this second correction remains pending.
+Phanuwit's second PR #36 review passed all 31 browser scenarios but noticed the desktop queue screenshot represented the transient loading state. The evidence journey now waits for a populated queue row before any queue capture. Phanuwit [approved the correction](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5327855072) and merged PR #36 into `lab3-staging`. He subsequently [approved the release](https://github.com/Datakung/toktickit/pull/37#pullrequestreview-5338181546) and merged PR #37 into `main`. The full final-main gate and evidence journey passed on `9fcae33`.
 
 ## My Reflection
 
-Draft for Pitchai to revise in his own words: Specifying six Issues made the planning request clearer, but the larger authentication and Ticket operations groups still required focused commits and review. I learned to translate ambiguous workflow ideas into an explicit transition matrix, protect stale updates with versions, and prove privacy through direct API denial rather than relying on hidden UI. Browser evidence also reminded me to distinguish a test synchronization defect from a product defect. I still need to complete peer review and final-main release evidence before claiming the lab is finished.
+Specifying six Issues made the planning request clearer, but the larger authentication and Ticket operations groups still required focused commits and review. I learned to translate ambiguous workflow ideas into an explicit transition matrix, protect stale updates with versions, and prove privacy through direct API denial rather than relying on hidden UI. Browser evidence also reminded me to distinguish a test synchronization defect from a product defect. Independent review exposed failures that my earlier green runs missed, and the final-main rerun taught me to separate branch evidence from release evidence. I approved this reflection for submission after Phanuwit merged the release and the final-main gate passed.

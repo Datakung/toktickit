@@ -1,6 +1,6 @@
 # Lab 3 Peer Review Evidence
 
-Status: Issues #25–#29 were peer-approved and merged into `lab3-staging`. Issue #30 quality PR #36 has changes requested; a second evidence correction awaits peer re-review. The release PR, final-main checks and PDF are not complete.
+Status: Issues #25–#30 were peer-reviewed and merged; Phanuwit approved quality PR #36 into `lab3-staging` and release PR #37 into `main` (`9fcae33`). Final-main verification passed on 2026-09-28. The single PDF was prepared separately for submission.
 
 | Role | Name | Student ID | GitHub |
 |---|---|---|---|
@@ -18,7 +18,7 @@ Repositories: [mine](https://github.com/Datakung/toktickit), [partner](https://g
 | [#27](https://github.com/Datakung/toktickit/issues/27) | User management | [PR #33](https://github.com/Datakung/toktickit/pull/33): Phanuwit [approved `5ed6a54`](https://github.com/Datakung/toktickit/pull/33#pullrequestreview-5219828249) and merged as `b9e23f3` on 2026-09-16. |
 | [#28](https://github.com/Datakung/toktickit/issues/28) | Staff queue | [PR #34](https://github.com/Datakung/toktickit/pull/34): Phanuwit reviewed and merged as `bdca390` on 2026-09-25. |
 | [#29](https://github.com/Datakung/toktickit/issues/29) | Ticket operations/communication | [PR #35](https://github.com/Datakung/toktickit/pull/35): [changes requested](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5320189640), corrections in `a522dc6`/`10dfbed`, [approved by Phanuwit](https://github.com/Datakung/toktickit/pull/35#pullrequestreview-5323222675), merged as `23ab582` on 2026-09-26 (Bangkok). |
-| [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | [PR #36](https://github.com/Datakung/toktickit/pull/36): first [locator review](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5325573348) addressed in `24bb23c`/`4ec6c9e`; [second review](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5325694968) confirmed 31/31 but found desktop queue screenshot captured loading state. Queue-capture correction awaits peer re-review. |
+| [#30](https://github.com/Datakung/toktickit/issues/30) | Quality/release | [PR #36](https://github.com/Datakung/toktickit/pull/36): first [locator review](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5325573348) addressed in `24bb23c`/`4ec6c9e`; [second review](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5325694968) confirmed 31/31 but found desktop queue screenshot captured loading state. Queue-capture correction was [approved](https://github.com/Datakung/toktickit/pull/36#pullrequestreview-5327855072), merged as `52d8e1a` on 2026-09-27 (Bangkok). [Release PR #37](https://github.com/Datakung/toktickit/pull/37) was [approved](https://github.com/Datakung/toktickit/pull/37#pullrequestreview-5338181546) and merged to `main` as `9fcae33` on 2026-09-28. |
 
 ## Received contract review (completed)
 
@@ -73,4 +73,4 @@ These are Pitchai's reviews of Phanuwit's Lab 3 work, separate from the received
 
 ## Workflow evidence
 
-Feature PRs target lab3-staging; release targets main. PR author answers findings; reviewer formally approves and merges. Record changes-requested and re-review briefly with links. Board completion and release approval remain pending. Final screenshots must show actual completed state.
+Feature PRs targeted lab3-staging; release PR #37 targeted main. PR author answered findings; reviewer formally approved and merged. GitHub Project `TokTickIT Individual Sprints` was checked on 2026-09-28: all six Lab 3 Issues #25–#30 were closed and in Done. The final screenshots were regenerated from the merged `main` code at `9fcae33` after release approval.
