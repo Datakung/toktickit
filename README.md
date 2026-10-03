@@ -1,5 +1,26 @@
 # TokTickIT
 
+## Lab 4 engineering contract in preparation
+
+The next increment adds Actions Taken, the final Ticket workflow and Requester/
+Staff dashboards while preserving Labs 1-3. The proposed contract is prepared for
+[Issue #39](https://github.com/Datakung/toktickit/issues/39) on
+`feature/39-engineering-contract`; it requires peer review before product coding.
+Feature PRs will target `lab4-staging`, followed by a reviewed release to `main`.
+
+- [Specification](docs/lab-04/specification.md): requirements, business rules,
+  role permissions, action lifecycle, resolution gate, data and dashboard calculations.
+- [API contract](docs/lab-04/api-spec.md) and [UI contract](docs/lab-04/ui-spec.md).
+- [Planned tests](docs/lab-04/tests.md): 16 acceptance criteria and 25 explicit cases.
+- [Review record](docs/lab-04/reviewer.md) and [AI-use record](docs/lab-04/ai-use.md).
+
+Implementation Issues: [#40](https://github.com/Datakung/toktickit/issues/40) action
+foundation, [#41](https://github.com/Datakung/toktickit/issues/41) action UI,
+[#42](https://github.com/Datakung/toktickit/issues/42) Ticket workflow,
+[#43](https://github.com/Datakung/toktickit/issues/43) dashboards and
+[#44](https://github.com/Datakung/toktickit/issues/44) quality/release. These APIs,
+screens and tests are planned, not yet implemented or verified.
+
 ## Lab 3 reviewed release
 
 Issues #25–#30 are closed and Done. Phanuwit approved and merged the quality
