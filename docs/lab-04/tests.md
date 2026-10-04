@@ -1,6 +1,6 @@
 # Lab 4 Test Plan and Traceability
 
-Status: Planned only, 2026-10-03. No Lab 4 tests have run and none of the new test
+Status: Planned only; review corrections added 2026-10-05. No Lab 4 tests have run and none of the new test
 paths below exists yet. Historical Lab 3 counts are not Lab 4 passing evidence.
 Create tests before or alongside their implementation Issue, not only at release.
 
@@ -19,24 +19,24 @@ Paths are repository-relative; every row is currently Planned.
 | API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Planned |
 | API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Planned |
 | API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Planned |
-| API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback | server/tests/lab-04/action-concurrency.api.test.ts | Planned |
+| API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback; independent edit succeeds then assignment fails or loses response | server/tests/lab-04/action-concurrency.api.test.ts | Planned |
 | API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Planned |
-| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
+| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts | Planned |
 | API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/safe-errors.api.test.ts | Planned |
-| UI-01 | Component | AC-02,03,05,06,13 | Action form/lifecycle, required feedback, input retention, exact retry key and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Planned |
-| UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload | client/tests/lab-04/TicketWorkflow.test.tsx | Planned |
+| UI-01 | Component | AC-02,03,05,06,13 | Separate field/assignment saves, lifecycle, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Planned |
+| UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; authoritative checklist excludes page-local inference and stale/unknown positive results | client/tests/lab-04/TicketWorkflow.test.tsx | Planned |
 | UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Planned |
 | UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Planned |
 | UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx | Planned |
 | STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx | Planned |
 | REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-04/full-regression.api.test.ts | Planned |
 | PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.test.ts | Planned |
-| E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Planned |
-| E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work blocks resolution; corrected work resolves/closes; reopen needs new cycle | client/e2e/lab-04/ticket-resolution.spec.ts | Planned |
+| E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Planned |
+| E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle | client/e2e/lab-04/ticket-resolution.spec.ts | Planned |
 | E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Planned |
 | E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-04/final-regression.spec.ts | Planned |
 | EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | client/e2e/lab-04/release-evidence.spec.ts | Planned |
@@ -84,6 +84,28 @@ above; implement the scenario with those suites and retain the actual result.
 | CASE-23 | API/network fails before save, after committed save, during refresh, or after navigation/sign-in changes | Draft/receipt rules respected; saved-versus-unsaved feedback correct; late/previous-user responses ignored | API-11, UI-01, UI-03, UI-04, UI-05 / AC-06,13 |
 | CASE-24 | Long Unicode/plain-text content, HTML-like input, keyboard-only use at 1440/768/390px | Text never executes; labels/focus/paging work; no clipping/overlap/page overflow | API-02, UI-01, STYLE-01, E2E-01, EVID-01 / AC-04,15 |
 | CASE-25 | Full old auth/account/Ticket/files/Comments/private Notes flows under new gate, plus dashboard smoke | Previous permissions/features remain; measured performance bounded; development hashes unchanged | REG-01, PERF-01, E2E-04, EVID-01 / AC-14,16 |
+| CASE-26 | Explicit field save succeeds; after authoritative reload, separate assignment fails validation/conflict/before commit, or commits with its response lost | No combined payload/automatic second request; first fields/event/receipt remain saved exactly once, assignment draft retained and truthful separate feedback; unknown second outcome blocks other writes and retries only the original assignment payload/key with no duplicate event | API-01, API-04, UI-01, E2E-01 / AC-03,06,13 |
+| CASE-27 | Page one contains qualifying completed work; page two contains PLANNED/IN_PROGRESS work or a COMPLETED action with follow-up; summary refresh fails or mismatches detail version/cycle | Whole-cycle counts block checklist and backend resolve regardless of viewed page; prior-cycle work excluded, zero/beyond-last page summary accurate; unknown/mismatched summary never shows ready or enables Resolve | API-06, API-07, UI-02, E2E-02 / AC-08,09,13 |
+
+CASE-26 details: field PATCH containing assigneeId and assignment PATCH containing
+Action fields return validation errors without changes. Valid create still saves
+fields/initial assignee atomically. For a successful field save followed by failed
+reload, assignment is not submitted until reload succeeds. Verify distinct keys
+and refreshed versions for the two explicit operations. For a definitive failed
+assignment, only the field event/version increment exists; for a committed-but-lost
+assignment followed by exact replay, exactly one event/version increment exists
+for EACH operation. A new explicit attempt after a definite rejection needs
+reviewed current versions and a new key, not reuse of a changed retry payload.
+
+CASE-27 details: independently query current-cycle completed/unfinished/completed-
+follow-up counts and compare the returned summary on every page to the same
+snapshot's parent version/cycle. Include more than 20 records, both blocker types,
+old-cycle blockers, zero actions and a concurrent completion/reopen. Counts and
+rows must form one consistent snapshot, never a mixture of before/after states.
+Component tests intentionally provide only qualifying visible items with blocked
+summary, then stale/failed summary and finally fresh matching summary; show ready
+only in the last eligible case. Browser tests navigate pages and clear the actual
+later-page blocker before refreshing into ready state; no bypass of the API gate.
 
 Case coverage must include both valid and invalid examples, direct API access
 and visible feedback where applicable. Confirmation of plan coverage is not
@@ -121,7 +143,7 @@ It does not exist yet and must be added with the intentional evidence journey.
 
 | Verification | Revision/date | Result |
 |---|---|---|
-| Contract consistency | Draft 2026-10-03 | Draft review pending |
+| Contract consistency | e11ae78 reviewed 2026-10-04; local corrections 2026-10-05 | Phanuwit requested changes; correction verification pending |
 | Unit/API/component/style | Not executed | Planned |
 | Migration/recovery/repeat seed | Not executed | Planned |
 | Browser/performance/evidence | Not executed | Planned |

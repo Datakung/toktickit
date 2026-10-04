@@ -40,11 +40,18 @@ mutations return receipts rather than silently merging an obsolete full Ticket.
 Client follows success with authoritative detail/list reads. If the reload fails,
 show "Saved; refresh to load the current record" and never recreate the action.
 
+ResolutionGate = `{cycle,completedCount,unfinishedCount,outstandingFollowUpCount,
+meetsActionRequirements}`. Counts cover ALL actions in the Ticket's current cycle,
+not the returned page: COMPLETED; PLANNED/IN_PROGRESS; and COMPLETED with
+followUpRequired=true respectively. meetsActionRequirements is exactly
+completedCount>=1 AND unfinishedCount=0 AND outstandingFollowUpCount=0.
+This describes the work predicate only, not permission or a legal status edge.
+
 ## Action endpoints
 
 | Method/path | Exact input | Success | Access |
 |---|---|---|---|
-| GET /tickets/:ticketId/actions | page/pageSize | 200 action page + ticketVersion/currentCycle | Owned Requester, Staff, Admin |
+| GET /tickets/:ticketId/actions | page/pageSize | 200 action page + ticketVersion/currentCycle/resolutionGate | Owned Requester, Staff, Admin |
 | GET /tickets/:ticketId/actions/:actionId | None | 200 `{action,ticketVersion,currentCycle}` | Same |
 | GET /tickets/:ticketId/actions/:actionId/history | page/pageSize | 200 event page | Same |
 | POST /staff/tickets/:ticketId/actions | Action fields + assigneeId:null/id, ticketVersion, requestId | 201 Receipt; exact replay 200 | Staff/Admin |
@@ -62,10 +69,33 @@ other fields. No same-state transition. Automatic actor facts are never accepted
 Active eligible assignees order by displayName then ID; history can display users
 no longer in that list. A self-assignment shortcut selects current actor normally.
 
+Creation accepts initial assigneeId atomically with the Action fields. After
+creation, field edit and assignment are independently submitted operations, never
+a combined save or automatic two-request chain. Field PATCH rejects assigneeId;
+assignment PATCH rejects Action fields. The UI provides separate "Save action"
+and "Save assignment" controls with explicit scope. Each confirmed operation
+has its own requestId and expected parent/child versions, receipt and audit event.
+
+After any successful operation, reload the action and parent state before enabling
+another mutation; use the newly observed versions, not guessed increments. If
+reload fails, keep "Saved; refresh" and disable further mutations until refreshed.
+If the author then separately submits assignment and it fails, the earlier field
+save remains committed: report "Action changes saved; assignment not saved" and
+retain the assignment draft. Cancelling the assignment draft does not undo that earlier save.
+An uncertain assignment response is "Action changes saved; assignment outcome
+unknown": block further mutations until the original assignment payload/requestId
+is reconciled by exact replay and authoritative reload. Never repeat the field
+save or issue a replacement assignment key to compensate for that uncertainty.
+
 All pages: `{items,page,pageSize,total,totalPages}`; page>=1, pageSize=10/20/50,
 default 20; totalPages>=1 and beyond-last page has no items. Actions order by
 createdAt ascending then id ascending, even after edits. Histories order identically.
-Action list also returns currentCycle/ticketVersion from the same snapshot.
+Action list returns currentCycle/ticketVersion/resolutionGate from one read-only
+repeatable-read snapshot containing the parent, page, total and whole-cycle counts.
+resolutionGate.cycle equals currentCycle on every page, including empty/beyond-last
+pages. Prior-cycle work is readable in the list but excluded from these counts.
+No query permits caller-supplied counts/cycle overrides. Apply owned/role access
+before returning any summary; no unrelated Notes or data enter it.
 
 Action event: `{id,actionId,kind,actor:Person,createdAt,version,reason:null|string,
 before:SafeActionSnapshot|null,after:SafeActionSnapshot}`. SafeActionSnapshot is

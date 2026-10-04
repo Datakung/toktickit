@@ -2,8 +2,10 @@
 
 Status: Proposed engineering contract for [Issue #39](https://github.com/Datakung/toktickit/issues/39),
 2026-10-03, prepared on feature/39-engineering-contract from reviewed main b3c1a70
-through lab4-staging. No product implementation, Lab 4 test execution, PR or peer
-approval is claimed. Implementation is planned in Issues #40-44.
+through lab4-staging. [PR #45](https://github.com/Datakung/toktickit/pull/45)
+received Changes requested on e11ae78; local contract corrections prepared
+2026-10-05 await author commit/push and peer verification. No product implementation,
+Lab 4 test execution or peer approval is claimed. Implementation is planned in Issues #40-44.
 
 ## 1. Sprint goal
 
@@ -103,6 +105,12 @@ password change. Existing CSRF/session/credential policies remain authoritative.
   Multi-Ticket account unassignment locks Tickets/actions in ascending ID order;
   each affected action receives one version/event change and each affected Ticket
   receives one parent version/timestamp change in that account transaction.
+  Creation includes initial assignment atomically; existing field edits and
+  assignment use separate explicitly submitted saves, never an automatic chain.
+  Each save is atomic on its own, not across multiple user operations. Reload
+  observed versions after success before enabling another mutation. A later
+  failed/uncertain assignment cannot undo or repeat the earlier successful edit;
+  preserve its draft and reconcile uncertainty using that operation's original key.
 - BR-10: Every new action mutation carries a UUID requestId. Store a durable
   receipt keyed by Ticket/actor/requestId with normalized operation/payload hash.
   Authorized exact replay returns the original receipt without another write;
@@ -120,6 +128,11 @@ password change. Existing CSRF/session/credential policies remain authoritative.
   cycle, zero PLANNED/IN_PROGRESS actions in that cycle, and zero COMPLETED actions
   with followUpRequired=true in that cycle. CANCELLED actions never count as completed
   work. Check the predicate atomically while holding the parent Ticket lock.
+  Action-list reads return an authoritative whole-current-cycle resolutionGate
+  summary with parent version/cycle, page and counts in one repeatable-read
+  snapshot. The UI evaluates this summary, not just loaded actions; blockers on
+  later pages still count. Unknown/stale/mismatched summaries do not display ready
+  or enable Resolve. A matching summary does not replace write-time gate checks.
 - BR-14: Entering CANCELLED requires no PLANNED/IN_PROGRESS current-cycle actions;
   users must explicitly complete/cancel those actions first. No completed-action
   requirement for Ticket cancellation. Confirm resolution/closure/cancellation in UI.
@@ -269,9 +282,9 @@ filters enable dashboard links without changing existing defaults/envelopes.
 | AC-03 | Staff/Admin create/edit/assign/start/complete/cancel only eligible work with field feedback and explicit terminal guards. |
 | AC-04 | Requester reads own actions/history only and cannot mutate actions or access Notes; anonymous/forced-change users are blocked. |
 | AC-05 | Inactive/Requester assignees are rejected; account changes preserve history and unassign active work safely. |
-| AC-06 | Stale/competing/duplicate writes have deterministic outcomes with no partial mutation, duplicate record/event or silent overwrite. |
+| AC-06 | Stale/competing/duplicate writes have deterministic outcomes with no partial mutation within an operation, duplicate record/event or silent overwrite; independent field/assignment saves truthfully retain earlier success and reconcile later failure/uncertainty. |
 | AC-07 | Action revisions and Ticket transitions are append-only, readable past one page and stably ordered with safe visibility. |
-| AC-08 | Every Ticket matrix edge and resolution/cancellation gate is enforced through direct API requests and explanatory UI. |
+| AC-08 | Every Ticket matrix edge and resolution/cancellation gate is enforced through direct API requests and explanatory UI; evaluated checklist uses a version-consistent whole-cycle backend summary, including later-page blockers. |
 | AC-09 | Requester indication remains advisory; reopen clears indication, advances cycle and requires new completed work; legacy terminal records remain usable. |
 | AC-10 | Requester metrics/lists match exact owned database predicates, boundaries and zero states without cross-owner leakage. |
 | AC-11 | Staff/Admin metrics/current-user actions match predicates, contain bounded lists and return a consistent snapshot. |

@@ -11,7 +11,7 @@ Feature PRs will target `lab4-staging`, followed by a reviewed release to `main`
 - [Specification](docs/lab-04/specification.md): requirements, business rules,
   role permissions, action lifecycle, resolution gate, data and dashboard calculations.
 - [API contract](docs/lab-04/api-spec.md) and [UI contract](docs/lab-04/ui-spec.md).
-- [Planned tests](docs/lab-04/tests.md): 16 acceptance criteria and 25 explicit cases.
+- [Planned tests](docs/lab-04/tests.md): 16 acceptance criteria and 27 explicit cases.
 - [Review record](docs/lab-04/reviewer.md) and [AI-use record](docs/lab-04/ai-use.md).
 
 Implementation Issues: [#40](https://github.com/Datakung/toktickit/issues/40) action

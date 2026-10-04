@@ -64,12 +64,30 @@ Attachment Notes, cycle and last update. Before completion say "Not recorded yet
 for performer rather than imply the assignee performed work. Empty Result is
 "Not recorded". Attachment Notes is explanatory text, not an upload control.
 
-Create/edit form: labeled local datetime field, Description textarea, Result
-textarea, assignee select including Unassigned, Follow-Up Required checkbox,
-conditional required Follow-up Note and optional Attachment Notes. Convert the
-labeled Bangkok input to an offset/Z timestamp. Create begins PLANNED. Edit of
-completed work shows immutable state/assignee/performer and requires Change reason.
+Create form: labeled local datetime field, Description textarea, Result textarea,
+initial assignee select including Unassigned, Follow-Up Required checkbox,
+conditional required Follow-up Note and optional Attachment Notes. Initial fields
+and assignment save atomically in one create request. Convert the labeled Bangkok
+input to an offset/Z timestamp. Create begins PLANNED.
+
+Existing action edit has the same Action fields but NO editable assignee selector;
+"Save action" submits only fields/versions/requestId/changeReason. Assignment is
+a separate labeled panel with its own assignee select and "Save assignment"
+button calling /assignee. Explain that these controls save independently; no
+"Save all" or automatic chained mutation. Completed work shows immutable
+state/assignee/performer and requires Change reason for allowed field corrections.
 Clearing existing follow-up requires a retained explanation and appends history.
+
+Allow one action mutation at a time across field/assignment/state controls.
+After success, reload authoritative action/parent versions before another save;
+preserve any separate unsaved draft and require explicit review/resubmission.
+If reload fails, announce the successful save and disable further mutations until
+refresh succeeds. If fields saved and a later explicitly submitted assignment
+fails, say "Action changes saved; assignment not saved" and keep the assignment
+draft. Do not roll back or repeat the successful field save. If assignment's
+response is lost, say "Action changes saved; assignment outcome unknown" and
+offer exact-payload/key Retry; block other mutations until reconciled/refreshed.
+Cancelling a draft does not undo an already confirmed operation.
 
 Start, Complete and Cancel appear only for permitted action transitions. Complete
 requires a Result and confirms that the current user performed the work. Cancel
@@ -87,8 +105,19 @@ with accessible paging and no edit/delete controls.
 ## Ticket workflow and history
 
 Preserve separate owner/priority/status controls and existing confirmations. Show
-only matrix destinations, with a visible resolution checklist for completed
-current-cycle work, unfinished work and follow-up. Backend rejection explains
+only matrix destinations, with an evaluated resolution checklist showing completed
+current-cycle work, unfinished work and outstanding completed-action follow-up.
+Use the API's whole-cycle resolutionGate counts/boolean, NEVER visible-page counts.
+A blocker on page two or beyond must keep the checklist blocked on page one.
+Match the summary's enclosing ticketVersion/currentCycle to the loaded Ticket
+detail before displaying pass/fail or enabling Resolve; otherwise show
+"Checking current resolution requirements" and reload. During initial load,
+failed refresh, a pending mutation or version mismatch, do not display a positive
+ready result or enable Resolve using an old summary. Loading/error is not zero.
+After every action/status mutation refresh the summary and detail. A ready work
+predicate still requires a permitted status edge and role. Concurrent writes can
+invalidate a read snapshot, so the status API rechecks BR-13 atomically and stale
+or gate failures remain normal recoverable feedback. Backend rejection explains
 which rule failed and links to Actions Taken. Cancellation first directs users
 to finish/cancel active work. A successful status change reloads summary, history
 and action eligibility. Reopened Ticket labels its new cycle and old read-only work.
