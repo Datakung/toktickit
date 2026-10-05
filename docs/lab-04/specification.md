@@ -1,11 +1,12 @@
 # Lab 4 Sprint Engineering Specification
 
-Status: Proposed engineering contract for [Issue #39](https://github.com/Datakung/toktickit/issues/39),
-2026-10-03, prepared on feature/39-engineering-contract from reviewed main b3c1a70
-through lab4-staging. [PR #45](https://github.com/Datakung/toktickit/pull/45)
-received Changes requested on e11ae78; local contract corrections prepared
-2026-10-05 await author commit/push and peer verification. No product implementation,
-Lab 4 test execution or peer approval is claimed. Implementation is planned in Issues #40-44.
+Status: Engineering contract approved by Phanuwit on corrected commit ff97405
+in [PR #45](https://github.com/Datakung/toktickit/pull/45#pullrequestreview-5416186064),
+then merged into lab4-staging as d32c8cf on 2026-10-05. Originally prepared from
+reviewed main b3c1a70 before product coding. Issue #40 data/API foundation is
+implemented in 4920527 and tested, awaiting its own peer review; see [tests.md](tests.md).
+Action screens (#41), final Ticket gate/transitions (#42), dashboards (#43) and
+release (#44) remain planned. Contract approval is not implementation approval.
 
 ## 1. Sprint goal
 
@@ -214,7 +215,7 @@ hydrate URL filters after navigation/reload/Back, not just show filtered labels.
 
 ## 7. Data, migration and seed
 
-Proposed ActionTaken: id, ticketId, cycle, state, actionAt, description, result,
+ActionTaken foundation: id, ticketId, cycle, state, actionAt, description, result,
 assigneeId?, createdById, performedById?, performedAt?, followUpRequired,
 followUpNote, attachmentNotes, cancellationReason?, version=1, createdAt, updatedAt.
 Use restrictive Ticket/User relations and bounded database string columns.
@@ -298,7 +299,7 @@ Every AC maps to planned tests in [tests.md](tests.md).
 
 ## 10. Product Definition of Done
 
-- [ ] Engineering contract peer-approved before product implementation.
+- [x] Engineering contract peer-approved before product implementation (PR #45).
 - [ ] Every AC has passing executable evidence; no required skipped tests.
 - [ ] Migration, preservation, repeatable seed and actual isolated recovery verified.
 - [ ] Role/ownership, current-session, CSRF, inactive assignment, versions, retry and
@@ -315,7 +316,7 @@ Every AC maps to planned tests in [tests.md](tests.md).
   final main rerun completes and all Issues reach Done after acceptance.
 - [ ] One readable linked PDF includes Answer Part 1-9 and author-reviewed reflection.
 
-## 11. Assumptions and decisions requiring review
+## 11. Reviewed assumptions and engineering decisions
 
 The sheet's detailed field list does not fully specify action assignment/state,
 completion/cancellation or the resolution predicate, but its grading rubric asks
@@ -326,5 +327,5 @@ ban on the requested action edit UI. Assignee and actual performer are separate.
 Follow-up may be cleared by a reasoned correction to a completed action while the
 Ticket is active; terminal Tickets and prior cycles remain immutable. Recovery
 does not invent legacy work. Administrator reuses Staff metrics. The seven-day
-window uses UTC instants and Bangkok presentation. These are proposed choices
-until the engineering-contract PR is reviewed; do not claim the handout fixed them.
+window uses UTC instants and Bangkok presentation. These are project-specific choices
+accepted in the engineering-contract review; do not claim the handout fixed them.

@@ -1,32 +1,37 @@
 # Lab 4 Test Plan and Traceability
 
-Status: Planned only; review corrections added 2026-10-05. No Lab 4 tests have run and none of the new test
-paths below exists yet. Historical Lab 3 counts are not Lab 4 passing evidence.
-Create tests before or alongside their implementation Issue, not only at release.
+Status: Approved contract; Issue #40 foundation tests executed 2026-10-05 on
+feature/40-actions-foundation from d32c8cf; verified implementation committed as
+4920527. Documentation changes do not alter the tested implementation.
+36 new unit/API/migration/seed tests pass; the full server run passes 182 tests.
+Remaining new UI/workflow/dashboard/release suites are still planned. Historical
+Lab 3 counts are not substituted for this branch's actual runs.
 
 ## Planned executable coverage
 
-Paths are repository-relative; every row is currently Planned.
+Paths are repository-relative. Passed rows exist and were executed for Issue #40;
+Partly verified rows explicitly identify unfinished scope. No final-main release
+status is implied by a branch pass.
 
-| Test ID | Type | AC | Scenario and expected result | Planned file | Final status |
+| Test ID | Type | AC | Scenario and expected result | Actual/planned file | Current status |
 |---|---|---|---|---|---|
-| MIG-01 | Migration/integration | AC-01 | Upgrade populated Lab 3 schema; all historical values/relations preserved; legacy cycle/date behavior explicit | server/tests/lab-04/migration-regression.test.ts | Planned |
-| MIG-02 | Recovery/integration | AC-01 | Failed migration rollback and isolated pre-migration backup restore compared against original records | server/tests/lab-04/migration-regression.test.ts | Planned |
-| SEED-01 | Integration | AC-01 | Run twice after manual fixture edits; no duplicate records/events or credential/edit reset; zero/one/multiple work | server/tests/lab-04/seed-regression.test.ts | Planned |
-| UNIT-01 | Unit | AC-02,03 | Description/result/time/boolean/note/reason/ID/UUID boundaries and unknown-key rejection | server/tests/lab-04/action-validation.unit.test.ts | Planned |
+| MIG-01 | Migration/integration | AC-01 | Upgrade populated Lab 3 schema; all historical values/relations preserved; legacy cycle/date behavior explicit | server/tests/lab-04/migration-regression.test.ts | Passed |
+| MIG-02 | Recovery/integration | AC-01 | Failed migration rollback and isolated pre-migration backup restore compared against original records | server/tests/lab-04/migration-regression.test.ts | Passed |
+| SEED-01 | Integration | AC-01 | Run twice after manual fixture edits; no duplicate records/events or credential/edit reset; zero/one/multiple work | server/tests/lab-04/seed-regression.test.ts | Passed |
+| UNIT-01 | Unit | AC-02,03 | Description/result/time/boolean/note/reason/ID/UUID boundaries and unknown-key rejection | server/tests/lab-04/action-validation.unit.test.ts | Passed |
 | UNIT-02 | Unit | AC-08,09 | All action/Ticket edges and pure gate/cycle predicate, including cancelled-only work | server/tests/lab-04/workflow-rules.unit.test.ts | Planned |
 | UNIT-03 | Unit | AC-10,11,12 | UTC range boundaries, status-group/date-pair parsing and stable query rules | server/tests/lab-04/dashboard-query.unit.test.ts | Planned |
-| API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Planned |
-| API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback; independent edit succeeds then assignment fails or loses response | server/tests/lab-04/action-concurrency.api.test.ts | Planned |
-| API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Planned |
-| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
+| API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Passed |
+| API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Passed |
+| API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
+| API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback; independent edit succeeds then assignment fails or loses response | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
+| API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Passed |
+| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/action-history.api.test.ts (actual summary); server/tests/lab-04/ticket-workflow.api.test.ts (planned transitions) | Partly verified: summary passes; Ticket gate/transitions pending #42 |
 | API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts | Planned |
-| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/safe-errors.api.test.ts | Planned |
+| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Partly verified: Action APIs pass; dashboard/workflow follow |
 | UI-01 | Component | AC-02,03,05,06,13 | Separate field/assignment saves, lifecycle, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Planned |
 | UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; authoritative checklist excludes page-local inference and stale/unknown positive results | client/tests/lab-04/TicketWorkflow.test.tsx | Planned |
 | UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Planned |
@@ -40,6 +45,43 @@ Paths are repository-relative; every row is currently Planned.
 | E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Planned |
 | E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-04/final-regression.spec.ts | Planned |
 | EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | client/e2e/lab-04/release-evidence.spec.ts | Planned |
+
+### Issue #40 executed coverage and limits
+
+Six new test files contain 36 tests: validation 15; action APIs 6; synchronized
+concurrency 7; history/snapshot/work-list 4; migration/recovery 3; seed 1.
+`action-fixture.ts` supplies real-session fixtures in uniquely named isolated
+test schemas. Account role/deactivation checks preserve completed performer IDs,
+remove all active assignments and increment each affected Ticket only once.
+CASE-26 is verified at the API level, including receipt-write rollback and exact
+replay of a separately saved assignment. CASE-27's whole-cycle summary excludes
+old work, includes a later-page unfinished/follow-up blocker, handles empty pages
+and retains one snapshot during a synchronized concurrent write. The new UI
+feedback and formal Ticket resolution enforcement are not implemented yet.
+
+Migration tests use actual pre-upgrade `pg_dump`/`psql` recovery in separate
+`toktickit_lab4_*_test_<random>` databases, compare counts and whole-row digests
+for all eight legacy tables, verify sequence behavior, rollback injected failed
+DDL and compare the migrated schema with Prisma (no drift). No credentials or
+backup contents are printed. Disposable databases/schemas are removed afterward;
+development is neither reset nor migrated. CLI seed creates new deterministic
+demo Tickets only; repeat runs preserve edited users, credentials, Tickets, work
+and events. Existing Lab 3 migration tests now apply the new additive migration
+before using current generated models, retaining their original assertions.
+
+Executed recovery/seed command from `server`:
+`npm test -- tests/lab-04/migration-regression.test.ts tests/lab-04/seed-regression.test.ts`
+(2 files, 4 tests passed). The recovery harness invokes
+`docker exec toktickit-postgres pg_dump -U <test-role> -d <generated-source-test-db> --no-owner --no-privileges`
+and sends that in-memory backup to
+`docker exec -i toktickit-postgres psql -U <test-role> -d <generated-restore-test-db> -v ON_ERROR_STOP=1`.
+The placeholders describe validated runtime values, not development recovery
+commands to copy blindly. Both target names are generated, verified test-only
+names; before/after legacy digests match and a restored sequence yields the
+expected next ID. SQL and backup contents remain private to the harness.
+
+The 31 existing browser scenarios verify earlier screens, not the new Lab 4 UI.
+Routine browser output stays ignored; no submission screenshots were refreshed.
 
 ## Meaningful test design
 
@@ -143,16 +185,23 @@ It does not exist yet and must be added with the intentional evidence journey.
 
 | Verification | Revision/date | Result |
 |---|---|---|
-| Contract consistency | e11ae78 reviewed 2026-10-04; local corrections 2026-10-05 | Phanuwit requested changes; correction verification pending |
-| Unit/API/component/style | Not executed | Planned |
-| Migration/recovery/repeat seed | Not executed | Planned |
-| Browser/performance/evidence | Not executed | Planned |
-| Builds/production audits | Not executed for Lab 4 | Planned |
-| Development-state hash comparison | Not executed for Lab 4 | Planned |
+| Contract consistency | PR #45; corrections ff97405, approved/merged 2026-10-05 | Approved by auto4496; merge d32c8cf |
+| Unit/API/component/style | Issue #40 working branch, 2026-10-05 | Full server: 28 files / 182 tests passed; existing client: 16 files / 97 tests passed. New foundation: 36 passing tests; new UI/dashboard/workflow pending |
+| Migration/recovery/repeat seed | Same working branch/date | Passed rollback, populated upgrade, actual isolated backup/restore, schema alignment and repeat seed |
+| Browser/performance/evidence | Same working branch/date | Existing browser suite: 31 passed (1.3m); new Lab 4 browser/performance/evidence planned |
+| Builds/production audits | Same working branch/date | Server/client builds passed; client audit zero; server audit one moderate Multer finding (below) |
+| Development-state hash comparison | Existing E2E run, 2026-10-05 | Before/after identical: eb767d391ae418079490e5a9ea4bfb7f5d1b0ab9d2f964faea19e24fd18885e9 |
 | Final-main rerun | Release pending | Planned |
 
 Store complete final-main output and actual counts/revision/date after execution.
 Branch passes do not substitute for released main. No skipped required tests.
+
+Server production audit exits 1 for Multer 2.3.0,
+[GHSA-3pph-fpjx-jg34](https://github.com/advisories/GHSA-3pph-fpjx-jg34), a
+moderate aborted-upload disk cleanup advisory. The advisory identifies 2.4.0 as
+patched. No dependency changes are bundled into the Action foundation; track the
+patch and upload regression rerun before Issue #44's final release gate. This is
+an open finding, not a clean production audit.
 
 ## Submission mapping
 
