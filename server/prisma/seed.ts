@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getPrisma } from "../src/prisma.js";
+import { seedLab4Fixtures } from "./seed-lab4.js";
 
 export async function seedDatabase(prisma: PrismaClient = getPrisma()) {
   const categories = [
@@ -89,7 +90,8 @@ export async function seedDatabase(prisma: PrismaClient = getPrisma()) {
 async function main() {
   const prisma = getPrisma();
   await seedDatabase(prisma);
-  console.log("Lab 3 account/reference seed completed. Provision initial credentials separately.");
+  await seedLab4Fixtures(prisma);
+  console.log("Lab 4 account/reference and demonstration seed completed. Existing records and credentials preserved; provision new credentials separately.");
 }
 
 const entryPath = process.argv[1] ? path.resolve(process.argv[1]) : "";
