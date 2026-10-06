@@ -1,25 +1,66 @@
 # TokTickIT
 
-## Lab 4 engineering contract in preparation
+## Lab 4 Actions Taken API foundation
 
 The next increment adds Actions Taken, the final Ticket workflow and Requester/
-Staff dashboards while preserving Labs 1-3. The proposed contract is prepared for
-[Issue #39](https://github.com/Datakung/toktickit/issues/39) on
-`feature/39-engineering-contract`; it requires peer review before product coding.
-Feature PRs will target `lab4-staging`, followed by a reviewed release to `main`.
+Staff dashboards while preserving Labs 1-3. Phanuwit approved the corrected
+[contract PR #45](https://github.com/Datakung/toktickit/pull/45#pullrequestreview-5416186064)
+at `ff97405` and merged it into `lab4-staging` (`d32c8cf`) on 2026-10-05.
+[Issue #40](https://github.com/Datakung/toktickit/issues/40) is implemented locally
+on `feature/40-actions-foundation` (implementation `4920527`), awaiting peer review.
+Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
 
 - [Specification](docs/lab-04/specification.md): requirements, business rules,
   role permissions, action lifecycle, resolution gate, data and dashboard calculations.
 - [API contract](docs/lab-04/api-spec.md) and [UI contract](docs/lab-04/ui-spec.md).
-- [Planned tests](docs/lab-04/tests.md): 16 acceptance criteria and 27 explicit cases.
+- [Tests and results](docs/lab-04/tests.md): 16 acceptance criteria, 27 explicit cases
+  and clearly separated passed foundation tests versus remaining planned work.
 - [Review record](docs/lab-04/reviewer.md) and [AI-use record](docs/lab-04/ai-use.md).
 
 Implementation Issues: [#40](https://github.com/Datakung/toktickit/issues/40) action
 foundation, [#41](https://github.com/Datakung/toktickit/issues/41) action UI,
 [#42](https://github.com/Datakung/toktickit/issues/42) Ticket workflow,
 [#43](https://github.com/Datakung/toktickit/issues/43) dashboards and
-[#44](https://github.com/Datakung/toktickit/issues/44) quality/release. These APIs,
-screens and tests are planned, not yet implemented or verified.
+[#44](https://github.com/Datakung/toktickit/issues/44) quality/release.
+
+Issue #40 adds paged owned action/history reads, Staff/Admin create/edit/assign/
+start/complete/cancel APIs, current-user work filters, whole-cycle checklist counts,
+immutable revisions and durable retry receipts. Creator and completing performer
+come from the session; assignment does not change the Ticket Owner. Separate
+field and assignment writes enforce parent/child versions and preserve earlier
+success. Account deactivation or a Requester role change safely unassigns active
+work while retaining completed performer history.
+
+The additive migration preserves existing records and supplies cycle fields;
+it does not invent historical work. The intentional demo seed creates eight
+status fixtures (`TKT-LAB4-SEED-01` through `08`), all three priorities, zero/one/
+multiple actions and a zero-Ticket Requester. Repeated seeds preserve edited
+records, credentials and events; initial credentials still need secure provisioning.
+Tests use guarded test targets, never development migrations or seeds.
+
+Verified 2026-10-05: 182 server tests (36 new foundation tests), 97 existing client
+tests, 31 existing browser scenarios, both builds and unchanged development
+database/uploads during E2E. Client production audit reports zero vulnerabilities;
+server audit reports one moderate Multer advisory, recorded for the release gate.
+These are branch checks, not a final-main release or new Lab 4 screen evidence.
+Action UI (#41), final Ticket transition/gate enforcement (#42) and dashboards
+(#43) remain planned; existing Lab 3 Ticket transitions are unchanged for now.
+
+Before running this branch against development, stop the API and take a verified
+database backup (and retain uploads). Then, from `server`, explicitly run:
+
+```powershell
+npx prisma validate
+npx prisma generate
+npx prisma migrate deploy
+npm run prisma:seed
+```
+
+Do not use `migrate reset`, `db push` or test URLs for your development setup.
+The migration/restore regression tests rehearse recovery in separate disposable
+databases, not against your development database. No new action screen is expected
+until Issue #41; run the foundation API tests with
+`npm --prefix server test -- tests/lab-04`.
 
 ## Lab 3 reviewed release
 

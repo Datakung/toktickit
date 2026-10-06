@@ -1,6 +1,11 @@
 # Lab 4 API Contract
 
-Status: Proposed; endpoints below do not yet exist. Source of business rules:
+Status: Contract approved in PR #45 on 2026-10-05. Action endpoints, paged history,
+whole-cycle summary and work-list APIs are implemented locally for Issue #40,
+with passing unit/API/migration evidence, pending implementation peer review.
+Ticket workflow/gate changes and dashboard APIs below remain planned for #42/#43;
+the existing Lab 3 Ticket transition handler is unchanged in this increment.
+Source of business rules:
 [specification.md](specification.md). Inherit the reviewed Lab 3 API contract
 from main b3c1a70, preserving session cookies, CSRF, role checks and safe DTOs.
 
@@ -48,6 +53,11 @@ completedCount>=1 AND unfinishedCount=0 AND outstandingFollowUpCount=0.
 This describes the work predicate only, not permission or a legal status edge.
 
 ## Action endpoints
+
+Implemented in `server/src/actions/action-routes.ts`, `action-service.ts`,
+`action-validation.ts` and `action-record.ts`; mutation account integrity also
+integrates with `server/src/admin/user-service.ts`. See [tests.md](tests.md) for
+actual test paths/results. All protected action responses use no-store.
 
 | Method/path | Exact input | Success | Access |
 |---|---|---|---|

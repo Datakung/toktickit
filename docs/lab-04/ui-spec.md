@@ -1,6 +1,9 @@
 # Lab 4 UI Specification
 
-Status: Proposed, not implemented or visually verified. Business rules are in
+Status: Contract approved in PR #45 on 2026-10-05; new Lab 4 screens remain
+planned, not implemented or visually verified. Issue #40 supplies their tested
+API foundation only. Existing Labs 1-3 browser regression passes are not evidence
+that these new screens have been built. Business rules are in
 [specification.md](specification.md); requests in [api-spec.md](api-spec.md).
 Preserve the existing Zen Green tokens, labeled cards/tables and safe feedback.
 
