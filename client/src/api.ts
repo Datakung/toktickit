@@ -44,7 +44,15 @@ export const resetAdminPassword = (id: number, input: { initialPassword: string;
 
 let csrfToken = "";
 export const AUTHENTICATION_LOST = "toktickit:authentication-lost";
-export function clearAuthentication() { csrfToken = ""; }
+export const ACTION_RETRY_PREFIX = "toktickit.action-retry:";
+export function clearAuthentication() {
+  csrfToken = "";
+  // Retry payloads contain only shared action fields, never credentials or Notes.
+  // Remove them when authentication is lost rather than retain another user's input.
+  try {
+    for (const key of Object.keys(sessionStorage)) if (key.startsWith(ACTION_RETRY_PREFIX)) sessionStorage.removeItem(key);
+  } catch { /* Storage may be disabled; authentication clearing must still work. */ }
+}
 export function isAuthenticationRequired(error: unknown): error is ApiError {
   return error instanceof ApiError && error.status === 401 && error.code === "AUTHENTICATION_REQUIRED";
 }
@@ -428,4 +436,44 @@ export async function getStaffAttachmentContent(ticketId: number, attachmentId: 
   const response = await fetch(`${API_URL}/api/staff/tickets/${ticketId}/attachments/${attachmentId}/download`, { credentials: requestCredentials });
   if (!response.ok) await parseApiResponse<never>(response);
   return { blob: await response.blob(), filename: responseFilename(response), mimeType: response.headers.get("Content-Type")?.split(";")[0] ?? "application/octet-stream" };
+}
+
+export type ActionState = "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+export interface ActionFields {
+  actionAt: string; description: string; result: string;
+  followUpRequired: boolean; followUpNote: string; attachmentNotes: string;
+}
+export interface ActionTakenRecord extends ActionFields {
+  id: number; ticketId: number; cycle: number; state: ActionState;
+  assignee: { id: number; displayName: string } | null;
+  createdBy: { id: number; displayName: string };
+  performedBy: { id: number; displayName: string } | null;
+  performedAt: string | null; cancellationReason: string | null;
+  version: number; createdAt: string; updatedAt: string;
+}
+export interface ActionEvent {
+  id: number; actionId: number; kind: string; version: number;
+  actor: { id: number; displayName: string }; createdAt: string; reason: string | null;
+  before: Record<string, unknown> | null; after: Record<string, unknown>;
+}
+export interface ActionHistoryPage { items: ActionEvent[]; page: number; pageSize: number; total: number; totalPages: number }
+export interface ActionPage extends Omit<ActionHistoryPage, "items"> {
+  items: ActionTakenRecord[]; ticketVersion: number; currentCycle: number;
+  resolutionGate: { cycle: number; completedCount: number; unfinishedCount: number; outstandingFollowUpCount: number; meetsActionRequirements: boolean };
+}
+export interface ActionReceipt { actionId: number; eventId: number; actionVersion: number; ticketVersion: number; replayed: boolean }
+export type ActionWriteKind = "create" | "edit" | "assign" | "state";
+export type ActionWritePayload = { ticketVersion: number; requestId: string } & (
+  (ActionFields & { assigneeId: number | null }) |
+  (ActionFields & { version: number; changeReason: string }) |
+  { version: number; assigneeId: number | null } |
+  { version: number; state: ActionState; result: string; cancellationReason: string }
+);
+export const getActions = (ticketId: number, page = 1) => getJson<ActionPage>(`/api/tickets/${ticketId}/actions?page=${page}&pageSize=20`);
+export const getAction = (ticketId: number, actionId: number) => getJson<{ action: ActionTakenRecord; ticketVersion: number; currentCycle: number }>(`/api/tickets/${ticketId}/actions/${actionId}`);
+export const getActionHistory = (ticketId: number, actionId: number, page = 1) => getJson<ActionHistoryPage>(`/api/tickets/${ticketId}/actions/${actionId}/history?page=${page}&pageSize=20`);
+export const getActionAssignees = () => getJson<{ items: StaffOwner[] }>("/api/staff/action-assignees");
+export function writeAction(ticketId: number, kind: ActionWriteKind, actionId: number | null, payload: ActionWritePayload) {
+  const suffix = kind === "create" ? "" : `/${actionId}${kind === "assign" ? "/assignee" : kind === "state" ? "/state" : ""}`;
+  return jsonMutation<ActionReceipt>(`/api/staff/tickets/${ticketId}/actions${suffix}`, kind === "create" ? "POST" : "PATCH", payload);
 }

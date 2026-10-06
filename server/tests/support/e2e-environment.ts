@@ -198,11 +198,10 @@ export async function cleanupE2EEnvironment() {
   const { e2eUrl } = configureE2EEnvironment();
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
-    await prisma.session.deleteMany();
-    await prisma.internalNote.deleteMany();
-    await prisma.publicComment.deleteMany();
-    await prisma.attachment.deleteMany();
-    await prisma.ticket.deleteMany();
+    // configureE2EEnvironment has proved this is an isolated E2E target.
+    // Cascading TRUNCATE also clears immutable action events/receipts. Product
+    // DELETE deliberately cannot remove these historical records.
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Session", "Ticket" RESTART IDENTITY CASCADE');
   } finally {
     await prisma.$disconnect();
     rmSync(e2eUploadRoot, { recursive: true, force: true });
@@ -250,12 +249,20 @@ export async function snapshotDevelopmentState() {
       prisma.$queryRaw`SELECT * FROM "Ticket" ORDER BY id`,
       prisma.attachment.findMany({ orderBy: { id: "asc" } }),
     ]);
+    const actionTables: Record<string, unknown> = {};
+    // A development schema may still precede Lab 4: fingerprint additive
+    // records when present, without migrating or otherwise changing it.
+    for (const table of ["ActionTaken", "ActionTakenEvent", "ActionWriteReceipt", "TicketTransitionEvent"]) {
+      const exists = await prisma.$queryRaw<Array<{ present: boolean }>>`SELECT to_regclass(${'"' + table + '"'}) IS NOT NULL AS present`;
+      if (exists[0]?.present) actionTables[table] = await prisma.$queryRawUnsafe(`SELECT * FROM "${table}" ORDER BY id`);
+    }
     const serialized = JSON.stringify({
       categories,
       systems,
       requesters,
       tickets,
       attachments,
+      actionTables,
       uploads: snapshotDevelopmentUploads(),
     });
     return createHash("sha256").update(serialized).digest("hex");
