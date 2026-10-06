@@ -1,9 +1,9 @@
 # Lab 4 Peer Review Record
 
 Status: Contract corrections approved and merged in PR #45 on 2026-10-05.
-Issue #40 implementation is committed as 4920527 after local verification,
-prepared for its own peer PR review. No implementation approval or reciprocal review
-is claimed.
+Issue #40 was independently approved and merged by auto4496 in PR #46 on
+2026-10-06. Issue #41 UI is locally implemented from that merge, pending author
+commit/push, a linked PR and its own review. No reciprocal review is claimed.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
 Expected peer: Phanuwit Butchari, 67070501070, GitHub auto4496.
@@ -75,8 +75,43 @@ scenarios, both builds, populated migration/rollback/backup restore and unchange
 development state during E2E. New action screens and formal Ticket gate are later
 Issues. Server audit has an open moderate dependency finding; details in [tests.md](tests.md).
 Implementation commit: [4920527](https://github.com/Datakung/toktickit/commit/4920527416236030f4eed4a5b8e32464f1370bb5).
-Record the actual documentation commit, PR and peer findings after they exist; no approval
-or implementation merge has been prewritten.
+Documentation commit: 4795f38. [PR #46](https://github.com/Datakung/toktickit/pull/46)
+is explicitly linked to closed Issue #40; its Project item is Done.
+[Phanuwit's approval](https://github.com/Datakung/toktickit/pull/46#pullrequestreview-5426230601)
+was submitted on exact head 4795f38 at 2026-10-06 09:13:21 UTC. He reported no
+actionable foundation defects, an independent build/Prisma/migration/restore/
+seed/concurrency/immutable-history review in disposable PostgreSQL 17, and all
+36 new tests passing. Three older Lab 3 tests timed out in his initial full run;
+the three affected files passed all 23 tests when rerun sequentially with a
+20-second timeout. His extra account-deactivation race test passed. He explicitly
+did not independently run client/E2E checks. His test harness alone used a different
+Docker container name; no production changes were reported. Peer merge followed
+at 12:09:25 UTC as a915812. These statements report his actual review, not an
+invented author run or approval of later UI/workflow/dashboard work.
+
+## Issue #41 UI handoff
+
+Branch feature/41-actions-ui starts from peer-merged staging a915812. Implementation
+commit: cd5aa76005a83cecea67aaad3394729cddb6843c (2026-10-06); documentation commit,
+push and PR remain pending. Review the
+shared role-safe Action screen, exact nested deep links, independent saves,
+Bangkok timestamp precision, actual performer confirmation, completed correction
+reason, terminal/prior-cycle guards, paged audit history, stale/unknown-save
+recovery and responsive cards. In particular, CASE-26 must not auto-chain saves
+or repeat fields when assignment fails. Check saved-but-refresh-failed create
+recovery and Requester direct mutation denial. See [tests.md](tests.md) and
+the [feature screenshot provenance](../../artifacts/lab-04/screenshots/actions-taken/README.md).
+Local verification on 2026-10-06: 182 server tests, 130 client tests, 36 browser
+scenarios (5 new Action journeys), both builds, Prisma validate and unchanged
+development data/uploads. Thirteen feature screenshots were captured and
+representative desktop/mobile Staff/Requester images visually inspected by the
+agent. Author visual acceptance is not yet recorded. Unknown retries retain
+their original user/Ticket-scoped payload/key across a full browser reload;
+confirmed-save refresh never creates again, and sign-out clears journals.
+Issue #41 is Started, not Done; no PR,
+peer findings, approval or merge is claimed until they exist. Link its feature
+PR explicitly to Issue #41 in Development, with base lab4-staging and auto4496
+as reviewer; do not treat a plain issue mention as verified linkage.
 
 ## Final integration and reciprocal review
 

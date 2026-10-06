@@ -1,20 +1,23 @@
 # TokTickIT
 
-## Lab 4 Actions Taken API foundation
+## Lab 4 Actions Taken
 
 The next increment adds Actions Taken, the final Ticket workflow and Requester/
 Staff dashboards while preserving Labs 1-3. Phanuwit approved the corrected
 [contract PR #45](https://github.com/Datakung/toktickit/pull/45#pullrequestreview-5416186064)
 at `ff97405` and merged it into `lab4-staging` (`d32c8cf`) on 2026-10-05.
-[Issue #40](https://github.com/Datakung/toktickit/issues/40) is implemented locally
-on `feature/40-actions-foundation` (implementation `4920527`), awaiting peer review.
+[Issue #40](https://github.com/Datakung/toktickit/issues/40) was approved and merged
+by Phanuwit in [PR #46](https://github.com/Datakung/toktickit/pull/46), staging `a915812`.
+[Issue #41](https://github.com/Datakung/toktickit/issues/41) adds the action screens
+on `feature/41-actions-ui`, implementation commit `cd5aa76`; documentation commit,
+push and peer review remain pending.
 Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
 
 - [Specification](docs/lab-04/specification.md): requirements, business rules,
   role permissions, action lifecycle, resolution gate, data and dashboard calculations.
 - [API contract](docs/lab-04/api-spec.md) and [UI contract](docs/lab-04/ui-spec.md).
 - [Tests and results](docs/lab-04/tests.md): 16 acceptance criteria, 27 explicit cases
-  and clearly separated passed foundation tests versus remaining planned work.
+  and clearly separated passed foundation/UI tests versus remaining planned work.
 - [Review record](docs/lab-04/reviewer.md) and [AI-use record](docs/lab-04/ai-use.md).
 
 Implementation Issues: [#40](https://github.com/Datakung/toktickit/issues/40) action
@@ -42,9 +45,20 @@ Verified 2026-10-05: 182 server tests (36 new foundation tests), 97 existing cli
 tests, 31 existing browser scenarios, both builds and unchanged development
 database/uploads during E2E. Client production audit reports zero vulnerabilities;
 server audit reports one moderate Multer advisory, recorded for the release gate.
-These are branch checks, not a final-main release or new Lab 4 screen evidence.
-Action UI (#41), final Ticket transition/gate enforcement (#42) and dashboards
-(#43) remain planned; existing Lab 3 Ticket transitions are unchanged for now.
+These are the historical Issue #40 checks, not final-main release results.
+Issue #41 now supplies Staff create/edit/separate assignment/start/complete/cancel,
+actual-performer display, completed corrections, shared Requester read-only records,
+paged audit history and action deep links. Failed/unknown saves preserve input;
+only the original payload/key is retried after an unknown response. A confirmed
+save is never repeated just because its subsequent refresh failed.
+Verified locally 2026-10-06: 182 server tests, 130 client tests, 36 browser
+scenarios (including 5 new Action journeys), both builds and unchanged development
+database/uploads. Thirteen screenshots are feature evidence, not final release.
+Three-width feature captures live in [Actions evidence](artifacts/lab-04/screenshots/actions-taken/README.md).
+Current branch results and limitations are in [Lab 4 tests](docs/lab-04/tests.md).
+Final Ticket gate enforcement (#42), dashboards (#43), final-main evidence and
+submission (#44) remain pending. Existing Lab 3 Ticket transitions are unchanged;
+this feature increment must not be presented as enforcing the final resolution gate.
 
 Before running this branch against development, stop the API and take a verified
 database backup (and retain uploads). Then, from `server`, explicitly run:
@@ -58,9 +72,12 @@ npm run prisma:seed
 
 Do not use `migrate reset`, `db push` or test URLs for your development setup.
 The migration/restore regression tests rehearse recovery in separate disposable
-databases, not against your development database. No new action screen is expected
-until Issue #41; run the foundation API tests with
-`npm --prefix server test -- tests/lab-04`.
+databases, not against your development database. Sign in as Staff/Admin and open
+a Ticket from the Queue to use Actions Taken; its Requester sees read-only work.
+Run foundation API tests with `npm --prefix server test -- tests/lab-04` and UI
+tests with `npm --prefix client test -- tests/lab-04`. Deliberately refresh feature
+captures with `npm --prefix client run test:e2e:lab4-actions-evidence`; normal
+`test:e2e` writes only ignored output. Do not treat these as final-main captures.
 
 ## Lab 3 reviewed release
 

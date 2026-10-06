@@ -1,9 +1,11 @@
 # Lab 4 UI Specification
 
-Status: Contract approved in PR #45 on 2026-10-05; new Lab 4 screens remain
-planned, not implemented or visually verified. Issue #40 supplies their tested
-API foundation only. Existing Labs 1-3 browser regression passes are not evidence
-that these new screens have been built. Business rules are in
+Status: Contract approved in PR #45 on 2026-10-05; API foundation approved/merged
+in PR #46 on 2026-10-06. Issue #41 Actions Taken is implemented/tested locally
+on feature/41-actions-ui from a915812, with agent-inspected feature captures,
+pending author acceptance and peer review. Dashboard and final Ticket workflow
+screens remain planned. Existing Labs 1-3 passes are not evidence for that
+unfinished scope. Business rules are in
 [specification.md](specification.md); requests in [api-spec.md](api-spec.md).
 Preserve the existing Zen Green tokens, labeled cards/tables and safe feedback.
 
@@ -175,7 +177,9 @@ remains readable, not merely disabled low-contrast inputs.
 artifacts/lab-04/screenshots/{staff-dashboard,requester-dashboard,actions-taken}/
 contains intentional final-main captures. Add workflow/regression close-ups as
 needed for readable submission; record revision, seed/isolation and viewport.
-Routine E2E output stays ignored. These checks are currently NOT completed:
+Routine E2E output stays ignored. Issue #41 also has explicitly generated feature
+captures in actions-taken, identified separately in that folder's README; these
+must be refreshed from final main in #44. The following full-release checks remain pending:
 
 - [ ] Major screens inspected at 1440/768/390px, including long/multiple action text.
 - [ ] Dashboard values and exact drill-down filters verified against independent queries.
@@ -192,3 +196,29 @@ Routine E2E output stays ignored. These checks are currently NOT completed:
 
 Automated/component checks and representative visual review do not establish a
 full manual screen-reader audit. Record the actual extent of verification.
+
+### Issue #41 feature verification, 2026-10-06
+
+ActionsTaken.tsx is shared by owned Requester and Staff/Admin Ticket Detail.
+The authenticated actor/Ticket key remounts drafts and retry state. List/action/
+parent versions must agree before writes; late navigation responses are ignored.
+Field and assignment forms save independently. Unknown responses freeze edits
+and expose only exact Retry; confirmed-save refresh failure exposes Refresh,
+not another create. A later rejected assignment announces earlier field success.
+Before submitting, session storage journals the original user/Ticket-scoped
+payload and requestId. A browser reload recovers an uncertain operation with the
+same key; it cannot start another create instead. Confirmed journals refresh the
+saved record without another write. Sign-out/authentication loss clears journals.
+If storage is unavailable before submission, the UI reports that nothing was sent.
+Completed Result is synchronized after completion without erasing unrelated
+unsaved field input. Bangkok input preserves milliseconds and submits an explicit
++07:00 offset, avoiding a freshly created action being rounded before its Ticket.
+Complete/cancel are inline confirmed operations; focus enters the form and returns
+to the relevant button on Back. Record headings, error fields and paging are focusable.
+Tablet/mobile tables become labeled cards with visually hidden accessible headers;
+their caption becomes a full-width block rather than a narrow anonymous table cell.
+
+Automated checks cover 1440/768/390px, long unbroken content, zero page overflow,
+44px targets and keyboard focus. Agent visual inspection covers representative
+action captures; the author has not yet personally accepted these new screens.
+Formal resolution checklist/history/reopen belongs to #42, not this feature.
