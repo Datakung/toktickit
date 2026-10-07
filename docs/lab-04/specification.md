@@ -6,8 +6,10 @@ then merged into lab4-staging as d32c8cf on 2026-10-05. Originally prepared from
 reviewed main b3c1a70 before product coding. Issue #40 data/API foundation is
 implemented in 4920527, documented in 4795f38 and peer-approved/merged in PR #46
 as a915812 on 2026-10-06. Action screens (#41) are implemented locally from that
-merge on feature/41-actions-ui and committed as cd5aa76, awaiting documentation
-commit/push and their own peer review;
+merge on feature/41-actions-ui, committed as cd5aa76/documentation 3addd43 and
+published in PR #47. Peer review requested correction of unmocked legacy Action
+reads on 2026-10-07; the test-only fix is locally verified, awaiting author
+commit/push and peer re-review. No business-rule change or approval is claimed;
 see [tests.md](tests.md). Final Ticket gate/transitions (#42), dashboards (#43)
 and release (#44) remain planned. Feature passes are not final-main acceptance.
 

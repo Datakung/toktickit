@@ -1,8 +1,9 @@
 # Lab 4 AI Use and Reflection
 
-Status: Interaction record updated 2026-10-06 through accepted Issue #40 and local
-Issue #41 UI implementation/testing. Issue #41 peer review, final release and
-author-approved reflection remain pending. Extend from actual sprint work.
+Status: Interaction record updated 2026-10-07 through accepted Issue #40, published
+Issue #41 UI and its requested test-fixture correction. Correction publication,
+peer re-review/acceptance, final release and author-approved reflection remain
+pending. Extend from actual sprint work.
 
 Tool: OpenAI Codex desktop. Exact selected model identifiers have not been
 independently recorded for these turns; confirm the visible selection before
@@ -20,8 +21,9 @@ app name or prior labs. Record any verified model changes.
 | 5 | "Yeah" after the agent explained Phanuwit's PR #45 findings and asked to update both | Authorized contract corrections: separate field/assignment saves with partial-success and exact-retry behavior, whole-cycle backend checklist summary, CASE-26/27 and factual review recording. Phanuwit later approved ff97405 and merged PR #45 before product implementation. |
 | 6 | "Docker ready" with the prepared feature/40-actions-foundation branch output | Authorized the next Issue's implementation/testing. Added preserving schema/migration, Action APIs, immutable history, retry receipts, safe account unassignment and repeatable demo fixtures; verified migration rollback/real isolated restore, concurrent writes and full regression. Fixed issues exposed by tests, without migrating/seeding development. |
 | 7 | "On to the next" after PR #46 was reviewed/merged | Started Issue #41 from the peer-merged staging commit. Wrote failing component tests before the shared Action screen; implemented separate saves, confirmations, read-only history and exact retries. Real-browser tests exposed timestamp precision, stale completed Result and Requester deep-link bugs; visual inspection exposed a mobile caption issue. Corrected these and reran tests/evidence without changing development data. |
+| 8 | "Yes fix them" after Phanuwit's PR #47 Changes requested review | Added typed Action/assignee mocks in legacy detail fixtures and a test-only guard that exposed unexpected real fetches before the fix. Kept existing cases/assertions, synchronized mutation summary versions and ensured the navigation race actually sends a claim. Reran all 130 client tests in default and serial modes and the typed client build; no product/database change or peer approval claimed. |
 
-The final submission requires 6-10 selected actual key prompts. Seven are
+The final submission requires 6-10 selected actual key prompts. Eight are
 recorded so far. Do not invent future prompts. Add meaningful
 implementation/review/testing interactions later and keep the total within 6-10.
 
@@ -38,8 +40,11 @@ loss occurs after a real API commit and replays the original receipt once.
 The original request is journaled in browser session storage before submission;
 an uncertain save survives a page reload with its original payload/key. Journals
 are scoped to the current user/Ticket and cleared on sign-out/authentication loss.
-The author committed the tested UI/evidence as cd5aa76; documentation commit/push
-remains the author's next step. Exact branch results and the existing dependency
+The author committed/pushed the tested UI/evidence as cd5aa76 and docs as 3addd43
+in PR #47. Real peer review exposed environment-dependent legacy fixture reads;
+the agent prepared a test-only correction and recorded actual passing reruns.
+The author still needs to commit/push that correction and obtain re-review.
+Exact branch results and the existing dependency
 audit finding are in [tests.md](tests.md); final-main results remain pending.
 The handout's field list and grading rubric differ in detail; proposed choices
 are explicitly identified rather than attributed to a nonexistent sheet rule.

@@ -13,6 +13,10 @@ Source of business rules:
 [specification.md](specification.md). Inherit the reviewed Lab 3 API contract
 from main b3c1a70, preserving session cookies, CSRF, role checks and safe DTOs.
 
+PR #47's 2026-10-07 correction isolates existing component fixtures' Action reads
+with typed empty pages and a no-network guard. It changes no product API, DTO,
+authorization or schema. Peer re-review is pending; see [reviewer.md](reviewer.md).
+
 ## Shared rules
 
 Base /api; camelCase JSON; positive PostgreSQL integer IDs and positive integer

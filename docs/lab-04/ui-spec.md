@@ -3,7 +3,9 @@
 Status: Contract approved in PR #45 on 2026-10-05; API foundation approved/merged
 in PR #46 on 2026-10-06. Issue #41 Actions Taken is implemented/tested locally
 on feature/41-actions-ui from a915812, with agent-inspected feature captures,
-pending author acceptance and peer review. Dashboard and final Ticket workflow
+published in PR #47. The 2026-10-07 peer-requested fixture isolation fix does not
+change these screens; correction publication, author acceptance and peer re-review
+remain pending. Dashboard and final Ticket workflow
 screens remain planned. Existing Labs 1-3 passes are not evidence for that
 unfinished scope. Business rules are in
 [specification.md](specification.md); requests in [api-spec.md](api-spec.md).

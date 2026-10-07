@@ -1,9 +1,10 @@
 # Lab 4 Test Plan and Traceability
 
 Status: Approved contract and accepted Issue #40 foundation (PR #46, merge
-a915812). Issue #41 Actions Taken UI is implemented locally on
-feature/41-actions-ui from a915812, with verification recorded below. Author
-acceptance and independent peer review of #41 remain pending. Formal Ticket
+a915812). Issue #41 Actions Taken UI is published in PR #47 from
+feature/41-actions-ui. Peer review requested fixture isolation changes on
+2026-10-07; the correction is locally verified below, pending author commit/push,
+author acceptance and peer re-review. Formal Ticket
 workflow (#42), dashboards (#43) and final release (#44) are still planned.
 Historical counts are not substituted for this branch's actual runs.
 
@@ -128,6 +129,46 @@ history; development is not reset, migrated or seeded. Its unchanged-state hash
 now also includes any existing Action, receipt and transition tables, while
 remaining compatible with a development schema that has not been upgraded.
 
+### PR #47 legacy fixture isolation correction, 2026-10-07
+
+Peer review on published 3addd43 exposed unmocked real Action reads in the older
+detail fixtures despite the earlier local pass. The review's 121/130 result and
+same-environment base/head reproduction are recorded in [reviewer.md](reviewer.md);
+the earlier 2026-10-06 pass is historical, not proof of environment-independent
+fixture isolation.
+
+Test-only correction: `client/tests/support/action-fixtures.ts` returns a typed
+empty ActionPage with parent version/current cycle and a zero-work resolution
+summary. AttachmentSection, RequesterTicketDetail, SafeErrorStates,
+RequesterCommunication, StaffTicketDetail and StaffTicketNavigation mock added
+reads explicitly. The six files' 25 existing cases install a rejecting fetch
+guard and assert zero network attempts; it fails even if the component handles
+the rejection. Cleanup/restoration happen before leaving a failed hook. This
+removes dependence on what is (or is not) listening on localhost:3000 without
+stopping the author's server or using a real database.
+
+Requester apparent resolution advances the summary from version 3 to 4; Staff
+claim advances 1 to 2. Tests wait for the refreshed enabled Actions control and
+assert the new summary. Staff navigation fixtures answer both numeric/string
+Ticket IDs, mock eligible assignees and prove a claim was submitted before
+navigating and receiving its stale response. The Notes spy is active before
+Requester mount. No previous cases/assertions were removed and no timeouts were
+increased. No production source, auth/schema, screenshots or development data
+changed. Backend/browser/audit results from 2026-10-06 were not rerun for this
+test-only correction; final-main verification remains pending.
+
+Executed from the repository root on the local correction over 3addd43:
+
+- `npm --prefix client test`: 18 files / 130 tests passed, 15.01s, 14:21 Bangkok.
+- `npm --prefix client test -- --maxWorkers=1 --minWorkers=1`: 18 files / 130 tests
+  passed, 62.70s, start 14:21:51 Bangkok.
+- `npm --prefix client run build`: TypeScript and Vite build passed.
+- `git diff --check`: passed after the correction/documentation edits.
+
+All six guarded files passed with zero real fetch attempts in both completed
+full runs. No uncaught errors were reported. These are local author-branch agent
+runs, not peer acceptance of the unpublished correction.
+
 ## Meaningful test design
 
 Test outcomes through API/database/UI behavior, not source-text matching. Gate
@@ -248,13 +289,18 @@ It does not exist yet and must be added with the intentional evidence journey.
 | Issue #41 builds/schema/patch | Same local branch/date | Both production builds, Prisma validate and git diff --check passed; audits were not rerun and the earlier Multer finding remains open |
 | Issue #41 development-state comparison | Same complete browser run; expanded fingerprint includes any existing new tables | Before/after identical: 466cf880b8708645baca8cc3e1fd5b8f967103b0c7c90cf30eb5acf84648025f |
 | Final-main rerun | Release pending | Planned |
+| PR #47 peer reproduction | Published 3addd43, auto4496 review 2026-10-07 | 121/130 client tests passed; 9 failures/9 uncaught errors. 33 new component/style checks and 5 new browsers passed; actual limits in reviewer.md |
+| PR #47 local fixture correction | Uncommitted correction over 3addd43, 2026-10-07 | Default and serial full client runs: 18 files / 130 passed each; zero fetch attempts in six guarded legacy fixture files; client typed build and patch check passed |
 
 Store complete final-main output and actual counts/revision/date after execution.
 Branch passes do not substitute for released main. No skipped required tests.
 Issue #41's tested product changes were local/uncommitted during these runs and
 were subsequently committed unchanged as cd5aa76005a83cecea67aaad3394729cddb6843c
-(feat: add Actions Taken ticket detail UI). Documentation commit/push and PR are
-still pending; record their actual IDs/links after publication.
+(feat: add Actions Taken ticket detail UI). Documentation was committed as
+3addd437518e1573fa79dccf0e08ca7cf419dc0d and both commits pushed in
+[PR #47](https://github.com/Datakung/toktickit/pull/47). The 2026-10-07 test-only
+correction remains uncommitted/unpushed and awaits real peer re-review; record
+its actual commit and acceptance after publication.
 The expanded fingerprint differs from the historical algorithm's value; its
 within-run equality is the preservation check, not comparison across algorithms.
 

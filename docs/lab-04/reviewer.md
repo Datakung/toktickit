@@ -2,8 +2,9 @@
 
 Status: Contract corrections approved and merged in PR #45 on 2026-10-05.
 Issue #40 was independently approved and merged by auto4496 in PR #46 on
-2026-10-06. Issue #41 UI is locally implemented from that merge, pending author
-commit/push, a linked PR and its own review. No reciprocal review is claimed.
+2026-10-06. Issue #41 UI is published in PR #47; Phanuwit requested changes on
+2026-10-07. The fixture correction is locally verified, pending author commit/push
+and peer re-review. No approval/merge or reciprocal review is claimed for #41.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
 Expected peer: Phanuwit Butchari, 67070501070, GitHub auto4496.
@@ -22,8 +23,8 @@ by the author; the peer supplies actual review comments, approval and merge.
 | Work group | Issue | PR/base | Review/author response/approval | State |
 |---|---|---|---|---|
 | Engineering contract | [#39](https://github.com/Datakung/toktickit/issues/39) | [#45](https://github.com/Datakung/toktickit/pull/45) / lab4-staging | Corrected ff97405; actual approval below | Merged d32c8cf |
-| Action foundation | [#40](https://github.com/Datakung/toktickit/issues/40) | PR being prepared / lab4-staging | Implementation 4920527; review pending | Started; implementation/tests prepared |
-| Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | Pending / lab4-staging | Pending | Backlog |
+| Action foundation | [#40](https://github.com/Datakung/toktickit/issues/40) | [#46](https://github.com/Datakung/toktickit/pull/46) / lab4-staging | Approved by auto4496 on 4795f38 | Merged a915812; Issue closed/Done |
+| Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Changes requested on 3addd43; correction prepared below | Open; not accepted/Done |
 | Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | Pending / lab4-staging | Pending | Backlog |
 | Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | Pending / lab4-staging | Pending | Backlog |
 | Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | Pending / lab4-staging, then main | Pending | Backlog |
@@ -92,8 +93,8 @@ invented author run or approval of later UI/workflow/dashboard work.
 ## Issue #41 UI handoff
 
 Branch feature/41-actions-ui starts from peer-merged staging a915812. Implementation
-commit: cd5aa76005a83cecea67aaad3394729cddb6843c (2026-10-06); documentation commit,
-push and PR remain pending. Review the
+commit: cd5aa76005a83cecea67aaad3394729cddb6843c (2026-10-06); documentation
+3addd437518e1573fa79dccf0e08ca7cf419dc0d. Both were pushed to PR #47. Review the
 shared role-safe Action screen, exact nested deep links, independent saves,
 Bangkok timestamp precision, actual performer confirmation, completed correction
 reason, terminal/prior-cycle guards, paged audit history, stale/unknown-save
@@ -108,10 +109,44 @@ representative desktop/mobile Staff/Requester images visually inspected by the
 agent. Author visual acceptance is not yet recorded. Unknown retries retain
 their original user/Ticket-scoped payload/key across a full browser reload;
 confirmed-save refresh never creates again, and sign-out clears journals.
-Issue #41 is Started, not Done; no PR,
-peer findings, approval or merge is claimed until they exist. Link its feature
-PR explicitly to Issue #41 in Development, with base lab4-staging and auto4496
-as reviewer; do not treat a plain issue mention as verified linkage.
+PR #47 explicitly Development-links Issue #41 and targets lab4-staging; linkage
+was verified through closingIssuesReferences. Issue #41 is not Done.
+
+### PR #47 requested correction, 2026-10-07
+
+[Phanuwit's Changes requested review](https://github.com/Datakung/toktickit/pull/47#pullrequestreview-5438725606)
+was submitted by auto4496 on exact head 3addd43 at 06:58:40 UTC (13:58:40 Bangkok).
+His [P2 finding](https://github.com/Datakung/toktickit/pull/47#discussion_r4203986376)
+identifies unmocked real Action reads after mounting ActionsTaken in legacy
+Requester detail fixtures. Responses from localhost:3000 could be a non-ActionPage,
+causing render errors and losing the attachment/communication screen assertions.
+
+He reported 33/33 new component/style checks and 5/5 new Chromium journeys passing,
+plus both builds and whitespace checks. His full client run passed 121/130 with
+9 failures/9 uncaught errors across 4 files, not merely timeouts. A serial check
+of AttachmentSection and RequesterCommunication passed 1/12 at head versus 12/12
+at base with the same dependencies/environment. His browser checks used disposable
+PostgreSQL 17 databases and an unchanged reviewer baseline/upload fingerprint,
+not the author's development database. He did not rerun all 182 backend tests
+or all 31 earlier browser journeys.
+
+Author authorized correction with "Yes fix them". Six legacy detail fixture files
+now use a shared typed empty ActionPage matching parent version/current cycle;
+Staff navigation also mocks assignees and supports numeric/string Ticket reads.
+Mutation fixtures advance the Action summary version with the parent. The claim
+navigation regression waits for an enabled control and asserts the request was
+sent before navigation, retaining its late-response assertions. The Requester
+private-Notes spy is installed before mounting, rather than after the read could
+already occur. Original test cases/assertions remain; none are skipped.
+
+A test-only fetch guard rejects and fails any unexpected network call in these
+six files. It exposed missing Action/assignee reads before correction; cleanup
+and mock restoration occur even when the guard fails. Full default and serial
+client results and the typed client build are in [tests.md](tests.md).
+Production source, permissions, database/uploads and screenshots are unchanged.
+These are local verification results, not Phanuwit's verification of the fix.
+Correction commit, pushed head, author reply and reviewer acceptance must be
+recorded after they actually exist; PR #47 remains Changes requested.
 
 ## Final integration and reciprocal review
 

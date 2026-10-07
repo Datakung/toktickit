@@ -9,8 +9,11 @@ at `ff97405` and merged it into `lab4-staging` (`d32c8cf`) on 2026-10-05.
 [Issue #40](https://github.com/Datakung/toktickit/issues/40) was approved and merged
 by Phanuwit in [PR #46](https://github.com/Datakung/toktickit/pull/46), staging `a915812`.
 [Issue #41](https://github.com/Datakung/toktickit/issues/41) adds the action screens
-on `feature/41-actions-ui`, implementation commit `cd5aa76`; documentation commit,
-push and peer review remain pending.
+on `feature/41-actions-ui`, implementation `cd5aa76` and documentation `3addd43`,
+published in [PR #47](https://github.com/Datakung/toktickit/pull/47).
+Phanuwit requested a legacy component-fixture isolation correction on 2026-10-07;
+the local fix and verification are recorded in the review/test documents.
+Correction commit/push and peer re-review remain pending; this is not approval.
 Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
 
 - [Specification](docs/lab-04/specification.md): requirements, business rules,
