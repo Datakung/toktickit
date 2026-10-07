@@ -3,6 +3,9 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import { TicketDetailPage } from "../../src/TicketDetailPage.js";
+import { emptyActionPage, requireMockedNetwork } from "../support/action-fixtures.js";
+
+requireMockedNetwork();
 
 const requester: api.DevelopmentRequester = {
   id: 1,
@@ -70,6 +73,7 @@ function renderDetail(onRequesterUnavailable = vi.fn()) {
 }
 
 beforeEach(() => {
+  vi.spyOn(api, "getActions").mockResolvedValue(emptyActionPage(1));
   vi.spyOn(api, "getTicket").mockResolvedValue(detail());
   vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
   Object.defineProperty(URL, "createObjectURL", {

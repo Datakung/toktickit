@@ -1,13 +1,21 @@
 # Lab 4 API Contract
 
 Status: Contract approved in PR #45 on 2026-10-05. Action endpoints, paged history,
-whole-cycle summary and work-list APIs are implemented locally for Issue #40,
-with passing unit/API/migration evidence, pending implementation peer review.
+whole-cycle summary and work-list APIs were approved/merged for Issue #40 in
+PR #46 (a915812). Issue #41 consumes these endpoints without changing their
+product contract: initial create is atomic; fields, assignment and state each
+have their own explicitly submitted payload/UUID; reads reconcile versions
+before the next save. Deep-linked actions use the exact nested detail endpoint,
+not a guess from the first list page. Requesters receive no mutation controls.
 Ticket workflow/gate changes and dashboard APIs below remain planned for #42/#43;
 the existing Lab 3 Ticket transition handler is unchanged in this increment.
 Source of business rules:
 [specification.md](specification.md). Inherit the reviewed Lab 3 API contract
 from main b3c1a70, preserving session cookies, CSRF, role checks and safe DTOs.
+
+PR #47's 2026-10-07 correction isolates existing component fixtures' Action reads
+with typed empty pages and a no-network guard. It changes no product API, DTO,
+authorization or schema. Peer re-review is pending; see [reviewer.md](reviewer.md).
 
 ## Shared rules
 
@@ -148,6 +156,10 @@ outcome. Explicit reload/review and a genuinely new operation use a new key.
 Unknown outcomes retain the exact submitted payload with its key; an edited draft
 cannot replace that payload during retry. Complete/reconcile the original operation
 first, then save a new change using fresh observed versions and a new requestId.
+Issue #41 journals the original intent in user/Ticket-scoped browser session
+storage before submission. A page reload replays an uncertain intent with that
+same key, or only refreshes a confirmed receipt. Sign-out/authentication loss
+clears these shared-action journals; no credentials or private Notes are stored.
 Receipts belong to their authenticated actor: another user cannot replay or obtain
 the first user's result just by supplying the same UUID. Revoked/inactive/role-changed
 actors fail current access checks even for an otherwise matching stored receipt.

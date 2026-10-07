@@ -1,11 +1,12 @@
 # Lab 4 Test Plan and Traceability
 
-Status: Approved contract; Issue #40 foundation tests executed 2026-10-05 on
-feature/40-actions-foundation from d32c8cf; verified implementation committed as
-4920527. Documentation changes do not alter the tested implementation.
-36 new unit/API/migration/seed tests pass; the full server run passes 182 tests.
-Remaining new UI/workflow/dashboard/release suites are still planned. Historical
-Lab 3 counts are not substituted for this branch's actual runs.
+Status: Approved contract and accepted Issue #40 foundation (PR #46, merge
+a915812). Issue #41 Actions Taken UI is published in PR #47 from
+feature/41-actions-ui. Peer review requested fixture isolation changes on
+2026-10-07; the correction is locally verified below, pending author commit/push,
+author acceptance and peer re-review. Formal Ticket
+workflow (#42), dashboards (#43) and final release (#44) are still planned.
+Historical counts are not substituted for this branch's actual runs.
 
 ## Planned executable coverage
 
@@ -32,15 +33,15 @@ status is implied by a branch pass.
 | API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts | Planned |
 | API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Partly verified: Action APIs pass; dashboard/workflow follow |
-| UI-01 | Component | AC-02,03,05,06,13 | Separate field/assignment saves, lifecycle, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Planned |
+| UI-01 | Component | AC-02,03,05,06,13 | Separate field/assignment saves, lifecycle, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 29 Action component cases |
 | UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; authoritative checklist excludes page-local inference and stale/unknown positive results | client/tests/lab-04/TicketWorkflow.test.tsx | Planned |
 | UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Planned |
 | UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Planned |
 | UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx | Planned |
-| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx | Planned |
+| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx | Partly verified: 4 Action CSS-contract checks plus real-browser computed layout/focus; future workflow/dashboard styles pending |
 | REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-04/full-regression.api.test.ts | Planned |
 | PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.test.ts | Planned |
-| E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Planned |
+| E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed: 5 feature browser journeys; final-main release evidence remains separate |
 | E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle | client/e2e/lab-04/ticket-resolution.spec.ts | Planned |
 | E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Planned |
 | E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-04/final-regression.spec.ts | Planned |
@@ -56,8 +57,8 @@ remove all active assignments and increment each affected Ticket only once.
 CASE-26 is verified at the API level, including receipt-write rollback and exact
 replay of a separately saved assignment. CASE-27's whole-cycle summary excludes
 old work, includes a later-page unfinished/follow-up blocker, handles empty pages
-and retains one snapshot during a synchronized concurrent write. The new UI
-feedback and formal Ticket resolution enforcement are not implemented yet.
+and retains one snapshot during a synchronized concurrent write. Issue #41 adds
+the UI feedback below; formal Ticket resolution enforcement remains planned #42.
 
 Migration tests use actual pre-upgrade `pg_dump`/`psql` recovery in separate
 `toktickit_lab4_*_test_<random>` databases, compare counts and whole-row digests
@@ -80,8 +81,93 @@ commands to copy blindly. Both target names are generated, verified test-only
 names; before/after legacy digests match and a restored sequence yields the
 expected next ID. SQL and backup contents remain private to the harness.
 
-The 31 existing browser scenarios verify earlier screens, not the new Lab 4 UI.
-Routine browser output stays ignored; no submission screenshots were refreshed.
+The Issue #40 run's 31 existing browser scenarios verified earlier screens, not
+the new Lab 4 UI. Routine browser output stayed ignored; that run refreshed no
+submission screenshots. Issue #41 feature captures are separately identified.
+
+### Issue #41 executed coverage and limits
+
+29 new component tests and 4 style-contract checks cover shared read-only history,
+independent field/assignment saves, corrected completed work, lifecycle
+confirmations, terminal/prior-cycle/cancelled guards, required feedback and
+preserved unsaved input. Exact-retry tests retain the original payload/UUID,
+including a full component reload and authentication-loss cleanup. Confirmed
+create followed by a failed refresh never submits another create. Mixed parent/
+child snapshots and late responses from a previous Ticket/user cannot authorize
+stale saves. Action pages and immutable history pages remain independent.
+
+Five browser journeys use real authenticated Requester, Staff and Administrator
+sessions against the guarded E2E database. They verify multiple actions and
+distinct creator/assignee/actual performer; fields then separate assignment;
+completion/correction/cancellation; owned Requester reading and a direct mutation
+403; real concurrent-write VERSION_CONFLICT with draft-preserving reload;
+21 actions/21 revisions and exact deep links beyond page one; Bangkok time
+precision; keyboard focus, long content and no page overflow at 1440/768/390px.
+Lost-response tests first commit via the real API, then abort only delivery;
+create recovery survives a browser reload and replays the original key once.
+Separate assignment recovery proves exactly one event/parent increment per save.
+The browser's INVALID_ASSIGNEE feedback scenario deliberately injects a definite
+400 response; actual inactive-assignee serialization is independently covered
+by the server API/concurrency suites, not claimed from that injected response.
+
+Initial component tests failed before ActionsTaken existed. Browser verification
+then exposed rounded action times before a freshly created Ticket, stale Result
+after completion and a Requester deep-link parsing defect. Agent visual inspection
+found a narrow mobile table caption; these were corrected and rerun. Three older
+fully mocked responsive Ticket tests needed an empty Actions response matching
+their fake session; otherwise the real API correctly returned 401. The mock was
+extended, without weakening product authorization or removing assertions. An
+intermediate login timeout while client/browser tests competed for CPU was rerun
+sequentially; only actual completed runs belong in the result ledger.
+
+Thirteen deliberate feature screenshots and capture provenance are in
+[Actions Taken evidence](../../artifacts/lab-04/screenshots/actions-taken/README.md).
+They are branch/agent verification, not author acceptance, peer approval or final
+main. Workflow/checklist/dashboard release journeys and final-main captures remain
+pending. The new test cleanup uses guarded test-only TRUNCATE to reset immutable
+history; development is not reset, migrated or seeded. Its unchanged-state hash
+now also includes any existing Action, receipt and transition tables, while
+remaining compatible with a development schema that has not been upgraded.
+
+### PR #47 legacy fixture isolation correction, 2026-10-07
+
+Peer review on published 3addd43 exposed unmocked real Action reads in the older
+detail fixtures despite the earlier local pass. The review's 121/130 result and
+same-environment base/head reproduction are recorded in [reviewer.md](reviewer.md);
+the earlier 2026-10-06 pass is historical, not proof of environment-independent
+fixture isolation.
+
+Test-only correction: `client/tests/support/action-fixtures.ts` returns a typed
+empty ActionPage with parent version/current cycle and a zero-work resolution
+summary. AttachmentSection, RequesterTicketDetail, SafeErrorStates,
+RequesterCommunication, StaffTicketDetail and StaffTicketNavigation mock added
+reads explicitly. The six files' 25 existing cases install a rejecting fetch
+guard and assert zero network attempts; it fails even if the component handles
+the rejection. Cleanup/restoration happen before leaving a failed hook. This
+removes dependence on what is (or is not) listening on localhost:3000 without
+stopping the author's server or using a real database.
+
+Requester apparent resolution advances the summary from version 3 to 4; Staff
+claim advances 1 to 2. Tests wait for the refreshed enabled Actions control and
+assert the new summary. Staff navigation fixtures answer both numeric/string
+Ticket IDs, mock eligible assignees and prove a claim was submitted before
+navigating and receiving its stale response. The Notes spy is active before
+Requester mount. No previous cases/assertions were removed and no timeouts were
+increased. No production source, auth/schema, screenshots or development data
+changed. Backend/browser/audit results from 2026-10-06 were not rerun for this
+test-only correction; final-main verification remains pending.
+
+Executed from the repository root on the local correction over 3addd43:
+
+- `npm --prefix client test`: 18 files / 130 tests passed, 15.01s, 14:21 Bangkok.
+- `npm --prefix client test -- --maxWorkers=1 --minWorkers=1`: 18 files / 130 tests
+  passed, 62.70s, start 14:21:51 Bangkok.
+- `npm --prefix client run build`: TypeScript and Vite build passed.
+- `git diff --check`: passed after the correction/documentation edits.
+
+All six guarded files passed with zero real fetch attempts in both completed
+full runs. No uncaught errors were reported. These are local author-branch agent
+runs, not peer acceptance of the unpublished correction.
 
 ## Meaningful test design
 
@@ -96,8 +182,9 @@ expected results independently, not from the function under test.
 
 ## Explicit edge-case scenarios
 
-Every case below is Planned, not a passing result. Test IDs refer to the table
-above; implement the scenario with those suites and retain the actual result.
+Cases below define required scenarios, not an assertion that all are complete.
+Use the executable coverage/status table and result ledger for actual verification;
+planned workflow/dashboard/release cases must still be implemented and run.
 
 | Case | Preconditions/trigger | Expected observable outcome | Test IDs / AC |
 |---|---|---|---|
@@ -180,7 +267,12 @@ Existing commands from repo root: npm --prefix server test; npm --prefix client 
 npm --prefix client run test:e2e; both package build commands; both production-only
 audits; git diff --check. Prisma validate/generate/migrate and backup/seed are
 explicit setup steps, not automatically a development migration side effect of tests.
-Proposed new capture command: npm --prefix client run test:e2e:lab4-evidence.
+Issue #41 intentional feature capture command:
+`npm --prefix client run test:e2e:lab4-actions-evidence` (5 journeys).
+Normal `test:e2e` keeps screenshot output ignored. To capture the feature and run
+all current regressions together:
+`npm --prefix client run test:e2e:lab4-actions-evidence -- e2e/lab-02 e2e/lab-03`.
+Proposed final release capture command: npm --prefix client run test:e2e:lab4-evidence.
 It does not exist yet and must be added with the intentional evidence journey.
 
 | Verification | Revision/date | Result |
@@ -191,10 +283,26 @@ It does not exist yet and must be added with the intentional evidence journey.
 | Browser/performance/evidence | Same working branch/date | Existing browser suite: 31 passed (1.3m); new Lab 4 browser/performance/evidence planned |
 | Builds/production audits | Same working branch/date | Server/client builds passed; client audit zero; server audit one moderate Multer finding (below) |
 | Development-state hash comparison | Existing E2E run, 2026-10-05 | Before/after identical: eb767d391ae418079490e5a9ea4bfb7f5d1b0ab9d2f964faea19e24fd18885e9 |
+| Issue #41 server regression | Local feature/41-actions-ui from a915812, 2026-10-06 19:38 Bangkok | npm --prefix server test: 28 files / 182 tests passed (66.14s); no development migration/seed |
+| Issue #41 client regression | Same local branch, 2026-10-06 19:56 Bangkok | npm --prefix client test: 18 files / 130 tests passed (10.63s); 29 new Action component + 4 style-contract checks |
+| Issue #41 browser/evidence | Same local branch, 2026-10-06; deliberate capture command above | 36 passed (2.0m), including all 31 earlier scenarios and 5 new journeys; 13 feature PNGs captured |
+| Issue #41 builds/schema/patch | Same local branch/date | Both production builds, Prisma validate and git diff --check passed; audits were not rerun and the earlier Multer finding remains open |
+| Issue #41 development-state comparison | Same complete browser run; expanded fingerprint includes any existing new tables | Before/after identical: 466cf880b8708645baca8cc3e1fd5b8f967103b0c7c90cf30eb5acf84648025f |
 | Final-main rerun | Release pending | Planned |
+| PR #47 peer reproduction | Published 3addd43, auto4496 review 2026-10-07 | 121/130 client tests passed; 9 failures/9 uncaught errors. 33 new component/style checks and 5 new browsers passed; actual limits in reviewer.md |
+| PR #47 local fixture correction | Uncommitted correction over 3addd43, 2026-10-07 | Default and serial full client runs: 18 files / 130 passed each; zero fetch attempts in six guarded legacy fixture files; client typed build and patch check passed |
 
 Store complete final-main output and actual counts/revision/date after execution.
 Branch passes do not substitute for released main. No skipped required tests.
+Issue #41's tested product changes were local/uncommitted during these runs and
+were subsequently committed unchanged as cd5aa76005a83cecea67aaad3394729cddb6843c
+(feat: add Actions Taken ticket detail UI). Documentation was committed as
+3addd437518e1573fa79dccf0e08ca7cf419dc0d and both commits pushed in
+[PR #47](https://github.com/Datakung/toktickit/pull/47). The 2026-10-07 test-only
+correction remains uncommitted/unpushed and awaits real peer re-review; record
+its actual commit and acceptance after publication.
+The expanded fingerprint differs from the historical algorithm's value; its
+within-run equality is the preservation check, not comparison across algorithms.
 
 Server production audit exits 1 for Multer 2.3.0,
 [GHSA-3pph-fpjx-jg34](https://github.com/advisories/GHSA-3pph-fpjx-jg34), a

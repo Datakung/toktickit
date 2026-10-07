@@ -23,6 +23,7 @@ import {
 } from "./api.js";
 import { attachmentSelectionError } from "./CreateTicketPage.js";
 import { CommunicationPanel } from "./CommunicationPanel.js";
+import { ActionsTaken } from "./ActionsTaken.js";
 
 type DetailState = "loading" | "ready" | "unavailable" | "error";
 type UploadState = "selected" | "uploading" | "failed";
@@ -118,11 +119,13 @@ export function TicketDetailPage({
   ticketId,
   onNavigate,
   onRequesterUnavailable,
+  linkedActionId,
 }: {
   requester: DevelopmentRequester;
   ticketId: string;
   onNavigate: (path: string) => void;
   onRequesterUnavailable: () => void;
+  linkedActionId?: string | null;
 }) {
   const [detailState, setDetailState] = useState<DetailState>("loading");
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
@@ -479,6 +482,7 @@ export function TicketDetailPage({
         {resolutionError&&<div className="feedback-panel feedback-panel-error" role="alert"><p>{resolutionError}</p>{resolutionError.toLowerCase().includes("changed")&&<button className="secondary-button" onClick={()=>void loadTicket()}>Reload Ticket</button>}</div>}
       </section>
 
+      <ActionsTaken ticket={ticket} staff={false} userId={requester.id} actorName={requester.displayName} linkedActionId={linkedActionId} />
       <CommunicationPanel ticketId={ticket.id} kind="comments" />
 
       <section className="detail-panel attachment-section" aria-labelledby="attachments-title">

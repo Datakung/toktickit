@@ -1165,6 +1165,50 @@ h2 {
   object-fit: contain;
 }
 
+.actions-taken { min-width: 0; overflow-wrap: anywhere; }
+.action-section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.action-section-heading > div { min-width: 0; }
+.action-section-heading > button { flex-shrink: 0; }
+.actions-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-block: 18px; }
+.actions-table caption { text-align: left; caption-side: top; color: var(--muted); font-size: 14px; }
+.actions-table th, .actions-table td { padding: 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.actions-table th { background: var(--green-100); color: var(--green-700); }
+.actions-table th:first-child { width: 28%; }
+.actions-table td p { margin: 8px 0 0; }
+.action-record, .action-editor, .action-assignment, .action-state-controls, .action-history { margin-block: 24px; padding-top: 20px; border-top: 1px solid var(--border); min-width: 0; }
+.action-record-grid, .action-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; }
+.action-record-grid > div, .action-field { min-width: 0; }
+.action-record-grid dt { font-weight: 700; }
+.action-record-grid dd { margin: 6px 0 0; }
+.actions-taken fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.actions-taken legend { float: none; width: auto; font-size: 20px; font-weight: 700; }
+.action-field { display: grid; align-content: start; gap: 7px; font-weight: 700; }
+.actions-taken input:not([type=checkbox]), .actions-taken select, .actions-taken textarea { width: 100%; min-width: 0; max-width: 100%; min-height: 48px; border: 1px solid #7e9b89; border-radius: 8px; padding: 10px 12px; background: #fff; color: var(--text); font: inherit; font-weight: 400; }
+.actions-taken textarea { min-height: 120px; resize: vertical; }
+.actions-taken [aria-invalid=true] { border-color: var(--error); }
+.actions-taken :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.actions-taken button, .action-history summary { min-height: 44px; }
+.action-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-block: 18px; }
+.action-checkbox { display: flex; gap: 12px; align-items: center; min-height: 44px; font-weight: 700; }
+.action-checkbox input { width: 20px; height: 20px; flex-shrink: 0; }
+.action-readonly { padding: 12px; background: #eef3ef; border-radius: 8px; }
+.action-history li { padding-block: 14px; border-bottom: 1px solid var(--border); }
+.action-history pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; }
+.action-history summary { display: list-item; padding: 12px 0; color: #006a43; cursor: pointer; }
+@media (max-width: 900px) {
+  .actions-table, .actions-table tbody, .actions-table tr, .actions-table td { display: block; width: 100%; }
+  .actions-table caption { display: block; width: 100%; }
+  .actions-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .actions-table tr { border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 16px; }
+  .actions-table td { border: 0; padding: 8px; }
+  .actions-table td::before { content: attr(data-label); display: block; font-weight: 700; color: #006a43; margin-bottom: 6px; }
+}
+@media (max-width: 575px) {
+  .action-section-heading { flex-direction: column; }
+  .action-record-grid, .action-form-grid { grid-template-columns: minmax(0, 1fr); }
+  .action-controls > button { flex: 1 1 160px; }
+}
+
 .removal-dialog label {
   display: grid;
   gap: 7px;
