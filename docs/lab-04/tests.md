@@ -1,16 +1,15 @@
 # Lab 4 Test Plan and Traceability
 
-Status: Approved contract and accepted Issue #40 foundation (PR #46, merge
-a915812). Issue #41 Actions Taken UI is published in PR #47 from
-feature/41-actions-ui. Peer review requested fixture isolation changes on
-2026-10-07; the correction is locally verified below, pending author commit/push,
-author acceptance and peer re-review. Formal Ticket
-workflow (#42), dashboards (#43) and final release (#44) are still planned.
-Historical counts are not substituted for this branch's actual runs.
+Status: Contract/foundation/Action UI accepted in PRs #45-47. Issue #41's
+fixture correction 0cf9e58 was approved and merged as f4da089 on 2026-10-07.
+Issue #42 workflow is locally implemented/tested from that merge on
+feature/42-ticket-workflow; author visual acceptance, commit/push and peer review
+are pending. Dashboards (#43) and final release (#44) remain planned.
+Historical counts are never substituted for this branch's actual runs.
 
 ## Planned executable coverage
 
-Paths are repository-relative. Passed rows exist and were executed for Issue #40;
+Paths are repository-relative. Passed rows exist and were executed for Issues #40-42;
 Partly verified rows explicitly identify unfinished scope. No final-main release
 status is implied by a branch pass.
 
@@ -20,29 +19,30 @@ status is implied by a branch pass.
 | MIG-02 | Recovery/integration | AC-01 | Failed migration rollback and isolated pre-migration backup restore compared against original records | server/tests/lab-04/migration-regression.test.ts | Passed |
 | SEED-01 | Integration | AC-01 | Run twice after manual fixture edits; no duplicate records/events or credential/edit reset; zero/one/multiple work | server/tests/lab-04/seed-regression.test.ts | Passed |
 | UNIT-01 | Unit | AC-02,03 | Description/result/time/boolean/note/reason/ID/UUID boundaries and unknown-key rejection | server/tests/lab-04/action-validation.unit.test.ts | Passed |
-| UNIT-02 | Unit | AC-08,09 | All action/Ticket edges and pure gate/cycle predicate, including cancelled-only work | server/tests/lab-04/workflow-rules.unit.test.ts | Planned |
+| UNIT-02 | Unit | AC-08,09 | All 64 Ticket status pairs and the independent current-cycle gate predicate | server/tests/lab-04/workflow-rules.unit.test.ts | Passed: 69 unit cases (64 Ticket pairs plus five gate predicates) |
 | UNIT-03 | Unit | AC-10,11,12 | UTC range boundaries, status-group/date-pair parsing and stable query rules | server/tests/lab-04/dashboard-query.unit.test.ts | Planned |
 | API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Passed |
 | API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Passed |
 | API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
 | API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback; independent edit succeeds then assignment fails or loses response | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
 | API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Passed |
-| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/action-history.api.test.ts (actual summary); server/tests/lab-04/ticket-workflow.api.test.ts (planned transitions) | Partly verified: summary passes; Ticket gate/transitions pending #42 |
-| API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
+| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/action-history.api.test.ts; server/tests/lab-04/ticket-workflow.api.test.ts | Passed: seven workflow API cases plus existing whole-cycle snapshot tests |
+| API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/workflow-concurrency.api.test.ts | Passed: 11 synchronized concurrency/rollback/session cases |
 | API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts | Planned |
-| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Partly verified: Action APIs pass; dashboard/workflow follow |
-| UI-01 | Component | AC-02,03,05,06,13 | Separate field/assignment saves, lifecycle, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 29 Action component cases |
-| UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; authoritative checklist excludes page-local inference and stale/unknown positive results | client/tests/lab-04/TicketWorkflow.test.tsx | Planned |
+| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Partly verified: Action/workflow security and safe errors pass; dashboard checks pending |
+| UI-01 | Component | AC-02,03,05,06,13 | View-first/Edit/Close detail, direct Start/Complete/Cancel, return focus/discard, late-history protection, independent field/assignment/state saves, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 44 Action component cases |
+| UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; labelled checklist colours exclude stale/unknown positive results; separate opening/progress stages and explicit target retain all valid transitions | client/tests/lab-04/TicketWorkflow.test.tsx | Passed: 32 workflow component cases after October 9 colour refinement |
 | UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Planned |
 | UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Planned |
 | UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx | Planned |
-| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx | Partly verified: 4 Action CSS-contract checks plus real-browser computed layout/focus; future workflow/dashboard styles pending |
-| REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-04/full-regression.api.test.ts | Planned |
+| UI-06 | Component | AC-04,07,13,15 | Changed-only audit fields, initial creation details, Yes/No, Bangkok dates, honest account IDs, escaped text and incomplete legacy snapshots without mutation | client/tests/lab-04/ActionHistoryChanges.test.tsx | Passed: six readable audit cases |
+| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx | Partly verified: six Action/workflow CSS-contract checks and actual browser hierarchy/focus/layout; dashboard styles pending |
+| REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-01, lab-02 and lab-03 (existing executable files); dedicated final release coverage remains #44 | Passed on feature branch through existing Labs 1-3 files; final-main release rerun pending |
 | PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.test.ts | Planned |
 | E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed: 5 feature browser journeys; final-main release evidence remains separate |
-| E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle | client/e2e/lab-04/ticket-resolution.spec.ts | Planned |
+| E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle; status stages, checklist colours/contrast, view-first/Edit and readable audit with exact original snapshots at three widths | client/e2e/lab-04/ticket-resolution.spec.ts | Passed: six real-session workflow/UI journeys in the latest October 9 targeted rerun; historical results below |
 | E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Planned |
 | E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-04/final-regression.spec.ts | Planned |
 | EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | client/e2e/lab-04/release-evidence.spec.ts | Planned |
@@ -167,7 +167,63 @@ Executed from the repository root on the local correction over 3addd43:
 
 All six guarded files passed with zero real fetch attempts in both completed
 full runs. No uncaught errors were reported. These are local author-branch agent
-runs, not peer acceptance of the unpublished correction.
+runs recorded before publication, not peer acceptance. Subsequent actual
+publication and acceptance are recorded in reviewer.md and the ledger below.
+
+## Issue #42 executed coverage, 2026-10-07
+
+Branch feature/42-ticket-workflow starts from peer-merged staging f4da089. No new
+migration is necessary: #40 supplied the cycle/date/event schema and immutable
+history triggers. This is feature verification, not acceptance or final main.
+
+- workflow-rules.unit.test.ts: 69 cases independently check all 64 status pairs
+  and missing-completed/unfinished/follow-up/current gate predicates.
+- ticket-workflow.api.test.ts: seven cases exercise real sessions and every
+  status pair, each gate blocker, stale precedence, advisory indication,
+  cancellation, formal resolve/close/reopen, safe transaction failure, owned
+  history/input protection, legacy null dates and 23 equal-time immutable events.
+- workflow-concurrency.api.test.ts: 11 cases synchronize the shared lock boundary
+  for resolve versus create/follow-up/completion, cancellation versus new work,
+  reopen versus archived corrections, and account unassignment versus resolution.
+  They verify atomic rollback if event persistence fails, plus revoked, inactive,
+  role-changed and mandatory-password-change sessions inside the transaction.
+- TicketWorkflow.test.tsx: 14 cases cover whole-cycle counts independent of visible
+  items, confirmations, loading/failed/mixed version/cycle summaries, cancellation,
+  status-response uncertainty/reload, reopen, history paging/retry and late replies.
+- The CSS-contract suite now has five cases; actual browser assertions separately
+  check wrapping, 44px controls and visible focus, not only source-text declarations.
+- ticket-resolution.spec.ts: two journeys exercise a real 22-action fixture with
+  a page-two blocker, completed follow-up correction, formal resolve/close/reopen,
+  old-cycle read-only work, advisory indication and owned history. A second journey
+  loses a response after an actual status commit, confirms no duplicate write,
+  explicitly reloads and recovers an intentionally simulated history outage.
+
+Full server run: 31 files / 269 passed, 69.00s, start 15:04:20 Bangkok. Server
+TypeScript build passed. Full client default run and TypeScript/Vite build pass;
+see the final checked run ledger below. All six legacy fetch guards remain
+active; no uncaught errors or real-fetch attempts are accepted.
+
+Initial red tests failed before the new rule module, API gate/history and history
+component existed. Fixture mistakes exposed during verification were corrected:
+required cycle/text fields, transaction-level (rather than root-delegate) outage
+injection, awaited initial action reads before select, and a simulated outage
+that stays active through StrictMode's duplicate reads. An early full browser
+attempt timed out while application source was being edited. The clean full
+rerun held application source unchanged; none of the original 36 journeys was
+skipped, weakened or granted an authorization bypass.
+
+The existing Staff operation regression moved to a generated isolated test schema
+with guarded TRUNCATE teardown because immutable events prohibit ordinary delete
+cleanup. Its valid resolution fixture now includes genuinely completed current-
+cycle work. Legacy API-mocked detail fixtures include typed empty history pages,
+with their rejecting-fetch guard unchanged. No development migration/seed/reset
+or credential update occurred. Feature captures and provenance:
+[workflow/README.md](../../artifacts/lab-04/screenshots/workflow/README.md).
+
+Production dependency audits were not rerun/fixed by this workflow Issue. The
+previously recorded server advisory remains a release-gate task; do not infer a
+clean audit from passing tests. Dashboards/performance, final-main acceptance,
+manual author visual approval, commits/push and peer review remain pending.
 
 ## Meaningful test design
 
@@ -291,6 +347,19 @@ It does not exist yet and must be added with the intentional evidence journey.
 | Final-main rerun | Release pending | Planned |
 | PR #47 peer reproduction | Published 3addd43, auto4496 review 2026-10-07 | 121/130 client tests passed; 9 failures/9 uncaught errors. 33 new component/style checks and 5 new browsers passed; actual limits in reviewer.md |
 | PR #47 local fixture correction | Uncommitted correction over 3addd43, 2026-10-07 | Default and serial full client runs: 18 files / 130 passed each; zero fetch attempts in six guarded legacy fixture files; client typed build and patch check passed |
+| PR #47 subsequent acceptance | Published 0cf9e58, 2026-10-07 | Actual auto4496 approval 5439057032; peer merge f4da089; Issue #41 closed |
+| Issue #42 full server regression | Local feature/42-ticket-workflow from f4da089, 2026-10-07; start 15:04:20 Bangkok | npm --prefix server test: 31 files / 269 passed (69.00s), including 87 new rule/API/concurrency cases |
+| Issue #42 full client regression | Same local branch/date; final start 15:10:43 Bangkok | npm --prefix client test: 19 files / 145 passed (10.99s); no uncaught errors or real fetch attempts in guarded fixtures |
+| Issue #42 full browser regression | Same local branch/date; final clean rerun after keyboard/CSS polish | npm --prefix client run test:e2e: 38 passed (2.1m), all 36 earlier scenarios plus two workflow journeys; application source held unchanged during run |
+| Issue #42 deliberate feature evidence | Same local branch/date; final capture rerun | npm --prefix client run test:e2e:lab4-workflow-evidence: 2 passed (21.4s); 12 deliberate PNGs; agent inspected desktop/mobile checklist and mobile history |
+| Issue #42 builds/schema/patch/links | Same local branch/date | Both production builds passed; Prisma validate passed from server directory with normal .env loading; git diff --check passed; all local Markdown link targets exist |
+| Issue #42 development-state comparison | Final full browser and deliberate evidence runs | Identical before/after: 466cf880b8708645baca8cc3e1fd5b8f967103b0c7c90cf30eb5acf84648025f |
+
+The first schema-validation invocation from the repository root did not load
+server/.env and reported missing DATABASE_URL; the unchanged schema validated
+successfully when run from server. No secret was printed or environment file
+modified. These Issue #42 results describe the local uncommitted feature, not
+released main or peer approval; production audits remain deferred as stated below.
 
 Store complete final-main output and actual counts/revision/date after execution.
 Branch passes do not substitute for released main. No skipped required tests.
@@ -299,8 +368,9 @@ were subsequently committed unchanged as cd5aa76005a83cecea67aaad3394729cddb6843
 (feat: add Actions Taken ticket detail UI). Documentation was committed as
 3addd437518e1573fa79dccf0e08ca7cf419dc0d and both commits pushed in
 [PR #47](https://github.com/Datakung/toktickit/pull/47). The 2026-10-07 test-only
-correction remains uncommitted/unpushed and awaits real peer re-review; record
-its actual commit and acceptance after publication.
+correction was subsequently published as 0cf9e58, approved by auto4496 in review
+5439057032 and merged as f4da089. These are historical Issue #41 checks;
+the Issue #42 branch remains uncommitted.
 The expanded fingerprint differs from the historical algorithm's value; its
 within-run equality is the preservation check, not comparison across algorithms.
 
@@ -310,6 +380,310 @@ moderate aborted-upload disk cleanup advisory. The advisory identifies 2.4.0 as
 patched. No dependency changes are bundled into the Action foundation; track the
 patch and upload regression rerun before Issue #44's final release gate. This is
 an open finding, not a clean production audit.
+
+## October 9 follow-up verification (local, uncommitted)
+
+### Creation refinement checks
+
+- Full client regression: 19 files / 147 tests passed, start 16:10:06 Bangkok,
+  duration 14.81s. Client production build passed (typed compilation and Vite).
+- Targeted browser regression: four `client/e2e/lab-02/create-ticket.spec.ts`
+  checks and the existing `requester-ticket-flow.spec.ts` journey: 5 passed
+  (17.7s). Covers official numeric-id redirect, one Ticket POST, waiting for both
+  uploads, failure/no success banner, recovery and real file retry without duplicate
+  creation, transient confirmation, ownership and existing file lifecycle.
+- New component checks cover waiting for the last upload and leaving the form
+  before the create response. Existing failure assertions now verify truthful
+  saved-Ticket feedback, disabled duplicate creation and no success callback.
+- Browser success/failure captures at 1440/390px have no horizontal overflow.
+  Failure recovery has a >=44px target and visible keyboard focus. Agent inspected
+  representative captures; this is not author visual acceptance or final evidence.
+- One-off verification used UI 5183 / API 3100 so the author's running UI 5173 /
+  API 3000 stayed available. Temporary configuration was removed afterward.
+  E2E database/uploads are guarded, isolated targets. Development fingerprint
+  before/after was identical:
+  `7866d633897609ae8d4db76cf4c1a0caf02d33b1b6e3222f25b3a8b950534812`.
+- Initial new callback assertions failed before implementation. The first full
+  client rerun exposed an older login fixture reading the real Staff owners/queue;
+  explicit empty mocks and the rejecting-fetch guard fixed test isolation, retaining
+  its original 12 cases. A browser focus assertion initially tested pointer-mode
+  programmatic focus; the final check uses Tab/Shift+Tab to verify keyboard focus.
+
+October 7's 269 server / 38 full browser passes remain historical; neither full
+suite was rerun for this client-only refinement. Do not claim 40 browser passes
+from inventory. Audits and final-main verification are still pending.
+
+Manual setup on October 9: the author copied a development pg_dump backup to
+`C:/CPE/CPE334/MINE/toktickit-backups/toktickit-20261009-154930.dump`, generated the
+Prisma client and applied the existing `20261005090000_actions_taken_foundation`
+migration. Their status output confirms all nine migrations applied. This backup
+was copied, not restore-tested here. The author then created a manual test Ticket;
+that intentional change explains the fingerprint difference from October 7.
+No agent development migration/seed/reset or credential change occurred.
+
+### Separate current-status box and explicit target
+
+The author's next refinement request adds a read-only saved status box and removes
+automatic next-status selection. All eight legal-transition lists remain intact;
+the Open box stays visible after opening. Ten new component checks initially
+failed before the implementation. All 24 workflow component checks subsequently
+passed (4.29s including test setup), retaining the original gate/history cases.
+
+- Full client rerun: 19 files / 157 tests passed, start 16:41:34 Bangkok,
+  duration 12.75s. Typed client production build passed.
+- Final targeted browser/evidence rerun: 7 passed (33.8s): the four earlier Staff
+  operations/communication/responsive checks plus three workflow journeys. Covers
+  separate saved/proposed status, every legal Open target, selection reset,
+  no-op prevention, three-width focus/44px/overflow, later-page blockers,
+  resolution/close/reopen, Requester read-only access and unknown-response recovery.
+- The first browser attempt passed six checks but one retained the old `Status`
+  label after the UI was renamed. Corrected that remaining selector to `Change
+  status to` without dropping assertions or increasing timeouts; the clean rerun
+  passed all seven. Unknown-response testing now explicitly selects Open before
+  saving instead of depending on automatic default selection.
+- Fifteen deliberate workflow PNGs now match the new layout: twelve refreshed
+  workflow regions and three new Operations status-selection captures. Agent
+  inspected desktop/mobile Operations; they are not author acceptance or final
+  release evidence. Capture provenance is in the workflow evidence README.
+- Temporary UI 5183 / API 3100 configuration again kept the author's running
+  services untouched; it was removed after verification. Development database
+  and uploads were identical before/after the browser run:
+  `45690586717e0d609bd40f9fa9ced28b7b7b78253ba3cd0e439cb8a9f7766618`.
+
+No server/API/schema logic changed for this refinement. Historical full server/
+browser passes remain dated above, not a claim of a full-suite October 9 browser
+rerun. Author manual acceptance, commit/push, peer review and #43/#44 remain pending.
+
+### Final two-stage layout verification, October 9
+
+The subsequent author clarification moves New opening above Operations and shows
+a separate progress panel below Operations only after opening. Two new component
+cases cover rejected opening and gated New cancellation; the existing pending
+opening case now also checks stage visibility and focus. The targeted three-case
+run failed before implementation. All 26 workflow cases then passed; typed build
+caught unsupported `exact` options on new Testing Library role queries. Corrected
+those options (string role names already match exactly) without weaker assertions.
+
+- Final full client: 19 files / 159 tests passed; start 16:58:15 Bangkok,
+  duration 11.26s. Typed production client build passed.
+- Final targeted browser/evidence: 8 passed (39.3s): four existing Staff operations/
+  communication/responsive cases and four workflow journeys. New opening and
+  progress stages, current/target separation, focus handoff, all legal Open choices,
+  New cancellation, unfinished work, resolution/close/reopen and unknown-opening
+  reload are verified against isolated real sessions. Desktop/tablet/mobile have
+  no page overflow and visible keyboard focus/44px controls.
+- Refreshed workflow evidence has 18 PNGs: twelve earlier workflow regions plus
+  opening/progress panels at 1440/768/390px. Representative panels were visually
+  inspected by the agent, not author-approved or released-main evidence.
+- Verification again used temporary UI 5183 / API 3100 configuration, removed
+  afterward. Development database/uploads were identical within the final run:
+  `05d7c50ead10c75379001e9863ed7497e5d7621c29d53aff64d3aa5aab1171d0`.
+- No API/schema/backend logic changed. No full-browser/server/audit rerun claimed.
+  The older release-evidence journey's opening selectors and Operations capture
+  region now include the separated status panel; it was not regenerated here.
+
+These results supersede the earlier October 9 UI verification, not its historical
+record. Commit/push, manual author acceptance, peer review and final release remain
+pending.
+
+### Latest checklist and action-view verification, October 9
+
+This supersedes the earlier UI-result counts, not their dated historical record.
+Author requests add green Met/red Not met rows with icons and text, larger bold
+checklist/Actions headings and explicit Edit action disclosure. No backend/schema,
+workflow-gate, mutation-payload or role change. Six colour checks initially failed
+before implementation. Four new view/edit cases cover view-only details/history,
+keyboard opening/closing and discarded draft, direct links, record switching and
+return to view after creation. Existing saves keep the editor open to retain the
+independent assignment draft. Read-only/unknown/conflict protections are retained.
+
+- Colour-only intermediate run: 165 client tests / 19 files (10.82s, 17:09:22
+  Bangkok), typed build and eight targeted browsers (34.3s) passed.
+- Final full client: 169 tests / 19 files passed (12.12s, 17:17:03 Bangkok).
+  Typed production build passed (Vite 676ms).
+- Final targeted browser/evidence: 14 passed (1.7m): four Staff operations/
+  responsive checks, five existing Actions Taken journeys and five workflow/UI
+  journeys. All sources were unchanged during the clean browser run. Covers
+  separate saves, uncertain create/assignment recovery, definite rejection,
+  concurrent conflict, exact deep links, audit paging, gates and status recovery.
+- At 1440/768/390px, view/edit and checklist have no page overflow. Edit works
+  from keyboard, has visible focus and >=44px target, focuses the first field,
+  and closing restores focus without saving. Browser checks confirm larger/bold
+  checklist heading and actual red/green row colours with text contrast >=4.5:1.
+  Stale/unknown overview stays neutral, requirements absent; terminal overview
+  stays neutral. No colour-only status meaning is introduced.
+- Final workflow evidence: 30 PNGs, including six new view/edit regions and six
+  checklist blocked/ready regions. Agent inspected desktop/mobile examples;
+  these are not author acceptance or final-main release evidence. Previously
+  accepted Issue #41 Action screenshots were not overwritten; its regression
+  captures go to ignored outputs in this run.
+- First full client attempt exposed an older focus assertion racing its React
+  effect; waitFor now awaits exactly the same required heading focus. Final
+  clean full suite passed, without removed assertions or extended timeouts.
+- Temporary UI 5183 / API 3100 config was removed after verification. Existing
+  browser API headers use the actual page Origin; CSRF/Origin checks stay active.
+  Development database/uploads fingerprint was identical before/after both runs:
+  `90f809cf6536cd93187145cb7ccbf3012e90177edb7928934f8f0a8bdd3142d4`.
+
+Full server, full-browser inventory and dependency audits were not rerun for these
+client refinements. Manual author acceptance, commit/push, peer review and #43/#44
+remain pending. No final-main readiness or clean audit is implied.
+
+### Readiness banner emphasis follow-up, October 9
+
+The author clarified that the top Ready/Not ready banner must stand out from the
+requirement rows. Added 20–24px/800-weight text, larger icon, 20px padding and a
+6px leading border. One new style case; actual computed overview size, weight,
+padding and border checked for both blocked/ready at 1440/768/390px. Rules, audit
+records and edit behaviour unchanged. Reread handout and inspected complete relevant
+pages 6/11: immutable history is our approved interpretation of Part 7, while the
+raw JSON disclosure is not a handout-mandated UI.
+
+- Full client: 19 files / 170 tests passed, 17:24:59 Bangkok, 13.79s.
+- Typed client build passed (Vite 816ms).
+- Five workflow/UI browser journeys passed (46.1s); all 30 workflow PNGs refreshed.
+  Larger overview, actual contrast, keyboard focus, 44px targets and no overflow
+  verified. Agent inspected final blocked/ready overview at desktop/mobile.
+- UI 5183 / API 3100 temporary config removed. Development database/uploads
+  identical before/after:
+  `bbf6109562e728196482780e6c8aa5d34a3b5e46e8c7a93efbe04eb298928102`.
+  Differences from earlier hashes reflect the author's intervening manual work;
+  preservation is checked within each run. No agent development mutation occurred.
+- Earlier 14 targeted browser passes remain dated historical verification, not
+  an additional 14-test rerun of this CSS-only change. No full server/full browser
+  inventory/audit rerun, author acceptance, commit/push or peer approval claimed.
+
+### Readable action audit follow-up, October 9
+
+Following explicit author approval, revision details now show only changed business
+fields, with friendly labels, Yes/No and Bangkok dates. Creation shows initial
+details without an empty Before column. Actor/time/reason remain visible. Unchanged
+fields and internal record IDs are excluded from this readable view, not from the
+stored snapshots. Unknown account names remain honest Account #ID labels. Original
+snapshots are retained exactly under collapsed, keyboard-operable Technical details.
+No API/schema/history persistence or role/ownership change was made.
+
+- Full client: 20 files / 176 tests passed, 17:34:11 Bangkok, 32.11s, using
+  `npm --prefix client test -- --maxWorkers=2 --minWorkers=1`.
+  An initial default-parallel attempt passed 175 but timed out in an older creation
+  error-state test; the limited-worker rerun passed without changing assertions or
+  timeouts. All six new readable-audit cases passed in both runs.
+- Typed client build passed (Vite 715ms).
+- Eleven targeted browser journeys passed (1.8m): five Actions Taken and six
+  workflow/UI journeys. Real Staff and owning Requester history at 1440/768/390px
+  verifies changed-only values, Yes/No, actor attribution, initially collapsed
+  disclosure, visible keyboard focus/44px target and no overflow even for long text.
+  Expanded JSON is compared exactly to API snapshots; history is identical before
+  and after viewing. Requester still cannot edit. Earlier workflow/gate/recovery
+  assertions remain active.
+- Thirty-six workflow PNGs were deliberately generated. Agent inspected readable
+  audit at desktop Staff and mobile Requester widths; this is not author acceptance.
+  Accepted Issue #41 PNGs were not overwritten.
+- Temporary isolated UI 5183 / API 3100 configuration removed. Development
+  database/uploads matched before and after this run:
+  `67839b10333d11982859906c2827200bdf178033835068722abfa89cfbf7e119`.
+  Within-run preservation is separate from intervening author manual changes.
+- No full-server/full-browser-inventory/dependency-audit rerun is claimed. Author
+  manual acceptance, commit/push and peer review remain pending; no final-main
+  acceptance or clean dependency audit is implied.
+
+### Close detail follow-up, October 9
+
+Author-requested Close detail hides details/editor/audit and returns keyboard
+focus to View, with heading fallback for off-page records. Staff and Requesters
+can reopen saved records. Editing uses the explicit Discard changes and close
+detail label; pending/uncertain saves and refresh recovery cannot be dismissed.
+No write/deletion/API change. List refresh keeps deliberately closed deep links
+closed, and late audit reads are invalidated. Five new component cases failed
+before implementation; an existing recovery case retains its exact-retry checks
+and additionally checks the disabled close control.
+
+- Full client: 20 files / 181 tests passed, 17:43:35 Bangkok, 34.98s, limited to
+  two workers. Action suite: 38 cases. Typed build passed (Vite 735ms), after
+  correcting three unsupported exact query options caught by TypeScript; no
+  assertion or timeout was weakened.
+- Six workflow/UI browser journeys passed (1.1m). Staff/owning Requester at
+  1440/768/390px verify keyboard Close/View, returned focus, a 44px close target,
+  no reopened detail after refresh and no changed history. The editor journey
+  discards unsaved input and reopens saved details at all three widths. Earlier
+  workflow/gate/recovery and exact snapshot assertions remain active.
+- Temporary UI 5183 / API 3100 config removed. Development database/uploads
+  unchanged before/after:
+  `67839b10333d11982859906c2827200bdf178033835068722abfa89cfbf7e119`.
+  This run wrote only ignored screenshots; the 36 persistent feature PNGs remain
+  the prior readable-audit run and are not claimed as fresh Close detail evidence.
+- No full-server/full-browser-inventory/dependency-audit rerun, author manual
+  acceptance, commit/push or peer approval claimed.
+
+### Independent Action progress follow-up, October 9
+
+The author approved exposing Start/Complete/Cancel directly below saved details,
+before the optional field editor. These are independent state saves, not field
+edits. Six added cases and the revised view-mode assertion failed before the move.
+Existing completion Result/performer confirmation, cancellation reason/confirmation,
+read-only role/cycle/terminal rules and exact-key recovery assertions remain. Unknown
+state-only recovery no longer opens an unrelated field editor. No API/backend/schema
+or recorded-event change was made.
+
+- Full client: 20 files / 187 tests passed, 18:05:09 Bangkok, 34.28s, using two
+  workers. Action component suite: 44 cases. An earlier run had two new failures
+  caused by tests retaining detached buttons after Back remounted the controls;
+  querying the current buttons fixed those tests with the same focus assertions.
+- Final typed client build passed (Vite 1.27s).
+- Eleven targeted browser journeys passed (2.4m): five Actions and six workflow/UI.
+  Actual Staff starts and Administrator completes without the editor; a distinct
+  Planned action is cancelled directly. Corrections still explicitly open Edit.
+  Independent assignment/field payloads, performers, Requester access, lost responses,
+  conflicts, paging and whole-cycle resolve/close/reopen assertions remain active.
+  At 1440/768/390px, view mode shows progress controls, keyboard completion opens
+  only its confirmation, Back restores focus, target height is >=44px and no page
+  overflow occurs. Close/reopen/draft discard and exact snapshot checks also pass.
+- All 39 workflow PNGs generated deliberately, including three new action-progress
+  captures. Agent inspected desktop/mobile progress. Accepted Issue #41 PNGs were
+  not overwritten; their regression screenshots remain ignored outputs.
+- Temporary isolated UI 5183 / API 3100 config removed. Development database and
+  uploads unchanged within this run:
+  `cbf37924909c38917a7d61afeb3f513892672be03386ef1be2a99fd97670fafb`.
+  Across-run changes reflect intervening author manual work, not agent migration,
+  seed, reset or credential changes.
+- No full-server/full-browser-inventory/dependency-audit rerun, author manual
+  acceptance, commit/push or independent peer approval claimed. Issues #43/#44
+  and final-main acceptance remain pending.
+
+### Final feature-PR verification, October 9
+
+This later record supersedes the earlier pending full-regression/publication
+notes above, while preserving their actual dated results and limitations.
+
+- Full server: 31 files / 269 tests passed, 18:21:32 Bangkok, 106.13s,
+  using `npm --prefix server test`. Server production build passed.
+- Full client: the final product changes passed 20 files / 187 tests at
+  18:05:09 Bangkok (34.28s, two workers). The publication typed build also passed
+  (Vite 1.55s); subsequent test-origin corrections did not change product code.
+- Full browser inventory: 44 tests passed (4.0m), using temporary isolated UI
+  5183 / API 3100 configuration. The first attempt passed 42 and failed only two
+  older secondary-context navigations hard-coded to unavailable port 5173.
+  Three URLs now derive their origin from the active test page. The full rerun
+  retains all authentication/reset/revocation/role assertions; no assertion,
+  timeout or retry was weakened. Temporary configuration removed after completion.
+- Development database/uploads unchanged within both full browser attempts:
+  `bd723571386f81ec515cd44c9b7d2e97d0393bd7c874392d8c65691ae24118f2`.
+  Tests use guarded disposable targets; no development migration, seed, reset or
+  credential change was performed.
+- The author exercised Ticket `TKT-20261009-DE4TLN` through formal resolution,
+  closure, reopening and fresh-cycle completed work. Read-only saved-state checks
+  confirmed cycle-2 Resolved/Closed events, cycle-3 Reopened/In Progress events,
+  cleared resolution/advisory dates and retention of all earlier actions. At the
+  latest inspection, cycle 3 had one completed action and no unfinished work or
+  outstanding completed-action follow-up. This is exercised-flow evidence, not
+  blanket final author visual acceptance or independent peer approval.
+- The 39 feature PNGs remain the deliberate independent-progress capture run;
+  this full inventory wrote ignored outputs only. Agent screenshot inspection is
+  separate from author acceptance and final-main release captures.
+- Prepared for an Issue #42 feature PR to `lab4-staging`. Peer approval/merge,
+  dashboards (#43), release (#44), final-main acceptance and final author Lab 4
+  reflection remain pending. Dependency audit was not rerun: the recorded moderate
+  server Multer advisory remains a release-gate item, not a claimed clean audit.
 
 ## Submission mapping
 
