@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ApiError,
   createTicket,
@@ -104,9 +104,13 @@ function validateForm(fields: FormFields) {
 export function CreateTicketPage({
   requester,
   onRequesterUnavailable,
+  onCreated,
+  onNavigate,
 }: {
   requester: DevelopmentRequester;
   onRequesterUnavailable: () => void;
+  onCreated?: (ticket: CreatedTicket) => void;
+  onNavigate?: (path: string, replace?: boolean) => void;
 }) {
   const [referenceState, setReferenceState] = useState<ReferenceState>("loading");
   const [categories, setCategories] = useState<Category[]>([]);
@@ -118,6 +122,13 @@ export function CreateTicketPage({
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdTicket, setCreatedTicket] = useState<CreatedTicket | null>(null);
+  const [uploadFailed, setUploadFailed] = useState(false);
+  const alive = useRef(true), currentRequester = useRef(requester.id);
+  currentRequester.current = requester.id;
+  const savedHeading = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
+  useEffect(() => { if (createdTicket && !isSubmitting) savedHeading.current?.focus(); }, [createdTicket, isSubmitting]);
 
   async function loadReferences() {
     setReferenceState("loading");
@@ -165,6 +176,8 @@ export function CreateTicketPage({
     if (Object.keys(errors).length > 0) return;
 
     setIsSubmitting(true);
+    const submittingRequester = requester.id;
+    const current = () => alive.current && currentRequester.current === submittingRequester;
     try {
       const ticket = await createTicket(requester.id, {
         categoryId: Number(fields.categoryId),
@@ -173,26 +186,34 @@ export function CreateTicketPage({
         requestedPriority: fields.requestedPriority as RequestedPriority,
         description: fields.description.trim(),
       });
+      if (!current()) return;
       setCreatedTicket(ticket);
 
+      let anyUploadFailed = false;
       for (let index = 0; index < attachments.length; index += 1) {
         setAttachments((current) => current.map((item, itemIndex) =>
           itemIndex === index ? { ...item, state: "uploading", error: undefined } : item));
         try {
           await uploadTicketAttachment(requester.id, ticket.id, attachments[index].file);
+          if (!current()) return;
           setAttachments((current) => current.map((item, itemIndex) =>
             itemIndex === index ? { ...item, state: "succeeded" } : item));
         } catch (error) {
+          if (!current()) return;
           if (isRequesterUnavailable(error)) {
             onRequesterUnavailable();
             return;
           }
           const message = error instanceof ApiError ? error.message : "Upload failed. Retry from Ticket Detail.";
+          anyUploadFailed = true;
+          setUploadFailed(true);
           setAttachments((current) => current.map((item, itemIndex) =>
             itemIndex === index ? { ...item, state: "failed", error: message } : item));
         }
       }
+      if (!anyUploadFailed && current()) onCreated?.(ticket);
     } catch (error) {
+      if (!current()) return;
       if (isRequesterUnavailable(error)) {
         onRequesterUnavailable();
         return;
@@ -204,7 +225,7 @@ export function CreateTicketPage({
         setSubmitError("The Ticket could not be created. Try again.");
       }
     } finally {
-      setIsSubmitting(false);
+      if (current()) setIsSubmitting(false);
     }
   }
 
@@ -226,11 +247,12 @@ export function CreateTicketPage({
       <h1 id="create-ticket-title">Create Ticket</h1>
       <p className="page-intro">Describe the request clearly. The service desk will assign IT priority after submission.</p>
 
-      {createdTicket && (
-        <div className="success-panel" role="status">
-          <p className="eyebrow">Ticket created</p>
-          <h2>{createdTicket.ticketNumber}</h2>
-          <p>Your Ticket is saved. Successful files are attached; failed files can be retried later without creating another Ticket.</p>
+      {createdTicket && !isSubmitting && (
+        <div className={uploadFailed ? "feedback-panel feedback-panel-error" : "success-panel"} role={uploadFailed ? "alert" : "status"}>
+          <p className="eyebrow">{uploadFailed ? "Attachment upload failed" : "Ticket created"}</p>
+          <h2 ref={savedHeading} tabIndex={-1}>{createdTicket.ticketNumber}</h2>
+          <p>{uploadFailed ? "Your Ticket is saved, but some attachments could not be uploaded. Do not create it again. Open Ticket Detail to retry the failed files; successful files remain attached." : "Your Ticket is saved. All selected attachments have finished uploading."}</p>
+          {uploadFailed && <a className="secondary-button creation-recovery-link" href={`/tickets/${createdTicket.id}`} onClick={event => { if (onNavigate) { event.preventDefault(); onNavigate(`/tickets/${createdTicket.id}`, true); } }}>Open Ticket to retry attachments</a>}
         </div>
       )}
 
@@ -289,7 +311,7 @@ export function CreateTicketPage({
 
         {submitError && <div className="feedback-panel feedback-panel-error" role="alert">{submitError}</div>}
         <button className="primary-button submit-ticket" type="submit" disabled={isSubmitting || Boolean(createdTicket)}>
-          {isSubmitting ? (createdTicket ? "Uploading Attachments…" : "Creating Ticket…") : createdTicket ? "Ticket created" : "Create Ticket"}
+          {isSubmitting ? (createdTicket ? "Uploading Attachments…" : "Creating Ticket…") : createdTicket ? (uploadFailed ? "Ticket saved — attachment upload failed" : "Ticket created") : "Create Ticket"}
         </button>
       </form>
     </section>

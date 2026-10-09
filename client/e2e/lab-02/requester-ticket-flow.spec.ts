@@ -34,11 +34,13 @@ test("creates, finds, opens, attaches, downloads, removes, and protects a Reques
   await expect(page.getByText(/initial-invalid\.txt is not an allowed/i)).toBeVisible();
   await expect(page.getByText("initial-valid.png")).toBeVisible();
   await page.getByRole("button", { name: "Create Ticket" }).click();
-  const ticketNumber = await page.locator(".success-panel h2").textContent();
+  await expect(page).toHaveURL(/\/tickets\/\d+$/);
+  await expect(page.getByText("Ticket created successfully.", { exact: true })).toBeVisible();
+  const ticketNumber = await page.locator("#ticket-detail-title").textContent();
   expect(ticketNumber).toMatch(/^TKT-/);
-  const initialAttachment = page.locator(".attachment-list > li")
+  const initialAttachment = page.locator(".detail-attachment-list > li")
     .filter({ hasText: "initial-valid.png" });
-  await expect(initialAttachment).toContainText("succeeded");
+  await expect(initialAttachment).toContainText("Active");
 
   await page.getByRole("navigation", { name: "Primary navigation" })
     .getByRole("link", { name: "My Tickets" }).click();

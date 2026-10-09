@@ -132,7 +132,10 @@ export interface TicketDetail extends TicketListItem {
   attachments: AttachmentMetadata[];
 }
 
-export interface StaffTicketDetail extends TicketDetail {}
+export interface StaffTicketDetail extends TicketDetail { resolutionCycle: number; resolvedAt: string | null }
+export interface WorkflowTransition { id: number; fromStatus: TicketStatus; toStatus: TicketStatus; cycle: number; ticketVersion: number; actor: { id: number; displayName: string }; createdAt: string }
+export interface WorkflowHistoryPage { items: WorkflowTransition[]; page: number; pageSize: number; total: number; totalPages: number }
+export const getWorkflowHistory = (ticketId: number, page = 1) => getJson<WorkflowHistoryPage>(`/api/tickets/${ticketId}/workflow-history?page=${page}&pageSize=20`);
 export interface CommunicationEntry { id: number; body: string; author: { id: number; displayName: string }; createdAt: string }
 export interface EntryPage { items: CommunicationEntry[]; page: number; pageSize: number; total: number; totalPages: number }
 

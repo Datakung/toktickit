@@ -3,22 +3,15 @@ import type { AuthLocals } from "../auth/auth-middleware.js";
 import { lockAccountChanges } from "../admin/user-service.js";
 import { getPrisma } from "../prisma.js";
 import { attachmentMetadataSelect, toAttachmentMetadata } from "../attachments/attachment-metadata.js";
+import { requireActionSession, resolutionSummary } from "../actions/action-service.js";
+import { ticketTransitions, resolutionFailure } from "../tickets/workflow-rules.js";
 
 export class OperationError extends Error {
   constructor(public status: number, public code: string, message: string, public fields: Record<string, string> = {}) { super(message); }
 }
 
 const TERMINAL: TicketStatus[] = ["RESOLVED", "CLOSED", "CANCELLED"];
-export const transitions: Record<TicketStatus, TicketStatus[]> = {
-  NEW: ["OPEN", "CANCELLED"],
-  OPEN: ["IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CANCELLED"],
-  IN_PROGRESS: ["WAITING_FOR_REQUESTER", "RESOLVED", "CANCELLED"],
-  WAITING_FOR_REQUESTER: ["IN_PROGRESS", "RESOLVED", "CANCELLED"],
-  RESOLVED: ["CLOSED", "REOPENED"],
-  CLOSED: ["REOPENED"],
-  REOPENED: ["IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CANCELLED"],
-  CANCELLED: [],
-};
+export const transitions = ticketTransitions;
 const priorities: RequestedPriority[] = ["LOW", "MEDIUM", "HIGH"];
 const statuses = Object.keys(transitions) as TicketStatus[];
 
@@ -26,6 +19,7 @@ export const staffTicketSelect = {
   id: true, ticketNumber: true, summary: true, description: true,
   requestedPriority: true, itPriority: true, status: true, version: true,
   requesterResolutionIndicatedAt: true, createdAt: true, updatedAt: true,
+  resolutionCycle: true, resolvedAt: true,
   requester: { select: { id: true, displayName: true, email: true } },
   owner: { select: { id: true, displayName: true } },
   category: { select: { id: true, name: true } },
@@ -59,10 +53,7 @@ function version(value: unknown) {
 async function mutation<T>(auth: AuthLocals, ticketId: number, expected: number, action: (tx: Prisma.TransactionClient, ticket: Prisma.TicketGetPayload<{}>) => Promise<T>) {
   return getPrisma().$transaction(async tx => {
     await lockAccountChanges(tx);
-    const actor = await tx.user.findUnique({ where: { id: auth.currentUser.id } });
-    if (!actor?.isActive) throw new OperationError(401, "AUTHENTICATION_REQUIRED", "Sign in to continue.");
-    if (actor.mustChangePassword) throw new OperationError(403, "PASSWORD_CHANGE_REQUIRED", "Change your initial password to continue.");
-    if (!(["IT_STAFF", "ADMINISTRATOR"] as string[]).includes(actor.role)) throw new OperationError(403, "FORBIDDEN", "Staff access is required.");
+    await requireActionSession(tx, auth, true);
     await tx.$queryRaw`SELECT id FROM "Ticket" WHERE id = ${ticketId} FOR UPDATE`;
     const ticket = await tx.ticket.findUnique({ where: { id: ticketId } });
     if (!ticket) throw new OperationError(404, "TICKET_NOT_FOUND", "Ticket not found.");
@@ -119,7 +110,20 @@ export async function changeStatus(auth: AuthLocals, id: number, input: unknown)
   return mutation(auth, id, expected, async (tx, ticket) => {
     const next = body.status as TicketStatus;
     if (!transitions[ticket.status].includes(next)) throw new OperationError(409, "INVALID_STATUS_TRANSITION", "That status transition is not allowed.", { status: "Reload and choose an allowed transition." });
-    await tx.ticket.update({ where: { id }, data: { status: next, requesterResolutionIndicatedAt: next === "REOPENED" ? null : ticket.requesterResolutionIndicatedAt, version: { increment: 1 } } });
+    if (next === "RESOLVED" || next === "CANCELLED") {
+      const counts = await resolutionSummary(tx, ticket);
+      const failure = next === "RESOLVED" ? resolutionFailure(counts)
+        : counts.unfinishedCount > 0 ? "Finish or cancel active actions in this Ticket's current cycle before cancelling the Ticket." : null;
+      if (failure) throw new OperationError(409, next === "RESOLVED" ? "RESOLUTION_GATE_NOT_MET" : "ACTIVE_ACTIONS_REMAIN", failure);
+    }
+    const transitionedAt = new Date();
+    const updated = await tx.ticket.update({ where: { id }, data: {
+      status: next, version: { increment: 1 },
+      ...(next === "RESOLVED" ? { resolvedAt: transitionedAt } : {}),
+      ...(next === "REOPENED" ? { resolutionCycle: { increment: 1 }, resolvedAt: null, requesterResolutionIndicatedAt: null } : {}),
+    } });
+    await tx.ticketTransitionEvent.create({ data: { ticketId: id, actorId: auth.currentUser.id,
+      fromStatus: ticket.status, toStatus: next, cycle: updated.resolutionCycle, ticketVersion: updated.version, createdAt: transitionedAt } });
     return readUpdated(tx, id);
   });
 }

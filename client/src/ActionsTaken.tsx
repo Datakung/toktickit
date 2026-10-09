@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { ActionHistoryChanges } from "./ActionHistoryChanges.js";
 import {
   ACTION_RETRY_PREFIX, ApiError, getAction, getActionAssignees, getActionHistory, getActions, getStaffTicket, writeAction,
   type ActionFields, type ActionHistoryPage, type ActionPage, type ActionTakenRecord,
@@ -11,6 +12,7 @@ type Props = {
   linkedActionId?: string | null; externalBusy?: boolean;
   onParentUpdated?: (ticket: Awaited<ReturnType<typeof getStaffTicket>>) => void;
   onBusyChange?: (busy: boolean) => void;
+  onSummaryChange?: (summary: ActionPage | null) => void;
 };
 type Draft = Omit<ActionFields, "actionAt"> & { actionAt: string; changeReason: string };
 type Intent = { kind: ActionWriteKind; actionId: number | null; payload: ActionWritePayload };
@@ -35,11 +37,12 @@ export function ActionsTaken(props: Props) {
   return <ActionsPanel key={`${props.ticket.id}:${props.userId}:${props.staff}:${props.linkedActionId ?? ""}`} {...props} />;
 }
 
-function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, externalBusy = false, onParentUpdated, onBusyChange }: Props) {
+function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, externalBusy = false, onParentUpdated, onBusyChange, onSummaryChange }: Props) {
   const recoveryKey = `${ACTION_RETRY_PREFIX}${userId}:${ticket.id}`;
   const [list, setList] = useState<ActionPage | null>(null);
   const [selected, setSelected] = useState<ActionTakenRecord | null>(null);
   const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<Draft>(() => draftOf());
   const [assignee, setAssignee] = useState("");
   const [choices, setChoices] = useState<StaffOwner[]>([]);
@@ -64,8 +67,11 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
   const recordHeading = useRef<HTMLHeadingElement>(null), firstField = useRef<HTMLInputElement>(null);
   const confirmationField = useRef<HTMLTextAreaElement>(null), trigger = useRef<HTMLElement | null>(null);
   const completeButton = useRef<HTMLButtonElement>(null), cancelButton = useRef<HTMLButtonElement>(null);
+  const editButton = useRef<HTMLButtonElement>(null);
+  const listHeading = useRef<HTMLHeadingElement>(null);
+  const viewButtons = useRef(new Map<number, HTMLButtonElement>());
   const previousConfirmation = useRef<typeof confirmation>(null);
-  const callbacks = useRef({ onParentUpdated, onBusyChange }); callbacks.current = { onParentUpdated, onBusyChange };
+  const callbacks = useRef({ onParentUpdated, onBusyChange, onSummaryChange }); callbacks.current = { onParentUpdated, onBusyChange, onSummaryChange };
   const id = useId();
   const locked = busy || loading || blocked || !!unknown || !!saved || externalBusy;
   const readOnlyReason = !staff ? "Shared action history is read-only for Requesters."
@@ -75,10 +81,12 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
 
   useEffect(() => {
     alive.current = true;
-    return () => { alive.current = false; reads.current++; historyReads.current++; callbacks.current.onBusyChange?.(false); };
+    return () => { alive.current = false; reads.current++; historyReads.current++; callbacks.current.onBusyChange?.(false); callbacks.current.onSummaryChange?.(null); };
   }, []);
   useEffect(() => { callbacks.current.onBusyChange?.(busy || blocked || !!unknown || !!saved || loading); }, [busy, blocked, unknown, saved, loading]);
+  useEffect(() => { callbacks.current.onSummaryChange?.(busy || blocked || unknown || saved || loading ? null : list); }, [busy, blocked, unknown, saved, loading, list]);
   useEffect(() => { if (creating) firstField.current?.focus(); else if (selected) recordHeading.current?.focus(); }, [creating, selected?.id, selected?.version]);
+  useEffect(() => { if (editing && !readOnlyReason) firstField.current?.focus(); }, [editing]);
   useEffect(() => {
     if (confirmation) confirmationField.current?.focus();
     else if (previousConfirmation.current) (previousConfirmation.current === "COMPLETED" ? completeButton : cancelButton).current?.focus();
@@ -110,7 +118,7 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
       // These are independent reads: a concurrent write must not turn a mixed
       // snapshot into permission to save with stale action/Ticket versions.
       if (nextList.ticketVersion < ticket.version || (detail && (detail.action.id !== actionId || detail.action.ticketId !== ticket.id || detail.ticketVersion !== nextList.ticketVersion || detail.currentCycle !== nextList.currentCycle))
-        || (nextParent && nextParent.version !== nextList.ticketVersion)) throw new Error("Snapshot changed");
+        || (nextParent && (nextParent.version !== nextList.ticketVersion || nextParent.resolutionCycle !== nextList.currentCycle))) throw new Error("Snapshot changed");
       setList(nextList); setSelected(detail?.action ?? null); setChoices(eligible.items);
       setParentStatus(nextParent?.status ?? ticket.status);
       if (nextParent) callbacks.current.onParentUpdated?.(nextParent);
@@ -122,6 +130,7 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
       if (intent) {
         sessionStorage.removeItem(recoveryKey);
         setCreating(false); setConfirmation(null); setConfirmed(false); setSaved(null); setUnknown(null);
+        if (intent.kind === "create") setEditing(false);
         if (intent.kind === "edit") fieldSavedFor.current = actionId;
         setNotice(intent.kind === "create" ? "Action created." : intent.kind === "edit" ? "Action changes saved." : intent.kind === "assign" ? "Assignment saved. Other action fields were not submitted." : "Action state saved.");
       }
@@ -145,6 +154,7 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
           if (!["create", "edit", "assign", "state"].includes(intent?.kind) || !intent.payload?.requestId
             || (intent.actionId !== null && !validId(String(intent.actionId)))) throw new Error("Invalid recovery record");
           fieldSavedFor.current = recovery.fieldSavedFor;
+          setEditing(intent.kind === "edit" || intent.kind === "assign");
           if (recovery.confirmed) { setSaved(intent); setNotice("Save confirmed. Refreshing current record…"); void refresh(intent.actionId, 1, false, intent); }
           else {
             setUnknown(intent); setCreating(intent.kind === "create");
@@ -167,20 +177,38 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
 
   function choose(actionId: number) {
     if (locked) return;
-    setCreating(false); setConfirmation(null); setNotice(""); fieldSavedFor.current = null;
+    setCreating(false); setEditing(false); setConfirmation(null); setNotice(""); fieldSavedFor.current = null;
     void refresh(actionId, list?.page, true);
   }
   function newAction() {
     if (locked || terminal(parentStatus)) return;
     trigger.current = document.activeElement as HTMLElement;
-    reads.current++; historyReads.current++; setSelected(null); setCreating(true); setDraft(draftOf());
+    reads.current++; historyReads.current++; setSelected(null); setEditing(false); setCreating(true); setDraft(draftOf());
     setAssignee(""); setConfirmation(null); setError(""); setNotice(""); setFields({}); fieldSavedFor.current = null;
   }
   function exitDraft() {
     if (locked) return;
+    const wasCreating = creating;
+    setEditing(false);
     setCreating(false); setDraft(draftOf(selected ?? undefined)); setAssignee(selected?.assignee ? String(selected.assignee.id) : "");
-    setConfirmation(null); setFields({}); setError(""); trigger.current?.focus();
+    setConfirmation(null); setFields({}); setError("");
+    if (wasCreating) trigger.current?.focus(); else editButton.current?.focus();
     // Cancelling local input never reverses a confirmed mutation.
+  }
+  function editAction() {
+    if (locked || readOnlyReason || !selected) return;
+    setEditing(true); setConfirmation(null); setFields({}); setError("");
+  }
+  function closeDetail() {
+    if (locked || !selected) return;
+    const returnTo = viewButtons.current.get(selected.id) ?? listHeading.current;
+    // Only discard local input. Pending/uncertain writes must retain their recovery state.
+    historyReads.current++;
+    setSelected(null); setEditing(false); setCreating(false); setDraft(draftOf()); setAssignee("");
+    setConfirmation(null); setConfirmed(false); setCompletionResult(""); setCancellationReason("");
+    setHistoryPage(null); setHistoryBusy(false); setHistoryError(""); setFields({}); setError(""); setNotice("");
+    fieldSavedFor.current = null;
+    returnTo?.focus();
   }
   function validationErrors(): Record<string, string> {
     const found: Record<string, string> = {};
@@ -231,7 +259,7 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
     } finally { writeLock.current = false; if (alive.current) setBusy(false); }
   }
   function saveFields() {
-    if (!list || locked) return;
+    if (!list || locked || (!creating && !editing)) return;
     const found = validationErrors(); setFields(found);
     if (Object.keys(found).length) { setError("Correct the highlighted fields before saving."); firstField.current?.form?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(); return; }
     const values: ActionFields = { actionAt: bangkokInstant(draft.actionAt), description: draft.description, result: draft.result,
@@ -268,23 +296,29 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
     <option value="">Unassigned</option>{assignee && !choices.some(c => String(c.id) === assignee) && <option value={assignee}>No longer eligible — choose another assignee</option>}
     {choices.map(c => <option key={c.id} value={c.id}>{c.displayName}</option>)}</select>{fields.assigneeId && <span className="field-error" id={`${id}-assignee-error`}>{fields.assigneeId}</span>}</label>;
 
-  return <section className="detail-panel actions-taken" aria-label="Actions Taken" aria-busy={loading || busy}>
-    <div className="action-section-heading"><div><h2>Actions Taken</h2><p>Shared work records, separate from comments and private Internal Notes. All action times use Bangkok (UTC+07:00).</p></div>
+  return <section id="actions-taken" className="detail-panel actions-taken" aria-label="Actions Taken" aria-busy={loading || busy}>
+    <div className="action-section-heading"><div><h2 ref={listHeading} tabIndex={-1}>Actions Taken</h2><p>Shared work records, separate from comments and private Internal Notes. All action times use Bangkok (UTC+07:00).</p></div>
       {staff && <button className="primary-button" disabled={locked || terminal(parentStatus)} onClick={newAction}>New action</button>}</div>
     {readOnlyReason && <p className="action-readonly">{readOnlyReason}</p>}
     {notice && <p className="success-message" role="status">{notice}</p>}
     {error && <div className="feedback-panel feedback-panel-error" role="alert"><p>{error}</p></div>}
     {unknown && <button className="secondary-button" disabled={busy} onClick={() => void send(unknown, true)}>{busy ? "Recovering save…" : "Retry same save"}</button>}
     {!unknown && <button className="text-button" disabled={busy || loading || externalBusy || (!!linkedActionId && !validId(linkedActionId))}
-      onClick={() => void refresh(saved?.actionId ?? selected?.id ?? (linkedActionId ? Number(linkedActionId) : null), list?.page, false, saved ?? undefined)}>{saved ? "Refresh saved record" : blocked ? "Reload and review" : "Refresh actions"}</button>}
+      onClick={() => void refresh(saved?.actionId ?? selected?.id ?? null, list?.page, false, saved ?? undefined)}>{saved ? "Refresh saved record" : blocked ? "Reload and review" : "Refresh actions"}</button>}
     {loading && <p>Loading current action records…</p>}
     {list && <><p>{list.total} actions · Page {list.page} of {list.totalPages} · Current cycle {list.currentCycle}</p>
       {list.items.length === 0 ? <p>No actions on this page.</p> : <table className="actions-table"><caption>Actions for this Ticket, ordered by creation</caption><thead><tr><th scope="col">Action / Description</th><th scope="col">Action time</th><th scope="col">State / Cycle</th><th scope="col">Assignee</th><th scope="col">Performed by</th><th scope="col">Details</th></tr></thead><tbody>
-        {list.items.map(a => <tr key={a.id}><td data-label="Action / Description"><strong>Action {a.id}</strong><p className="preserve-text">{a.description}</p></td><td data-label="Action time">{date(a.actionAt)}</td><td data-label="State / Cycle">{stateLabel(a.state)} · Cycle {a.cycle}</td><td data-label="Assignee">{a.assignee?.displayName ?? "Unassigned"}</td><td data-label="Performed by">{a.performedBy?.displayName ?? "Not recorded yet"}</td><td data-label="Details"><button className="secondary-button" disabled={locked} aria-label={`View action ${a.id}`} onClick={() => choose(a.id)}>View</button></td></tr>)}
+        {list.items.map(a => <tr key={a.id}><td data-label="Action / Description"><strong>Action {a.id}</strong><p className="preserve-text">{a.description}</p></td><td data-label="Action time">{date(a.actionAt)}</td><td data-label="State / Cycle">{stateLabel(a.state)} · Cycle {a.cycle}</td><td data-label="Assignee">{a.assignee?.displayName ?? "Unassigned"}</td><td data-label="Performed by">{a.performedBy?.displayName ?? "Not recorded yet"}</td><td data-label="Details"><button ref={button => { if (button) viewButtons.current.set(a.id, button); else viewButtons.current.delete(a.id); }} className="secondary-button" disabled={locked} aria-label={`View action ${a.id}`} onClick={() => choose(a.id)}>View</button></td></tr>)}
       </tbody></table>}
       <nav className="action-controls" aria-label="Actions pages"><button className="secondary-button" disabled={locked || list.page <= 1} onClick={() => void refresh(selected?.id ?? null, list.page - 1)}>Previous actions</button><button className="secondary-button" disabled={locked || list.page >= list.totalPages} onClick={() => void refresh(selected?.id ?? null, list.page + 1)}>Next actions</button></nav>
     </>}
-    {selected && <section className="action-record" aria-label={`Action ${selected.id} details`}><h3 ref={recordHeading} tabIndex={-1}>Action {selected.id}</h3>
+    {selected && <section className="action-record" aria-label={`Action ${selected.id} details`}>
+      <div className="action-section-heading"><h3 ref={recordHeading} tabIndex={-1}>Action {selected.id}</h3>
+        <div className="action-controls">
+          {staff && !readOnlyReason && <button ref={editButton} className="secondary-button" disabled={locked} aria-expanded={editing} aria-controls={`${id}-editor`} onClick={editing ? exitDraft : editAction}>{editing ? "Close editor" : "Edit action"}</button>}
+          <button className="secondary-button" disabled={locked} onClick={closeDetail}>{editing ? "Discard changes and close detail" : "Close detail"}</button>
+        </div>
+      </div>
       <dl className="action-record-grid">{[
         ["Action Date/Time", date(selected.actionAt)], ["Description", selected.description], ["Result", selected.result || "Not recorded"],
         ["State", stateLabel(selected.state)], ["Cycle", selected.cycle], ["Assigned to", selected.assignee?.displayName ?? "Unassigned"],
@@ -295,7 +329,20 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
         ...(selected.cancellationReason ? [["Cancellation reason", selected.cancellationReason]] : []),
       ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="preserve-text">{value}</dd></div>)}</dl>
     </section>}
-    {staff && !readOnlyReason && (creating || selected) && <>
+    {staff && !readOnlyReason && selected && selected.state !== "COMPLETED" && <section className="action-state-controls" aria-label="Action state controls">
+      <h3>Action progress</h3>
+      <p>Start, complete or cancel this work without editing its fields. Each operation saves separately.</p>
+      {!confirmation ? <div className="action-controls">{selected.state === "PLANNED" && <button className="secondary-button" disabled={locked} onClick={() => saveState("IN_PROGRESS")}>Start action</button>}<button ref={completeButton} className="primary-button" disabled={locked} onClick={() => openConfirmation("COMPLETED")}>Complete action</button><button ref={cancelButton} className="secondary-button" disabled={locked} onClick={() => openConfirmation("CANCELLED")}>Cancel action</button></div>
+        : <form aria-label={confirmation === "COMPLETED" ? "Confirm completion" : "Confirm cancellation"} onSubmit={e => { e.preventDefault(); saveState(confirmation); }}><fieldset disabled={locked}><legend>{confirmation === "COMPLETED" ? "Complete this action" : "Cancel this action"}</legend>
+          <p>{confirmation === "COMPLETED" ? `Completion records ${actorName} as the actual performer, not the assignee. Unsaved action fields are not submitted.` : "Cancellation retains this record and its audit history. This cannot be reversed."}</p>
+          <label className="action-field" htmlFor={`${id}-state-text`}>{confirmation === "COMPLETED" ? "Completion Result" : "Cancellation reason"}<textarea aria-label={confirmation === "COMPLETED" ? "Completion Result" : "Cancellation reason"} ref={confirmationField} id={`${id}-state-text`} required maxLength={confirmation === "COMPLETED" ? 4000 : 500}
+            value={confirmation === "COMPLETED" ? completionResult : cancellationReason} aria-invalid={!!fields[confirmation === "COMPLETED" ? "result" : "cancellationReason"]}
+            onChange={e => confirmation === "COMPLETED" ? setCompletionResult(e.target.value) : setCancellationReason(e.target.value)} />{fields[confirmation === "COMPLETED" ? "result" : "cancellationReason"] && <span className="field-error">{fields[confirmation === "COMPLETED" ? "result" : "cancellationReason"]}</span>}</label>
+          <label className="action-checkbox"><input type="checkbox" required checked={confirmed} onChange={e => setConfirmed(e.target.checked)} />{confirmation === "COMPLETED" ? "I confirm I performed this work." : "I confirm cancellation of this action."}</label>
+          <div className="action-controls"><button className="primary-button">{confirmation === "COMPLETED" ? "Confirm complete" : "Confirm cancel action"}</button><button type="button" className="secondary-button" onClick={() => { setConfirmation(null); trigger.current?.focus(); }}>Back without changing state</button></div>
+        </fieldset></form>}
+    </section>}
+    {staff && !readOnlyReason && (creating || (selected && editing)) && <div id={`${id}-editor`}>
       <form className="action-editor" onSubmit={e => { e.preventDefault(); saveFields(); }} aria-label={creating ? "Create action" : "Edit action fields"}>
         <fieldset disabled={locked}><legend>{creating ? "New action" : "Action fields"}</legend>
           <p>{creating ? "Creates one Planned record. Its initial fields and assignee save together." : "Save action changes fields only. Assignment is saved separately; cancelling input does not undo saved changes."}</p>
@@ -309,21 +356,13 @@ function ActionsPanel({ ticket, staff, userId, actorName, linkedActionId, extern
         </fieldset>
       </form>
       {selected && selected.state !== "COMPLETED" && <form className="action-assignment" aria-label="Action assignment" onSubmit={e => { e.preventDefault(); saveAssignment(); }}><fieldset disabled={locked}><legend>Assignment</legend><p>Save assignment changes only the assignee. Unsaved action fields are kept.</p>{assigneeControl}<button className="secondary-button">Save assignment</button></fieldset></form>}
-      {selected && selected.state !== "COMPLETED" && <section className="action-state-controls" aria-label="Action state controls">
-        {!confirmation ? <div className="action-controls">{selected.state === "PLANNED" && <button className="secondary-button" disabled={locked} onClick={() => saveState("IN_PROGRESS")}>Start action</button>}<button ref={completeButton} className="primary-button" disabled={locked} onClick={() => openConfirmation("COMPLETED")}>Complete action</button><button ref={cancelButton} className="secondary-button" disabled={locked} onClick={() => openConfirmation("CANCELLED")}>Cancel action</button></div>
-          : <form aria-label={confirmation === "COMPLETED" ? "Confirm completion" : "Confirm cancellation"} onSubmit={e => { e.preventDefault(); saveState(confirmation); }}><fieldset disabled={locked}><legend>{confirmation === "COMPLETED" ? "Complete this action" : "Cancel this action"}</legend>
-            <p>{confirmation === "COMPLETED" ? `Completion records ${actorName} as the actual performer, not the assignee. Unsaved action fields are not submitted.` : "Cancellation retains this record and its audit history. This cannot be reversed."}</p>
-            <label className="action-field" htmlFor={`${id}-state-text`}>{confirmation === "COMPLETED" ? "Completion Result" : "Cancellation reason"}<textarea aria-label={confirmation === "COMPLETED" ? "Completion Result" : "Cancellation reason"} ref={confirmationField} id={`${id}-state-text`} required maxLength={confirmation === "COMPLETED" ? 4000 : 500}
-              value={confirmation === "COMPLETED" ? completionResult : cancellationReason} aria-invalid={!!fields[confirmation === "COMPLETED" ? "result" : "cancellationReason"]}
-              onChange={e => confirmation === "COMPLETED" ? setCompletionResult(e.target.value) : setCancellationReason(e.target.value)} />{fields[confirmation === "COMPLETED" ? "result" : "cancellationReason"] && <span className="field-error">{fields[confirmation === "COMPLETED" ? "result" : "cancellationReason"]}</span>}</label>
-            <label className="action-checkbox"><input type="checkbox" required checked={confirmed} onChange={e => setConfirmed(e.target.checked)} />{confirmation === "COMPLETED" ? "I confirm I performed this work." : "I confirm cancellation of this action."}</label>
-            <div className="action-controls"><button className="primary-button">{confirmation === "COMPLETED" ? "Confirm complete" : "Confirm cancel action"}</button><button type="button" className="secondary-button" onClick={() => { setConfirmation(null); trigger.current?.focus(); }}>Back without changing state</button></div>
-          </fieldset></form>}
-      </section>}
-    </>}
+    </div>}
     {selected && <section className="action-history" aria-label="Action audit history"><h3>Audit history</h3><p>Immutable revisions, ordered oldest first. Times use Bangkok.</p>
       {historyBusy && <p>Loading audit history…</p>}{historyError && <><p role="alert">{historyError}</p><button className="secondary-button" onClick={() => void loadHistory(selected.id)}>Retry history</button></>}
-      {historyPage && <><ol>{historyPage.items.map(event => <li key={event.id}><strong>{stateLabel(event.kind)} · Revision {event.version}</strong><p>{event.actor.displayName} · {date(event.createdAt)}</p>{event.reason && <p className="preserve-text">Reason: {event.reason}</p>}<details><summary>Before and after values</summary><h4>Before</h4><pre>{event.before ? JSON.stringify(event.before, null, 2) : "No previous record"}</pre><h4>After</h4><pre>{JSON.stringify(event.after, null, 2)}</pre></details></li>)}</ol>{!historyPage.items.length && <p>No revisions on this page.</p>}<p>History page {historyPage.page} of {historyPage.totalPages} · {historyPage.total} revisions</p><nav className="action-controls" aria-label="Audit history pages"><button className="secondary-button" disabled={historyBusy || historyPage.page <= 1} onClick={() => void loadHistory(selected.id, historyPage.page - 1)}>Previous history</button><button className="secondary-button" disabled={historyBusy || historyPage.page >= historyPage.totalPages} onClick={() => void loadHistory(selected.id, historyPage.page + 1)}>Next history</button></nav></>}
+      {historyPage && <><ol>{historyPage.items.map(event => <li key={event.id}><strong>{stateLabel(event.kind)} · Revision {event.version}</strong><p>Changed by {event.actor.displayName} · {date(event.createdAt)} (Bangkok)</p>{event.reason && <p className="preserve-text">Reason: {event.reason}</p>}
+        <ActionHistoryChanges event={event} />
+        <details className="action-audit-technical"><summary>Technical details</summary><p>Original audit snapshots, retained unchanged.</p>{event.before && <><h4>Before</h4><pre>{JSON.stringify(event.before, null, 2)}</pre></>}<h4>{event.kind === "CREATED" && !event.before ? "Initial snapshot" : "After"}</h4><pre>{JSON.stringify(event.after, null, 2)}</pre></details>
+      </li>)}</ol>{!historyPage.items.length && <p>No revisions on this page.</p>}<p>History page {historyPage.page} of {historyPage.totalPages} · {historyPage.total} revisions</p><nav className="action-controls" aria-label="Audit history pages"><button className="secondary-button" disabled={historyBusy || historyPage.page <= 1} onClick={() => void loadHistory(selected.id, historyPage.page - 1)}>Previous history</button><button className="secondary-button" disabled={historyBusy || historyPage.page >= historyPage.totalPages} onClick={() => void loadHistory(selected.id, historyPage.page + 1)}>Next history</button></nav></>}
     </section>}
   </section>;
 }
