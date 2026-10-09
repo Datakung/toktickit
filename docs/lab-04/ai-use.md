@@ -1,7 +1,7 @@
 # Lab 4 AI Use and Reflection
 
-Status: Actual interaction record through accepted Issues #40/#41 and local
-Issue #42 workflow implementation and creation refinement, through 2026-10-09. Issue #42 publication/review,
+Status: Actual interaction record through accepted Issues #40-42 and local
+Issue #43 dashboards on 2026-10-10. Dashboard author/publication/peer review,
 final release and author-approved Lab 4 reflection remain pending.
 
 Tool: OpenAI Codex desktop. Exact selected model identifiers have not been
@@ -157,6 +157,117 @@ page. Authentication, reset, session-revocation and role assertions are unchange
 no retries/timeouts were increased. Full rerun results are recorded in tests.md.
 No development seed/reset/credential change or new migration was performed.
 This is supplementary evidence, not another selected key prompt or final reflection.
+
+### Supplementary Issue #43 interaction evidence (2026-10-10)
+
+The author said "He merged it let's move to the next". The agent verified PR #48's
+actual approval/merge, updated staging and started feature/43-dashboards. It reread
+the supplied complete PDF and inspected relevant dashboard illustrations before
+implementing the approved role/metric rules. Initial API tests exposed missing
+endpoints; subsequent tests caught a missing Prisma import and invalid fixture
+cycle/completed-field data. UI tests cover loading, genuine zeros, refresh failure,
+forbidden clearing, identity changes and exact URL filters. Typed builds caught a
+generic dictionary cast and two missing Ticket fixture fields. The first full UI
+run caught an outdated exact status-option assertion after adding Active Tickets;
+all eight status assertions remain. The first dashboard browser run exposed a
+missing /api prefix in the test's comparison URLs, not the product links.
+
+Performance tests observe actual emitted SQL statement counts, bounded payloads
+and five warmed reads per role with 500 Tickets/Actions. An initial large-fixture
+validation failure required the existing mandatory note fields; no product schema
+was weakened. Legacy browser login helpers now verify the new dashboard home then
+navigate explicitly to their original test destination. No old security checks are
+dropped, no retry/timeout raised. The stopped existing database container was
+started for testing; only guarded test/E2E targets were seeded/reset. Feature
+screenshots are agent-inspected evidence, not author visual approval or final-main
+release captures. No migration, dependency, development seed or credential reset.
+This supplements the selected real prompts; it does not fabricate an author reflection.
+
+Final local checks: 288 server tests, 210 client tests, both builds and the complete
+48-scenario Chromium inventory passed. The initial full browser run's three Admin
+home assumptions were corrected in the shared helper; no assertions were relaxed.
+Inspection also caught malformed Requester date values reaching a formatter and
+undefined optional queue filters being serialized. Focused regression tests now
+cover both. Existing API/UI ports and development hashes were preserved. No PR,
+commit/push, board movement or author visual approval is claimed for this branch.
+Final visual inspection caught a narrow mobile work-list caption. The agent
+added a scoped full-width caption rule and an actual-browser width assertion,
+and waited for loaded work counts before capturing. The four dashboard journeys
+and typed build were rerun; data/API semantics are unchanged.
+
+Supplementary author dashboard review: the author reported six Requester and
+five Staff checks passing, then requested smaller Requester quick links,
+equal/aligned Action progress buttons and wider work tables with one-line labels.
+The agent scoped CSS to these controls and My Actions, preserving responsive
+cards, touch targets and all independent state/field/assignment semantics.
+The added browser layout scenario checks visual line positions, equal button
+dimensions before/after Start, realistic longer Ticket numbers and overflow at
+1440/1150/768/390. A first assertion counted separate text nodes as separate
+lines; it was corrected to count distinct vertical positions, not relaxed.
+Five dashboard journeys (17.2s), all 210 client tests (35.74s) and the build pass.
+Feature captures were regenerated; representative desktop/mobile images were
+inspected. Development data/uploads fingerprints matched within the run.
+No new full-server/full-browser inventory/audit or peer approval is claimed.
+
+Later author clarification: browser-toolbar screenshots all showed 100% zoom.
+The author asked to shrink the shared interface while preserving earlier header,
+equal-button and one-line-table requirements. The agent implemented compact
+workspace typography/spacing, smaller dashboard numbers/cards/lists, aligned
+three-column Staff metrics and a centered 1200px work area. No CSS zoom/transform,
+root/browser scaling or data/save/authorization behavior changed. Five deliberate
+browser/evidence cases passed at wide desktop and responsive widths (22.4s),
+all 210 client tests passed (39.10s), and the build passed. The full Chromium
+inventory then passed all 49 scenarios (4.0m), preserving auth, accounts,
+attachments, communication, Action/workflow and responsive assertions. The
+development database/uploads fingerprint stayed unchanged within both runs.
+No timeout/retry increased or assertion skipped. Author acceptance of the
+new compact look remains pending; no new full-server or audit result is claimed.
+
+Latest author prompt: fix the remaining oversized-looking dashboard cards/lists,
+leaving the balanced My Actions view. The agent reduced dashboard-only whitespace,
+shortened visible panel links to `View all` with descriptive accessible names,
+and kept text, numbers, headers, touch targets and destinations unchanged.
+All 210 client tests (35.67s), the typed build and five guarded browser/evidence
+cases (19.5s) passed; updated Staff desktop/mobile images were inspected and
+development state remained unchanged. No fresh full inventory/server/audit run
+or author/peer visual approval is claimed for this last adjustment.
+
+Later author prompt: fix misaligned action create/discard buttons and clarify
+whether action numbering restarts per Ticket. The agent checked the ActionTaken
+global auto-increment ID and existing ID-based labels, leaving numbering intact.
+Editor buttons now reuse the equal-size confirmation grid with zero top margins
+and full-width mobile stacking. An added style test and expanded browser case
+cover both create/edit controls at 1440/768/390px. All 211 client tests (34.63s),
+typed build and five guarded browser cases (20.7s) passed. Representative new
+control captures were inspected; development state matched within the run. No
+fresh full inventory, server/audit or approval claim accompanies this correction.
+
+Subsequent author request: make action numbering independent per Ticket and
+correct the incorrect display indexes. The handout does not prescribe global
+display numbering; this is an author-approved UI refinement. The agent added
+backend-derived Ticket-local `actionNumber` DTO fields and replaced global-ID
+labels in lists/details/dashboard/work views while retaining internal IDs for
+writes, deep links and immutable history. No migration/reset was needed. Tests
+cover interleaved Tickets, tied times, later pages, prior/cancelled work, filtered
+view parity, replay/audit IDs and forged-number rejection. Full client 211 tests,
+both builds and the complete server rerun 290 tests pass. The first server run
+exposed a new fixture missing its cancellation reason; the fixture was corrected
+without weakening the database constraint or assertions. Five deliberate browser
+capture cases pass and representative work images were inspected. Development
+state was unchanged within that browser run; author/peer acceptance remains pending.
+
+The complete guarded Chromium inventory then passed all 49 scenarios (4.5m),
+including later-page Action 21, ID-based real writes/deep links, dashboard number
+parity and resolution/close/reopen. Existing security/focus/lifecycle assertions
+remain; no retry/timeout increase or skip. Development database/uploads matched
+before/after. Ordinary screenshots stay ignored; final-main evidence, dependency
+audit and independent/author visual acceptance are not claimed by this result.
+
+The author subsequently stated "Everything in order" and authorized committing,
+pushing and opening the Issue #43 PR into `lab4-staging`. The agent prepared the
+reviewed feature, documentation and isolated screenshot evidence for publication.
+This is author feature/UI acceptance, not independent peer approval, a new test
+run, final-main acceptance or approval of the pending reflection below.
 
 ## My Reflection
 

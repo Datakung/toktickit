@@ -13,10 +13,15 @@ on `feature/41-actions-ui`, implementation `cd5aa76` and documentation `3addd43`
 published in [PR #47](https://github.com/Datakung/toktickit/pull/47).
 The legacy fixture correction `0cf9e58` was [approved by Phanuwit](https://github.com/Datakung/toktickit/pull/47#pullrequestreview-5439057032)
 on 2026-10-07 and merged into staging as `f4da089`. Issue #41 is closed.
-Issue #42 is prepared for feature review on `feature/42-ticket-workflow` from that
-merge. The author exercised resolution, closure, reopening and fresh-cycle work;
-independent peer approval/merge and final-main acceptance remain pending.
+Phanuwit [approved PR #48](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227)
+at `b7f6bb9` and merged Issue #42 into `lab4-staging` as `00fddc1` on 2026-10-09.
+Issue #43 is locally implemented on `feature/43-dashboards` from that accepted merge.
+Its author review/publication/peer acceptance and final-main acceptance remain pending.
 Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
+
+Action labels count separately within each Ticket: Action 1, Action 2, and so on.
+They continue across pages and resolution cycles. Internal record IDs in links
+and audit history remain unchanged; this refinement needs no migration or reset.
 
 Issue #42 adds whole-current-cycle resolution/cancellation checks, atomic formal
 transition history and fresh cycles on reopen. Staff see an authoritative
@@ -95,8 +100,15 @@ database/uploads. Thirteen screenshots are feature evidence, not final release.
 Three-width feature captures live in [Actions evidence](artifacts/lab-04/screenshots/actions-taken/README.md).
 Current branch results and limitations are in [Lab 4 tests](docs/lab-04/tests.md).
 Those published Issue #41 checks did not include final Ticket gate enforcement.
-Issue #42 now implements that gate locally; its publication/review, dashboards
-(#43), final-main evidence and submission (#44) remain pending.
+Issue #42's gate is peer-accepted. Issue #43 adds read-only Requester and Staff/Admin
+dashboards, genuine zero/loading/error states, captured seven-day ranges and matching
+URL-based Ticket/work-list links. Role home pages are `/dashboard` and
+`/staff/dashboard`; My Tickets, Create Ticket, Ticket Queue and Users remain available.
+Metrics come from one backend snapshot, never from a downloaded page of records.
+See [dashboard screenshots](artifacts/lab-04/screenshots/dashboards/README.md) and
+[current test evidence](docs/lab-04/tests.md). No new migration, dependency or
+development seed/reset is required. Publication/review for #43 and final-main
+evidence/submission (#44) remain pending.
 
 Before running this branch against development, stop the API and take a verified
 database backup (and retain uploads). Then, from `server`, explicitly run:

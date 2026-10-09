@@ -151,8 +151,8 @@ test("readable audit changes preserve exact snapshots and owned Requester visibi
       expect(await close.evaluate(el => el.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
       await page.keyboard.press("Enter");
       await expect(history).toHaveCount(0);
-      await expect(page.getByRole("region", { name: `Action ${actionId} details` })).toHaveCount(0);
-      const view = page.getByRole("button", { name: `View action ${actionId}`, exact: true });
+      await expect(page.getByRole("region", { name: "Action 1 details" })).toHaveCount(0);
+      const view = page.getByRole("button", { name: "View action 1", exact: true });
       await expect(view).toBeFocused();
       await page.getByRole("button", { name: "Refresh actions", exact: true }).click();
       await expect(view).toBeEnabled(); await expect(history).toHaveCount(0);
@@ -167,7 +167,7 @@ test("action details stay in view mode until Edit is chosen at every width", asy
   const actionId = await create(page, t.id, "Verify account access with the Requester");
   await page.goto(`/staff/tickets/${t.id}?tab=actions&actionId=${actionId}`);
   const actions = page.getByRole("region", { name: "Actions Taken", exact: true });
-  await expect(actions.getByRole("heading", { name: `Action ${actionId}`, exact: true })).toBeFocused();
+  await expect(actions.getByRole("heading", { name: "Action 1", exact: true })).toBeFocused();
   for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: 1000 });
     await expect(actions.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
@@ -197,15 +197,15 @@ test("action details stay in view mode until Edit is chosen at every width", asy
     await capture(page, info, `action-edit-${width}`);
     await actions.getByRole("button", { name: "Close editor" }).click();
     await expect(edit).toBeFocused();
-    await expect(actions.getByRole("region", { name: `Action ${actionId} details` })).toContainText("Verify account access with the Requester");
+    await expect(actions.getByRole("region", { name: "Action 1 details" })).toContainText("Verify account access with the Requester");
     await edit.click();
     await actions.getByLabel("Description", { exact: true }).fill("Discard this draft and close the entire detail");
     await actions.getByRole("button", { name: "Discard changes and close detail" }).click();
     await expect(actions.getByRole("region", { name: "Action audit history" })).toHaveCount(0);
     await expect(actions.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
-    const view = actions.getByRole("button", { name: `View action ${actionId}`, exact: true });
+    const view = actions.getByRole("button", { name: "View action 1", exact: true });
     await expect(view).toBeFocused(); await view.click();
-    await expect(actions.getByRole("region", { name: `Action ${actionId} details` })).toContainText("Verify account access with the Requester");
+    await expect(actions.getByRole("region", { name: "Action 1 details" })).toContainText("Verify account access with the Requester");
   }
   expect((await (await page.request.get(`${api}/api/tickets/${t.id}/actions/${actionId}`)).json()).action.version).toBe(1);
 });

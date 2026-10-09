@@ -38,14 +38,17 @@ async function fixture(page: Page) {
   await expect(page.getByRole("button", { name: "New action" })).toBeEnabled();
   return ticket as { id: number; ticketNumber: string };
 }
-async function create(page: Page, description: string) {
+async function create(page: Page, description: string, actionNumber = 1) {
   const section = page.getByRole("region", { name: "Actions Taken", exact: true });
   await section.getByRole("button", { name: "New action" }).click();
   await expect(section.getByLabel("Action Date/Time (Bangkok)")).toBeFocused();
   await section.getByLabel("Description", { exact: true }).fill(description);
+  const response = page.waitForResponse(r => r.request().method() === "POST" && /\/api\/staff\/tickets\/\d+\/actions$/.test(new URL(r.url()).pathname));
   await section.getByRole("button", { name: "Create action", exact: true }).click();
+  const receipt = await (await response).json();
   await expect(section.getByText("Action created.", { exact: true })).toBeVisible();
-  return Number((await section.getByRole("heading", { name: /^Action \d+$/ }).innerText()).split(" ")[1]);
+  await expect(section.getByRole("heading", { name: `Action ${actionNumber}`, exact: true })).toBeFocused();
+  return receipt.actionId as number;
 }
 async function capture(page: Page, info: TestInfo, name: string) {
   await expect.poll(() => page.evaluate(() => Math.max(document.body.scrollWidth, document.documentElement.scrollWidth) <= innerWidth)).toBe(true);
@@ -79,7 +82,7 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   await expect(section.getByRole("button", { name: "Start action" })).toHaveCount(0);
   await signOut(page); await login(page, "admin@example.test");
   await page.goto(`/staff/tickets/${ticket.id}?tab=actions&actionId=${first}`);
-  await expect(section.getByRole("heading", { name: `Action ${first}`, exact: true })).toBeFocused();
+  await expect(section.getByRole("heading", { name: "Action 1", exact: true })).toBeFocused();
   await expect(section.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
   await section.getByRole("button", { name: "Complete action", exact: true }).click();
   await expect(section.getByLabel("Completion Result")).toBeFocused();
@@ -87,7 +90,7 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   await section.getByLabel("I confirm I performed this work.").check();
   await section.getByRole("button", { name: "Confirm complete" }).click();
   await expect(section.getByText("Action state saved.", { exact: true })).toBeVisible();
-  const detail = section.getByRole("region", { name: `Action ${first} details` });
+  const detail = section.getByRole("region", { name: "Action 1 details" });
   await expect(detail).toContainText("Mali Support"); await expect(detail).toContainText("Suda Support"); await expect(detail).toContainText("Local Administrator");
   await expect(section.getByLabel("Action assignee")).toHaveCount(0);
   await expect(section.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
@@ -104,7 +107,7 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   await section.getByRole("button", { name: "Save action", exact: true }).click();
   await expect(section.getByText("Action changes saved.", { exact: true })).toBeVisible();
   await capture(page, info, "staff-completed-correction-desktop");
-  const second = await create(page, "Duplicate route investigation");
+  const second = await create(page, "Duplicate route investigation", 2);
   expect(second).not.toBe(first);
   await section.getByRole("button", { name: "Cancel action", exact: true }).click();
   await section.getByLabel("Cancellation reason").fill("Already covered by completed VPN diagnosis.");
@@ -115,7 +118,7 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   await capture(page, info, "staff-cancelled-desktop");
   await signOut(page); await login(page, "anan.chaiyasit@example.test");
   await page.goto(`/tickets/${ticket.id}?tab=actions&actionId=${first}`);
-  await expect(section.getByRole("heading", { name: `Action ${first}`, exact: true })).toBeFocused();
+  await expect(section.getByRole("heading", { name: "Action 1", exact: true })).toBeFocused();
   await expect(section.getByText(/history is read-only/)).toBeVisible();
   await expect(section.getByRole("button", { name: "New action" })).toHaveCount(0);
   await expect(section.getByText(/Local Administrator/).first()).toBeVisible();
@@ -194,7 +197,7 @@ test("responsive cards, field controls and read-only histories fit 1440/768/390p
   }
   await signOut(page); await login(page, "anan.chaiyasit@example.test");
   await page.goto(`/tickets/${ticket.id}?tab=actions&actionId=${actionId}`);
-  await expect(section.getByRole("heading", { name: `Action ${actionId}`, exact: true })).toBeFocused();
+  await expect(section.getByRole("heading", { name: "Action 1", exact: true })).toBeFocused();
   for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: width === 1440 ? 900 : 1024 });
     await capture(page, info, `requester-history-${width}`);
@@ -257,9 +260,9 @@ test("action and audit paging open exact later records, and invalid deep links s
   }
   await page.goto(`/staff/tickets/${ticket.id}?tab=actions&actionId=${lastId}`);
   const section = page.getByRole("region", { name: "Actions Taken", exact: true });
-  await expect(section.getByRole("heading", { name: `Action ${lastId}`, exact: true })).toBeFocused();
+  await expect(section.getByRole("heading", { name: "Action 21", exact: true })).toBeFocused();
   await section.getByRole("button", { name: "Next actions" }).click();
-  await expect(section.getByRole("button", { name: `View action ${lastId}` })).toBeVisible();
+  await expect(section.getByRole("button", { name: "View action 21" })).toBeVisible();
   await section.getByRole("button", { name: "Next history" }).click();
   await expect(section.getByText("History page 2 of 2 · 21 revisions")).toBeVisible();
   await page.goto(`/staff/tickets/${ticket.id}?tab=actions&actionId=2147483648`);

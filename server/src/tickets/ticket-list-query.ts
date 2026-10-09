@@ -1,4 +1,5 @@
 import { Prisma, RequestedPriority, TicketStatus } from "@prisma/client";
+import { dashboardFilterNames, parseDashboardFilters, dashboardFilterWhere, type DashboardFilters } from "../dashboard/dashboard-query.js";
 
 export const TICKET_LIST_QUERY_NAMES = new Set([
   "search",
@@ -10,12 +11,13 @@ export const TICKET_LIST_QUERY_NAMES = new Set([
   "direction",
   "page",
   "pageSize",
+  ...dashboardFilterNames,
 ]);
 
 export type TicketListSort = "updatedAt" | "createdAt" | "ticketNumber";
 export type SortDirection = "asc" | "desc";
 
-export interface TicketListQuery {
+export interface TicketListQuery extends DashboardFilters {
   search: string;
   categoryId: number | null;
   relatedSystemId: number | null;
@@ -71,6 +73,7 @@ function positiveInteger(
 
 export function parseTicketListQuery(query: Record<string, unknown>): TicketListQueryResult {
   const fields: Record<string, string> = {};
+  const dashboardFilters = parseDashboardFilters(query, fields);
 
   for (const name of Object.keys(query)) {
     if (!TICKET_LIST_QUERY_NAMES.has(name)) fields[name] = `Unknown query parameter: ${name}.`;
@@ -149,6 +152,7 @@ export function parseTicketListQuery(query: Record<string, unknown>): TicketList
       direction,
       page,
       pageSize,
+      ...dashboardFilters,
     },
   };
 }
@@ -170,6 +174,7 @@ export function ticketListWhere(requesterId: number, query: TicketListQuery): Pr
     ...(query.relatedSystemId === null ? {} : { relatedSystemId: query.relatedSystemId }),
     ...(query.requestedPriority === null ? {} : { requestedPriority: query.requestedPriority }),
     ...(query.status === null ? {} : { status: query.status }),
+    ...dashboardFilterWhere(query),
   };
 }
 

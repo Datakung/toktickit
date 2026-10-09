@@ -6,11 +6,15 @@ approved corrected Issue #41 head 0cf9e58 in PR #47 on 2026-10-07 and merged it
 into lab4-staging as f4da089; Issue #41 is closed. See [reviewer.md](reviewer.md)
 for exact review links and independent-test limits.
 
-Issue #42 is implemented on feature/42-ticket-workflow from f4da089: atomic
-current-cycle resolution/cancellation gates, transition history, reopen cycles
-and authoritative UI checklist. Tests and feature evidence are recorded in
-[tests.md](tests.md); author visual acceptance, commits/push and peer review
-remain pending. Dashboards (#43) and final release (#44) are still planned.
+Issue #42 was approved at b7f6bb9 and merged in PR #48 as 00fddc1 on 2026-10-09.
+Issue #43 implements the approved dashboard rules locally on feature/43-dashboards
+from that merge: read-only repeatable-read snapshots, bounded summaries, current-user
+work and exact URL drill-downs. Existing defaults/envelopes remain unchanged.
+The full 11-page supplied Lab 4 sheet was reread on 2026-10-10, including dashboard
+mockups and the ownership/query/feedback/three-width requirements. Illustrative
+mockup controls do not override the approved role rules (no Staff Create Ticket).
+[tests.md](tests.md) records actual checks. Author acceptance, publication and
+peer review for #43, and final release (#44), remain pending.
 Feature passes are not final-main acceptance.
 
 ## 1. Sprint goal
@@ -220,6 +224,17 @@ hydrate URL filters after navigation/reload/Back, not just show filtered labels.
 
 ## 7. Data, migration and seed
 
+Author-approved numbering refinement (2026-10-10): display a one-based
+`actionNumber` within each Ticket rather than exposing the global ID as its
+work sequence. The backend derives this ordinal in immutable creation order
+(`createdAt` ascending, `id` tie-break) across ALL of the Ticket's actions,
+including cancelled work and prior cycles. Pagination and assigned/performed
+filters do not reset it; reopening continues it. Do not derive the number from
+a dashboard/work-list row index. The global `id` still identifies writes,
+receipts, deep links and audit events. Existing records automatically receive
+the Ticket-local display number on read; no schema migration, stored ID rewrite,
+historical snapshot edit or new database index is needed for this refinement.
+
 ActionTaken foundation: id, ticketId, cycle, state, actionAt, description, result,
 assigneeId?, createdById, performedById?, performedAt?, followUpRequired,
 followUpNote, attachmentNotes, cancellationReason?, version=1, createdAt, updatedAt.
@@ -284,7 +299,7 @@ filters enable dashboard links without changing existing defaults/envelopes.
 | ID | Observable acceptance criterion |
 |---|---|
 | AC-01 | Migration/recovery and repeated seeds preserve earlier IDs, relationships, timestamps, credentials and edits. |
-| AC-02 | Multiple actions save under the correct Ticket with backend creator/performer, required fields and independent assignment. |
+| AC-02 | Multiple actions save under the correct Ticket with backend creator/performer, required fields and independent assignment. Display numbering starts at 1 per Ticket, continues across pages/cycles and agrees in detail/work/dashboard views without changing internal IDs. |
 | AC-03 | Staff/Admin create/edit/assign/start/complete/cancel only eligible work with field feedback and explicit terminal guards. |
 | AC-04 | Requester reads own actions/history only and cannot mutate actions or access Notes; anonymous/forced-change users are blocked. |
 | AC-05 | Inactive/Requester assignees are rejected; account changes preserve history and unassign active work safely. |

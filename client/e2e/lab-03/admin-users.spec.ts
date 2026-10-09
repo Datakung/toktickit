@@ -5,6 +5,7 @@ async function login(page: Page, email = "admin@example.test", password = E2E_PA
   await page.goto("/login"); await page.getByLabel("Email", { exact: true }).fill(email);
   await page.getByLabel("Password", { exact: true }).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  if (email === "admin@example.test") { await expect(page.getByRole("heading", { name: "Staff Dashboard", exact: true })).toBeVisible(); await page.getByRole("button", { name: "Users", exact: true }).click(); }
 }
 test("Admin creates, edits, deactivates, activates and resets a real account", async ({ page, browser }) => {
   await login(page); await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();

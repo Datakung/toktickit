@@ -5,7 +5,7 @@ import { lockAccountChanges } from "../admin/user-service.js";
 import type { AuthLocals } from "../auth/auth-middleware.js";
 import { sha256, safeEqual } from "../auth/security.js";
 import { OperationError } from "../staff/ticket-operations.js";
-import { actionSelect, appendActionEvent } from "./action-record.js";
+import { actionSelect, actionNumberSql, appendActionEvent } from "./action-record.js";
 import { parseActionWrite, parseActionPage, parseWorkQuery, type WriteKind } from "./action-validation.js";
 
 const terminal = ["RESOLVED", "CLOSED", "CANCELLED"];
@@ -46,7 +46,10 @@ export async function readActions(auth: AuthLocals, ticketId: number, query: Rec
     if (actionId) {
       const action = await tx.actionTaken.findFirst({ where: { id: actionId, ticketId }, select: actionSelect });
       if (!action) notFound();
-      if (!history) return { action, ticketVersion: ticket.version, currentCycle: ticket.resolutionCycle };
+      if (!history) {
+        const [number] = await tx.$queryRaw<Array<{ actionNumber: number }>>`SELECT ${actionNumberSql} AS "actionNumber" FROM "ActionTaken" a WHERE a.id=${action.id} AND a."ticketId"=${ticketId}`;
+        return { action: { ...action, actionNumber: number.actionNumber }, ticketVersion: ticket.version, currentCycle: ticket.resolutionCycle };
+      }
       const where = { actionId, ticketId }, total = await tx.actionTakenEvent.count({ where });
       const items = (page - 1) * pageSize >= total ? [] : await tx.actionTakenEvent.findMany({ where, select: { id: true, actionId: true, kind: true, actor: { select: { id: true, displayName: true } }, createdAt: true, version: true, reason: true, before: true, after: true }, orderBy: [{ createdAt: "asc" }, { id: "asc" }], skip: (page - 1) * pageSize, take: pageSize });
       return pageEnvelope(items, page, pageSize, total);
@@ -55,7 +58,8 @@ export async function readActions(auth: AuthLocals, ticketId: number, query: Rec
     // Short-circuit beyond-last pages, including valid page integers whose
     // multiplied offset exceeds Prisma's signed 32-bit skip argument.
     const items = (page - 1) * pageSize >= total ? [] : await tx.actionTaken.findMany({ where, select: actionSelect, orderBy: [{ createdAt: "asc" }, { id: "asc" }], skip: (page - 1) * pageSize, take: pageSize });
-    return { ...pageEnvelope(items, page, pageSize, total), ticketVersion: ticket.version, currentCycle: ticket.resolutionCycle, resolutionGate: await resolutionSummary(tx, ticket) };
+    const numbered = items.map((action, index) => ({ ...action, actionNumber: (page - 1) * pageSize + index + 1 }));
+    return { ...pageEnvelope(numbered, page, pageSize, total), ticketVersion: ticket.version, currentCycle: ticket.resolutionCycle, resolutionGate: await resolutionSummary(tx, ticket) };
   }, { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
 }
 
@@ -135,9 +139,9 @@ export async function listActionWork(auth: AuthLocals, query: Record<string, unk
     const where = Prisma.join(parts, " AND ");
     const [count] = await tx.$queryRaw<Array<{ total: bigint }>>`SELECT count(*) AS total FROM "ActionTaken" a JOIN "Ticket" t ON t.id=a."ticketId" WHERE ${where}`;
     const order = q.performed ? Prisma.sql`a."performedAt" DESC, a.id DESC` : Prisma.sql`a."updatedAt" DESC, a.id DESC`;
-    const ids = await tx.$queryRaw<Array<{ id: number }>>`SELECT a.id FROM "ActionTaken" a JOIN "Ticket" t ON t.id=a."ticketId" WHERE ${where} ORDER BY ${order} LIMIT ${q.pageSize} OFFSET ${(q.page - 1) * q.pageSize}`;
+    const ids = await tx.$queryRaw<Array<{ id: number; actionNumber: number }>>`SELECT a.id, ${actionNumberSql} AS "actionNumber" FROM "ActionTaken" a JOIN "Ticket" t ON t.id=a."ticketId" WHERE ${where} ORDER BY ${order} LIMIT ${q.pageSize} OFFSET ${(q.page - 1) * q.pageSize}`;
     const rows = await tx.actionTaken.findMany({ where: { id: { in: ids.map(a => a.id) } }, select: { id: true, ticketId: true, description: true, cycle: true, state: true, assignee: { select: { id: true, displayName: true } }, performedBy: { select: { id: true, displayName: true } }, performedAt: true, version: true, ticket: { select: { ticketNumber: true, status: true } } } });
-    const items = ids.map(({ id }) => { const a = rows.find(row => row.id === id)!; const { description, ticket, ...data } = a; return { ...data, summary: description.slice(0, 120), ticketNumber: ticket.ticketNumber, ticketStatus: ticket.status }; });
+    const items = ids.map(({ id, actionNumber }) => { const a = rows.find(row => row.id === id)!; const { description, ticket, ...data } = a; return { ...data, actionNumber, summary: description.slice(0, 120), ticketNumber: ticket.ticketNumber, ticketStatus: ticket.status }; });
     return pageEnvelope(items, q.page, q.pageSize, Number(count.total));
   }, { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
 }
