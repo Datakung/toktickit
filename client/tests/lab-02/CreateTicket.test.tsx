@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import { CreateTicketPage } from "../../src/CreateTicketPage.js";
@@ -11,10 +11,11 @@ const requester: api.DevelopmentRequester = {
   email: "anan.chaiyasit@example.test",
 };
 
-function renderCreateTicket() {
-  render(
-    <CreateTicketPage requester={requester} onRequesterUnavailable={vi.fn()} />,
+function renderCreateTicket(onCreated = vi.fn()) {
+  const view = render(
+    <CreateTicketPage requester={requester} onRequesterUnavailable={vi.fn()} onCreated={onCreated} />,
   );
+  return { ...view, onCreated };
 }
 
 describe("Create Ticket", () => {
@@ -109,7 +110,7 @@ describe("Create Ticket", () => {
       resolveCreate = resolve;
     }));
     const user = userEvent.setup();
-    renderCreateTicket();
+    const { onCreated } = renderCreateTicket();
     await completeRequiredFields(user);
 
     const submit = screen.getByRole("button", { name: "Create Ticket" });
@@ -130,6 +131,8 @@ describe("Create Ticket", () => {
     expect(ticketDate).toHaveTextContent(/2026/);
     expect(ticketDate).not.toHaveTextContent(/2569/);
     expect(screen.getByRole("button", { name: "Ticket created" })).toBeDisabled();
+    expect(onCreated).toHaveBeenCalledOnce();
+    expect(onCreated).toHaveBeenCalledWith(expect.objectContaining({ id: 42, ticketNumber: "TKT-20260901-A1B2C3" }));
   });
 
   it("preserves entered values when Ticket creation fails safely", async () => {
@@ -137,7 +140,7 @@ describe("Create Ticket", () => {
       new api.ApiError(500, "TICKET_CREATE_FAILED", "The Ticket could not be created. Try again."),
     );
     const user = userEvent.setup();
-    renderCreateTicket();
+    const { onCreated } = renderCreateTicket();
     await completeRequiredFields(user);
 
     await user.click(screen.getByRole("button", { name: "Create Ticket" }));
@@ -145,6 +148,7 @@ describe("Create Ticket", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("The Ticket could not be created");
     expect(screen.getByLabelText(/Summary/)).toHaveValue("Cannot connect to VPN");
     expect(screen.getByRole("button", { name: "Create Ticket" })).toBeEnabled();
+    expect(onCreated).not.toHaveBeenCalled();
   });
 
   it("rejects a detectable file signature mismatch before submission", async () => {
@@ -172,7 +176,7 @@ describe("Create Ticket", () => {
       .mockRejectedValueOnce(new api.ApiError(500, "ATTACHMENT_UPLOAD_FAILED", "Upload failed."));
     const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
     const user = userEvent.setup();
-    renderCreateTicket();
+    const { onCreated } = renderCreateTicket();
     await completeRequiredFields(user);
     await user.upload(screen.getByLabelText("Choose files"), [
       new File([png], "one.png", { type: "image/png" }),
@@ -187,5 +191,40 @@ describe("Create Ticket", () => {
     expect(screen.getByText("succeeded")).toBeInTheDocument();
     expect(screen.getByText("failed")).toBeInTheDocument();
     expect(screen.getByText("Upload failed.")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Attachment upload failed");
+    expect(screen.getByRole("alert")).toHaveTextContent("Your Ticket is saved");
+    expect(screen.queryByText("Ticket created", { selector: "p" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open Ticket to retry attachments" })).toHaveAttribute("href", "/tickets/43");
+    expect(screen.getByRole("button", { name: "Ticket saved — attachment upload failed" })).toBeDisabled();
+    expect(onCreated).not.toHaveBeenCalled();
+    expect(api.createTicket).toHaveBeenCalledOnce();
+  });
+
+  it("waits for every initial upload before confirming navigation", async () => {
+    const created: api.CreatedTicket = { id: 44, ticketNumber: "TKT-20260901-UPLOAD", requesterId: 1, status: "NEW", createdAt: "2026-09-01T03:00:00.000Z" };
+    vi.spyOn(api, "createTicket").mockResolvedValue(created);
+    let completeUpload!: (value: api.AttachmentMetadata) => void;
+    const uploaded: api.AttachmentMetadata = { id: 1, ticketId: 44, originalName: "one.png", mimeType: "image/png", sizeBytes: 9, createdAt: created.createdAt, removed: false, removedAt: null, removalReason: null, removedByRequesterId: null };
+    vi.spyOn(api, "uploadTicketAttachment").mockResolvedValueOnce(uploaded).mockReturnValueOnce(new Promise(resolve => { completeUpload = resolve; }));
+    const user = userEvent.setup(); const { onCreated } = renderCreateTicket(); await completeRequiredFields(user);
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+    await user.upload(screen.getByLabelText("Choose files"), [new File([png], "one.png", { type: "image/png" }), new File([png], "two.png", { type: "image/png" })]);
+    await screen.findByText("two.png"); await user.click(screen.getByRole("button", { name: "Create Ticket" }));
+    await waitFor(() => expect(api.uploadTicketAttachment).toHaveBeenCalledTimes(2));
+    expect(onCreated).not.toHaveBeenCalled(); expect(screen.getByRole("button", { name: "Uploading Attachments…" })).toBeDisabled();
+    completeUpload({ ...uploaded, id: 2, originalName: "two.png" });
+    await waitFor(() => expect(onCreated).toHaveBeenCalledOnce());
+    expect(onCreated).toHaveBeenCalledWith(created);
+    expect(api.createTicket).toHaveBeenCalledOnce();
+  });
+
+  it("does not redirect after leaving the form while creation is pending", async () => {
+    let finish!: (ticket: api.CreatedTicket) => void;
+    vi.spyOn(api, "createTicket").mockReturnValue(new Promise(resolve => { finish = resolve; }));
+    const user = userEvent.setup(); const { unmount, onCreated } = renderCreateTicket(); await completeRequiredFields(user);
+    await user.click(screen.getByRole("button", { name: "Create Ticket" })); unmount();
+    await act(async () => { finish({ id: 45, ticketNumber: "TKT-20260901-LATE", requesterId: 1, status: "NEW", createdAt: "2026-09-01T03:00:00.000Z" }); });
+    expect(api.createTicket).toHaveBeenCalledOnce();
+    expect(onCreated).not.toHaveBeenCalled();
   });
 });

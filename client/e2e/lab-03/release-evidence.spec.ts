@@ -133,8 +133,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
     await page.getByLabel("IT Priority", { exact: true }).selectOption("HIGH");
     await page.getByRole("button", { name: "Save IT Priority" }).click();
     await expect(page.getByRole("status").filter({ hasText: "IT Priority saved" })).toBeVisible();
-    await page.getByLabel("Status", { exact: true }).selectOption("OPEN");
-    await page.getByRole("button", { name: "Save Status" }).click();
+    await page.getByLabel("Choose an action", { exact: true }).selectOption("OPEN");
+    await page.getByRole("button", { name: "Open Ticket", exact: true }).click();
     await expect(page.getByRole("status").filter({ hasText: "Status saved" })).toBeVisible();
   } finally {
     releaseCommunication();
@@ -153,7 +153,7 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });
     await capture(page, info, `staff-ticket-detail/detail-${width.name}.png`);
-    await captureRegion(page.locator(".operation-grid"), info, `staff-ticket-detail/operations-${width.name}.png`);
+    await captureRegion(page.locator(".workflow-controls"), info, `staff-ticket-detail/operations-${width.name}.png`);
     await captureRegion(comments, info, `staff-ticket-detail/public-comments-${width.name}.png`);
     await captureRegion(notes, info, `staff-ticket-detail/internal-notes-${width.name}.png`);
   }

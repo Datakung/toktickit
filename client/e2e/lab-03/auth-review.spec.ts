@@ -22,7 +22,7 @@ test("a session revoked by a second login leaves protected pages and stays signe
   const other = await browser.newContext();
   try {
     const second = await other.newPage();
-    await second.goto("http://127.0.0.1:5173/login");
+    await second.goto(new URL("/login", page.url()).href);
     await signIn(second);
     await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Create Ticket", exact: true }).click();
     await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();

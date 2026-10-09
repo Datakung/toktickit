@@ -3,6 +3,9 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import App from "../../src/App.js";
+import { requireMockedNetwork } from "../support/action-fixtures.js";
+
+requireMockedNetwork();
 
 const requester: api.CurrentUser = { id:1, displayName:"Anan Chaiyasit", email:"anan.chaiyasit@example.test", role:"REQUESTER", isActive:true, mustChangePassword:false };
 describe("Lab 3 authenticated shell", () => {
@@ -12,6 +15,8 @@ describe("Lab 3 authenticated shell", () => {
     vi.spyOn(api,"getAdminUsers").mockResolvedValue({ items: [] });
     vi.spyOn(api,"getCategories").mockResolvedValue([]);
     vi.spyOn(api,"getRelatedSystems").mockResolvedValue([]);
+    vi.spyOn(api,"getStaffOwners").mockResolvedValue({ items: [] });
+    vi.spyOn(api,"getStaffQueue").mockResolvedValue({ items: [], page: 1, pageSize: 10, total: 0, totalPages: 1 });
     return vi.spyOn(api,"getTickets").mockResolvedValue({data:[],meta:{page:1,pageSize:10,totalItems:0,totalPages:0,search:"",filters:{categoryId:null,relatedSystemId:null,requestedPriority:null,status:null},sort:"updatedAt",direction:"desc"}});
   }
   it.each(["REQUESTER", "IT_STAFF", "ADMINISTRATOR"] as const)("allows a normal %s to open and complete password change", async role => {

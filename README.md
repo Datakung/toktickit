@@ -1,6 +1,6 @@
 # TokTickIT
 
-## Lab 4 Actions Taken
+## Lab 4 Actions Taken and Ticket workflow
 
 The next increment adds Actions Taken, the final Ticket workflow and Requester/
 Staff dashboards while preserving Labs 1-3. Phanuwit approved the corrected
@@ -11,10 +11,45 @@ by Phanuwit in [PR #46](https://github.com/Datakung/toktickit/pull/46), staging 
 [Issue #41](https://github.com/Datakung/toktickit/issues/41) adds the action screens
 on `feature/41-actions-ui`, implementation `cd5aa76` and documentation `3addd43`,
 published in [PR #47](https://github.com/Datakung/toktickit/pull/47).
-Phanuwit requested a legacy component-fixture isolation correction on 2026-10-07;
-the local fix and verification are recorded in the review/test documents.
-Correction commit/push and peer re-review remain pending; this is not approval.
+The legacy fixture correction `0cf9e58` was [approved by Phanuwit](https://github.com/Datakung/toktickit/pull/47#pullrequestreview-5439057032)
+on 2026-10-07 and merged into staging as `f4da089`. Issue #41 is closed.
+Issue #42 is prepared for feature review on `feature/42-ticket-workflow` from that
+merge. The author exercised resolution, closure, reopening and fresh-cycle work;
+independent peer approval/merge and final-main acceptance remain pending.
 Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
+
+Issue #42 adds whole-current-cycle resolution/cancellation checks, atomic formal
+transition history and fresh cycles on reopen. Staff see an authoritative
+checklist; Requesters see only their own read-only workflow history. Loading,
+stale summaries and uncertain saves never enable resolution. Feature captures
+are in [workflow evidence](artifacts/lab-04/screenshots/workflow/README.md).
+The checklist uses prominent headings and labelled green checks/red crosses.
+Actions open in view mode; eligible Staff click Edit action to reveal mutation
+controls. Saved details and audit history remain visible without opening the editor.
+Eligible actions also show a separate Action progress section with Start, Complete
+and Cancel; these do not require Edit action or save unsaved fields.
+Audit revisions show readable What changed values (or initial creation details).
+Original Before/After snapshots remain unchanged under collapsed Technical details.
+Close detail returns to the list; while editing, its label explicitly warns that
+unsaved changes will be discarded. Saved actions and history are never deleted.
+Regenerate deliberately with `npm --prefix client run test:e2e:lab4-workflow-evidence`;
+ordinary E2E writes only ignored outputs. No new migration is needed beyond #40.
+See [tests.md](docs/lab-04/tests.md) for the actual branch results and limitations.
+
+The 2026-10-09 author-requested creation refinement opens the saved Ticket Detail
+after creation and all initial uploads succeed. An upload failure instead keeps
+the form open with failure feedback and a link to retry files on the saved Ticket;
+it does not display creation success or create another Ticket.
+
+Staff Operations also separates the saved `Current status` from `Change status
+to`. Saving Open keeps Open visible, resets the proposed target and retains all
+four legal next statuses without automatically choosing one.
+
+The subsequent author-requested two-stage layout puts an `Open ticket` panel
+above Operations only while the Ticket is New (Open/Cancel remain available).
+After opening, a separate `Update ticket status` panel appears below Operations
+with every valid progress transition. A permanently Cancelled Ticket instead
+shows read-only status with no further transitions.
 
 - [Specification](docs/lab-04/specification.md): requirements, business rules,
   role permissions, action lifecycle, resolution gate, data and dashboard calculations.
@@ -59,9 +94,9 @@ scenarios (including 5 new Action journeys), both builds and unchanged developme
 database/uploads. Thirteen screenshots are feature evidence, not final release.
 Three-width feature captures live in [Actions evidence](artifacts/lab-04/screenshots/actions-taken/README.md).
 Current branch results and limitations are in [Lab 4 tests](docs/lab-04/tests.md).
-Final Ticket gate enforcement (#42), dashboards (#43), final-main evidence and
-submission (#44) remain pending. Existing Lab 3 Ticket transitions are unchanged;
-this feature increment must not be presented as enforcing the final resolution gate.
+Those published Issue #41 checks did not include final Ticket gate enforcement.
+Issue #42 now implements that gate locally; its publication/review, dashboards
+(#43), final-main evidence and submission (#44) remain pending.
 
 Before running this branch against development, stop the API and take a verified
 database backup (and retain uploads). Then, from `server`, explicitly run:

@@ -18,4 +18,15 @@ describe("Actions Taken responsive style contract", () => {
     expect(css).toContain(".action-record-grid, .action-form-grid { grid-template-columns: minmax(0, 1fr);");
     expect(css).toMatch(/\.actions-taken button, \.action-history summary\s*\{ min-height: 44px/);
   });
+  it("wraps workflow history and checklist content and permits pagination controls to reflow", () => {
+    expect(css).toMatch(/\.workflow-event-list li\s*\{[^}]*overflow-wrap: anywhere/);
+    expect(css).toMatch(/\.workflow-pagination\s*\{[^}]*flex-wrap: wrap/);
+    expect(css).toMatch(/\.workflow-history, \.resolution-checklist\s*\{[^}]*min-width: 0;[^}]*overflow-wrap: anywhere/);
+    expect(css).toMatch(/\.resolution-checklist a\s*\{[^}]*min-height: 44px;[^}]*color: var\(--green-700\)/);
+    expect(css).toContain(".resolution-checklist a:focus-visible, .workflow-history button:focus-visible { outline: 3px solid var(--focus)");
+  });
+  it("emphasizes the overall resolution banner above individual requirements", () => {
+    expect(css).toMatch(/\.resolution-checklist-status\s*\{[^}]*font-size: clamp\(1\.25rem,[^}]*font-weight: 800;[^}]*padding: 20px;[^}]*border-inline-start-width: 6px/);
+    expect(css).toContain(".resolution-checklist-status .resolution-requirement-icon { font-size: 1.2em; }");
+  });
 });

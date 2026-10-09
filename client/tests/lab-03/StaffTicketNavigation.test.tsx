@@ -16,6 +16,7 @@ function deferred<T>() {
 const first: api.StaffTicketDetail = {
   id: 8, ticketNumber: "TKT-OPS-8", summary: "Old ticket", description: "Old detail",
   requestedPriority: "HIGH", itPriority: "MEDIUM", status: "OPEN", version: 1,
+  resolutionCycle: 1, resolvedAt: null,
   requesterResolutionIndicatedAt: null, createdAt: "2026-09-25T00:00:00Z", updatedAt: "2026-09-25T01:00:00Z",
   requester: { id: 2, displayName: "Anan", email: "anan@example.test" }, owner: null,
   category: { id: 1, name: "Network" }, relatedSystem: { id: 2, name: "VPN" }, attachments: [],

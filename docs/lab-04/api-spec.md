@@ -1,21 +1,18 @@
 # Lab 4 API Contract
 
-Status: Contract approved in PR #45 on 2026-10-05. Action endpoints, paged history,
-whole-cycle summary and work-list APIs were approved/merged for Issue #40 in
-PR #46 (a915812). Issue #41 consumes these endpoints without changing their
-product contract: initial create is atomic; fields, assignment and state each
-have their own explicitly submitted payload/UUID; reads reconcile versions
-before the next save. Deep-linked actions use the exact nested detail endpoint,
-not a guess from the first list page. Requesters receive no mutation controls.
-Ticket workflow/gate changes and dashboard APIs below remain planned for #42/#43;
-the existing Lab 3 Ticket transition handler is unchanged in this increment.
-Source of business rules:
-[specification.md](specification.md). Inherit the reviewed Lab 3 API contract
-from main b3c1a70, preserving session cookies, CSRF, role checks and safe DTOs.
+Status: Approved contract; foundations and Action UI accepted in PRs #46/#47.
+Issue #42 implements the Ticket status gates and shared workflow-history endpoint
+below on feature/42-ticket-workflow from f4da089, without a new schema migration.
+Staff detail/status responses include resolutionCycle and nullable resolvedAt.
+The existing {status,version} input is unchanged. Session/role is rechecked under
+the account -> Ticket lock; stale versions precede matrix/gate evaluation.
+Status/date/cycle/version/event changes share one transaction. History uses a
+repeatable-read snapshot and only exposes safe actor ID/name and transition data.
+Dashboard APIs remain planned #43. Source rules: [specification.md](specification.md).
 
-PR #47's 2026-10-07 correction isolates existing component fixtures' Action reads
-with typed empty pages and a no-network guard. It changes no product API, DTO,
-authorization or schema. Peer re-review is pending; see [reviewer.md](reviewer.md).
+PR #47's fixture-only correction 0cf9e58 was independently approved and merged;
+it changed no production API or permissions. Exact evidence: [reviewer.md](reviewer.md).
+Issue #42 itself has not yet been committed, published or peer-approved.
 
 ## Shared rules
 
@@ -232,3 +229,36 @@ controls from URL on entry/reload/popstate and keep the URL current on filter/pa
 changes. Invalid URLs show safe field feedback without rendering unfiltered data
 as though the metric matched. /staff/actions also hydrates its work-list query.
 Detail actionId/tab query selects and focuses the matching readable action.
+
+## Creation feedback refinement, 2026-10-09
+
+No API or schema change: Ticket POST and initial attachment POSTs remain separate
+operations. A successful Ticket response supplies the authoritative saved id and
+number. The UI redirects only after all initial uploads succeed. Upload failure
+does not roll back Ticket creation and must not be labeled `Ticket not created`;
+show upload failure, explain the saved Ticket and retry files on that identity
+without a second Ticket POST. Successful files remain attached.
+
+The Staff status-display refinement is also client-only: it distinguishes the
+confirmed current status from an unsaved target and requires explicit selection.
+The existing status/version payload, allowed-transition matrix and gate errors
+are unchanged; no no-op or backward status transition is introduced.
+
+The two-stage opening/progress UI derives its stage from the authoritative Ticket
+status. New Open/Cancel still use the existing status/version write; the button
+label changes, not the request contract. Progress is shown only after a confirmed
+non-New status read/save, with cancelled state represented read-only. No new
+`opened` flag or endpoint is needed.
+
+Checklist colours/headings and the on-demand Action editor do not change any API
+payload, endpoint, version/cycle validation or role restriction. View only reads;
+Edit action reveals existing explicit field/assignment/state operations, never
+saves by itself. Recovering an unknown save still replays its original journaled
+intent rather than creating another mutation.
+
+Readable What changed derives from the existing ActionEvent before/after data.
+There is no new history endpoint, payload, write or stored snapshot format. The
+UI formats current event.actor attribution and existing IDs honestly; it does not
+look up today's assignee and present that as a historical name. Raw snapshots
+remain available unchanged under Technical details with the same owned/shared
+permissions and no Internal Notes added.

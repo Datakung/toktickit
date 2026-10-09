@@ -28,7 +28,7 @@ async function fixture(page: Page) {
   const categories = await (await page.request.get(`${api}/api/categories`)).json();
   const systems = await (await page.request.get(`${api}/api/related-systems`)).json();
   const response = await page.request.post(`${api}/api/tickets`, {
-    headers: { "X-CSRF-Token": await csrf(page), Origin: "http://127.0.0.1:5173" },
+    headers: { "X-CSRF-Token": await csrf(page), Origin: new URL(page.url()).origin },
     data: { categoryId: categories[0].id, relatedSystemId: systems[0].id, requestedPriority: "MEDIUM", summary: `Lab 4 action evidence ${randomUUID()}`, description: "Isolated browser fixture; never development data." },
   });
   expect(response.status()).toBe(201);
@@ -59,6 +59,7 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   const ticket = await fixture(page);
   const section = page.getByRole("region", { name: "Actions Taken", exact: true });
   const first = await create(page, "Investigate VPN connection");
+  await section.getByRole("button", { name: "Edit action", exact: true }).click();
   await section.getByLabel("Action assignee").selectOption({ label: "Suda Support" });
   await section.getByLabel("Description", { exact: true }).fill("Diagnosed VPN connection");
   const mutations: Array<{ path: string; body: Record<string, unknown> }> = [];
@@ -71,12 +72,15 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   await expect(section.getByText(/Assignment saved/)).toBeVisible();
   expect(mutations).toHaveLength(2); expect(mutations[1].path).toMatch(/\/assignee$/);
   expect(Number(mutations[1].body.ticketVersion)).toBe(Number(mutations[0].body.ticketVersion) + 1);
+  await section.getByRole("button", { name: "Close editor" }).click();
+  await expect(section.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
   await section.getByRole("button", { name: "Start action" }).click();
   await expect(section.getByText("Action state saved.", { exact: true })).toBeVisible();
   await expect(section.getByRole("button", { name: "Start action" })).toHaveCount(0);
   await signOut(page); await login(page, "admin@example.test");
   await page.goto(`/staff/tickets/${ticket.id}?tab=actions&actionId=${first}`);
   await expect(section.getByRole("heading", { name: `Action ${first}`, exact: true })).toBeFocused();
+  await expect(section.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
   await section.getByRole("button", { name: "Complete action", exact: true }).click();
   await expect(section.getByLabel("Completion Result")).toBeFocused();
   await section.getByLabel("Completion Result").fill("VPN gateway restored; requester can connect.");
@@ -86,6 +90,8 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   const detail = section.getByRole("region", { name: `Action ${first} details` });
   await expect(detail).toContainText("Mali Support"); await expect(detail).toContainText("Suda Support"); await expect(detail).toContainText("Local Administrator");
   await expect(section.getByLabel("Action assignee")).toHaveCount(0);
+  await expect(section.getByRole("form", { name: "Edit action fields" })).toHaveCount(0);
+  await section.getByRole("button", { name: "Edit action", exact: true }).click();
   await section.getByLabel("Follow-Up Required").check();
   await section.getByLabel("Follow-up Note").fill("Verify stability tomorrow.");
   await section.getByLabel("Attachment Notes").fill("Diagnostic export discussed in the Ticket attachment.");
@@ -114,7 +120,7 @@ test("different actors create, assign, edit, start, complete, correct and cancel
   await expect(section.getByRole("button", { name: "New action" })).toHaveCount(0);
   await expect(section.getByText(/Local Administrator/).first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Internal Notes", exact: true })).toHaveCount(0);
-  expect((await page.request.post(`${api}/api/staff/tickets/${ticket.id}/actions`, { headers: { "X-CSRF-Token": await csrf(page), Origin: "http://127.0.0.1:5173" }, data: {} })).status()).toBe(403);
+  expect((await page.request.post(`${api}/api/staff/tickets/${ticket.id}/actions`, { headers: { "X-CSRF-Token": await csrf(page), Origin: new URL(page.url()).origin }, data: {} })).status()).toBe(403);
   await capture(page, info, "requester-readonly-desktop");
 });
 
@@ -140,6 +146,7 @@ test("lost create and later assignment responses reconcile once without repeatin
   await section.getByRole("button", { name: "Retry same save" }).click();
   await expect(section.getByText("Action created.", { exact: true })).toBeVisible();
   expect(createBodies).toHaveLength(2); expect(createBodies[0]).toEqual(createBodies[1]);
+  await section.getByRole("button", { name: "Edit action", exact: true }).click();
   let fieldSaves = 0;
   page.on("request", request => { if (request.method() === "PATCH" && /\/actions\/\d+$/.test(request.url())) fieldSaves++; });
   await section.getByLabel("Action assignee").selectOption({ label: "Suda Support" });
@@ -169,6 +176,7 @@ test("responsive cards, field controls and read-only histories fit 1440/768/390p
   const ticket = await fixture(page);
   const section = page.getByRole("region", { name: "Actions Taken", exact: true });
   const actionId = await create(page, `Inspect long diagnostic token ${"longtoken".repeat(50)}`);
+  await section.getByRole("button", { name: "Edit action", exact: true }).click();
   await section.getByLabel("Follow-Up Required").check();
   await section.getByLabel("Follow-up Note").fill("Schedule verification with the requester after the maintenance window.");
   await section.getByLabel("Attachment Notes").fill("See the separately uploaded diagnostic report.");
@@ -197,6 +205,7 @@ test("rejected assignment preserves earlier success, then a real concurrent writ
   const ticket = await fixture(page);
   const section = page.getByRole("region", { name: "Actions Taken", exact: true });
   const actionId = await create(page, "Independent recovery fixture");
+  await section.getByRole("button", { name: "Edit action", exact: true }).click();
   await section.getByLabel("Action assignee").selectOption({ label: "Suda Support" });
   await section.getByLabel("Description", { exact: true }).fill("These fields really saved before assignment failed");
   await section.getByRole("button", { name: "Save action", exact: true }).click();
@@ -213,7 +222,7 @@ test("rejected assignment preserves earlier success, then a real concurrent writ
   expect(current.items[0].description).toBe("These fields really saved before assignment failed");
   expect(current.items[0].assignee).toBeNull();
   const concurrent = await page.request.post(`${api}/api/staff/tickets/${ticket.id}/actions`, {
-    headers: { "X-CSRF-Token": await csrf(page), Origin: "http://127.0.0.1:5173" },
+    headers: { "X-CSRF-Token": await csrf(page), Origin: new URL(page.url()).origin },
     data: { ticketVersion: current.ticketVersion, requestId: randomUUID(), assigneeId: null, actionAt: new Date().toISOString(), description: "Concurrent work", result: "", followUpRequired: false, followUpNote: "", attachmentNotes: "" },
   });
   expect(concurrent.status()).toBe(201);
@@ -233,7 +242,7 @@ test("action and audit paging open exact later records, and invalid deep links s
   let ticketVersion = 1, lastId = 0;
   for (let index = 0; index < 21; index++) {
     const response = await page.request.post(`${api}/api/staff/tickets/${ticket.id}/actions`, {
-      headers: { "X-CSRF-Token": token, Origin: "http://127.0.0.1:5173" },
+      headers: { "X-CSRF-Token": token, Origin: new URL(page.url()).origin },
       data: { ticketVersion, requestId: randomUUID(), assigneeId: null, actionAt: new Date().toISOString(), description: `Paged action ${index}`, result: "", followUpRequired: false, followUpNote: "", attachmentNotes: "" },
     });
     expect(response.status()).toBe(201);
@@ -241,7 +250,7 @@ test("action and audit paging open exact later records, and invalid deep links s
   }
   for (let index = 1; index <= 20; index++) {
     const response = await page.request.patch(`${api}/api/staff/tickets/${ticket.id}/actions/${lastId}`, {
-      headers: { "X-CSRF-Token": token, Origin: "http://127.0.0.1:5173" },
+      headers: { "X-CSRF-Token": token, Origin: new URL(page.url()).origin },
       data: { ticketVersion, version: index, requestId: randomUUID(), actionAt: new Date().toISOString(), description: `Paged revision ${index}`, result: "", followUpRequired: false, followUpNote: "", attachmentNotes: "", changeReason: "" },
     });
     expect(response.status()).toBe(200); ticketVersion = (await response.json()).ticketVersion;

@@ -10,6 +10,7 @@ requireMockedNetwork();
 const detail: api.StaffTicketDetail = {
   id: 8, ticketNumber: "TKT-OPS-8", summary: "VPN unavailable", description: "Cannot connect from home",
   requestedPriority: "HIGH", itPriority: "MEDIUM", status: "OPEN", version: 1,
+  resolutionCycle: 1, resolvedAt: null,
   requesterResolutionIndicatedAt: null, createdAt: "2026-09-25T00:00:00Z", updatedAt: "2026-09-25T01:00:00Z",
   requester: { id: 2, displayName: "Anan", email: "anan@example.test" }, owner: null,
   category: { id: 1, name: "Network" }, relatedSystem: { id: 2, name: "VPN" }, attachments: [],
@@ -37,7 +38,8 @@ describe("Staff Ticket Detail", () => {
       fixture.setTicket(updated);
       return updated;
     });
-    expect(await screen.findByRole("heading", { name: "TKT-OPS-8" })).toHaveFocus();
+    await screen.findByRole("heading", { name: "TKT-OPS-8" });
+    await waitFor(() => expect(screen.getByRole("heading", { name: "TKT-OPS-8" })).toHaveFocus());
     await waitFor(() => expect(screen.getByRole("button", { name: "Claim Ticket" })).toBeEnabled());
     await userEvent.click(screen.getByRole("button", { name: "Claim Ticket" }));
     await waitFor(() => expect(claim).toHaveBeenCalledWith(8, 1));

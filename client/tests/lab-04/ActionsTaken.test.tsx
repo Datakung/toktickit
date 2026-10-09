@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import { ActionsTaken, bangkokInput, bangkokInstant } from "../../src/ActionsTaken.js";
 
-const ticket = { id: 8, version: 1, status: "OPEN", createdAt: "2026-09-01T00:00:00Z" } as api.StaffTicketDetail;
+const ticket = { id: 8, version: 1, resolutionCycle: 1, resolvedAt: null, status: "OPEN", createdAt: "2026-09-01T00:00:00Z" } as api.StaffTicketDetail;
 const record: api.ActionTakenRecord = {
   id: 12, ticketId: 8, cycle: 1, state: "PLANNED", actionAt: "2026-09-25T01:00:00Z",
   description: "Investigate VPN", result: "", assignee: null, createdBy: { id: 9, displayName: "Mali" },
@@ -22,9 +22,183 @@ function setup(staff = true, options: { action?: api.ActionTakenRecord; status?:
   vi.spyOn(api, "getStaffTicket").mockResolvedValue(context);
   return render(<ActionsTaken ticket={context} staff={staff} userId={9} actorName="Mali" linkedActionId={options.link} />);
 }
-async function open() { await userEvent.click(await screen.findByRole("button", { name: "View action 12" })); await screen.findByRole("heading", { name: "Action 12" }); }
+async function open(edit = true) {
+  await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
+  await screen.findByRole("heading", { name: "Action 12" });
+  const button = screen.queryByRole("button", { name: "Edit action" });
+  if (edit && button) await userEvent.click(button);
+}
 afterEach(() => { cleanup(); vi.restoreAllMocks(); sessionStorage.clear(); });
 describe("Actions Taken", () => {
+  it.each(["PLANNED", "IN_PROGRESS"] as const)("shows permitted progress controls in %s view mode without opening the editor", async state => {
+    setup(true, { action: { ...record, state } }); await open(false);
+    expect(screen.getByRole("region", { name: "Action state controls" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Complete action" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Cancel action" })).toBeEnabled();
+    expect(!!screen.queryByRole("button", { name: "Start action" })).toBe(state === "PLANNED");
+    expect(screen.queryByRole("form", { name: "Edit action fields" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("form", { name: "Action assignment" })).not.toBeInTheDocument();
+  });
+  it("starts work directly from view mode with only a state save", async () => {
+    const write = vi.spyOn(api, "writeAction").mockResolvedValue({ actionId: 12, eventId: 1, actionVersion: 2, ticketVersion: 2, replayed: false });
+    setup(); await open(false);
+    vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, state: "IN_PROGRESS", version: 2 }, ticketVersion: 2, currentCycle: 1 });
+    vi.mocked(api.getActions).mockResolvedValue({ ...page, ticketVersion: 2 });
+    vi.mocked(api.getStaffTicket).mockResolvedValue({ ...ticket, version: 2 });
+    await userEvent.click(screen.getByRole("button", { name: "Start action" }));
+    await screen.findByText("Action state saved.");
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(write.mock.calls[0][1]).toBe("state");
+    expect(write.mock.calls[0][3]).toMatchObject({ state: "IN_PROGRESS", version: 1, ticketVersion: 1 });
+    expect(write.mock.calls[0][3]).not.toHaveProperty("description");
+    expect(screen.queryByRole("button", { name: "Start action" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+  });
+  it.each(["COMPLETED", "CANCELLED"] as const)("confirms %s directly without editing or saving fields", async state => {
+    const write = vi.spyOn(api, "writeAction").mockResolvedValue({ actionId: 12, eventId: 1, actionVersion: 2, ticketVersion: 2, replayed: false });
+    setup(); await open(false);
+    const completed = state === "COMPLETED";
+    const button = () => screen.getByRole("button", { name: completed ? "Complete action" : "Cancel action" });
+    await userEvent.click(button());
+    const label = completed ? "Completion Result" : "Cancellation reason";
+    expect(screen.getByLabelText(label)).toHaveFocus();
+    await userEvent.click(screen.getByRole("button", { name: "Back without changing state" }));
+    expect(button()).toHaveFocus(); expect(write).not.toHaveBeenCalled();
+    await userEvent.click(button());
+    const form = screen.getByRole("form", { name: completed ? "Confirm completion" : "Confirm cancellation" });
+    fireEvent.submit(form); expect(write).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByLabelText(completed ? "I confirm I performed this work." : "I confirm cancellation of this action."));
+    fireEvent.submit(form); expect(write).not.toHaveBeenCalled();
+    await userEvent.type(screen.getByLabelText(label), "Verified work outcome");
+    vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, state, version: 2, result: completed ? "Verified work outcome" : "", cancellationReason: completed ? null : "Verified work outcome" }, ticketVersion: 2, currentCycle: 1 });
+    vi.mocked(api.getActions).mockResolvedValue({ ...page, ticketVersion: 2 });
+    vi.mocked(api.getStaffTicket).mockResolvedValue({ ...ticket, version: 2 });
+    await userEvent.click(screen.getByRole("button", { name: completed ? "Confirm complete" : "Confirm cancel action" }));
+    await screen.findByText("Action state saved.");
+    expect(write).toHaveBeenCalledTimes(1); expect(write.mock.calls[0][1]).toBe("state");
+    expect(write.mock.calls[0][3]).toMatchObject({ state, result: completed ? "Verified work outcome" : "", cancellationReason: completed ? "" : "Verified work outcome" });
+    expect(write.mock.calls[0][3]).not.toHaveProperty("description");
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action state controls" })).not.toBeInTheDocument();
+  });
+  it("recovers an uncertain direct completion with the same intent and no field editor", async () => {
+    const write = vi.spyOn(api, "writeAction").mockRejectedValueOnce(new TypeError("Lost response"))
+      .mockResolvedValueOnce({ actionId: 12, eventId: 1, actionVersion: 2, ticketVersion: 2, replayed: true });
+    const rendered = setup(); await open(false);
+    await userEvent.click(screen.getByRole("button", { name: "Complete action" }));
+    await userEvent.type(screen.getByLabelText("Completion Result"), "VPN restored");
+    await userEvent.click(screen.getByLabelText("I confirm I performed this work."));
+    await userEvent.click(screen.getByRole("button", { name: "Confirm complete" }));
+    await screen.findByText(/Save outcome unknown/);
+    expect(screen.getByRole("button", { name: "Edit action" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Close detail" })).toBeDisabled();
+    rendered.unmount(); setup();
+    await screen.findByText(/unknown after reload/);
+    expect(screen.queryByRole("form", { name: "Edit action fields" })).not.toBeInTheDocument();
+    vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, state: "COMPLETED", result: "VPN restored", version: 2 }, ticketVersion: 2, currentCycle: 1 });
+    vi.mocked(api.getActions).mockResolvedValue({ ...page, ticketVersion: 2 });
+    vi.mocked(api.getStaffTicket).mockResolvedValue({ ...ticket, version: 2 });
+    await userEvent.click(screen.getByRole("button", { name: "Retry same save" }));
+    await screen.findByText("Action state saved.");
+    expect(write).toHaveBeenCalledTimes(2); expect(write.mock.calls[1]).toEqual(write.mock.calls[0]);
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+  });
+  it.each([true, false])("closes action details and audit without changing data (staff=%s)", async staff => {
+    const write = vi.spyOn(api, "writeAction");
+    setup(staff); await open(false);
+    const close = screen.getByRole("button", { name: "Close detail" });
+    close.focus(); await userEvent.keyboard("{Enter}");
+    expect(screen.queryByRole("region", { name: "Action 12 details" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action audit history" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View action 12" })).toHaveFocus();
+    await open(false);
+    expect(screen.getByRole("region", { name: "Action 12 details" })).toHaveTextContent("Investigate VPN");
+    expect(screen.getByRole("region", { name: "Action audit history" })).toBeVisible();
+    expect(write).not.toHaveBeenCalled();
+  });
+  it("explicitly discards unsaved fields and assignment when closing an editor's detail", async () => {
+    const write = vi.spyOn(api, "writeAction");
+    setup(); await open();
+    await userEvent.type(screen.getByLabelText("Description"), " unsaved");
+    await userEvent.selectOptions(screen.getByLabelText("Action assignee"), "9");
+    await userEvent.click(screen.getByRole("button", { name: "Discard changes and close detail" }));
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action audit history" })).not.toBeInTheDocument();
+    await open();
+    expect(screen.getByLabelText("Description")).toHaveValue("Investigate VPN");
+    expect(screen.getByLabelText("Action assignee")).toHaveValue("");
+    expect(write).not.toHaveBeenCalled();
+  });
+  it("keeps a closed deep-linked action closed when refreshing the list", async () => {
+    setup(true, { link: "12" });
+    await screen.findByRole("heading", { name: "Action 12" });
+    await userEvent.click(screen.getByRole("button", { name: "Close detail" }));
+    await userEvent.click(screen.getByRole("button", { name: "Refresh actions" }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "View action 12" })).toBeEnabled());
+    expect(screen.queryByRole("region", { name: "Action 12 details" })).not.toBeInTheDocument();
+    expect(api.getAction).toHaveBeenCalledTimes(1);
+  });
+  it("ignores a late audit response after closing and reopening the detail", async () => {
+    setup();
+    let finish!: (value: api.ActionHistoryPage) => void;
+    vi.mocked(api.getActionHistory).mockImplementationOnce(() => new Promise(resolve => { finish = resolve; }));
+    await open(false);
+    await screen.findByText("Loading audit history…");
+    await userEvent.click(screen.getByRole("button", { name: "Close detail" }));
+    await open(false);
+    await screen.findByText("No revisions on this page.");
+    finish({ items: [], page: 2, pageSize: 20, total: 22, totalPages: 2 });
+    await waitFor(() => expect(screen.getByText("History page 1 of 1 · 0 revisions")).toBeVisible());
+    expect(screen.queryByText("History page 2 of 2 · 22 revisions")).not.toBeInTheDocument();
+  });
+  it("views saved details and audit history before explicitly opening the editor", async () => {
+    const write = vi.spyOn(api, "writeAction");
+    setup(); await open(false);
+    expect(screen.getByRole("heading", { name: "Action 12" })).toHaveFocus();
+    expect(screen.getByRole("region", { name: "Action 12 details" })).toHaveTextContent("Investigate VPN");
+    expect(screen.getByRole("region", { name: "Action audit history" })).toBeVisible();
+    expect(screen.queryByRole("form", { name: "Edit action fields" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("form", { name: "Action assignment" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Complete action" })).toBeVisible();
+    const edit = screen.getByRole("button", { name: "Edit action" });
+    expect(edit).toHaveAttribute("aria-expanded", "false");
+    edit.focus(); await userEvent.keyboard("{Enter}");
+    expect(screen.getByLabelText("Action Date/Time (Bangkok)")).toHaveFocus();
+    expect(screen.getByRole("button", { name: "Close editor" })).toHaveAttribute("aria-expanded", "true");
+    await userEvent.type(screen.getByLabelText("Description"), " unsaved");
+    await userEvent.click(screen.getByRole("button", { name: "Close editor" }));
+    expect(screen.getByRole("button", { name: "Edit action" })).toHaveFocus();
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Edit action" }));
+    expect(screen.getByLabelText("Description")).toHaveValue("Investigate VPN");
+    expect(write).not.toHaveBeenCalled();
+  });
+  it("opens a Staff deep link in view mode without automatically editing", async () => {
+    setup(true, { link: "12" });
+    expect(await screen.findByRole("heading", { name: "Action 12" })).toHaveFocus();
+    expect(screen.getByRole("button", { name: "Edit action" })).toBeVisible();
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+  });
+  it("returns to view mode when another action is chosen", async () => {
+    setup(); await open(); await userEvent.type(screen.getByLabelText("Description"), " draft");
+    vi.mocked(api.getActions).mockResolvedValue({ ...page, items: [record, { ...record, id: 13 }] });
+    await userEvent.click(screen.getByRole("button", { name: "Refresh actions" }));
+    await screen.findByRole("button", { name: "View action 13" });
+    vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, id: 13 }, ticketVersion: 1, currentCycle: 1 });
+    await userEvent.click(screen.getByRole("button", { name: "View action 13" }));
+    expect(await screen.findByRole("heading", { name: "Action 13" })).toHaveFocus();
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Edit action" })).toHaveAttribute("aria-expanded", "false");
+  });
+  it("returns a newly created action to view mode", async () => {
+    vi.spyOn(api, "writeAction").mockResolvedValue({ actionId: 12, eventId: 1, actionVersion: 1, ticketVersion: 1, replayed: false });
+    setup(); await userEvent.click(await screen.findByRole("button", { name: "New action" }));
+    await userEvent.type(screen.getByLabelText("Description"), "Investigate VPN");
+    await userEvent.click(screen.getByRole("button", { name: "Create action" }));
+    await screen.findByText("Action created.");
+    expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Edit action" })).toHaveAttribute("aria-expanded", "false");
+  });
   it("shows Requester records and history without mutation controls", async () => {
     setup(false);
     await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
@@ -33,12 +207,13 @@ describe("Actions Taken", () => {
     expect(screen.queryByRole("button", { name: "New action" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Save action" })).not.toBeInTheDocument();
     expect(api.getActionAssignees).not.toHaveBeenCalled();
+    expect(screen.queryByRole("region", { name: "Action state controls" })).not.toBeInTheDocument();
   });
   it("keeps fields and assignment as independent saves", async () => {
     const edit = vi.spyOn(api, "writeAction").mockResolvedValue({ actionId: 12, eventId: 1, actionVersion: 2, ticketVersion: 2, replayed: false });
     setup();
     await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
-    await screen.findByLabelText("Description");
+    await userEvent.click(await screen.findByRole("button", { name: "Edit action" }));
     vi.mocked(api.getStaffTicket).mockResolvedValue({ ...ticket, version: 2 });
     vi.mocked(api.getActions).mockResolvedValue({ ...page, ticketVersion: 2 });
     vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, version: 2, description: "Checked VPN" }, ticketVersion: 2, currentCycle: 1 });
@@ -78,6 +253,8 @@ describe("Actions Taken", () => {
     await userEvent.click(screen.getByRole("button", { name: "Save assignment" }));
     expect(await screen.findByText(/Action changes saved; assignment outcome unknown/)).toBeVisible();
     expect(screen.getByRole("button", { name: "Save action" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Discard changes and close detail" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Complete action" })).toBeDisabled();
     vi.mocked(api.getStaffTicket).mockResolvedValue({ ...ticket, version: 3 });
     vi.mocked(api.getActions).mockResolvedValue({ ...page, ticketVersion: 3 });
     vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, version: 3 }, ticketVersion: 3, currentCycle: 1 });
@@ -151,6 +328,7 @@ describe("Actions Taken", () => {
     await screen.findByText(/Explain the correction/);
     expect(screen.queryByLabelText("Action assignee")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Start action" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action state controls" })).not.toBeInTheDocument();
     expect(write).not.toHaveBeenCalled();
   });
   it.each(["RESOLVED", "CLOSED", "CANCELLED"] as const)("makes %s Tickets read-only", async status => {
@@ -158,10 +336,14 @@ describe("Actions Taken", () => {
     expect(screen.getByText(/Actions cannot be changed/)).toBeVisible();
     expect(screen.queryByRole("button", { name: "Save action" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "New action" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Edit action" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action state controls" })).not.toBeInTheDocument();
   });
   it.each([{ state: "CANCELLED" as const, cycle: 1 }, { state: "PLANNED" as const, cycle: 0 }])("locks cancelled and prior-cycle records: %j", async values => {
     setup(true, { action: { ...record, ...values } }); await open();
     expect(screen.queryByRole("button", { name: "Save action" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Edit action" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action state controls" })).not.toBeInTheDocument();
   });
   it("confirms actual performer, requires Result and supports backing out", async () => {
     const write = vi.spyOn(api, "writeAction").mockResolvedValue({ actionId: 12, eventId: 1, actionVersion: 1, ticketVersion: 1, replayed: false });
@@ -211,7 +393,10 @@ describe("Actions Taken", () => {
     vi.mocked(api.getActionHistory).mockResolvedValue({ items: [{ id: 1, actionId: 12, kind: "EDITED", version: 2, actor: record.createdBy, createdAt: record.createdAt, reason: "Correction", before: null, after: { description: "<script>alert(1)</script>" } }], page: 1, pageSize: 20, total: 21, totalPages: 2 });
     await userEvent.click(screen.getByRole("button", { name: "Refresh actions" }));
     await screen.findByText(/Edited · Revision 2/);
-    await userEvent.click(screen.getByText("Before and after values"));
+    expect(screen.getByRole("heading", { name: "What changed" })).toBeVisible();
+    expect(screen.getByText(/Changed by Mali/)).toBeVisible();
+    expect(screen.getByText("Technical details").closest("details")).not.toHaveAttribute("open");
+    await userEvent.click(screen.getByText("Technical details"));
     expect(document.querySelector("script")).toBeNull();
     await userEvent.click(screen.getByRole("button", { name: "Next history" }));
     await waitFor(() => expect(api.getActionHistory).toHaveBeenLastCalledWith(8, 12, 2));

@@ -1,10 +1,10 @@
 # Lab 4 Peer Review Record
 
-Status: Contract corrections approved and merged in PR #45 on 2026-10-05.
-Issue #40 was independently approved and merged by auto4496 in PR #46 on
-2026-10-06. Issue #41 UI is published in PR #47; Phanuwit requested changes on
-2026-10-07. The fixture correction is locally verified, pending author commit/push
-and peer re-review. No approval/merge or reciprocal review is claimed for #41.
+Status: Contract and foundation accepted in PRs #45/#46. Phanuwit approved
+corrected Issue #41 head 0cf9e58 and merged PR #47 into lab4-staging as f4da089
+on 2026-10-07. Issue #42 is Started on feature/42-ticket-workflow from that merge;
+local implementation/evidence exists, but author acceptance, commits/push and
+its own peer review remain pending. No reciprocal review is claimed.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
 Expected peer: Phanuwit Butchari, 67070501070, GitHub auto4496.
@@ -24,8 +24,8 @@ by the author; the peer supplies actual review comments, approval and merge.
 |---|---|---|---|---|
 | Engineering contract | [#39](https://github.com/Datakung/toktickit/issues/39) | [#45](https://github.com/Datakung/toktickit/pull/45) / lab4-staging | Corrected ff97405; actual approval below | Merged d32c8cf |
 | Action foundation | [#40](https://github.com/Datakung/toktickit/issues/40) | [#46](https://github.com/Datakung/toktickit/pull/46) / lab4-staging | Approved by auto4496 on 4795f38 | Merged a915812; Issue closed/Done |
-| Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Changes requested on 3addd43; correction prepared below | Open; not accepted/Done |
-| Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | Pending / lab4-staging | Pending | Backlog |
+| Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Corrected 0cf9e58; approval below | Merged f4da089; Issue closed |
+| Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | Pending / lab4-staging | Local implementation; not yet peer reviewed | Started |
 | Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | Pending / lab4-staging | Pending | Backlog |
 | Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | Pending / lab4-staging, then main | Pending | Backlog |
 
@@ -110,7 +110,8 @@ agent. Author visual acceptance is not yet recorded. Unknown retries retain
 their original user/Ticket-scoped payload/key across a full browser reload;
 confirmed-save refresh never creates again, and sign-out clears journals.
 PR #47 explicitly Development-links Issue #41 and targets lab4-staging; linkage
-was verified through closingIssuesReferences. Issue #41 is not Done.
+was verified through closingIssuesReferences. This was the original handoff;
+acceptance of the corrected head is recorded below.
 
 ### PR #47 requested correction, 2026-10-07
 
@@ -144,9 +145,174 @@ six files. It exposed missing Action/assignee reads before correction; cleanup
 and mock restoration occur even when the guard fails. Full default and serial
 client results and the typed client build are in [tests.md](tests.md).
 Production source, permissions, database/uploads and screenshots are unchanged.
-These are local verification results, not Phanuwit's verification of the fix.
-Correction commit, pushed head, author reply and reviewer acceptance must be
-recorded after they actually exist; PR #47 remains Changes requested.
+The author committed/pushed the correction as
+[0cf9e58](https://github.com/Datakung/toktickit/commit/0cf9e583c94779ef6f1c346becc019b31281208e).
+The original local runs above are distinct from Phanuwit's subsequent independent
+verification below; no author-reply link is invented.
+
+### PR #47 acceptance, 2026-10-07
+
+[Phanuwit's actual approval](https://github.com/Datakung/toktickit/pull/47#pullrequestreview-5439057032)
+was submitted on exact head 0cf9e58 at 07:34:30 UTC (14:34:30 Bangkok).
+He reported the full 18-file client suite passing 130/130 with no uncaught errors
+and no real fetches in the six guarded files; the focused serial legacy pair
+passed 12/12, compared with 1/12 on the old head and 12/12 at base. His client
+build and whitespace checks passed. This is a test/documentation-only fix;
+his prior review had passed 33 new component/style checks, five feature browsers
+and both builds. Those browser/backend checks were not repeated for this
+test-only correction; no all-182-backend/all-31-earlier-browser rerun is claimed. His approval covers #41, not workflow/dashboard/release.
+Peer merge followed at 07:35:15 UTC (14:35:15 Bangkok) as
+[f4da089](https://github.com/Datakung/toktickit/commit/f4da089686f77ad67cd9891143b62f26d15b6bf1).
+Issue #41 is closed. No reciprocal review is implied.
+
+## Issue #42 local review handoff
+
+User authorized the next Issue after confirming the merge. Branch
+feature/42-ticket-workflow starts from f4da089; the existing Issue #42 project
+card was moved from Backlog to Started, not Done. Review all eight-status edges,
+each whole-cycle gate, cancellation with active work, transactional history
+rollback, current-session recheck, resolution date, reopen cycles and races with
+action/account mutations. Inspect the matching-version/cycle checklist, explicit
+confirmation, unknown-status reload and owned read-only paged history.
+
+The previous Staff regression now uses a uniquely generated test schema with
+guarded TRUNCATE teardown (immutable events cannot be casually deleted); its
+resolution fixture includes actual completed work. API-mocked legacy component
+fixtures include the additive history read and retain their rejecting-fetch guard.
+No authorization bypass, production migration, development seed or reset was used.
+See [tests.md](tests.md) and [feature captures](../../artifacts/lab-04/screenshots/workflow/README.md).
+Author visual acceptance, implementation/documentation commits, pushed head, linked
+feature PR, actual peer comments/replies/approval and merge are still pending.
+Do not advance #42 to Done based only on these local checks.
+
+### Author-requested follow-up, 2026-10-09
+
+Review the creation redirect after all uploads, transient success notice, failure
+alert with honest saved-Ticket recovery, disabled duplicate submission, mobile
+layout and keyboard target/focus. Include navigation away during pending creation.
+The existing login component fixture now explicitly mocks Staff owners/queue and
+rejects unexpected fetches; its original assertions remain. This isolates it from
+a running development API, not a product authentication change. Latest verification
+is 147 client tests, five targeted real-browser checks and the client build; see
+the dated ledger for the distinction from October 7's full regression.
+
+The author backed up development and applied the existing #40 migration on
+October 9 to fix manual creation against the outdated database. The agent did not
+seed/reset it or alter credentials; browser verification preserved development
+database/uploads. No additional migration is required for the redirect. Local
+changes still require author acceptance/publication and independent peer review.
+
+Also review the subsequent separate Current status box and Change status to
+selector. Open must remain visible after saving, all four legal Open transitions
+must remain selectable, and no later target should be preselected. Check all
+eight status matrices, pending/rejected saves, reset after success, terminal
+confirmation and the unchanged resolution/unknown-response guards. Desktop,
+tablet and mobile feature captures are refreshed for this refinement; these do
+not imply author visual acceptance or peer approval.
+
+The final author refinement separates opening and progress into standalone panels:
+New opening above Operations, progress below Operations after a confirmed open,
+and read-only status for Cancelled. Inspect focus handoff, pending/rejected/unknown
+opening, direct New cancellation and all later transitions. Latest local results
+are 159 full client tests, eight targeted browsers and the typed client build;
+18 workflow captures include opening/progress at three widths. No final-main
+pass, author acceptance or peer review is implied.
+
+### Checklist and view-first action refinement, October 9
+
+Review the larger bold checklist/Actions headings and green-check/red-cross
+requirements with explicit Met/Not met text. Overview is neutral for uncertain,
+stale/loading and terminal states; authoritative whole-cycle gate is unchanged.
+View/deep links/newly created actions show saved details and audit before editing.
+Eligible Staff choose Edit action; check keyboard focus, closing/discarding unsaved
+fields, preserved independent assignment after field save, unknown-save receipt
+recovery and no Edit for Requesters/terminal/cancelled/prior-cycle work.
+
+Latest local verification: 169 client tests / 19 files, typed client build and
+14 targeted browsers (four Staff regression, five Action and five workflow/UI).
+30 deliberate workflow PNGs include checklist and view/editor at three widths;
+agent inspected representative desktop/mobile images. Row contrast >=4.5:1 and
+44px keyboard controls/no page overflow were checked. Older initial-heading test
+now waits for its existing focus effect without removing the focus requirement.
+No full-server/full-browser-inventory/audit rerun or peer approval is claimed.
+Author acceptance/publication and independent review are still required.
+
+Further October 9 banner refinement: overall readiness is larger than requirements
+(20–24px, heavier weight, spacing/icon/border emphasis), not just the heading.
+Latest verification is 170 client tests, typed build and five workflow/UI browser
+journeys (46.1s), refreshing 30 feature PNGs with three-width hierarchy/no overflow
+checks. Prior 14-browser result remains historical. Audit history/JSON was not
+altered; handout Part 7 requires ordered append-only behaviour/role visibility,
+while our approved contract chooses immutable revisions and this display format.
+
+Subsequent October 9 approval implements readable action revisions: changed-only
+business fields, creation initial details, Yes/No and Bangkok dates. Attribution
+and correction reasons remain visible; exact original snapshots are collapsed
+under Technical details. Review unknown account IDs for honest labels rather than
+inferred historical names, and verify keyboard disclosure and owned read-only access.
+No stored event, ordering, paging, API or role policy changed.
+
+Latest local verification: 176 client tests / 20 files (limited-worker rerun), typed
+build and eleven targeted browser journeys (1.8m: five Actions, six workflow/UI).
+The first full-client attempt had one older creation-test timeout; no assertion or
+timeout was weakened. Staff/Requester audit at three widths compares expanded JSON
+exactly to API snapshots and proves viewing does not mutate history. Thirty-six
+workflow PNGs were generated; agent inspected desktop/mobile readable audit.
+Development fingerprint was unchanged within this run; temporary config removed.
+Earlier server/full-browser/audit results remain dated historical checks. Author
+manual acceptance, publication and independent peer review are still pending.
+
+Further author-requested Close detail is available in saved-details headers for
+Staff/owning Requesters. Editing explicitly offers Discard changes and close detail;
+pending/uncertain writes remain locked for recovery. Verify details/audit hide,
+saved work remains, focus returns to View (heading when off-page), reopening reads
+saved values and list refresh does not reopen a deliberately closed deep link.
+Latest checks: 181 client tests / 20 files, typed build and six workflow/UI browser
+journeys (1.1m), with three-width keyboard/44px/discard/exact-history assertions.
+Development fingerprint unchanged; temporary config removed. Persistent screenshots
+remain the earlier 36 captures; this run used ignored output only. No peer or author
+manual acceptance, publication or full-server/full-browser/audit rerun is claimed.
+
+The author's next clarification approved independent Action progress in view mode,
+before the optional field editor. Review Start for Planned and Complete/Cancel for
+eligible active actions without Edit; confirm they send state-only payloads and
+still require Result/performer confirmation or cancellation reason/confirmation.
+Field/assignment drafts are never silently submitted. Prior-cycle, terminal,
+cancelled and Requester restrictions remain; state-only retry recovery stays in
+view mode with the original key.
+
+Latest local results: 187 client tests / 20 files (44 Action cases), typed build
+and eleven targeted Actions/workflow browser journeys (2.4m). Two new tests first
+held detached button references after Back; they now query current buttons and
+retain focus checks. Real direct Start/Complete/Cancel, three-width keyboard/44px/
+no overflow, immutable snapshots and earlier workflow/recovery assertions passed.
+Thirty-nine workflow PNGs regenerated; desktop/mobile progress agent-inspected.
+Development fingerprint unchanged within the run; temporary config removed.
+No full-server/full-browser/audit rerun, author manual acceptance, publication or
+peer review is claimed.
+
+### Feature PR preparation, October 9
+
+The author requested publication after exercising resolution, closure, reopening
+and fresh-cycle work. Read-only checks on `TKT-20261009-DE4TLN` verified those
+saved events, cleared dates on reopen and retained previous-cycle actions. The
+latest inspected cycle-3 completed action has no outstanding follow-up. This
+does not substitute for independent peer review or blanket author visual acceptance.
+
+Final verification: 269 server tests / 31 files (106.13s), 187 client tests /
+20 files (34.28s), both production builds and the full 44-test browser inventory
+(4.0m). Two legacy tests first navigated secondary contexts to hard-coded port
+5173; three URLs now use the active test origin. Original security assertions,
+timeouts and retry settings remain unchanged. Both full browser runs preserved
+the development database/uploads fingerprint; temporary port configuration removed.
+The 39 persistent PNGs are the earlier deliberate feature captures, not regenerated
+by this full run and not final-main evidence. See tests.md for exact provenance.
+
+Review the resolution blockers, full transition matrix, stale/concurrent writes,
+owned paged history, terminal/legacy records, independent state/field/assignment
+saves and exact-key recovery. Peer approval/merge, Issues #43/#44, final-main
+verification and the final author reflection remain pending. No new dependency
+audit is claimed; the recorded moderate Multer advisory remains tracked.
 
 ## Final integration and reciprocal review
 

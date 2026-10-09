@@ -1,17 +1,17 @@
 # Lab 4 Sprint Engineering Specification
 
-Status: Engineering contract approved by Phanuwit on corrected commit ff97405
-in [PR #45](https://github.com/Datakung/toktickit/pull/45#pullrequestreview-5416186064),
-then merged into lab4-staging as d32c8cf on 2026-10-05. Originally prepared from
-reviewed main b3c1a70 before product coding. Issue #40 data/API foundation is
-implemented in 4920527, documented in 4795f38 and peer-approved/merged in PR #46
-as a915812 on 2026-10-06. Action screens (#41) are implemented locally from that
-merge on feature/41-actions-ui, committed as cd5aa76/documentation 3addd43 and
-published in PR #47. Peer review requested correction of unmocked legacy Action
-reads on 2026-10-07; the test-only fix is locally verified, awaiting author
-commit/push and peer re-review. No business-rule change or approval is claimed;
-see [tests.md](tests.md). Final Ticket gate/transitions (#42), dashboards (#43)
-and release (#44) remain planned. Feature passes are not final-main acceptance.
+Status: Contract approved before implementation in PR #45 (ff97405; merge
+d32c8cf). Issue #40 was peer-approved/merged in PR #46 (a915812). Phanuwit
+approved corrected Issue #41 head 0cf9e58 in PR #47 on 2026-10-07 and merged it
+into lab4-staging as f4da089; Issue #41 is closed. See [reviewer.md](reviewer.md)
+for exact review links and independent-test limits.
+
+Issue #42 is implemented on feature/42-ticket-workflow from f4da089: atomic
+current-cycle resolution/cancellation gates, transition history, reopen cycles
+and authoritative UI checklist. Tests and feature evidence are recorded in
+[tests.md](tests.md); author visual acceptance, commits/push and peer review
+remain pending. Dashboards (#43) and final release (#44) are still planned.
+Feature passes are not final-main acceptance.
 
 ## 1. Sprint goal
 
@@ -334,3 +334,47 @@ Ticket is active; terminal Tickets and prior cycles remain immutable. Recovery
 does not invent legacy work. Administrator reuses Staff metrics. The seven-day
 window uses UTC instants and Bangkok presentation. These are project-specific choices
 accepted in the engineering-contract review; do not claim the handout fixed them.
+
+## 12. Author-requested creation refinement, 2026-10-09
+
+Within local Issue #42, creation now redirects to the saved Ticket Detail after
+all selected initial uploads succeed. An attachment failure shows failure rather
+than creation success and keeps the form open. Because Ticket creation precedes
+the independent uploads, explain that the Ticket is saved and provide a retry
+link; do not claim rollback, delete the Ticket or repeat creation. This is an
+author-requested navigation refinement, not a newly inferred handout requirement
+or a change to the backend workflow/ownership rules.
+
+The subsequent author-requested status refinement separates the saved current
+status from an explicit proposed transition. It removes automatic next-status
+preselection, not any legal transition. All eight states retain exactly the
+approved matrix, current Open remains visible after saving, and only a successful
+save updates the displayed confirmed status. Gates, versions and permissions do
+not change.
+
+The author's later clarification separates New-ticket opening from progress
+updates into two panels. Open/Cancel belong to the initial stage; after a confirmed
+open, progress status choices appear in a separate stage. This changes presentation
+only, not BR transition permissions, action creation/assignment rules or the
+resolution/cancellation gates. A directly cancelled New Ticket is not represented
+as having been opened.
+
+The author also requested stronger checklist/Action heading hierarchy, red/green
+labelled requirement rows, and view-first action details with explicit Edit action.
+These are client-only presentation choices: saved details/audit remain readable,
+while existing mutation/confirmation/gate/recovery rules still apply after opening
+the editor. Closing discards only unsaved local input, not confirmed work.
+
+The author approved a readable audit view: initial values for creation, changed
+business fields only for later revisions and collapsed original Technical details.
+This changes presentation only; immutable snapshots, recorded actor/reason/time,
+chronological ordering and ownership restrictions remain intact. Account names
+are not invented where the snapshot/actor response provides only an ID.
+
+The author then approved separating Action progress from field editing. Start,
+Complete and Cancel are independent operations available directly in the eligible
+saved-detail view; Edit action is not a business-rule prerequisite for completion.
+Existing confirmations, required completion Result/cancellation reason, versions,
+retry keys, actor attribution and role/cycle/terminal restrictions are unchanged.
+State-only recovery does not open an unrelated field editor. This corrects the
+earlier presentation grouping, not the approved backend workflow.
