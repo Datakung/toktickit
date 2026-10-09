@@ -446,7 +446,11 @@ not independent peer approval, a separately reported Administrator/exact-width
 manual checklist, or final-main release acceptance. Latest verification remains
 290 server tests, 211 client tests, both builds and all 49 guarded Chromium
 scenarios passing. Independent review/merge and Issue #44 release gates remain
-pending; publication details will be recorded after the PR exists.
+pending. Implementation commit `c5185639d9ce7a97b572049a0b87a9cd3d210d5e`
+was pushed to `feature/43-dashboards`; [PR #49](https://github.com/Datakung/toktickit/pull/49)
+is open against `lab4-staging`, verified with no merge conflicts when created.
+This publication record is a documentation-only follow-up; the tests above cover
+the implementation commit. No peer approval or merge is claimed.
 
 Record real feature/release approvals and merge commits, final-main checks and
 Project Done evidence after they exist. Keep the release Issue open until those
