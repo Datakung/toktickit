@@ -3,9 +3,10 @@
 Status: Contract and foundation accepted in PRs #45/#46. Phanuwit approved
 corrected Issue #41 head 0cf9e58 and merged PR #47 into lab4-staging as f4da089
 on 2026-10-07. He approved Issue #42 at b7f6bb9 and merged PR #48 as 00fddc1
-on 2026-10-09. Issue #43 now has local implementation/evidence on
-feature/43-dashboards from that merge; author acceptance/publication and its own
-peer review remain pending. No reciprocal review is claimed.
+on 2026-10-09. He approved Issue #43 at 6dce864 and merged PR #49 as 4660ac6
+on 2026-10-10. Issue #44 is in local quality/release work from that merge;
+its own peer approval and final-main acceptance remain pending. No reciprocal
+review is claimed.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
 Expected peer: Phanuwit Butchari, 67070501070, GitHub auto4496.
@@ -27,8 +28,8 @@ by the author; the peer supplies actual review comments, approval and merge.
 | Action foundation | [#40](https://github.com/Datakung/toktickit/issues/40) | [#46](https://github.com/Datakung/toktickit/pull/46) / lab4-staging | Approved by auto4496 on 4795f38 | Merged a915812; Issue closed/Done |
 | Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Corrected 0cf9e58; approval below | Merged f4da089; Issue closed |
 | Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | [#48](https://github.com/Datakung/toktickit/pull/48) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227) of b7f6bb9 | Merged 00fddc1 |
-| Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | Pending / lab4-staging | Local implementation/testing; no peer approval claimed | Local work started; board not changed |
-| Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | Pending / lab4-staging, then main | Pending | Backlog |
+| Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | [#49](https://github.com/Datakung/toktickit/pull/49) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211) of 6dce864 | Merged 4660ac6; Issue closed |
+| Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | Pending / lab4-staging, then main | Local candidate checks; peer release approval pending | Work started; not Done |
 
 ## Contract review questions
 
@@ -452,7 +453,87 @@ is open against `lab4-staging`, verified with no merge conflicts when created.
 This publication record is a documentation-only follow-up; the tests above cover
 the implementation commit. No peer approval or merge is claimed.
 
+### Issue #43 actual independent approval and merge
+
+GitHub was checked on 2026-10-10. auto4496 approved exact head
+`6dce8643446f3eb0fa0561814d3d09f8a8203772` at 22:12:54 Bangkok and merged
+PR #49 into `lab4-staging` as `4660ac61b8609be19bc6d2e057b8516fa7fb74ce`
+at 22:13:07 Bangkok. Review [5479533211](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211)
+confirmed no actionable findings and recorded independent 290 server/211 client
+tests, both builds, Prisma validation and one uninterrupted 49-case Chromium
+run (2.7m), with reviewer baseline/uploads preserved.
+
+The reviewer used disposable reviewer targets. The empty migrated development
+stand-in was not the author's development database. Two migration-test Docker
+container substitutions were restored; the server run used a 20-second default
+timeout for Windows overhead while explicit test deadlines stayed unchanged.
+These limits are retained rather than presenting that run as identical to the
+author's environment. No author response to a nonexistent finding is invented.
+
+### Issue #44 quality/release work started
+
+The author requested work on #44 after that accepted merge. The agent created
+`feature/44-quality-release`, retained fresh audits, patched the upload/proxy
+dependencies and vulnerable build/test tooling, added aborted-upload, proxy-trust
+and wider safe-error regressions, and expanded development-state coverage to
+include sessions/Comments/Notes/migrations. Current evidence is local candidate
+work; the reproducible gate and its manifest live in
+`artifacts/lab-04/quality-gate/`. No quality PR, peer approval, release merge,
+final-main gate or Project Done status is claimed yet. The author's model
+selection and original Lab 4 reflection were supplied and recorded in ai-use.md.
+
+The complete local gate finished at 23:02:19 Bangkok on 2026-10-10: 298 server,
+211 client and 49 Chromium tests passed, with both builds, Prisma validation,
+four clean audits and unchanged expanded development fingerprints. Eighteen
+agent-inspected candidate screenshots were retained with byte hashes and source
+paths. The manifest labels the dirty local candidate on base 4660ac6 accurately.
+No independent reviewer has yet approved these quality changes. A final-main
+guard refusal on the feature branch is recorded separately, not as main acceptance.
+
 Record real feature/release approvals and merge commits, final-main checks and
 Project Done evidence after they exist. Keep the release Issue open until those
 checks finish. Record author reviews of the peer's actual project with direct links
 when performed; no reciprocal review has been recorded for this lab yet.
+
+### Issue #44 authorized publication, October 10
+
+The author answered "Go for it" to committing/pushing and opening the quality
+PR. Implementation/evidence commit
+`15d8b386b4065e82e984c6fcdf595a29f71a46cf` and raw-log whitespace attributes
+`d8189869a59ec64c98bc90a13371d16a596aaa83` were pushed to
+`feature/44-quality-release`. [PR #50](https://github.com/Datakung/toktickit/pull/50)
+was created against `lab4-staging` at 23:10:42 Bangkok on 2026-10-10. GitHub
+confirmed Open, non-draft and mergeable with no conflicts at creation.
+
+The passing gate predates those commits; its exact source fingerprints still
+match the published candidate. Raw terminal logs are retained unchanged; only
+their blank-at-EOF Git whitespace rule is scoped out via `.gitattributes`.
+This publication record is documentation-only and does not claim a fresh run.
+No quality peer approval, staging/main merge, completed PDF or Project Done
+status exists yet. Issue #44 remains open for the remaining release gates.
+
+### PR #50 changes requested and corrected, October 11
+
+Phanuwit (`auto4496`) requested changes at exact head
+`95b6689f3245cc517dce32772343eb47cb3c53b1` at 00:26:18 Bangkok on 2026-10-11.
+Actual review [5480101784](https://github.com/Datakung/toktickit/pull/50#pullrequestreview-5480101784)
+reported one P2 [finding](https://github.com/Datakung/toktickit/pull/50#discussion_r4238547399):
+a failed final snapshot or unreadable final log could throw while still persisting
+`passed`. The reviewer reproduced that failure and independently passed the
+ordinary 298 server / 211 client / 49 browser run (2.7m, no skips/flaky/retries),
+both builds, Prisma validation, diff checks and four clean audits. Reviewer
+baseline/uploads matched and all 18 screenshot hashes matched; disposable
+reviewer targets and an empty migrated development stand-in were used, not the
+author's database. Review-only container substitutions/evidence routing were
+restored; no test deadline or assertion was changed.
+
+The author requested "Fix it". The agent reproduced the manifest bug, deferred
+success until valid matching fingerprints, caught final-verification errors,
+preserved earlier failures and added ten database-free parsed-production
+regressions. All ten pass; the full quality gate invokes them automatically.
+Both builds and the dirty-feature FinalMain refusal were checked. PostgreSQL
+was unreachable, so no fresh database-backed full gate or preservation digest
+is claimed. Existing candidate evidence was not overwritten; correction output
+and source digests are in `artifacts/lab-04/quality-gate/review-fix/`.
+This is the author's correction, not reviewer reapproval or a merge. The finding
+remains for the peer to recheck; #44/main/PDF/Project acceptance remain pending.

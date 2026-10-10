@@ -1,0 +1,21 @@
+PASS matching final snapshot completes passing checks [passed]
+FAIL external final snapshot failure cannot claim passed [passed]
+status passed, expected failed-development-verification
+FAIL unreadable final snapshot log cannot claim passed [passed]
+status passed, expected failed-development-verification
+FAIL invalid final fingerprint cannot claim passed [failed-development-state-changed]
+status failed-development-state-changed, expected failed-development-verification
+PASS different final fingerprint records changed development state [failed-development-state-changed]
+FAIL missing baseline cannot claim preservation [failed-development-state-changed]
+status failed-development-state-changed, expected failed-development-verification
+PASS matching snapshot does not erase an earlier step failure [failed]
+PASS snapshot exit failure retains an earlier step failure [failed]
+PASS snapshot read failure retains an earlier step failure [failed]
+FAIL changed state retains an earlier step failure [failed-development-state-changed]
+status failed-development-state-changed, expected failed
+5/10 quality-gate finalization regressions passed. No database or repository evidence changed.
+Exception: C:\CPE\CPE334\MINE\toktickit\scripts\tests\lab4-quality-gate.test.ps1:89
+Line |
+  89 |  … ailed.Count) { throw 'Quality-gate finalization regression failed.' }
+     |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Quality-gate finalization regression failed.

@@ -259,7 +259,7 @@ export async function snapshotDevelopmentState() {
     const actionTables: Record<string, unknown> = {};
     // A development schema may still precede Lab 4: fingerprint additive
     // records when present, without migrating or otherwise changing it.
-    for (const table of ["ActionTaken", "ActionTakenEvent", "ActionWriteReceipt", "TicketTransitionEvent"]) {
+    for (const table of ["Session", "PublicComment", "InternalNote", "ActionTaken", "ActionTakenEvent", "ActionWriteReceipt", "TicketTransitionEvent", "_prisma_migrations"]) {
       const exists = await prisma.$queryRaw<Array<{ present: boolean }>>`SELECT to_regclass(${'"' + table + '"'}) IS NOT NULL AS present`;
       if (exists[0]?.present) actionTables[table] = await prisma.$queryRawUnsafe(`SELECT * FROM "${table}" ORDER BY id`);
     }

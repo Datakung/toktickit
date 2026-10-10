@@ -1,13 +1,12 @@
 # Lab 4 AI Use and Reflection
 
-Status: Actual interaction record through accepted Issues #40-42 and local
-Issue #43 dashboards on 2026-10-10. Dashboard author/publication/peer review,
-final release and author-approved Lab 4 reflection remain pending.
+Status: Actual interaction record through peer-accepted Issues #40-43 and the
+Issue #44 release-candidate work on 2026-10-10. Final release remains pending.
 
-Tool: OpenAI Codex desktop. Exact selected model identifiers have not been
-independently recorded for these turns; confirm the visible selection before
-final submission. Do not infer one exact model for the entire sprint from the
-app name or prior labs. Record any verified model changes.
+Tool: OpenAI Codex desktop. On 2026-10-10 the author reported the selected model
+as "GPT-Sol 6.1". This is the author's selection record, not an independently
+verified model history for every earlier turn; no historical model changes are
+inferred from the app name or prior labs.
 
 ## Selected real prompts so far
 
@@ -269,8 +268,45 @@ reviewed feature, documentation and isolated screenshot evidence for publication
 This is author feature/UI acceptance, not independent peer approval, a new test
 run, final-main acceptance or approval of the pending reflection below.
 
+## Issue #44 actual continuation, 2026-10-10
+
+The author requested "Start on this one" with Issue #44 after PR #49's actual
+peer merge. The agent reread the full handout, checked GitHub acceptance evidence,
+retained fresh dependency findings, updated vulnerable upload/proxy/test-tool
+dependencies and added eight hardening/error-recovery tests. The complete local
+gate passed 298 server / 211 client / 49 browser cases, both builds, Prisma
+validation and four clean audits; development state was unchanged. Eighteen
+candidate captures were inspected and retained with honest provenance. No new
+quality PR, peer approval, final-main pass or finished PDF is invented.
+
+The author answered the model question with "GPT-Sol 6.1" and supplied the
+reflection below. The agent recorded those answers and corrected grammar only.
+The nine-part submission plan follows the real handout; final-main evidence and
+release approval must exist before assembling a completed submission.
+
+The author's later "Go for it" authorized committing/pushing and opening the
+quality PR. The agent published the verified candidate in
+[PR #50](https://github.com/Datakung/toktickit/pull/50) to `lab4-staging`, retained
+the original test/provenance records and recorded publication separately from
+independent approval or final release. Issue #44 is not complete.
+
+## Review correction interaction (2026-10-11)
+
+After "He reviewed", the agent read the actual PR #50 requested-changes review
+and confirmed the final-snapshot manifest bug in the source. The author then
+said "Fix it". The agent reproduced the failure with parsed-production
+regressions, fixed success/failure handling, preserved earlier failures and added
+automatic gate coverage. Ten regression checks and both builds passed; the
+database was unreachable, so no new full gate or preservation hash was invented.
+The author's reflection below is unchanged by this coding interaction.
+
 ## My Reflection
 
-Pending author reflection after implementation and review. Ask the author to
-review or supply the final reflection before using it in the submission. Prior
-approval of the Lab 3 reflection does not approve a future Lab 4 reflection.
+Supplied by the author on 2026-10-10; lightly edited for grammar without adding
+claims about experiences or results:
+
+AI helped me most by listing the details I needed for planning. I could also
+suggest my own ideas and incorporate them into the plan to make it more suitable.
+I still needed to check UI details myself, such as whether the buttons and page
+sizes were appropriate. Most of the checks I needed to make personally were on
+the frontend.
