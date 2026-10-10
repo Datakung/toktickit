@@ -55,6 +55,12 @@ See [visual-evidence.md](visual-evidence.md) and
 The `-FinalMain` guard was checked on this dirty feature branch and correctly
 refused before starting or replacing evidence. No final-main run is claimed.
 
+The verified candidate was subsequently published in
+[PR #50](https://github.com/Datakung/toktickit/pull/50) to `lab4-staging`:
+implementation/evidence 15d8b38, original-log attributes d818986. Source/image
+fingerprints still match. The manifest remains the truthful precommit record;
+publication documentation is not a newly executed gate or peer acceptance.
+
 ## Remaining release gates
 
 - Peer-review the quality changes and merge them into lab4-staging.

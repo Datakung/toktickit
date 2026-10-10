@@ -18,7 +18,8 @@ at `b7f6bb9` and merged Issue #42 into `lab4-staging` as `00fddc1` on 2026-10-09
 Phanuwit [approved PR #49](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211)
 at `6dce864` and merged Issue #43 into `lab4-staging` as `4660ac6` on 2026-10-10.
 Issue #44 starts from that accepted integration point on `feature/44-quality-release`.
-Its quality/release review and final-main acceptance remain pending.
+Its local candidate is published in [PR #50](https://github.com/Datakung/toktickit/pull/50)
+against `lab4-staging`. Quality/release review and final-main acceptance remain pending.
 Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
 
 Action labels count separately within each Ticket: Action 1, Action 2, and so on.

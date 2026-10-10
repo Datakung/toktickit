@@ -932,3 +932,10 @@ source paths, capture timestamps and SHA-256 digests. See the
 The clean-main guard was exercised on this dirty feature checkout and correctly
 refused before running checks or replacing evidence. That is a guard check, not
 a final-main run. Final peer approval, final captures/PDF and Project Done remain pending.
+
+The author subsequently authorized publication. The verified candidate was
+committed as 15d8b38, with original terminal-log attributes in d818986, and pushed
+in [PR #50](https://github.com/Datakung/toktickit/pull/50) to `lab4-staging`.
+Source/screenshot fingerprints were rechecked before publication and match the
+retained evidence. Publication documentation adds no product/test changes and
+does not turn the dirty-start candidate run into a clean-main or new test run.
