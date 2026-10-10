@@ -1,0 +1,69 @@
+
+> toktickit-client@1.0.0 test:e2e:review
+> playwright test --config playwright.dashboard-review.config.ts --reporter=list,json --retries=0
+
+[WebServer] (node:39648) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+Development state before E2E: 53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3
+
+Running 49 tests using 1 worker
+
+(node:34896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › e2e\lab-02\create-ticket.spec.ts:18:1 › creates one Ticket and displays its official number (3.5s)
+  ok  2 [chromium] › e2e\lab-02\create-ticket.spec.ts:68:1 › redirects only after both initial attachments succeed (3.2s)
+  ok  3 [chromium] › e2e\lab-02\create-ticket.spec.ts:94:1 › upload failure shows failure instead of success, stays on form and opens the saved Ticket without duplicating it (3.8s)
+  ok  4 [chromium] › e2e\lab-02\create-ticket.spec.ts:131:1 › keeps the Create Ticket form within a mobile viewport (1.7s)
+  ok  5 [chromium] › e2e\lab-02\my-tickets-responsive.spec.ts:59:1 › uses the desktop Ticket table without horizontal page overflow (550ms)
+  ok  6 [chromium] › e2e\lab-02\my-tickets-responsive.spec.ts:71:1 › keeps My Tickets usable at the tablet viewport (573ms)
+  ok  7 [chromium] › e2e\lab-02\my-tickets-responsive.spec.ts:83:1 › uses touch-friendly Ticket cards at 390 px without horizontal overflow (571ms)
+  ok  8 [chromium] › e2e\lab-02\requester-context-responsive.spec.ts:11:3 › signed-in Requester context remains usable at desktop width (1.7s)
+  ok  9 [chromium] › e2e\lab-02\requester-context-responsive.spec.ts:11:3 › signed-in Requester context remains usable at tablet width (1.7s)
+  ok 10 [chromium] › e2e\lab-02\requester-context-responsive.spec.ts:11:3 › signed-in Requester context remains usable at mobile width (1.7s)
+  ok 11 [chromium] › e2e\lab-02\requester-context.spec.ts:4:1 › signs in and signs out of the Requester session (1.8s)
+  ok 12 [chromium] › e2e\lab-02\requester-ticket-flow.spec.ts:7:1 › creates, finds, opens, attaches, downloads, removes, and protects a Requester Ticket (4.0s)
+  ok 13 [chromium] › e2e\lab-02\responsive.spec.ts:44:1 › validates and captures Create, My Tickets, and Ticket Detail at all contract widths (5.4s)
+  ok 14 [chromium] › e2e\lab-02\ticket-detail-responsive.spec.ts:65:3 › keeps Ticket Detail usable at the desktop viewport (670ms)
+  ok 15 [chromium] › e2e\lab-02\ticket-detail-responsive.spec.ts:65:3 › keeps Ticket Detail usable at the tablet viewport (612ms)
+  ok 16 [chromium] › e2e\lab-02\ticket-detail-responsive.spec.ts:65:3 › keeps Ticket Detail usable at the mobile viewport (581ms)
+  ok 17 [chromium] › e2e\lab-03\admin-users.spec.ts:10:1 › Admin creates, edits, deactivates, activates and resets a real account (6.8s)
+  ok 18 [chromium] › e2e\lab-03\admin-users.spec.ts:51:3 › Administrator list and editor fit 1440px with keyboard focus (1.7s)
+  ok 19 [chromium] › e2e\lab-03\admin-users.spec.ts:51:3 › Administrator list and editor fit 768px with keyboard focus (1.7s)
+  ok 20 [chromium] › e2e\lab-03\admin-users.spec.ts:51:3 › Administrator list and editor fit 390px with keyboard focus (1.7s)
+  ok 21 [chromium] › e2e\lab-03\auth-review.spec.ts:4:1 › failed logout retains the real session across reload, then retries successfully (2.0s)
+  ok 22 [chromium] › e2e\lab-03\auth-review.spec.ts:20:1 › a session revoked by a second login leaves protected pages and stays signed out on Back (3.1s)
+  ok 23 [chromium] › e2e\lab-03\auth-review.spec.ts:35:1 › a normal Requester changes their password and can sign in with it (5.6s)
+Authorization evidence: Requester GET /api/staff/tickets/1/notes -> 403; private note text absent.
+  ok 24 [chromium] › e2e\lab-03\release-evidence.spec.ts:52:1 › captures integrated Lab 3 role, workflow, feedback and responsive evidence (18.8s)
+  ok 25 [chromium] › e2e\lab-03\staff-queue.spec.ts:14:1 › Staff searches, combines filters, sorts, paginates and opens the detail destination (2.5s)
+  ok 26 [chromium] › e2e\lab-03\staff-queue.spec.ts:46:3 › Staff queue fits 1440px with labels and keyboard focus (1.7s)
+  ok 27 [chromium] › e2e\lab-03\staff-queue.spec.ts:46:3 › Staff queue fits 768px with labels and keyboard focus (1.8s)
+  ok 28 [chromium] › e2e\lab-03\staff-queue.spec.ts:46:3 › Staff queue fits 390px with labels and keyboard focus (1.6s)
+  ok 29 [chromium] › e2e\lab-03\staff-queue.spec.ts:61:1 › Requester cannot navigate or read the shared Staff queue (1.6s)
+  ok 30 [chromium] › e2e\lab-03\staff-ticket-operations.spec.ts:23:1 › Staff operates a Ticket and communicates without exposing Internal Notes (4.8s)
+  ok 31 [chromium] › e2e\lab-03\staff-ticket-operations.spec.ts:71:3 › Staff Ticket Detail fits 1440px without horizontal overflow (2.0s)
+  ok 32 [chromium] › e2e\lab-03\staff-ticket-operations.spec.ts:71:3 › Staff Ticket Detail fits 768px without horizontal overflow (2.0s)
+  ok 33 [chromium] › e2e\lab-03\staff-ticket-operations.spec.ts:71:3 › Staff Ticket Detail fits 390px without horizontal overflow (1.8s)
+  ok 34 [chromium] › e2e\lab-04\actions-taken-flow.spec.ts:60:1 › different actors create, assign, edit, start, complete, correct and cancel distinct shared actions (25.1s)
+  ok 35 [chromium] › e2e\lab-04\actions-taken-flow.spec.ts:130:1 › lost create and later assignment responses reconcile once without repeating an earlier field save (8.6s)
+  ok 36 [chromium] › e2e\lab-04\actions-taken-flow.spec.ts:177:1 › responsive cards, field controls and read-only histories fit 1440/768/390px (13.1s)
+  ok 37 [chromium] › e2e\lab-04\actions-taken-flow.spec.ts:207:1 › rejected assignment preserves earlier success, then a real concurrent write requires explicit conflict reload (8.3s)
+  ok 38 [chromium] › e2e\lab-04\actions-taken-flow.spec.ts:242:1 › action and audit paging open exact later records, and invalid deep links stay unavailable (5.5s)
+  ok 39 [chromium] › e2e\lab-04\dashboards.spec.ts:18:1 › Requester snapshot links match owned lists, keep captured range after reload and Back, and recover refresh (2.7s)
+  ok 40 [chromium] › e2e\lab-04\dashboards.spec.ts:44:74 › Staff metrics and assigned-work destination for mali.support@example.test (3.0s)
+  ok 41 [chromium] › e2e\lab-04\dashboards.spec.ts:44:74 › Staff metrics and assigned-work destination for admin@example.test (1.8s)
+  ok 42 [chromium] › e2e\lab-04\dashboards.spec.ts:82:1 › empty Requester and forbidden dashboard show honest feedback without leaked counts (1.5s)
+  ok 43 [chromium] › e2e\lab-04\dashboards.spec.ts:88:1 › work lists keep desktop labels on one line and action progress controls aligned (10.8s)
+  ok 44 [chromium] › e2e\lab-04\ticket-resolution.spec.ts:96:1 › readable audit changes preserve exact snapshots and owned Requester visibility at every width (26.2s)
+  ok 45 [chromium] › e2e\lab-04\ticket-resolution.spec.ts:165:1 › action details stay in view mode until Edit is chosen at every width (17.4s)
+  ok 46 [chromium] › e2e\lab-04\ticket-resolution.spec.ts:213:1 › saved status stays separate from the next choice, with every valid Open transition retained (6.7s)
+  ok 47 [chromium] › e2e\lab-04\ticket-resolution.spec.ts:266:1 › New-ticket cancellation remains available but cannot bypass unfinished work (3.5s)
+  ok 48 [chromium] › e2e\lab-04\ticket-resolution.spec.ts:289:1 › whole-cycle blockers, formal resolution/close/reopen and read-only history at all widths (18.1s)
+  ok 49 [chromium] › e2e\lab-04\ticket-resolution.spec.ts:345:1 › lost status response blocks repeated saves until authoritative reload, and history read can retry (3.6s)
+Development database and uploads unchanged: 53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3
+
+  49 passed (4.3m)

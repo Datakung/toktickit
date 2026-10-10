@@ -7,14 +7,14 @@ into lab4-staging as f4da089; Issue #41 is closed. See [reviewer.md](reviewer.md
 for exact review links and independent-test limits.
 
 Issue #42 was approved at b7f6bb9 and merged in PR #48 as 00fddc1 on 2026-10-09.
-Issue #43 implements the approved dashboard rules locally on feature/43-dashboards
-from that merge: read-only repeatable-read snapshots, bounded summaries, current-user
+Issue #43 was peer-approved at 6dce864 and merged in PR #49 as 4660ac6 on 2026-10-10.
+It implements read-only repeatable-read snapshots, bounded summaries, current-user
 work and exact URL drill-downs. Existing defaults/envelopes remain unchanged.
 The full 11-page supplied Lab 4 sheet was reread on 2026-10-10, including dashboard
 mockups and the ownership/query/feedback/three-width requirements. Illustrative
 mockup controls do not override the approved role rules (no Staff Create Ticket).
-[tests.md](tests.md) records actual checks. Author acceptance, publication and
-peer review for #43, and final release (#44), remain pending.
+[tests.md](tests.md) records actual checks. Issue #43 is author-accepted and
+peer-merged; Issue #44 quality review and final release remain pending.
 Feature passes are not final-main acceptance.
 
 ## 1. Sprint goal
@@ -293,6 +293,12 @@ with zero Tickets. Do not rewrite existing fixtures merely to satisfy the gate.
 See [api-spec.md](api-spec.md) for exact requests, receipts, lists, queries and
 error precedence. Retain all existing endpoints and security; additive list
 filters enable dashboard links without changing existing defaults/envelopes.
+
+Issue #44 hardening changes compatible upload/proxy dependency versions and
+upgrades vulnerable test tooling. It does not change the schema, action numbering,
+authorization, business rules or development records. Its reproducible isolated
+gate retains all per-case results and distinguishes release-candidate checks from
+the required clean-main rerun. Final peer release/PDF acceptance remain pending.
 
 ## 9. Acceptance criteria
 

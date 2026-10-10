@@ -1,9 +1,9 @@
 # Lab 4 Test Plan and Traceability
 
-Status: Contract/foundation/Action UI/workflow accepted in PRs #45-48. Issue #42
-was approved at b7f6bb9 and merged as 00fddc1 on 2026-10-09. Issue #43 dashboards
-are locally implemented/tested on feature/43-dashboards from that merge. Its author
-acceptance/publication/peer review and final release (#44) remain pending.
+Status: Contract and Issues #40-43 accepted in PRs #45-49. Issue #43 was approved
+at 6dce864 and merged as 4660ac6 on 2026-10-10. Issue #44 quality/release work
+starts from that accepted merge; its peer review and final-main release remain
+pending. Current candidate evidence is retained under artifacts/lab-04/quality-gate/.
 Historical counts are never substituted for this branch's actual runs.
 
 ## Planned executable coverage
@@ -30,7 +30,8 @@ status is implied by a branch pass.
 | API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Passed: three cases, all metric-to-list comparisons |
 | API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Passed: three cases, all status/priority/current-user comparisons |
 | API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts; dashboard-query.unit.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts | Passed: synchronized snapshot insert, inclusive performer boundaries/ties/prior cycles and auth guards; each card comparison lives in role API files |
-| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/requester-dashboard.api.test.ts; server/tests/lab-04/staff-dashboard.api.test.ts; server/tests/lab-04/dashboard-drill-down.api.test.ts; server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Action/workflow and dashboard authorization/safe-error checks pass; the wider release gate remains pending |
+| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts; dashboard-drill-down.api.test.ts; safe-errors.api.test.ts | Existing guards pass; five wider safe-error/recovery cases pass on the release candidate; final main pending |
+| HARD-01 | Upload/proxy regression | AC-13,14,16 | Aborted multipart before async path assignment leaves no orphan; service stays healthy; default proxy trust is off and mapped unrelated addresses stay untrusted | server/tests/lab-04/upload-hardening.test.ts; proxy-trust-hardening.test.ts | Three candidate cases passed with patched dependencies |
 | API-12 | API/numbering | AC-02,04,06,07,11,12 | Interleaved Ticket IDs, tied creation times, page 2, prior/cancelled work, filtered work/dashboard parity, preserved write/replay/audit IDs and forged-number rejection | server/tests/lab-04/action-numbering.api.test.ts | Passed: two cases in the complete 290-test server rerun |
 | UI-01 | Component | AC-02,03,05,06,13 | View-first/Edit/Close detail, direct Start/Complete/Cancel, return focus/discard, late-history protection, independent field/assignment/state saves, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 44 Action component cases |
 | UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; labelled checklist colours exclude stale/unknown positive results; separate opening/progress stages and explicit target retain all valid transitions | client/tests/lab-04/TicketWorkflow.test.tsx | Passed: 32 workflow component cases after October 9 colour refinement |
@@ -44,8 +45,8 @@ status is implied by a branch pass.
 | E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed: 5 feature browser journeys; final-main release evidence remains separate |
 | E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle; status stages, checklist colours/contrast, view-first/Edit and readable audit with exact original snapshots at three widths | client/e2e/lab-04/ticket-resolution.spec.ts | Passed: six real-session workflow/UI journeys in the latest October 9 targeted rerun; historical results below |
 | E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Passed: five cases in the targeted evidence run and latest complete 49-scenario Ticket-local-numbering run |
-| E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-04/final-regression.spec.ts | Planned |
-| EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | client/e2e/lab-04/release-evidence.spec.ts | Planned |
+| E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-02/requester-ticket-flow.spec.ts; lab-03/auth-review.spec.ts; admin-users.spec.ts; staff-ticket-operations.spec.ts; release-evidence.spec.ts, included by test:e2e:review | Executable existing regression retained in complete 49-case candidate run; final main pending; no nonexistent duplicate final-regression file required |
+| EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | scripts/lab4-quality-gate.ps1; client/e2e/lab-03/release-evidence.spec.ts; client/e2e/lab-04/dashboards.spec.ts; client/e2e/lab-04/ticket-resolution.spec.ts | Candidate gate and 18 inspected captures retained; final-main capture/inspection remains pending |
 
 ### Issue #43 dashboard implementation and evidence (2026-10-10)
 
@@ -879,3 +880,55 @@ passing main output. Part 5 includes dashboard query parity. Part 6 includes act
 validation/roles/lifecycle. Part 7 includes workflow and immutable history. Part 8
 includes Requester metrics/ownership and regression. Part 9 includes real captures,
 responsive/focus checks and truthful author/agent visual provenance.
+
+## Issue #44 release-candidate gate, 2026-10-10
+
+This phase starts at accepted staging 4660ac6 on feature/44-quality-release.
+Fresh production audit initially found Multer 2.3.0 (moderate orphaned aborted
+upload writes) and proxy-addr 2.0.7 (critical mapped-address trust advisory).
+Full audits additionally found vulnerable Vitest/tool dependencies (9 server,
+7 client findings total). Compatible updates resolved Multer 2.4.0,
+proxy-addr 2.0.8, Vite 6.4.4, Vitest 4.1.11 and source-map-js 1.2.2; all four
+fresh production/full audits subsequently exited zero with no reported findings.
+Vite/Express remain on their existing major versions; no Prisma/schema upgrade.
+Primary sources: [Multer advisory](https://github.com/advisories/GHSA-3pph-fpjx-jg34),
+[proxy advisory](https://github.com/advisories/GHSA-jqcg-44mw-7w3h), and
+[Vitest migration guide](https://v4.vitest.dev/guide/migration.html).
+
+The first targeted test setup failed because the existing PostgreSQL container
+was stopped. Starting that existing container restored test connectivity; no
+development migration/seed/reset occurred. Preserve that initial output rather
+than representing it as a product test failure or silently deleting it.
+
+Preliminary complete reruns passed 291 server cases, then 293 including proxy
+checks; 211 client cases; both builds; schema validation; all 49 Chromium cases
+(4.4m). Five additional safe-error/recovery cases passed separately. The complete
+reproducible gate includes every new case. Its uninterrupted run finished at
+23:02:19 Bangkok: 40 server files / 298 tests (97.31s command duration),
+23 client files / 211 tests (36.28s), 49 Chromium cases (4.3m), both production
+builds, Prisma validation, all four zero-finding audits and diff checks passed.
+The manifest records base revision 4660ac6 with a dirty working tree: this is
+tested local candidate content, not a claimed committed revision or final main.
+JSON reports retain per-case results and file paths; no skips/todos/flaky retries.
+
+The 500-Ticket / 500-Action local performance smoke measured five samples per
+role: Requester median/max 14/15ms, Staff 15/19ms, Administrator 15/16ms;
+maximum query statements 8/9/9 and response bytes 1697/3717/2401. These are
+local smoke measurements, not production latency guarantees.
+
+The expanded development digest includes Sessions, Comments, Internal Notes and
+Prisma migration history. Its before/after value for the entire gate was
+53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3.
+This algorithm intentionally differs from older hashes; only within-run equality
+is a preservation claim. Browser retries remain zero. No required skip/todo/only
+markers were found in test sources. Final main must run the same gate with
+`./scripts/lab4-quality-gate.ps1 -FinalMain` after peer release approval/merge.
+
+Eighteen agent-inspected, byte-verified copies from this gate are retained with
+source paths, capture timestamps and SHA-256 digests. See the
+[gate manifest](../../artifacts/lab-04/quality-gate/manifest.json),
+[complete output](../../artifacts/lab-04/quality-gate/README.md) and
+[visual provenance](../../artifacts/lab-04/quality-gate/visual-evidence.md).
+The clean-main guard was exercised on this dirty feature checkout and correctly
+refused before running checks or replacing evidence. That is a guard check, not
+a final-main run. Final peer approval, final captures/PDF and Project Done remain pending.

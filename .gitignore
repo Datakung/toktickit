@@ -15,4 +15,5 @@ server/prisma/*.db
 *.credentials.local.json
 # logs & OS
 *.log
+!artifacts/lab-04/quality-gate/*.log
 .DS_Store

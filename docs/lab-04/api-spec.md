@@ -8,17 +8,20 @@ The existing {status,version} input is unchanged. Session/role is rechecked unde
 the account -> Ticket lock; stale versions precede matrix/gate evaluation.
 Status/date/cycle/version/event changes share one transaction. History uses a
 repeatable-read snapshot and only exposes safe actor ID/name and transition data.
-Dashboard APIs below are implemented locally for #43. Source rules: [specification.md](specification.md).
+Dashboard APIs below are peer-accepted in PR #49. Source rules: [specification.md](specification.md).
 
 PR #47's fixture-only correction 0cf9e58 was independently approved and merged;
 it changed no production API or permissions. Exact evidence: [reviewer.md](reviewer.md).
 Issue #42 was approved at b7f6bb9 and merged in PR #48 as 00fddc1. Issue #43
-is not yet published/peer-approved. GET /api/dashboard/requester and /staff use
+was approved at 6dce864 and merged in PR #49 as 4660ac6. GET /api/dashboard/requester and /staff use
 no-store and a read-only repeatable-read transaction with session/role recheck,
 one asOf, inclusive elapsed-seven-day UTC range and <=5 summary rows per list.
 Ticket/list additive statusGroup and paired updated/resolved timestamp filters
 are implemented; /api/staff/actions retains the existing current-user work rules.
 No schema/input-write or credential/private-Note visibility change is introduced.
+Issue #44 dependency hardening changes no request/response contract. Generic
+dashboard/action errors, malformed JSON, service health and exactly-once recovery
+are additionally exercised by server/tests/lab-04/safe-errors.api.test.ts.
 
 ## Shared rules
 

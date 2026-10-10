@@ -7,8 +7,8 @@ Counts come from the whole-cycle ActionPage summary and must match the parent's
 version/cycle; loading, mixed snapshots and busy/unknown saves never mean ready.
 Lost status responses freeze writes until an explicit authoritative reload.
 Issue #42 screens were peer-approved in PR #48 and merged as 00fddc1. Dashboard
-screens (#43) are implemented locally; author/peer acceptance and final-main
-evidence (#44) remain pending.
+screens (#43) were author-accepted and peer-approved/merged in PR #49 (4660ac6).
+Final-main evidence (#44) remains pending.
 Business rules: [specification.md](specification.md); requests: [api-spec.md](api-spec.md).
 
 ## Navigation and routes
@@ -444,3 +444,20 @@ Cancel requires its own reason and confirmation. Back restores keyboard focus.
 All busy/conflict/uncertain-save locks, terminal/cancelled/prior-cycle/Requester
 restrictions, current-cycle gates and immutable events remain unchanged. A recovered
 state-only intent retains its original key without revealing a field editor.
+
+### Issue #44 candidate visual inspection, 2026-10-10
+
+The complete 49-case Chromium gate passed with existing keyboard/focus,
+responsive, role, workflow and exact-snapshot assertions intact. The agent
+inspected 18 actual captures from this run and retained byte-identical copies
+with timestamps/source paths/hashes in
+[candidate visual evidence](../../artifacts/lab-04/quality-gate/visual-evidence.md).
+Representative desktop/tablet/mobile samples preserve the approved compact
+workspace, prominent headings, separate saved/selected status, readable audit,
+equal-size controls and mobile stacking. Refresh failure visibly retains the
+last successful snapshot rather than displaying invented zero counts.
+
+This is agent inspection of a local candidate, not author final acceptance,
+a complete accessibility certification or final-main evidence. All major-screen
+final captures and the pending full-release checklist above must still be
+completed after the reviewed release. No additional UI resizing was introduced.

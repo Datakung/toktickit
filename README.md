@@ -15,8 +15,10 @@ The legacy fixture correction `0cf9e58` was [approved by Phanuwit](https://githu
 on 2026-10-07 and merged into staging as `f4da089`. Issue #41 is closed.
 Phanuwit [approved PR #48](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227)
 at `b7f6bb9` and merged Issue #42 into `lab4-staging` as `00fddc1` on 2026-10-09.
-Issue #43 is locally implemented on `feature/43-dashboards` from that accepted merge.
-Its author review/publication/peer acceptance and final-main acceptance remain pending.
+Phanuwit [approved PR #49](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211)
+at `6dce864` and merged Issue #43 into `lab4-staging` as `4660ac6` on 2026-10-10.
+Issue #44 starts from that accepted integration point on `feature/44-quality-release`.
+Its quality/release review and final-main acceptance remain pending.
 Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
 
 Action labels count separately within each Ticket: Action 1, Action 2, and so on.
@@ -107,8 +109,37 @@ URL-based Ticket/work-list links. Role home pages are `/dashboard` and
 Metrics come from one backend snapshot, never from a downloaded page of records.
 See [dashboard screenshots](artifacts/lab-04/screenshots/dashboards/README.md) and
 [current test evidence](docs/lab-04/tests.md). No new migration, dependency or
-development seed/reset is required. Publication/review for #43 and final-main
+development seed/reset is required. Issue #43 is peer-accepted; final-main
 evidence/submission (#44) remain pending.
+
+### Lab 4 release-candidate quality gate
+
+Issue #44 patches Multer to 2.4.0 and Express's resolved proxy-addr to 2.0.8,
+and updates the test tools to Vitest 4.1.11 / Vite 6.4.4. Install the checked-in
+locks with `npm --prefix server ci` and `npm --prefix client ci` when reviewing
+this branch. Node 22 LTS or 24 LTS is supported; this gate used Node 24.14.0.
+No schema migration or development reseed is part of this hardening.
+
+With the existing PostgreSQL container available and the guarded test/E2E
+targets configured, run from the repository root:
+
+```powershell
+./scripts/lab4-quality-gate.ps1
+```
+
+This retains per-case reports, logs, builds, schema validation and production/full
+audits under `artifacts/lab-04/quality-gate/`. The expanded read-only development
+fingerprint includes sessions, Comments, Internal Notes and migration history as
+well as Tickets/actions/accounts/files. The gate fails on changed development
+state, failed/skipped/todo tests or flaky browser coverage. Browser retries are
+explicitly zero; review ports 5183/3100 do not reuse the development services.
+
+After the peer-approved release is merged into a clean `main` checkout, rerun
+`./scripts/lab4-quality-gate.ps1 -FinalMain`. That mode refuses feature branches,
+dirty starting checkouts and main without the accepted dashboard increment.
+A release-candidate pass does not close #44 or substitute for that final-main run.
+See [the quality-gate record](artifacts/lab-04/quality-gate/README.md) and
+[submission plan](docs/lab-04/submission-plan.md) for remaining evidence gates.
 
 Before running this branch against development, stop the API and take a verified
 database backup (and retain uploads). Then, from `server`, explicitly run:
