@@ -1,0 +1,90 @@
+{
+  "phase": "final-main",
+  "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+  "branch": "main",
+  "workingTreeDirtyAtStart": false,
+  "startedAtUtc": "2026-10-10T19:39:09.8908804+00:00",
+  "node": "v24.14.0",
+  "status": "passed",
+  "steps": [
+    {
+      "name": "gate-regressions",
+      "exitCode": 0,
+      "seconds": 1.38
+    },
+    {
+      "name": "development-before",
+      "exitCode": 0,
+      "seconds": 0.73
+    },
+    {
+      "name": "server-tests",
+      "exitCode": 0,
+      "seconds": 92.4
+    },
+    {
+      "name": "client-tests",
+      "exitCode": 0,
+      "seconds": 35.42
+    },
+    {
+      "name": "server-build",
+      "exitCode": 0,
+      "seconds": 2.6
+    },
+    {
+      "name": "client-build",
+      "exitCode": 0,
+      "seconds": 4.65
+    },
+    {
+      "name": "prisma-validate",
+      "exitCode": 0,
+      "seconds": 0.58
+    },
+    {
+      "name": "server-production-audit",
+      "exitCode": 0,
+      "seconds": 4.37
+    },
+    {
+      "name": "server-full-audit",
+      "exitCode": 0,
+      "seconds": 1.03
+    },
+    {
+      "name": "client-production-audit",
+      "exitCode": 0,
+      "seconds": 0.94
+    },
+    {
+      "name": "client-full-audit",
+      "exitCode": 0,
+      "seconds": 1.01
+    },
+    {
+      "name": "browser-tests",
+      "exitCode": 0,
+      "seconds": 247.66
+    },
+    {
+      "name": "diff-check",
+      "exitCode": 0,
+      "seconds": 0.1
+    },
+    {
+      "name": "development-after",
+      "exitCode": 0,
+      "seconds": 0.35
+    }
+  ],
+  "developmentBefore": "53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3",
+  "tests": {
+    "server": 298,
+    "client": 211,
+    "browser": 49
+  },
+  "preservationVerified": true,
+  "developmentAfter": "53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3",
+  "finishedAtUtc": "2026-10-10T19:45:43.3347283+00:00"
+}

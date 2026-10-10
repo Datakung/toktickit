@@ -1,0 +1,58 @@
+{
+  "phase": "release-candidate",
+  "revision": "4660ac61b8609be19bc6d2e057b8516fa7fb74ce",
+  "workingTreeDirtyAtStart": true,
+  "note": "Exact candidate dependency and new hardening/gate files; not a clean committed-tree claim. Documentation and screenshot indexing were updated after verification.",
+  "files": [
+    {
+      "path": "client/package.json",
+      "sha256": "9d2c71a679194874bcca3e9e33b67021ea8188729c84664bff1b88d79ac0ef90",
+      "lastWriteAtUtc": "2026-10-10T15:44:29.7547871Z"
+    },
+    {
+      "path": "client/package-lock.json",
+      "sha256": "2627ec38e64ec23d20011bb4aac7a7a3a41c7caeb8a5c75b1600606a0ba4c1b6",
+      "lastWriteAtUtc": "2026-10-10T15:44:47.1851555Z"
+    },
+    {
+      "path": "server/package.json",
+      "sha256": "68f7a73c0cfbabfaa75ca44e23c782882d2eaf1912b067e276607799db58abd1",
+      "lastWriteAtUtc": "2026-10-10T15:44:29.4810879Z"
+    },
+    {
+      "path": "server/package-lock.json",
+      "sha256": "df03de09df293273036ed4da7677963e1bfab041e30bb325422838dcd5330ccb",
+      "lastWriteAtUtc": "2026-10-10T15:44:47.3256488Z"
+    },
+    {
+      "path": "server/tests/support/e2e-environment.ts",
+      "sha256": "c2333ab561669be7b192b78776b67ca77c354590b6ba41a2d72e5283c857a844",
+      "lastWriteAtUtc": "2026-10-10T15:46:04.0757508Z"
+    },
+    {
+      "path": "server/tests/development-snapshot.ts",
+      "sha256": "2f1109b804ed55bce439244c16af61da14f1b3e941da0456877b787d8e863da1",
+      "lastWriteAtUtc": "2026-10-10T15:55:24.4536825Z"
+    },
+    {
+      "path": "server/tests/lab-04/upload-hardening.test.ts",
+      "sha256": "bb10b95779d3f663ced5e7c1ffe0340f560b82e72a59cd6245480a99c309481f",
+      "lastWriteAtUtc": "2026-10-10T15:46:04.3443615Z"
+    },
+    {
+      "path": "server/tests/lab-04/proxy-trust-hardening.test.ts",
+      "sha256": "dbe09e719b67ddb7cce099af3600139eb0d03bc4728971934c5fa84c8e19011b",
+      "lastWriteAtUtc": "2026-10-10T15:50:40.7872481Z"
+    },
+    {
+      "path": "server/tests/lab-04/safe-errors.api.test.ts",
+      "sha256": "544869a3e01bf5f61f55082b6b07bbea26c3fb2b7da94343b666f525ffcca100",
+      "lastWriteAtUtc": "2026-10-10T15:53:48.5037182Z"
+    },
+    {
+      "path": "scripts/lab4-quality-gate.ps1",
+      "sha256": "83563c4f470a49364238904583d33389c0b92c2e6cc8f4ac7fcd1cf25f4604bf",
+      "lastWriteAtUtc": "2026-10-10T15:55:25.2480494Z"
+    }
+  ]
+}

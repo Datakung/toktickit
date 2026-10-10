@@ -14,8 +14,10 @@ The full 11-page supplied Lab 4 sheet was reread on 2026-10-10, including dashbo
 mockups and the ownership/query/feedback/three-width requirements. Illustrative
 mockup controls do not override the approved role rules (no Staff Create Ticket).
 [tests.md](tests.md) records actual checks. Issue #43 is author-accepted and
-peer-merged; Issue #44 quality review and final release remain pending.
-Feature passes are not final-main acceptance.
+peer-merged. Corrected quality PR #50 and release PR #51 were peer-approved and
+merged; clean main 0f169ea passed the complete final gate on October 11.
+Final evidence publication and author visual/PDF acceptance remain pending.
+Historical feature passes below are distinct from the latest final-main run.
 
 ## 1. Sprint goal
 
@@ -298,7 +300,8 @@ Issue #44 hardening changes compatible upload/proxy dependency versions and
 upgrades vulnerable test tooling. It does not change the schema, action numbering,
 authorization, business rules or development records. Its reproducible isolated
 gate retains all per-case results and distinguishes release-candidate checks from
-the required clean-main rerun. Final peer release/PDF acceptance remain pending.
+the required clean-main rerun. Peer release PR #51 is accepted and merged. Final
+author visual/PDF acceptance and final evidence publication remain pending.
 
 ## 9. Acceptance criteria
 
@@ -326,14 +329,14 @@ Every AC maps to planned tests in [tests.md](tests.md).
 ## 10. Product Definition of Done
 
 - [x] Engineering contract peer-approved before product implementation (PR #45).
-- [ ] Every AC has passing executable evidence; no required skipped tests.
-- [ ] Migration, preservation, repeatable seed and actual isolated recovery verified.
-- [ ] Role/ownership, current-session, CSRF, inactive assignment, versions, retry and
+- [x] Every AC has passing executable evidence; no required skipped tests.
+- [x] Migration, preservation, repeatable seed and actual isolated recovery verified.
+- [x] Role/ownership, current-session, CSRF, inactive assignment, versions, retry and
   resolution race protection enforced directly by backend tests.
-- [ ] Complete action/Ticket lifecycle, immutable history and legacy compatibility work.
-- [ ] Dashboard metrics match independent queries and drill-downs match counts.
-- [ ] Earlier functionality regressed; full tests/builds pass and production audits reviewed.
-- [ ] Isolated E2E confirms unchanged development database/uploads.
+- [x] Complete action/Ticket lifecycle, immutable history and legacy compatibility work.
+- [x] Dashboard metrics match independent queries and drill-downs match counts.
+- [x] Earlier functionality regressed; full tests/builds pass and production audits reviewed.
+- [x] Isolated E2E confirms unchanged development database/uploads.
 - [ ] Final-main screenshots and accurate responsive/accessibility checklist inspected.
 - [ ] Runtime console errors, broken navigation, temporary placeholder content and
   unfinished controls audited; setup/migration/seed/test/demo instructions verified.
@@ -343,6 +346,13 @@ Every AC maps to planned tests in [tests.md](tests.md).
 - [ ] One readable linked PDF includes Answer Part 1-9 and author-reviewed reflection.
 
 ## 11. Reviewed assumptions and engineering decisions
+
+Latest #44 verification: clean main `0f169ea` passed 298 server / 211 client /
+49 Chromium cases, ten gate regressions, both builds, Prisma validation and four
+clean audits. Thirty-six supplementary raw-row/API/drill-down comparisons pass.
+This evidence follow-up does not change BR/FR/API/schema/index/numbering semantics.
+Final author visual/PDF acceptance, published documentation and actual all-Done
+closure evidence remain unfinished; unchecked completion items are intentional.
 
 The sheet's detailed field list does not fully specify action assignment/state,
 completion/cancellation or the resolution predicate, but its grading rubric asks

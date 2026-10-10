@@ -1,53 +1,96 @@
 # Lab 4 Test Plan and Traceability
 
 Status: Contract and Issues #40-43 accepted in PRs #45-49. Issue #43 was approved
-at 6dce864 and merged as 4660ac6 on 2026-10-10. Issue #44 quality/release work
-starts from that accepted merge; its peer review and final-main release remain
-pending. Current candidate evidence is retained under artifacts/lab-04/quality-gate/.
-Historical counts are never substituted for this branch's actual runs.
+at 6dce864 and merged as 4660ac6 on 2026-10-10. Corrected quality PR #50 and release
+PR #51 were peer-approved/merged. Clean main 0f169ea passed the complete gate on
+October 11, 02:39:09-02:45:43 Bangkok. Final evidence is retained separately under
+artifacts/lab-04/final-main/. Publication and author visual/PDF acceptance remain;
+historical candidate counts/provenance below are not relabelled as main evidence.
+
+## Latest final-main execution
+
+Command: `./scripts/lab4-quality-gate.ps1 -FinalMain`. Revision:
+`0f169eaeca9bf00672c5c32884a1913c53b845d3`; branch main; clean at start.
+Ten gate-finalization regressions, 40 files/298 server tests, 23 files/211 client
+tests and 49 Chromium scenarios passed. Durations: server 90.85s, client 34.50s,
+browser command 247.66s. No required skipped/todo/flaky/retried coverage. Both
+production builds, Prisma validation, four zero-finding audits and diff-check pass.
+Original logs and individual case JSON are in `final-main/gate`; the fresh-file
+index distinguishes executed output from inherited candidate support files.
+The corrected manifest's `preservationVerified: true` precedes `status: passed`.
+Expanded development before/after digest:
+`53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3`.
+Candidate evidence at `quality-gate/` is byte-identical to the reviewed original.
+
+The full final-main run includes populated migration preservation, failed-DDL
+rollback, real disposable backup restoration, repeatable seeds, auth/CSRF/roles,
+files/Comments/Notes/Admin regression, all 64 matrix pairs, current-cycle/page-two
+blockers, synchronized races, immutable history, exact retries and Ticket-local
+numbering. All planned executable rows below have final-main coverage; old per-row
+feature counts are historical context, not the current suite's totals.
+
+Local performance smoke (500 Tickets / 500 Actions, five warmed reads per role):
+
+| Role | Median / maximum ms | Maximum statements | Maximum JSON bytes |
+|---|---|---|---|
+| Requester | 13 / 13 | 8 | 1697 |
+| IT Staff | 13 / 17 | 9 | 3717 |
+| Administrator | 12 / 13 | 9 | 2401 |
+
+Separate supplementary verification at 02:48:17-02:48:29 passed 36 independently
+computed raw-row metric comparisons and exact live drill-down totals, four bounded
+list/order checks and 24 healthy screen/width audits. `dashboard-parity.json` retains
+query columns, predicates in the reproducible helper, actor/range/count/filter values
+and expected login-only 401 probes. No unexpected console/page errors or root/body
+overflow. The two initial harness failures and their corrections are retained;
+no new product fix is implied. Both additional development fingerprints match.
+Screenshots: 168 full-gate and 24 supplementary original PNGs, indexed with digests.
+Agent visual QA and author acceptance are separate; author final acceptance and
+evidence publication remain pending. No blanket manual screen-reader audit claim.
 
 ## Planned executable coverage
 
-Paths are repository-relative. Passed rows exist and were executed for Issues #40-43;
-Partly verified rows explicitly identify unfinished scope. No final-main release
-status is implied by a branch pass.
+Paths are repository-relative. Every executable row below passed on clean main
+0f169ea on October 11. The retained individual-case reports provide exact current
+coverage; dated feature results below remain historical. Author final visual/PDF
+acceptance is a separate pending check, not an executable-test failure.
 
 | Test ID | Type | AC | Scenario and expected result | Actual/planned file | Current status |
 |---|---|---|---|---|---|
-| MIG-01 | Migration/integration | AC-01 | Upgrade populated Lab 3 schema; all historical values/relations preserved; legacy cycle/date behavior explicit | server/tests/lab-04/migration-regression.test.ts | Passed |
-| MIG-02 | Recovery/integration | AC-01 | Failed migration rollback and isolated pre-migration backup restore compared against original records | server/tests/lab-04/migration-regression.test.ts | Passed |
-| SEED-01 | Integration | AC-01 | Run twice after manual fixture edits; no duplicate records/events or credential/edit reset; zero/one/multiple work | server/tests/lab-04/seed-regression.test.ts | Passed |
-| UNIT-01 | Unit | AC-02,03 | Description/result/time/boolean/note/reason/ID/UUID boundaries and unknown-key rejection | server/tests/lab-04/action-validation.unit.test.ts | Passed |
-| UNIT-02 | Unit | AC-08,09 | All 64 Ticket status pairs and the independent current-cycle gate predicate | server/tests/lab-04/workflow-rules.unit.test.ts | Passed: 69 unit cases (64 Ticket pairs plus five gate predicates) |
-| UNIT-03 | Unit | AC-10,11,12 | UTC range boundaries, status-group/date-pair parsing and stable query rules | server/tests/lab-04/dashboard-query.unit.test.ts | Passed: nine cases |
-| API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Passed |
-| API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Passed |
-| API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
-| API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback; independent edit succeeds then assignment fails or loses response | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
-| API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Passed |
-| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/action-history.api.test.ts; server/tests/lab-04/ticket-workflow.api.test.ts | Passed: seven workflow API cases plus existing whole-cycle snapshot tests |
-| API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/workflow-concurrency.api.test.ts | Passed: 11 synchronized concurrency/rollback/session cases |
-| API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Passed: three cases, all metric-to-list comparisons |
-| API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Passed: three cases, all status/priority/current-user comparisons |
-| API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts; dashboard-query.unit.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts | Passed: synchronized snapshot insert, inclusive performer boundaries/ties/prior cycles and auth guards; each card comparison lives in role API files |
-| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts; dashboard-drill-down.api.test.ts; safe-errors.api.test.ts | Existing guards pass; five wider safe-error/recovery cases pass on the release candidate; final main pending |
-| HARD-01 | Upload/proxy regression | AC-13,14,16 | Aborted multipart before async path assignment leaves no orphan; service stays healthy; default proxy trust is off and mapped unrelated addresses stay untrusted | server/tests/lab-04/upload-hardening.test.ts; proxy-trust-hardening.test.ts | Three candidate cases passed with patched dependencies |
-| GATE-01 | Release-evidence regression | AC-14,16 | Only valid matching final fingerprints permit passed; external snapshot/log-read/invalid/missing/mismatched fingerprints fail; earlier failures/exit codes persist | scripts/tests/lab4-quality-gate.test.ps1 | Ten database-free cases pass against parsed production finalization/step code; run automatically by the quality gate |
-| API-12 | API/numbering | AC-02,04,06,07,11,12 | Interleaved Ticket IDs, tied creation times, page 2, prior/cancelled work, filtered work/dashboard parity, preserved write/replay/audit IDs and forged-number rejection | server/tests/lab-04/action-numbering.api.test.ts | Passed: two cases in the complete 290-test server rerun |
-| UI-01 | Component | AC-02,03,05,06,13 | View-first/Edit/Close detail, direct Start/Complete/Cancel, return focus/discard, late-history protection, independent field/assignment/state saves, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 44 Action component cases |
-| UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; labelled checklist colours exclude stale/unknown positive results; separate opening/progress stages and explicit target retain all valid transitions | client/tests/lab-04/TicketWorkflow.test.tsx | Passed: 32 workflow component cases after October 9 colour refinement |
-| UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Passed: four cases, including late identity-response exclusion |
-| UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Passed: six cases, both roles and unsupported-link rejection |
-| UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx; dashboards.spec.ts browser | Passed: 13 component cases; actual reload/Back in browser |
-| UI-06 | Component | AC-04,07,13,15 | Changed-only audit fields, initial creation details, Yes/No, Bangkok dates, honest account IDs, escaped text and incomplete legacy snapshots without mutation | client/tests/lab-04/ActionHistoryChanges.test.tsx | Passed: six readable audit cases |
-| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx; client/e2e/lab-04/dashboards.spec.ts | Seven Action/workflow CSS-contract checks and dashboard browser hierarchy/focus/layout checks pass at 1440/768/390px; author visual approval and final-main evidence remain pending |
-| REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-01, lab-02 and lab-03 (existing executable files); dedicated final release coverage remains #44 | Passed on feature branch through existing Labs 1-3 files; final-main release rerun pending |
-| PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.api.test.ts | Passed: 500 Tickets/500 Actions; five warmed reads per role, emitted SQL counts and payload sizes measured |
-| E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed: 5 feature browser journeys; final-main release evidence remains separate |
-| E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle; status stages, checklist colours/contrast, view-first/Edit and readable audit with exact original snapshots at three widths | client/e2e/lab-04/ticket-resolution.spec.ts | Passed: six real-session workflow/UI journeys in the latest October 9 targeted rerun; historical results below |
-| E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Passed: five cases in the targeted evidence run and latest complete 49-scenario Ticket-local-numbering run |
-| E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-02/requester-ticket-flow.spec.ts; lab-03/auth-review.spec.ts; admin-users.spec.ts; staff-ticket-operations.spec.ts; release-evidence.spec.ts, included by test:e2e:review | Executable existing regression retained in complete 49-case candidate run; final main pending; no nonexistent duplicate final-regression file required |
-| EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | scripts/lab4-quality-gate.ps1; client/e2e/lab-03/release-evidence.spec.ts; client/e2e/lab-04/dashboards.spec.ts; client/e2e/lab-04/ticket-resolution.spec.ts | Candidate gate and 18 inspected captures retained; final-main capture/inspection remains pending |
+| MIG-01 | Migration/integration | AC-01 | Upgrade populated Lab 3 schema; all historical values/relations preserved; legacy cycle/date behavior explicit | server/tests/lab-04/migration-regression.test.ts | Passed on final main; individual-case reports retained |
+| MIG-02 | Recovery/integration | AC-01 | Failed migration rollback and isolated pre-migration backup restore compared against original records | server/tests/lab-04/migration-regression.test.ts | Passed on final main; individual-case reports retained |
+| SEED-01 | Integration | AC-01 | Run twice after manual fixture edits; no duplicate records/events or credential/edit reset; zero/one/multiple work | server/tests/lab-04/seed-regression.test.ts | Passed on final main; individual-case reports retained |
+| UNIT-01 | Unit | AC-02,03 | Description/result/time/boolean/note/reason/ID/UUID boundaries and unknown-key rejection | server/tests/lab-04/action-validation.unit.test.ts | Passed on final main; individual-case reports retained |
+| UNIT-02 | Unit | AC-08,09 | All 64 Ticket status pairs and the independent current-cycle gate predicate | server/tests/lab-04/workflow-rules.unit.test.ts | Passed on final main; individual-case reports retained |
+| UNIT-03 | Unit | AC-10,11,12 | UTC range boundaries, status-group/date-pair parsing and stable query rules | server/tests/lab-04/dashboard-query.unit.test.ts | Passed on final main; individual-case reports retained |
+| API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Passed on final main; individual-case reports retained |
+| API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Passed on final main; individual-case reports retained |
+| API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Passed on final main; individual-case reports retained |
+| API-04 | API/concurrency | AC-06 | Simultaneous writes, stale parent/child version, exact replay after lost response, reused UUID mismatch and rollback; independent edit succeeds then assignment fails or loses response | server/tests/lab-04/action-concurrency.api.test.ts | Passed on final main; individual-case reports retained |
+| API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Passed on final main; individual-case reports retained |
+| API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/action-history.api.test.ts; server/tests/lab-04/ticket-workflow.api.test.ts | Passed on final main; individual-case reports retained |
+| API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/workflow-concurrency.api.test.ts | Passed on final main; individual-case reports retained |
+| API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Passed on final main; individual-case reports retained |
+| API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Passed on final main; individual-case reports retained |
+| API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts; dashboard-query.unit.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts | Passed on final main; individual-case reports retained |
+| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts; dashboard-drill-down.api.test.ts; safe-errors.api.test.ts | Passed on final main; individual-case reports retained |
+| HARD-01 | Upload/proxy regression | AC-13,14,16 | Aborted multipart before async path assignment leaves no orphan; service stays healthy; default proxy trust is off and mapped unrelated addresses stay untrusted | server/tests/lab-04/upload-hardening.test.ts; proxy-trust-hardening.test.ts | Passed on final main; individual-case reports retained |
+| GATE-01 | Release-evidence regression | AC-14,16 | Only valid matching final fingerprints permit passed; external snapshot/log-read/invalid/missing/mismatched fingerprints fail; earlier failures/exit codes persist | scripts/tests/lab4-quality-gate.test.ps1 | Passed on final main; individual-case reports retained |
+| API-12 | API/numbering | AC-02,04,06,07,11,12 | Interleaved Ticket IDs, tied creation times, page 2, prior/cancelled work, filtered work/dashboard parity, preserved write/replay/audit IDs and forged-number rejection | server/tests/lab-04/action-numbering.api.test.ts | Passed on final main; individual-case reports retained |
+| UI-01 | Component | AC-02,03,05,06,13 | View-first/Edit/Close detail, direct Start/Complete/Cancel, return focus/discard, late-history protection, independent field/assignment/state saves, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed on final main; individual-case reports retained |
+| UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; labelled checklist colours exclude stale/unknown positive results; separate opening/progress stages and explicit target retain all valid transitions | client/tests/lab-04/TicketWorkflow.test.tsx | Passed on final main; individual-case reports retained |
+| UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Passed on final main; individual-case reports retained |
+| UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Passed on final main; individual-case reports retained |
+| UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx; dashboards.spec.ts browser | Passed on final main; individual-case reports retained |
+| UI-06 | Component | AC-04,07,13,15 | Changed-only audit fields, initial creation details, Yes/No, Bangkok dates, honest account IDs, escaped text and incomplete legacy snapshots without mutation | client/tests/lab-04/ActionHistoryChanges.test.tsx | Passed on final main; individual-case reports retained |
+| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx; client/e2e/lab-04/dashboards.spec.ts | Passed on final main; author final visual/PDF acceptance pending |
+| REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-01, lab-02 and lab-03 (existing executable files); dedicated final release coverage remains #44 | Passed on final main; individual-case reports retained |
+| PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.api.test.ts | Passed on final main; individual-case reports retained |
+| E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed on final main; individual-case reports retained |
+| E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle; status stages, checklist colours/contrast, view-first/Edit and readable audit with exact original snapshots at three widths | client/e2e/lab-04/ticket-resolution.spec.ts | Passed on final main; individual-case reports retained |
+| E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Passed on final main; individual-case reports retained |
+| E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-02/requester-ticket-flow.spec.ts; lab-03/auth-review.spec.ts; admin-users.spec.ts; staff-ticket-operations.spec.ts; release-evidence.spec.ts, included by test:e2e:review | Passed on final main; individual-case reports retained |
+| EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | scripts/lab4-quality-gate.ps1; client/e2e/lab-03/release-evidence.spec.ts; client/e2e/lab-04/dashboards.spec.ts; client/e2e/lab-04/ticket-resolution.spec.ts | Passed on final main; author final visual/PDF acceptance pending |
 
 ### Issue #43 dashboard implementation and evidence (2026-10-10)
 

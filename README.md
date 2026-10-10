@@ -1,5 +1,28 @@
 # TokTickIT
 
+## Lab 4 reviewed main and final verification (2026-10-11)
+
+Phanuwit approved corrected [PR #50](https://github.com/Datakung/toktickit/pull/50#pullrequestreview-5480214732)
+and the integrated [release PR #51](https://github.com/Datakung/toktickit/pull/51#pullrequestreview-5480530699).
+The release was peer-merged into main as `0f169eaeca9bf00672c5c32884a1913c53b845d3`.
+The clean-main `-FinalMain` gate passed 298 server, 211 client and 49 Chromium
+tests, 10 gate regressions, both builds, Prisma validation and all four zero-finding
+audits. No required tests were skipped or retried. Development database/uploads
+fingerprints matched. [Final evidence](artifacts/lab-04/final-main/README.md)
+retains this run separately from the unchanged historical candidate evidence.
+
+A supplementary isolated run passed 36 independent database/API/drill-down
+comparisons and 24 healthy screen/width audits. The unchanged application uses
+review ports 5183/3100; only guarded test/E2E fixtures were reset. Reproduce with
+`server/node_modules/.bin/tsx scripts/lab4-final-main-parity.mts <main-revision>`
+from the repository root. Signed-out `/api/auth/me` 401 probes are recorded,
+not confused with unexpected console errors.
+
+Issue #44 was reopened and returned to Started after premature closure/Done.
+Final author visual/PDF acceptance and publication of this evidence follow-up
+remain pending. The nine-part PDF is a review copy, not a completed submission.
+Older dated sections below are historical execution records, not current release status.
+
 ## Lab 4 Actions Taken and Ticket workflow
 
 The next increment adds Actions Taken, the final Ticket workflow and Requester/
@@ -64,7 +87,8 @@ shows read-only status with no further transitions.
 - [API contract](docs/lab-04/api-spec.md) and [UI contract](docs/lab-04/ui-spec.md).
 - [Tests and results](docs/lab-04/tests.md): 16 acceptance criteria, 27 explicit cases
   and clearly separated passed foundation/UI tests versus remaining planned work.
-- [Review record](docs/lab-04/reviewer.md) and [AI-use record](docs/lab-04/ai-use.md).
+- [Review record](docs/lab-04/reviewer.md), including reviews received and the eight
+  verified reviews given on Phanuwit's repository, and [AI-use record](docs/lab-04/ai-use.md).
 
 Implementation Issues: [#40](https://github.com/Datakung/toktickit/issues/40) action
 foundation, [#41](https://github.com/Datakung/toktickit/issues/41) action UI,
