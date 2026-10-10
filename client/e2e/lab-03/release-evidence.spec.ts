@@ -62,6 +62,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
   await capture(page, info, "authentication/invalid-login-desktop.png");
 
   await login(page, "admin@example.test");
+  await expect(page.getByRole("heading", { name: "Staff Dashboard" })).toBeVisible();
+  await page.getByRole("button", { name: "Users", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });
@@ -100,6 +102,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await login(page, "mali.support@example.test");
+  await expect(page.getByRole("heading", { name: "Staff Dashboard" })).toBeVisible();
+  await page.getByRole("button", { name: "Ticket Queue", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Ticket Queue", exact: true })).toBeVisible();
   await expect(page.locator(".queue-table tbody tr").first()).toBeVisible();
   for (const width of widths) {
@@ -161,6 +165,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await login(page, "anan.chaiyasit@example.test");
+  await expect(page.getByRole("heading", { name: "My Dashboard" })).toBeVisible();
+  await page.goto("/tickets");
   await expect(page.getByRole("heading", { name: "My Tickets" })).toBeVisible();
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });

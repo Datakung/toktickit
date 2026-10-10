@@ -6,11 +6,25 @@ cancellation guidance, reopen labels and paged read-only transition history.
 Counts come from the whole-cycle ActionPage summary and must match the parent's
 version/cycle; loading, mixed snapshots and busy/unknown saves never mean ready.
 Lost status responses freeze writes until an explicit authoritative reload.
-These screens are locally verified, not yet author-accepted or peer-approved.
-Dashboard screens (#43) and final-main evidence (#44) remain planned.
+Issue #42 screens were peer-approved in PR #48 and merged as 00fddc1. Dashboard
+screens (#43) are implemented locally; author/peer acceptance and final-main
+evidence (#44) remain pending.
 Business rules: [specification.md](specification.md); requests: [api-spec.md](api-spec.md).
 
 ## Navigation and routes
+
+Implemented #43: Requester home/brand use /dashboard; Staff/Admin use
+/staff/dashboard. Existing list/create/queue/account navigation is preserved,
+with aria-current on the active route. Counts are labelled links with large
+numbers; status/priority links include explicit zeros. Pending initial reads show
+loading, not placeholder zeros. Failed refreshes label the retained successful
+snapshot Not refreshed; forbidden responses clear protected metrics. User-keyed
+views ignore late old-identity responses. Requester cards use four/two/one columns
+across desktop/tablet/mobile; Staff cards use three/two/one, with aligned metric
+numbers. Count links and quick actions remain at least 44px tall.
+Captured time pairs, status-group/owner/assignment filters and paging round-trip
+through URLs on reload/Back. Invalid URLs show safe feedback and no unfiltered
+results. My Actions links open the exact Action record through tab/actionId.
 
 | Route | Role | Purpose |
 |---|---|---|
@@ -56,6 +70,44 @@ assignee and actual performer/time. Show applied current-user filter; detail
 links open Actions Taken and focus the intended record. Empty assigned work and
 empty recent performed work are normal zero states. Admin reuses this screen;
 My values refer to the signed-in Admin, not another Staff member.
+
+Author layout follow-up: only the My Actions desktop content area expands to
+1200px maximum above 1100px viewports, with balanced centered side margins.
+Its table sizes columns automatically,
+keeps Ticket/Action labels and View Action links on one line, and retains wrapping
+summaries plus labeled cards on smaller screens. Direct Action progress buttons
+use equal 180px widths and aligned 48px minimum heights on desktop; on mobile
+they stack at equal full widths. Requester quick links use compact matching
+heights and retain 44px minimum targets. These are presentation changes, not
+changes to independent saves, authorization or read-only action rules.
+
+Create/Save action and Discard unsaved fields use the same two-column equal-height
+grid as confirmation controls (up to 300px per button, minimum 48px height, no
+primary-button top margin). At 575px and below, the pair stacks at equal full
+widths. This corrects the previously missed action field editor controls.
+At the author's subsequent request, displayed Action numbers are now Ticket-local
+ordinals: each Ticket starts with Action 1, and reopening continues its sequence.
+Lists, details, accessible View labels, My Actions and dashboard links use the
+same backend `actionNumber`, including on later pages and filtered lists.
+Global internal IDs remain unchanged in links, writes and technical audit snapshots.
+
+At the author's later request for a consistent compact workspace at 100% browser
+zoom, shared workspace text uses 15px at the default 16px root size; page headings
+cap at 40px rather than 52px, branding/header gaps are slightly smaller, and the
+content starts after 32-56px padding rather than up to 96px. Login/root/browser
+zoom is unchanged. Dashboard metric numbers are 36px; Requester and narrower
+layouts reserve two label lines, while wide Staff cards reserve one line to
+avoid excess space above their aligned counts. Section headings remain larger/bolder than body text, and card
+padding/list-row gaps are reduced. Paired list panels no longer stretch the
+shorter list to the longer one's height. The important resolution/Actions Taken
+headers remain emphasized. Equal progress/confirmation controls, 44px/48px touch
+targets, one-line desktop work labels and responsive cards are preserved.
+
+The subsequent dashboard-only density adjustment uses short visible `View all`
+panel links with full descriptive accessible names and unchanged destinations.
+Heading/link margins align the controls alongside their headings where space
+allows; list-row vertical padding is 8px. Readable text, 36px numbers and 44px
+targets remain unchanged. My Actions and the shared workspace are not resized.
 
 ## Actions Taken on detail
 

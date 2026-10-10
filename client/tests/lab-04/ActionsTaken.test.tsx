@@ -6,7 +6,7 @@ import { ActionsTaken, bangkokInput, bangkokInstant } from "../../src/ActionsTak
 
 const ticket = { id: 8, version: 1, resolutionCycle: 1, resolvedAt: null, status: "OPEN", createdAt: "2026-09-01T00:00:00Z" } as api.StaffTicketDetail;
 const record: api.ActionTakenRecord = {
-  id: 12, ticketId: 8, cycle: 1, state: "PLANNED", actionAt: "2026-09-25T01:00:00Z",
+  id: 12, actionNumber: 1, ticketId: 8, cycle: 1, state: "PLANNED", actionAt: "2026-09-25T01:00:00Z",
   description: "Investigate VPN", result: "", assignee: null, createdBy: { id: 9, displayName: "Mali" },
   performedBy: null, performedAt: null, followUpRequired: false, followUpNote: "", attachmentNotes: "",
   cancellationReason: null, version: 1, createdAt: "2026-09-25T01:00:00Z", updatedAt: "2026-09-25T01:00:00Z",
@@ -23,8 +23,8 @@ function setup(staff = true, options: { action?: api.ActionTakenRecord; status?:
   return render(<ActionsTaken ticket={context} staff={staff} userId={9} actorName="Mali" linkedActionId={options.link} />);
 }
 async function open(edit = true) {
-  await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
-  await screen.findByRole("heading", { name: "Action 12" });
+  await userEvent.click(await screen.findByRole("button", { name: "View action 1" }));
+  await screen.findByRole("heading", { name: "Action 1" });
   const button = screen.queryByRole("button", { name: "Edit action" });
   if (edit && button) await userEvent.click(button);
 }
@@ -108,11 +108,11 @@ describe("Actions Taken", () => {
     setup(staff); await open(false);
     const close = screen.getByRole("button", { name: "Close detail" });
     close.focus(); await userEvent.keyboard("{Enter}");
-    expect(screen.queryByRole("region", { name: "Action 12 details" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Action 1 details" })).not.toBeInTheDocument();
     expect(screen.queryByRole("region", { name: "Action audit history" })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "View action 12" })).toHaveFocus();
+    expect(screen.getByRole("button", { name: "View action 1" })).toHaveFocus();
     await open(false);
-    expect(screen.getByRole("region", { name: "Action 12 details" })).toHaveTextContent("Investigate VPN");
+    expect(screen.getByRole("region", { name: "Action 1 details" })).toHaveTextContent("Investigate VPN");
     expect(screen.getByRole("region", { name: "Action audit history" })).toBeVisible();
     expect(write).not.toHaveBeenCalled();
   });
@@ -131,11 +131,11 @@ describe("Actions Taken", () => {
   });
   it("keeps a closed deep-linked action closed when refreshing the list", async () => {
     setup(true, { link: "12" });
-    await screen.findByRole("heading", { name: "Action 12" });
+    await screen.findByRole("heading", { name: "Action 1" });
     await userEvent.click(screen.getByRole("button", { name: "Close detail" }));
     await userEvent.click(screen.getByRole("button", { name: "Refresh actions" }));
-    await waitFor(() => expect(screen.getByRole("button", { name: "View action 12" })).toBeEnabled());
-    expect(screen.queryByRole("region", { name: "Action 12 details" })).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole("button", { name: "View action 1" })).toBeEnabled());
+    expect(screen.queryByRole("region", { name: "Action 1 details" })).not.toBeInTheDocument();
     expect(api.getAction).toHaveBeenCalledTimes(1);
   });
   it("ignores a late audit response after closing and reopening the detail", async () => {
@@ -154,8 +154,8 @@ describe("Actions Taken", () => {
   it("views saved details and audit history before explicitly opening the editor", async () => {
     const write = vi.spyOn(api, "writeAction");
     setup(); await open(false);
-    expect(screen.getByRole("heading", { name: "Action 12" })).toHaveFocus();
-    expect(screen.getByRole("region", { name: "Action 12 details" })).toHaveTextContent("Investigate VPN");
+    expect(screen.getByRole("heading", { name: "Action 1" })).toHaveFocus();
+    expect(screen.getByRole("region", { name: "Action 1 details" })).toHaveTextContent("Investigate VPN");
     expect(screen.getByRole("region", { name: "Action audit history" })).toBeVisible();
     expect(screen.queryByRole("form", { name: "Edit action fields" })).not.toBeInTheDocument();
     expect(screen.queryByRole("form", { name: "Action assignment" })).not.toBeInTheDocument();
@@ -175,18 +175,18 @@ describe("Actions Taken", () => {
   });
   it("opens a Staff deep link in view mode without automatically editing", async () => {
     setup(true, { link: "12" });
-    expect(await screen.findByRole("heading", { name: "Action 12" })).toHaveFocus();
+    expect(await screen.findByRole("heading", { name: "Action 1" })).toHaveFocus();
     expect(screen.getByRole("button", { name: "Edit action" })).toBeVisible();
     expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
   });
   it("returns to view mode when another action is chosen", async () => {
     setup(); await open(); await userEvent.type(screen.getByLabelText("Description"), " draft");
-    vi.mocked(api.getActions).mockResolvedValue({ ...page, items: [record, { ...record, id: 13 }] });
+    vi.mocked(api.getActions).mockResolvedValue({ ...page, items: [record, { ...record, id: 13, actionNumber: 2 }] });
     await userEvent.click(screen.getByRole("button", { name: "Refresh actions" }));
-    await screen.findByRole("button", { name: "View action 13" });
-    vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, id: 13 }, ticketVersion: 1, currentCycle: 1 });
-    await userEvent.click(screen.getByRole("button", { name: "View action 13" }));
-    expect(await screen.findByRole("heading", { name: "Action 13" })).toHaveFocus();
+    await screen.findByRole("button", { name: "View action 2" });
+    vi.mocked(api.getAction).mockResolvedValue({ action: { ...record, id: 13, actionNumber: 2 }, ticketVersion: 1, currentCycle: 1 });
+    await userEvent.click(screen.getByRole("button", { name: "View action 2" }));
+    expect(await screen.findByRole("heading", { name: "Action 2" })).toHaveFocus();
     expect(screen.queryByLabelText("Description")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Edit action" })).toHaveAttribute("aria-expanded", "false");
   });
@@ -201,8 +201,8 @@ describe("Actions Taken", () => {
   });
   it("shows Requester records and history without mutation controls", async () => {
     setup(false);
-    await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
-    expect(await screen.findByRole("heading", { name: "Action 12" })).toHaveFocus();
+    await userEvent.click(await screen.findByRole("button", { name: "View action 1" }));
+    expect(await screen.findByRole("heading", { name: "Action 1" })).toHaveFocus();
     expect(screen.getAllByText("Not recorded yet")[0]).toBeVisible();
     expect(screen.queryByRole("button", { name: "New action" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Save action" })).not.toBeInTheDocument();
@@ -212,7 +212,7 @@ describe("Actions Taken", () => {
   it("keeps fields and assignment as independent saves", async () => {
     const edit = vi.spyOn(api, "writeAction").mockResolvedValue({ actionId: 12, eventId: 1, actionVersion: 2, ticketVersion: 2, replayed: false });
     setup();
-    await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
+    await userEvent.click(await screen.findByRole("button", { name: "View action 1" }));
     await userEvent.click(await screen.findByRole("button", { name: "Edit action" }));
     vi.mocked(api.getStaffTicket).mockResolvedValue({ ...ticket, version: 2 });
     vi.mocked(api.getActions).mockResolvedValue({ ...page, ticketVersion: 2 });
@@ -379,8 +379,8 @@ describe("Actions Taken", () => {
     expect(write).toHaveBeenCalledWith(8, "state", 12, expect.objectContaining({ state: "CANCELLED", cancellationReason: "Duplicate investigation" }));
   });
   it("reads the exact linked action even when it is not on the first page", async () => {
-    setup(false, { link: "77", action: { ...record, id: 77 } });
-    expect(await screen.findByRole("heading", { name: "Action 77" })).toHaveFocus();
+    setup(false, { link: "77", action: { ...record, id: 77, actionNumber: 21 } });
+    expect(await screen.findByRole("heading", { name: "Action 21" })).toHaveFocus();
     expect(api.getAction).toHaveBeenCalledWith(8, 77);
   });
   it("rejects malformed linked IDs without fetching a different action", async () => {
@@ -411,7 +411,7 @@ describe("Actions Taken", () => {
   it("does not leak a draft across users", async () => {
     const rendered = setup(); await open(); await userEvent.type(screen.getByLabelText("Description"), " private draft");
     rendered.rerender(<ActionsTaken ticket={ticket} staff={false} userId={2} actorName="Anan" />);
-    await screen.findByRole("button", { name: "View action 12" });
+    await screen.findByRole("button", { name: "View action 1" });
     expect(screen.queryByDisplayValue(/private draft/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Save action" })).not.toBeInTheDocument();
   });
@@ -463,13 +463,13 @@ describe("Actions Taken", () => {
     let finish!: (detail: Awaited<ReturnType<typeof api.getAction>>) => void;
     const rendered = setup(false);
     vi.mocked(api.getAction).mockReturnValueOnce(new Promise(resolve => { finish = resolve; }));
-    await userEvent.click(await screen.findByRole("button", { name: "View action 12" }));
+    await userEvent.click(await screen.findByRole("button", { name: "View action 1" }));
     vi.mocked(api.getActions).mockResolvedValue({ ...page, items: [{ ...record, id: 55, ticketId: 13, description: "New Ticket work" }] });
     rendered.rerender(<ActionsTaken ticket={{ ...ticket, id: 13 }} staff={false} userId={9} actorName="Mali" />);
     await screen.findByText("New Ticket work");
     finish({ action: { ...record, description: "Late old record" }, ticketVersion: 1, currentCycle: 1 });
     await waitFor(() => expect(screen.queryByText("Late old record")).not.toBeInTheDocument());
-    expect(screen.queryByRole("heading", { name: "Action 12" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Action 1" })).not.toBeInTheDocument();
   });
   it("handles empty and failed reads without inventing records or ready state", async () => {
     setup(false);

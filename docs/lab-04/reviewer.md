@@ -2,9 +2,10 @@
 
 Status: Contract and foundation accepted in PRs #45/#46. Phanuwit approved
 corrected Issue #41 head 0cf9e58 and merged PR #47 into lab4-staging as f4da089
-on 2026-10-07. Issue #42 is Started on feature/42-ticket-workflow from that merge;
-local implementation/evidence exists, but author acceptance, commits/push and
-its own peer review remain pending. No reciprocal review is claimed.
+on 2026-10-07. He approved Issue #42 at b7f6bb9 and merged PR #48 as 00fddc1
+on 2026-10-09. Issue #43 now has local implementation/evidence on
+feature/43-dashboards from that merge; author acceptance/publication and its own
+peer review remain pending. No reciprocal review is claimed.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
 Expected peer: Phanuwit Butchari, 67070501070, GitHub auto4496.
@@ -25,8 +26,8 @@ by the author; the peer supplies actual review comments, approval and merge.
 | Engineering contract | [#39](https://github.com/Datakung/toktickit/issues/39) | [#45](https://github.com/Datakung/toktickit/pull/45) / lab4-staging | Corrected ff97405; actual approval below | Merged d32c8cf |
 | Action foundation | [#40](https://github.com/Datakung/toktickit/issues/40) | [#46](https://github.com/Datakung/toktickit/pull/46) / lab4-staging | Approved by auto4496 on 4795f38 | Merged a915812; Issue closed/Done |
 | Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Corrected 0cf9e58; approval below | Merged f4da089; Issue closed |
-| Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | Pending / lab4-staging | Local implementation; not yet peer reviewed | Started |
-| Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | Pending / lab4-staging | Pending | Backlog |
+| Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | [#48](https://github.com/Datakung/toktickit/pull/48) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227) of b7f6bb9 | Merged 00fddc1 |
+| Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | Pending / lab4-staging | Local implementation/testing; no peer approval claimed | Local work started; board not changed |
 | Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | Pending / lab4-staging, then main | Pending | Backlog |
 
 ## Contract review questions
@@ -315,6 +316,141 @@ verification and the final author reflection remain pending. No new dependency
 audit is claimed; the recorded moderate Multer advisory remains tracked.
 
 ## Final integration and reciprocal review
+
+### Issue #43 Requester author review, October 10
+
+The author reported passing all six guided Requester checks as Anan: active
+Ticket drill-down (25), waiting empty state (0), captured seven-day updated list
+(3), currently/recently resolved empty state (0), Ticket-detail navigation and
+dashboard refresh/readability. Supplied screenshots show the active-status filter,
+captured date range with three rows, read-only Actions Taken, and refreshed
+dashboard. These are development-data author observations, not isolated fixture
+captures or independent peer approval. Exact tablet/mobile viewport dimensions
+were not supplied; no blanket all-width author approval is inferred.
+
+The author requested a smaller Create Ticket quick link. Dashboard quick links
+now share compact padding, aligned heights and no underline while retaining
+44px minimum touch targets. Staff/Admin visual review and acceptance of this
+adjustment remain pending; no publication or peer approval is claimed.
+
+Follow-up verification: the client production build and all four dashboard
+browser scenarios passed (14.3s). The Requester quick links were checked for
+matching heights, compact styling and minimum 44px targets at 1440/768/390px;
+the updated 390px capture was visually inspected. Feature PNGs were recaptured.
+Development database/uploads fingerprint stayed
+`0fb0060b9fb5ae2401a194b9943b324a9e83a2a087c5e78a413efdeeba93189c`
+through this run. The earlier full test totals were not rerun for this CSS change.
+
+### Issue #43 Staff author review and layout adjustment, October 10
+
+The author reported all five guided Staff checks passing: unassigned active
+Tickets, actor-owned active Tickets, assigned current-cycle unfinished actions,
+status/priority drill-down and exact performed-action navigation. Screenshots
+showed assigned/performed work and the direct action-progress controls. This
+does not claim Administrator or exact-width author visual approval.
+
+At the author's request, direct Start/Complete/Cancel controls now have equal
+180px widths, aligned 48px minimum heights and no extra primary-button margin;
+mobile controls stack at equal full widths. My Actions alone can use a 1440px
+desktop content area, automatic table sizing, a wider Ticket/Action column and
+single-line View Action links. Tablet/mobile labeled cards and wrapping free-text
+summaries remain intact. No state, permission or save semantics changed.
+
+All five dashboard browser scenarios passed (17.2s), including a new layout
+scenario at 1440/1150/768/390px, realistic longer Ticket numbers, assigned and
+performed lists, three Planned controls and two In Progress controls. The first
+attempt counted DOM text fragments rather than visual lines; the test now counts
+distinct vertical text positions without weakening the one-line requirement.
+Feature captures were regenerated and inspected; the typed client build and
+all 210 client tests in 23 files passed (35.74s for the test run).
+Development database/uploads stayed unchanged within the final run:
+`9bff6072145d98e0ee2193e71b852833b64642aa3090a2eb118029f341a10454`.
+Full server/browser-inventory/audit reruns are not claimed for this layout change.
+Author acceptance of the adjustments, publication and peer approval remain pending.
+
+The author also identified mismatched confirmation controls. Completion and
+cancellation forms now use equal-width/height, aligned buttons and equal-height
+stacking on mobile. Initial field focus and Back restoring the trigger without
+saving are verified at 1440/768/390. The author clarified that the later concern
+was perceived page enlargement, not missing padding; the temporary extra gutters
+and cell padding were removed. Existing global text sizing and zoom were not
+changed. Browser zoom remains to be confirmed with the author. The final five
+dashboard cases passed (19.3s), client build passed, and development fingerprint
+remained unchanged. This does not claim the author's zoom concern is resolved.
+
+### Issue #43 compact shared workspace review, October 10
+
+The author supplied 100% zoom screenshots and authorized a more compact shared
+interface, while preserving earlier header emphasis, button alignment and table
+readability requirements. The earlier browser-zoom hypothesis is not accepted as
+the explanation. Workspace body text is 15px, page headings cap at 40px,
+header/content spacing is smaller, dashboard numbers use 36px and tighter cards
+and lists, and the three Staff cards align their counts without a vacant fourth
+slot. Paired panels size to their content. My Actions is centered and capped at
+1200px, retaining automatic columns and single-line Ticket/Action/View labels.
+Progress and confirmation controls remain equal-sized and touch-friendly;
+resolution/Actions Taken headers remain prominent. No browser/root zoom change.
+
+Five targeted dashboard/evidence cases passed (22.4s), all 210 client tests
+passed (39.10s), and the typed client build passed. Captures now include wide
+1920px views and existing desktop/tablet/mobile widths. Development fingerprint
+remained unchanged. The complete Chromium inventory subsequently passed all
+49 scenarios (4.0m), including earlier pages and Action/workflow regressions.
+The development database/uploads fingerprint matched before/after the full run;
+no retry/timeout increased or assertion skipped. Feature PNGs remain the
+deliberate compact evidence run; full-run outputs are ignored screenshots.
+The author still needs to judge this proposed compact look. No publication,
+new peer approval or final-main release acceptance is claimed.
+
+The author subsequently requested dashboard-only density adjustments: less empty
+space above wide Staff counts, short visible `View all` links with unchanged full
+accessible names/destinations, and slightly tighter list rows. My Actions/shared
+typography are unchanged. Latest checks: 210 client tests (35.67s), typed build,
+and five guarded browser/evidence cases (19.5s) passed. Desktop/mobile captures
+were refreshed and representative Staff views inspected; development state is
+unchanged. The earlier full 49-case run was not repeated for this last adjustment.
+Final author visual acceptance and independent peer review remain pending.
+
+The next author screenshot exposed a missed Create/Discard editor pair. Create
+and edit field forms now share equal-size controls with zero top margins and
+full-width mobile stacking. Latest checks: 211 client tests (34.63s), typed build
+and five guarded browser cases (20.7s) passed. Both editor modes were checked at
+1440/768/390px, new control crops were captured and representative pairs inspected.
+Development state matched within this run. Global ActionTaken IDs and all save
+semantics remain unchanged; no new complete inventory/server/audit or approval.
+
+The author then approved Ticket-local action numbering. Read DTOs carry the
+one-based creation ordinal across every Ticket action, including earlier cycles
+and cancelled work. All displayed indexes now use this number; global IDs in
+links, writes, replay receipts and immutable snapshots remain untouched. No
+migration/reset. Both builds, 211 client tests (51.36s), the complete 290-test
+server rerun (144.46s), and five deliberate browser capture cases (33.6s) pass.
+The first server attempt's sole failure was the new fixture's missing required
+cancellation reason; the fixture was corrected without relaxing the constraint.
+Representative work-list captures were inspected; development state matched
+within the browser run. Final visual acceptance/peer review/release remain pending.
+
+The latest complete Chromium inventory also passed all 49 scenarios (4.5m),
+including Ticket-local labels and Action 21 paging with preserved ID-based
+mutation/deep-link behavior, all earlier security flows, and close/reopen.
+Development database/uploads matched before/after; no retry/timeout raised or
+assertion skipped. Full-run screenshots are ignored outputs, not final-main
+captures. Publication, visual acceptance, peer approval and audit remain separate.
+
+### Issue #43 author acceptance and publication authorization, October 10
+
+After the numbering refinement and latest checks, the author stated
+"Everything in order" and explicitly authorized committing/pushing the branch
+and opening a new PR. This records acceptance of the reviewed feature and UI,
+not independent peer approval, a separately reported Administrator/exact-width
+manual checklist, or final-main release acceptance. Latest verification remains
+290 server tests, 211 client tests, both builds and all 49 guarded Chromium
+scenarios passing. Independent review/merge and Issue #44 release gates remain
+pending. Implementation commit `c5185639d9ce7a97b572049a0b87a9cd3d210d5e`
+was pushed to `feature/43-dashboards`; [PR #49](https://github.com/Datakung/toktickit/pull/49)
+is open against `lab4-staging`, verified with no merge conflicts when created.
+This publication record is a documentation-only follow-up; the tests above cover
+the implementation commit. No peer approval or merge is claimed.
 
 Record real feature/release approvals and merge commits, final-main checks and
 Project Done evidence after they exist. Keep the release Issue open until those

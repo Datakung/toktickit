@@ -1,4 +1,5 @@
 import { Router, type Response } from "express";
+import { Prisma } from "@prisma/client";
 import { getPrisma } from "../prisma.js";
 import {
   developmentRequesterContext,
@@ -79,7 +80,7 @@ ticketRouter.get(
           skip: (query.page - 1) * query.pageSize,
           take: query.pageSize,
         }),
-      ]);
+      ], { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
 
       response.status(200).json({
         data: tickets,

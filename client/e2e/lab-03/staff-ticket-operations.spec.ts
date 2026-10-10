@@ -8,7 +8,8 @@ async function login(page: Page, email: string) {
   await page.getByLabel("Email", { exact: true }).fill(email);
   await page.getByLabel("Password", { exact: true }).fill(E2E_PASSWORD);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(email === "mali.support@example.test" ? /\/staff\/tickets$/ : /\/tickets$/);
+  await expect(page).toHaveURL(email === "mali.support@example.test" ? /\/staff\/dashboard$/ : /\/dashboard$/);
+  await page.goto(email === "mali.support@example.test" ? "/staff/tickets" : "/tickets");
 }
 
 async function openOperationsTicket(page: Page) {

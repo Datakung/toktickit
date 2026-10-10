@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent, type MouseEvent } from "react";
+import { readListSearch, listSearch } from "./list-url.js";
 import {
   getCategories,
   getRelatedSystems,
@@ -34,6 +35,7 @@ type ListState = "loading" | "ready" | "error";
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-GB", {
     calendar: "gregory",
+    timeZone: "Asia/Bangkok",
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
@@ -52,20 +54,23 @@ function isDefaultQuery(query: TicketListQuery) {
     query.sort === "updatedAt" &&
     query.direction === "desc" &&
     query.page === 1 &&
-    query.pageSize === 10;
+    query.pageSize === 10 && !query.statusGroup && !query.updatedSince && !query.resolvedSince;
 }
 
 export function MyTicketsPage({
   requester,
   onNavigate,
   onRequesterUnavailable,
+  urlSearch,
 }: {
   requester: DevelopmentRequester;
   onNavigate: (path: string) => void;
   onRequesterUnavailable: () => void;
+  urlSearch?: string;
 }) {
-  const [query, setQuery] = useState<TicketListQuery>(defaultTicketListQuery);
-  const [searchDraft, setSearchDraft] = useState("");
+  const parsed = readListSearch(urlSearch, defaultTicketListQuery, "requester");
+  const [query, setQuery] = useState<TicketListQuery>(parsed.query);
+  const [searchDraft, setSearchDraft] = useState(parsed.query.search);
   const [listState, setListState] = useState<ListState>("loading");
   const [result, setResult] = useState<TicketListResponse | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -91,6 +96,7 @@ export function MyTicketsPage({
     let current = true;
     setResult(null);
     setListState("loading");
+    if (parsed.error) { setListState("error"); return; }
     getTickets(requester.id, query)
       .then((response) => {
         if (!current) return;
@@ -112,7 +118,9 @@ export function MyTicketsPage({
   function updateQuery(update: Partial<TicketListQuery>) {
     setResult(null);
     setListState("loading");
-    setQuery((current) => ({ ...current, ...update, page: update.page ?? 1 }));
+    const next = { ...query, ...update, page: update.page ?? 1 };
+    setQuery(next);
+    if (urlSearch !== undefined) onNavigate(`/tickets${listSearch(next)}`);
   }
 
   function submitSearch(event: FormEvent) {
@@ -125,6 +133,7 @@ export function MyTicketsPage({
     setResult(null);
     setListState("loading");
     setQuery(defaultTicketListQuery);
+    if (urlSearch !== undefined) onNavigate("/tickets");
   }
 
   function followCreateTicket(event: MouseEvent<HTMLAnchorElement>) {
@@ -156,6 +165,8 @@ export function MyTicketsPage({
       </div>
 
       <section className="ticket-list-controls" aria-label="Search and filter Tickets">
+        {query.statusGroup && <p className="helper-text">Active Tickets: New, Open, In Progress, Waiting for Requester and Reopened.</p>}
+        {!parsed.error && (query.updatedSince || query.resolvedSince) && <p className="helper-text">Captured dashboard range ({query.resolvedSince ? "resolved" : "updated"}): {formatDate(query.resolvedSince || query.updatedSince!)} to {formatDate(query.resolvedUntil || query.updatedUntil!)}. Lists are live. <button className="text-button" onClick={() => updateQuery({ updatedSince: undefined, updatedUntil: undefined, resolvedSince: undefined, resolvedUntil: undefined })}>Remove date range</button></p>}
         <form className="ticket-search" role="search" onSubmit={submitSearch}>
           <label htmlFor="ticket-search">Ticket Number or Summary</label>
           <div>
@@ -220,12 +231,15 @@ export function MyTicketsPage({
           <label>Status
             <select
               aria-label="Status filter"
-              value={query.status ?? ""}
+              value={query.statusGroup ? "active" : query.status ?? ""}
               onChange={(event) => updateQuery({
-                status: (event.target.value || null) as TicketStatus | null,
+                status: (event.target.value === "active" ? null : event.target.value || null) as TicketStatus | null,
+                statusGroup: event.target.value === "active" ? "active" : undefined,
+                ...(event.target.value !== "RESOLVED" ? { resolvedSince: undefined, resolvedUntil: undefined } : {}),
               })}
             >
               <option value="">All Statuses</option>
+              <option value="active">Active Tickets</option>
               {ticketStatuses.map(status => <option key={status} value={status}>{statusLabel(status)}</option>)}
             </select>
           </label>
@@ -263,14 +277,14 @@ export function MyTicketsPage({
       {listState === "error" && (
         <div className="feedback-panel feedback-panel-error" role="alert">
           <h2>Your Tickets are unavailable</h2>
-          <p>We could not load your Tickets. Try again.</p>
-          <button
+          <p>{parsed.error || "We could not load your Tickets. Try again."}</p>
+          {!parsed.error && <button
             className="secondary-button"
             type="button"
             onClick={() => setQuery((current) => ({ ...current }))}
           >
             Retry
-          </button>
+          </button>}
         </div>
       )}
 

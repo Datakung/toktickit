@@ -1,6 +1,10 @@
 import { Prisma, type ActionTaken } from "@prisma/client";
 
 const person = { select: { id: true, displayName: true } } as const;
+// Public ordinal counts every action on the same Ticket, including previous
+// cycles and cancelled/unassigned work. Never rank a filtered work-list page.
+export const actionNumberSql = Prisma.sql`(SELECT count(*)::int FROM "ActionTaken" preceding
+  WHERE preceding."ticketId"=a."ticketId" AND (preceding."createdAt", preceding.id) <= (a."createdAt", a.id))`;
 export const actionSelect = {
   id: true, ticketId: true, cycle: true, state: true, actionAt: true, description: true,
   result: true, assignee: person, createdBy: person, performedBy: person, performedAt: true,

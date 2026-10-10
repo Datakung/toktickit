@@ -43,14 +43,14 @@ test("a normal Requester changes their password and can sign in with it", async 
     await page.getByLabel("New password", { exact: true }).fill(next);
     await page.getByLabel("Confirm new password", { exact: true }).fill(next);
     await page.getByRole("button", { name: "Change password", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "My Tickets" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "My Dashboard" })).toBeVisible();
   }
   await change(E2E_PASSWORD, updated);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await page.getByLabel("Email").fill("anan.chaiyasit@example.test");
   await page.getByLabel("Password", { exact: true }).fill(updated);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "My Tickets" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "My Dashboard" })).toBeVisible();
   await page.getByRole("button", { name: "Change password", exact: true }).click();
   await change(updated, E2E_PASSWORD);
 });

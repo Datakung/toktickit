@@ -29,4 +29,9 @@ describe("Actions Taken responsive style contract", () => {
     expect(css).toMatch(/\.resolution-checklist-status\s*\{[^}]*font-size: clamp\(1\.25rem,[^}]*font-weight: 800;[^}]*padding: 20px;[^}]*border-inline-start-width: 6px/);
     expect(css).toContain(".resolution-checklist-status .resolution-requirement-icon { font-size: 1.2em; }");
   });
+  it("aligns equal-sized create/save and discard controls without the primary-button top margin", () => {
+    expect(css).toMatch(/\.action-editor \.action-controls\s*\{[^}]*display: grid;[^}]*grid-template-columns: repeat\(2, minmax\(0, 300px\)\);[^}]*grid-auto-rows: 1fr;[^}]*align-items: stretch/);
+    expect(css).toMatch(/\.action-editor \.action-controls > button\s*\{[^}]*min-height: 48px;[^}]*margin-top: 0/);
+    expect(css).toMatch(/\.action-editor \.action-controls\s*\{ grid-template-columns: minmax\(0, 1fr\);/);
+  });
 });

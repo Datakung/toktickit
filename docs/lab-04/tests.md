@@ -1,15 +1,14 @@
 # Lab 4 Test Plan and Traceability
 
-Status: Contract/foundation/Action UI accepted in PRs #45-47. Issue #41's
-fixture correction 0cf9e58 was approved and merged as f4da089 on 2026-10-07.
-Issue #42 workflow is locally implemented/tested from that merge on
-feature/42-ticket-workflow; author visual acceptance, commit/push and peer review
-are pending. Dashboards (#43) and final release (#44) remain planned.
+Status: Contract/foundation/Action UI/workflow accepted in PRs #45-48. Issue #42
+was approved at b7f6bb9 and merged as 00fddc1 on 2026-10-09. Issue #43 dashboards
+are locally implemented/tested on feature/43-dashboards from that merge. Its author
+acceptance/publication/peer review and final release (#44) remain pending.
 Historical counts are never substituted for this branch's actual runs.
 
 ## Planned executable coverage
 
-Paths are repository-relative. Passed rows exist and were executed for Issues #40-42;
+Paths are repository-relative. Passed rows exist and were executed for Issues #40-43;
 Partly verified rows explicitly identify unfinished scope. No final-main release
 status is implied by a branch pass.
 
@@ -20,7 +19,7 @@ status is implied by a branch pass.
 | SEED-01 | Integration | AC-01 | Run twice after manual fixture edits; no duplicate records/events or credential/edit reset; zero/one/multiple work | server/tests/lab-04/seed-regression.test.ts | Passed |
 | UNIT-01 | Unit | AC-02,03 | Description/result/time/boolean/note/reason/ID/UUID boundaries and unknown-key rejection | server/tests/lab-04/action-validation.unit.test.ts | Passed |
 | UNIT-02 | Unit | AC-08,09 | All 64 Ticket status pairs and the independent current-cycle gate predicate | server/tests/lab-04/workflow-rules.unit.test.ts | Passed: 69 unit cases (64 Ticket pairs plus five gate predicates) |
-| UNIT-03 | Unit | AC-10,11,12 | UTC range boundaries, status-group/date-pair parsing and stable query rules | server/tests/lab-04/dashboard-query.unit.test.ts | Planned |
+| UNIT-03 | Unit | AC-10,11,12 | UTC range boundaries, status-group/date-pair parsing and stable query rules | server/tests/lab-04/dashboard-query.unit.test.ts | Passed: nine cases |
 | API-01 | API | AC-02,03 | Multiple actions, automatic creator/performer, independent assignment, fields and valid lifecycle | server/tests/lab-04/actions-taken.api.test.ts | Passed |
 | API-02 | API | AC-03,04,05 | Direct forbidden/owned reads, forged actor, forced-change, inactive/Requester assignee, terminal/prior-cycle guards | server/tests/lab-04/actions-taken.api.test.ts | Passed |
 | API-03 | API/concurrency | AC-05,06 | Concurrent account change/assignment; account-integrity unassignment retains performer/events | server/tests/lab-04/action-concurrency.api.test.ts | Passed |
@@ -28,24 +27,212 @@ status is implied by a branch pass.
 | API-05 | API | AC-07 | Revisions retained past page one; equal-time ID tie-break; correction reasons; no history edit/delete; no Notes leakage | server/tests/lab-04/action-history.api.test.ts | Passed |
 | API-06 | API/workflow | AC-08,09 | All eight-status edges; each gate failure, legal resolution/cancellation/reopen, advisory indication, legacy terminal close; whole-cycle snapshot summary with later-page blockers | server/tests/lab-04/action-history.api.test.ts; server/tests/lab-04/ticket-workflow.api.test.ts | Passed: seven workflow API cases plus existing whole-cycle snapshot tests |
 | API-07 | API/concurrency | AC-06,08,09 | Action update/completion/creation races against resolve/cancel/reopen; one consistent outcome | server/tests/lab-04/workflow-concurrency.api.test.ts | Passed: 11 synchronized concurrency/rollback/session cases |
-| API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts | Planned |
-| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Partly verified: Action/workflow security and safe errors pass; dashboard checks pending |
+| API-08 | API/dashboard | AC-10 | Independent owned queries, zero account, other-owner exclusion, exact inclusive UTC boundaries and legacy null dates | server/tests/lab-04/requester-dashboard.api.test.ts | Passed: three cases, all metric-to-list comparisons |
+| API-09 | API/dashboard | AC-11 | Staff/Admin metrics, current-user work, zero status/priority keys, snapshots and <=5 lists match queries | server/tests/lab-04/staff-dashboard.api.test.ts | Passed: three cases, all status/priority/current-user comparisons |
+| API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts; dashboard-query.unit.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts | Passed: synchronized snapshot insert, inclusive performer boundaries/ties/prior cycles and auth guards; each card comparison lives in role API files |
+| API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts (actual); server/tests/lab-04/requester-dashboard.api.test.ts; server/tests/lab-04/staff-dashboard.api.test.ts; server/tests/lab-04/dashboard-drill-down.api.test.ts; server/tests/lab-04/safe-errors.api.test.ts (planned wider gate) | Action/workflow and dashboard authorization/safe-error checks pass; the wider release gate remains pending |
+| API-12 | API/numbering | AC-02,04,06,07,11,12 | Interleaved Ticket IDs, tied creation times, page 2, prior/cancelled work, filtered work/dashboard parity, preserved write/replay/audit IDs and forged-number rejection | server/tests/lab-04/action-numbering.api.test.ts | Passed: two cases in the complete 290-test server rerun |
 | UI-01 | Component | AC-02,03,05,06,13 | View-first/Edit/Close detail, direct Start/Complete/Cancel, return focus/discard, late-history protection, independent field/assignment/state saves, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 44 Action component cases |
 | UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; labelled checklist colours exclude stale/unknown positive results; separate opening/progress stages and explicit target retain all valid transitions | client/tests/lab-04/TicketWorkflow.test.tsx | Passed: 32 workflow component cases after October 9 colour refinement |
-| UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Planned |
-| UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Planned |
-| UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx | Planned |
+| UI-03 | Component | AC-10,12,13 | Owned dashboard zero/loading/ready/failure/refresh, labels and real drill-down navigation | client/tests/lab-04/RequesterDashboard.test.tsx | Passed: four cases, including late identity-response exclusion |
+| UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Passed: six cases, both roles and unsupported-link rejection |
+| UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx; dashboards.spec.ts browser | Passed: 13 component cases; actual reload/Back in browser |
 | UI-06 | Component | AC-04,07,13,15 | Changed-only audit fields, initial creation details, Yes/No, Bangkok dates, honest account IDs, escaped text and incomplete legacy snapshots without mutation | client/tests/lab-04/ActionHistoryChanges.test.tsx | Passed: six readable audit cases |
-| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx | Partly verified: six Action/workflow CSS-contract checks and actual browser hierarchy/focus/layout; dashboard styles pending |
+| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx; client/e2e/lab-04/dashboards.spec.ts | Seven Action/workflow CSS-contract checks and dashboard browser hierarchy/focus/layout checks pass at 1440/768/390px; author visual approval and final-main evidence remain pending |
 | REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-01, lab-02 and lab-03 (existing executable files); dedicated final release coverage remains #44 | Passed on feature branch through existing Labs 1-3 files; final-main release rerun pending |
-| PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.test.ts | Planned |
+| PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.api.test.ts | Passed: 500 Tickets/500 Actions; five warmed reads per role, emitted SQL counts and payload sizes measured |
 | E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed: 5 feature browser journeys; final-main release evidence remains separate |
 | E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle; status stages, checklist colours/contrast, view-first/Edit and readable audit with exact original snapshots at three widths | client/e2e/lab-04/ticket-resolution.spec.ts | Passed: six real-session workflow/UI journeys in the latest October 9 targeted rerun; historical results below |
-| E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Planned |
+| E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Passed: five cases in the targeted evidence run and latest complete 49-scenario Ticket-local-numbering run |
 | E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-04/final-regression.spec.ts | Planned |
 | EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | client/e2e/lab-04/release-evidence.spec.ts | Planned |
+
+### Issue #43 dashboard implementation and evidence (2026-10-10)
+
+Branch feature/43-dashboards starts from peer-accepted Issue #42 merge 00fddc1.
+Five new server files contain 19 tests: nine filter/range units, three owned
+Requester APIs, three Staff/Admin APIs, three snapshot/boundary/auth checks and
+one performance case. Metric expectations are independent fixture totals; every
+count is also compared to its actual filtered list endpoint. Equal-time ordering
+uses descending ID. Null legacy resolution dates and other Requesters/performers
+are excluded. Prior-cycle assigned work is excluded; prior completed-performer
+history is retained. A synchronized concurrent insert proves summaries and later
+aggregates share one database snapshot.
+
+Three new UI files contain 23 tests (4 Requester, 6 Staff, 13 navigation/API).
+Coverage includes loading without fake zeros, honest empty results, labelled stale
+refresh/Retry, 403 protected-data clearing, late old-user responses, captured
+range/owner/pagination round-trips, unsupported/duplicate/malformed URLs, invalid
+date feedback without formatter crashes and cleared optional keys without the
+literal text `undefined` in requests.
+
+Actual checks so far, not final-main/peer testing: full server 36 files/288 tests
+passed in 94.39s. After making the exact Requester upper-boundary fixture explicit,
+its three tests passed again in 4.28s. Final client: 23 files/210 tests passed in
+18.26s, followed by a passing typed production build. Server build also passed.
+The corrected complete Chromium inventory passed all 48 scenarios in 3.9 minutes,
+including all four dashboard journeys; development fingerprints matched. The first full browser
+run passed 45 and failed three old Admin landing-page assumptions; corrected
+helpers verify Staff Dashboard then open Users, keeping all original focus,
+account/reset/auth assertions. No retry/timeout increased.
+
+Performance uses an isolated generated schema with 500 Tickets/500 Actions,
+one warm-up and five HTTP reads per role. Real emitted SQL counts include auth
+rechecks but exclude BEGIN/COMMIT/ROLLBACK/SET TRANSACTION. Bounds: <=12 statements,
+<=64KiB JSON; local median target <2s. Latest full-suite measurements:
+
+| Role | Median / maximum ms | Maximum statements | Maximum JSON bytes |
+|---|---|---|---|
+| Requester | 17 / 18 | 8 | 1697 |
+| IT Staff | 16 / 20 | 9 | 3632 |
+| Administrator | 16 / 18 | 9 | 2401 |
+
+These are local smoke measurements, not production capacity/load claims.
+
+Real-browser checks cover populated/empty Requesters, Staff/Admin current-user
+work, every metric/list comparison, captured range reload/Back and the exact
+performed-action deep link. Captures include 1440/768/390, zero/forbidden/refresh
+failure and work lists. Root/body overflow, visible focus and >=44px dashboard
+links are checked. The agent visually inspected six role/width images; this is
+not author visual acceptance. [Feature evidence](../../artifacts/lab-04/screenshots/dashboards/README.md)
+is not final-main evidence. Review API/UI use 3100/5183, leaving 3000/5173 alone.
+E2E development database/uploads fingerprints matched before/after:
+`bd723571386f81ec515cd44c9b7d2e97d0393bd7c874392d8c65691ae24118f2`.
+No migration/dependency/development seed/reset/credential change.
+
+Reproduce with `npm --prefix server test`, `npm --prefix client test`, both
+`run build` commands and `npm --prefix client run test:e2e:review`. The checked-in
+review configuration preserves guarded E2E data and fingerprint verification,
+running alongside development on 5173. Deliberate screenshot replacement uses
+`npm --prefix client run test:e2e:lab4-dashboard-evidence`; ordinary runs write only
+ignored outputs. Author review/publication/peer approval, #44 release/audit/final
+main captures and the author-approved Lab 4 reflection remain pending. Audit was
+not rerun; the recorded moderate Multer advisory remains a separate release item.
+
+Final screenshot inspection exposed a narrow mobile work-table caption. A scoped
+caption rule now gives it the full table width; browser capture waits for loaded
+work counts and asserts caption width, preventing premature partial screenshots.
+The four dashboard journeys were rerun through the checked-in evidence script
+after this presentation-only correction, and the client build passed again.
+
+### Issue #43 author layout follow-up, October 10
+
+The author reported all six Requester and all five Staff guided functional
+checks passing, with readable dashboard screenshots. Exact viewport widths and
+Administrator manual approval were not supplied. At the author's request, compact
+Requester quick links were followed by equal-size, aligned Action progress
+buttons and a wider My Actions desktop layout. No state or authorization changed.
+
+The latest five-case dashboard browser run passed in 17.2s. Its added layout
+case uses realistic longer Ticket numbers, confirms single-line Ticket/Action
+labels and View Action links on desktop at 1440/1150, checks labeled cards and
+no overflow at 768/390, and compares button width/height/top before and after
+Start action. The initial line-count assertion counted separate DOM fragments
+on the same line; it was corrected to count distinct vertical text positions.
+All feature dashboard captures were refreshed. The client typed build passed;
+the full client regression also passed all 210 tests in 23 files (35.74s).
+Development fingerprint stayed unchanged within the run:
+`9bff6072145d98e0ee2193e71b852833b64642aa3090a2eb118029f341a10454`.
+Completion/cancellation confirmation buttons were subsequently given equal
+widths/heights and alignment too. The layout case now checks both confirmation
+forms at 1440/768/390, initial field focus, Back restoring the trigger's focus,
+and no state change on Back. A temporary page-gutter/cell-padding expansion was
+removed after the author clarified a perceived whole-page zoom issue. No global
+text-size or zoom rules were changed; actual browser zoom is not yet confirmed.
+The final five-case evidence rerun passed in 19.3s and the client build passed;
+development fingerprint remained identical to the preceding layout run. Six
+confirmation-region PNGs were added and representative captures inspected.
+The complete browser inventory now includes one additional layout case; no
+complete 49-case, full-server or audit rerun is claimed for this CSS adjustment.
+
+### Compact shared workspace follow-up, October 10
+
+The author supplied browser-toolbar screenshots confirming 100% zoom, rejected
+the browser-zoom hypothesis and authorized compacting the shared interface while
+retaining emphasized headers, equal aligned controls and one-line work labels.
+Shared workspace text is now 15px at a 16px root, page headings cap at 40px,
+and header/content spacing is reduced. Dashboard numbers are 36px with aligned
+counts, smaller card/list padding and naturally sized paired panels. My Actions
+uses a centered 1200px cap instead of the experimental 1440px width. No CSS zoom,
+transform scale, browser setting, API/state or permission change was made.
+
+The deliberate five-case browser/evidence run passed (22.4s), now also checking
+1920px wide desktop alongside 1440/1150/768/390 where applicable. It asserts
+compact text/number/heading sizes, centered work width/margins, aligned Staff
+counts, single-line labels, equal progress/confirmation buttons, retained focus
+and no page overflow. Dashboard feature PNGs were recaptured, including new
+wide-desktop views. Representative wide desktop/mobile captures were inspected.
+Full client: 23 files / 210 tests passed (39.10s); typed production build passed.
+Development database/uploads stayed unchanged through this evidence run:
+`9bff6072145d98e0ee2193e71b852833b64642aa3090a2eb118029f341a10454`.
+The complete Chromium inventory also passed all 49 cases (4.0m), including
+earlier auth/accounts/attachments/communication/queue/responsive flows and all
+Actions/workflow scenarios. Development database/uploads matched the same
+fingerprint before/after this full run. Ordinary full-run captures use ignored
+outputs; the checked-in feature PNGs remain the deliberate compact evidence run.
+No retry/timeout was raised and no assertion was skipped. No new full-server or
+dependency-audit rerun is claimed for this presentation change. Author visual
+acceptance/publication/peer review remain pending.
+
+### Dashboard-only density follow-up, October 10
+
+After reviewing the compact screenshots, the author requested less dashboard
+whitespace. Wide Staff cards now reserve one label line; list links display
+`View all` while keeping their descriptive accessible names and destinations,
+and rows use 8px vertical padding. My Actions/shared sizes are unchanged.
+Full client: 23 files / 210 tests passed (35.67s); typed build passed. The five
+guarded dashboard/evidence cases passed (19.5s), additionally checking the small
+label-to-count gap and same-row desktop heading/link layout. Desktop/mobile
+feature captures were refreshed and representative Staff views inspected.
+Development database/uploads retained the same recorded fingerprint. The
+earlier complete 49-case run was not repeated for this dashboard-only adjustment;
+no new full-server, audit, peer approval or author visual acceptance is claimed.
+
+### Action field-editor alignment follow-up, October 10
+
+The author identified Create action/Discard unsaved fields as another misaligned
+pair. The scoped editor styles now share the confirmation controls' equal-size
+grid and zero top margins. An added style regression test covers this contract;
+the existing browser layout case now checks both create and edit form controls
+at 1440/768/390px and discards without saving. Full client: 23 files / 211 tests
+passed (34.63s); typed build passed; five guarded browser/evidence cases passed
+(20.7s). Six cropped create/edit control captures were added and representative
+desktop/mobile pairs visually inspected. Development data/uploads matched before
+and after this run: `64bfed31b464fc9241afc9bc460ff651a7e9fa09917b5e827cb9644d41c16c90`.
+Action IDs remain global; no renumbering, schema or save behavior changed. No
+fresh complete 49-case inventory, server/audit run or author/peer approval is claimed.
+
+### Ticket-local action numbering follow-up, October 10
+
+The author approved Action 1, Action 2... independently per Ticket, correcting
+the earlier UI choice to expose the global ID as the action's number. The read
+DTOs now include `actionNumber` across detail, paged actions, current-user work
+and Staff/Admin dashboards. Ordinals use immutable creation order across all
+Ticket actions, not filtered-page indexes; they do not reset on reopening.
+Existing records need no migration/reset. IDs in routes, writes, replay receipts
+and immutable audit snapshots are unchanged; field/state/assignment semantics
+and permissions remain intact. Client tests and browser fixtures now distinguish
+display numbers from the internal IDs used in real writes/deep links.
+
+Full client: 23 files / 211 tests passed (51.36s). Both typed production builds
+passed. The complete server rerun passed 37 files / 290 tests (144.46s), including
+the two new numbering cases. Its first attempt passed 289 tests and failed only
+the new cancelled-action fixture's missing required reason; that fixture was
+corrected, not the production constraint or test expectations. The 500-Ticket /
+500-Action dashboard smoke still passes (8/9/9 statements, median 31/40/40ms).
+The deliberate five-case feature capture run passed (33.6s), with existing
+development database/uploads unchanged. Representative work-list captures show
+two different Tickets each with Action 1. Earlier Action/workflow feature PNGs
+are historical; final-main recapture remains a separate #44 responsibility.
+
+The subsequent complete Chromium run passed all 49 scenarios (4.5m), including
+real create/edit/replay writes with internal IDs, Action 21 paging, Requester
+read-only deep links, dashboard/work number parity, closing and fresh-cycle
+reopening. No assertion was skipped, timeout raised or retry increased.
+Development database/uploads matched before/after this complete run:
+`64bfed31b464fc9241afc9bc460ff651a7e9fa09917b5e827cb9644d41c16c90`.
+The complete run wrote ignored outputs, not final-main captures. No dependency
+audit rerun, publication or author/peer visual approval is claimed.
 
 ### Issue #40 executed coverage and limits
 

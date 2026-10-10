@@ -4,12 +4,13 @@ import userEvent from "@testing-library/user-event";
 import * as api from "../../src/api.js";
 import App from "../../src/App.js";
 import { requireMockedNetwork } from "../support/action-fixtures.js";
+import { mockDashboards } from "../support/dashboard-fixtures.js";
 
 requireMockedNetwork();
 
 const requester: api.CurrentUser = { id:1, displayName:"Anan Chaiyasit", email:"anan.chaiyasit@example.test", role:"REQUESTER", isActive:true, mustChangePassword:false };
 describe("Lab 3 authenticated shell", () => {
-  beforeEach(() => { window.history.replaceState({},"","/login"); });
+  beforeEach(() => { window.history.replaceState({},"","/login"); mockDashboards(); });
   afterEach(() => vi.restoreAllMocks());
   function mockTickets() {
     vi.spyOn(api,"getAdminUsers").mockResolvedValue({ items: [] });
@@ -31,7 +32,7 @@ describe("Lab 3 authenticated shell", () => {
     await user.type(screen.getByLabelText("New password"), "another-private-password");
     await user.type(screen.getByLabelText("Confirm new password"), "another-private-password");
     await user.click(screen.getByRole("button", { name: "Change password" }));
-    await waitFor(() => expect(location.pathname).toBe(role === "ADMINISTRATOR" ? "/admin/users" : role === "IT_STAFF" ? "/staff/tickets" : "/tickets"));
+    await waitFor(() => expect(location.pathname).toBe(role === "REQUESTER" ? "/dashboard" : "/staff/dashboard"));
     await user.click(screen.getByRole("button", { name: "Change password" }));
     expect(await screen.findByRole("heading", { name: "Change your password" })).toBeInTheDocument();
   });
@@ -52,6 +53,7 @@ describe("Lab 3 authenticated shell", () => {
     expect(await screen.findByRole("heading", { name: "Sign in" })).toBeInTheDocument();
   });
   it("returns to login after a protected 401 and blocks stale back navigation without logout", async () => {
+    window.history.replaceState({}, "", "/tickets");
     vi.spyOn(api, "getCurrentUser").mockResolvedValue(requester);
     const signOut = vi.spyOn(api, "logout");
     const tickets = mockTickets();
@@ -98,15 +100,15 @@ describe("Lab 3 authenticated shell", () => {
     vi.spyOn(api,"getCategories").mockResolvedValue([]); vi.spyOn(api,"getRelatedSystems").mockResolvedValue([]); vi.spyOn(api,"getTickets").mockResolvedValue({data:[],meta:{page:1,pageSize:10,totalItems:0,totalPages:0,search:"",filters:{categoryId:null,relatedSystemId:null,requestedPriority:null,status:null},sort:"updatedAt",direction:"desc"}});
     const user=userEvent.setup(); render(<App/>); await screen.findByRole("heading",{name:"Change your password"});
     await user.type(screen.getByLabelText("Current password"),"initial-fixture-password"); await user.type(screen.getByLabelText("New password"),"changed-fixture-password"); await user.type(screen.getByLabelText("Confirm new password"),"changed-fixture-password"); await user.click(screen.getByRole("button",{name:"Change password"}));
-    expect(await screen.findByRole("heading",{name:"My Tickets"})).toBeInTheDocument(); expect(screen.getByText("Signed in · Requester")).toBeInTheDocument();
+    expect(await screen.findByRole("heading",{name:"My Dashboard"})).toBeInTheDocument(); expect(screen.getByText("Signed in · Requester")).toBeInTheDocument();
   });
-  it("routes IT Staff to the Ticket Queue instead of Requester navigation", async () => {
+  it("routes IT Staff to the Staff Dashboard instead of Requester navigation", async () => {
     vi.spyOn(api,"getCurrentUser").mockResolvedValue({...requester,role:"IT_STAFF"});
     vi.spyOn(api,"getCategories").mockResolvedValue([]);
     vi.spyOn(api,"getRelatedSystems").mockResolvedValue([]);
     vi.spyOn(api,"getStaffOwners").mockResolvedValue({items:[]});
     vi.spyOn(api,"getStaffQueue").mockResolvedValue({items:[],page:1,pageSize:10,total:0,totalPages:1});
     render(<App/>);
-    expect(await screen.findByRole("heading",{name:"Ticket Queue"})).toBeInTheDocument(); expect(screen.queryByText("Create Ticket")).not.toBeInTheDocument();
+    expect(await screen.findByRole("heading",{name:"Staff Dashboard"})).toBeInTheDocument(); expect(screen.queryByText("Create Ticket")).not.toBeInTheDocument();
   });
 });

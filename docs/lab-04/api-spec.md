@@ -8,11 +8,17 @@ The existing {status,version} input is unchanged. Session/role is rechecked unde
 the account -> Ticket lock; stale versions precede matrix/gate evaluation.
 Status/date/cycle/version/event changes share one transaction. History uses a
 repeatable-read snapshot and only exposes safe actor ID/name and transition data.
-Dashboard APIs remain planned #43. Source rules: [specification.md](specification.md).
+Dashboard APIs below are implemented locally for #43. Source rules: [specification.md](specification.md).
 
 PR #47's fixture-only correction 0cf9e58 was independently approved and merged;
 it changed no production API or permissions. Exact evidence: [reviewer.md](reviewer.md).
-Issue #42 itself has not yet been committed, published or peer-approved.
+Issue #42 was approved at b7f6bb9 and merged in PR #48 as 00fddc1. Issue #43
+is not yet published/peer-approved. GET /api/dashboard/requester and /staff use
+no-store and a read-only repeatable-read transaction with session/role recheck,
+one asOf, inclusive elapsed-seven-day UTC range and <=5 summary rows per list.
+Ticket/list additive statusGroup and paired updated/resolved timestamp filters
+are implemented; /api/staff/actions retains the existing current-user work rules.
+No schema/input-write or credential/private-Note visibility change is introduced.
 
 ## Shared rules
 
@@ -36,10 +42,17 @@ Ticket. Revalidate current session/actor inside mutation transactions.
 ## Action data transfer objects
 
 Person = `{id,displayName}`; role-safe actor labels remain even when inactive.
-Action = `{id,ticketId,cycle,state,actionAt,description,result,assignee:Person|null,
+Action = `{id,actionNumber,ticketId,cycle,state,actionAt,description,result,assignee:Person|null,
 createdBy:Person,performedBy:Person|null,performedAt:string|null,
 followUpRequired,followUpNote,attachmentNotes,cancellationReason:string|null,
 version,createdAt,updatedAt}`.
+
+`actionNumber` is a read-only, one-based ordinal within its Ticket, ordered by
+immutable `createdAt,id`. Count every action, including cancelled and prior-cycle
+records, before filtering or paging. A new Ticket starts at 1; reopening does
+not reset numbers. `id`/route `actionId` remain globally unique internal IDs.
+No write accepts `actionNumber`; receipts and original audit snapshots retain
+the internal IDs. The value is derived for existing data without a migration.
 
 Action fields = `{actionAt,description,result,followUpRequired,followUpNote,
 attachmentNotes}`. Limits/conditional validation are BR-05-07. State values:
@@ -126,7 +139,7 @@ current-cycle restriction applies to active assigned work. Completed historical 
 available by performedBy even after reopening; do not silently add current-cycle
 restriction to that query. Reject combining assignedTo and performedBy.
 
-Work summary = `{id,ticketId,ticketNumber,summary:description,cycle,state,
+Work summary = `{id,actionNumber,ticketId,ticketNumber,summary:description,cycle,state,
 assignee,performedBy,performedAt,ticketStatus,version}`; description summary is
 bounded to 120 characters; list ordered updatedAt/id descending, or performedAt/id
 descending when performedBy is supplied. A performed date range requires performedBy.
@@ -198,7 +211,7 @@ recentTickets:DashboardTicket[],recentPerformedActions:DashboardAction[],
 drillDown:StaffDrillDown}`.
 
 DashboardTicket = `{id,ticketNumber,summary,status,itPriority,owner:Person|null,
-updatedAt}`; summary <=120 characters. DashboardAction = `{id,ticketId,
+updatedAt}`; summary <=120 characters. DashboardAction = `{id,actionNumber,ticketId,
 ticketNumber,summary,state,performedAt}` with action summary <=120 characters.
 Each array <=5. Metrics use the specification's exact predicates. Each drillDown
 property is a same-origin relative route matching its metric/list; statusCounts

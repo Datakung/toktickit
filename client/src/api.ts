@@ -97,14 +97,15 @@ export interface AttachmentMetadata {
 export const ticketStatuses = ["NEW", "OPEN", "IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CLOSED", "REOPENED", "CANCELLED"] as const;
 export type TicketStatus = typeof ticketStatuses[number];
 export const statusLabel = (value: TicketStatus) => ({ NEW: "New", OPEN: "Open", IN_PROGRESS: "In Progress", WAITING_FOR_REQUESTER: "Waiting for Requester", RESOLVED: "Resolved", CLOSED: "Closed", REOPENED: "Reopened", CANCELLED: "Cancelled" })[value];
-export interface QueueQuery { q: string; categoryId: string; relatedSystemId: string; ownerId: string; unassigned: string; status: string; itPriority: string; sort: string; direction: string; page: number; pageSize: number }
+export interface DashboardListFilters { statusGroup?: string; updatedSince?: string; updatedUntil?: string; resolvedSince?: string; resolvedUntil?: string }
+export interface QueueQuery extends DashboardListFilters { q: string; categoryId: string; relatedSystemId: string; ownerId: string; unassigned: string; status: string; itPriority: string; sort: string; direction: string; page: number; pageSize: number }
 export interface QueueItem extends TicketListItem { requester: { id: number; displayName: string }; owner: { id: number; displayName: string } | null; version: number }
 export interface QueueResponse { items: QueueItem[]; page: number; pageSize: number; total: number; totalPages: number }
 export interface StaffOwner { id: number; displayName: string; role: UserRole }
 export function getStaffOwners(): Promise<{ items: StaffOwner[] }> { return getJson("/api/staff/owners"); }
 export function getStaffQueue(query: QueueQuery): Promise<QueueResponse> {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) if (value !== "") params.set(key, String(value));
+  for (const [key, value] of Object.entries(query)) if (value !== "" && value != null) params.set(key, String(value));
   return getJson(`/api/staff/tickets?${params}`);
 }
 export type TicketListSort = "updatedAt" | "createdAt" | "ticketNumber";
@@ -145,7 +146,7 @@ export interface AttachmentContent {
   mimeType: string;
 }
 
-export interface TicketListQuery {
+export interface TicketListQuery extends DashboardListFilters {
   search: string;
   categoryId: number | null;
   relatedSystemId: number | null;
@@ -224,7 +225,7 @@ export async function checkSystem(): Promise<SystemStatus> {
   };
 }
 
-async function getJson<T>(path: string): Promise<T> {
+export async function getJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { credentials: requestCredentials });
 
   return parseApiResponse<T>(response);
@@ -340,6 +341,7 @@ export async function getTickets(
     parameters.set("requestedPriority", query.requestedPriority);
   }
   if (query.status !== null) parameters.set("status", query.status);
+  for (const key of ["statusGroup", "updatedSince", "updatedUntil", "resolvedSince", "resolvedUntil"] as const) if (query[key]) parameters.set(key, query[key]!);
 
   const response = await fetch(`${API_URL}/api/tickets?${parameters.toString()}`, {
     credentials: requestCredentials,
@@ -447,7 +449,7 @@ export interface ActionFields {
   followUpRequired: boolean; followUpNote: string; attachmentNotes: string;
 }
 export interface ActionTakenRecord extends ActionFields {
-  id: number; ticketId: number; cycle: number; state: ActionState;
+  id: number; actionNumber: number; ticketId: number; cycle: number; state: ActionState;
   assignee: { id: number; displayName: string } | null;
   createdBy: { id: number; displayName: string };
   performedBy: { id: number; displayName: string } | null;

@@ -12,7 +12,9 @@
     "test:e2e:evidence": "playwright test e2e/lab-02/responsive.spec.ts",
     "test:e2e:lab3-evidence": "playwright test e2e/lab-03/release-evidence.spec.ts",
     "test:e2e:lab4-actions-evidence": "playwright test e2e/lab-04/actions-taken-flow.spec.ts",
-    "test:e2e:lab4-workflow-evidence": "playwright test e2e/lab-04/ticket-resolution.spec.ts"
+    "test:e2e:lab4-workflow-evidence": "playwright test e2e/lab-04/ticket-resolution.spec.ts",
+    "test:e2e:review": "playwright test --config playwright.dashboard-review.config.ts",
+    "test:e2e:lab4-dashboard-evidence": "playwright test --config playwright.dashboard-review.config.ts e2e/lab-04/dashboards.spec.ts"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
