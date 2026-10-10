@@ -43,6 +43,7 @@ function Invoke-QualityStep {
 
 Push-Location $taskRepoRoot
 try {
+    Invoke-QualityStep 'gate-regressions' (Get-Process -Id $PID).Path @('-NoProfile', '-File', (Join-Path $PSScriptRoot 'tests/lab4-quality-gate.test.ps1'))
     Invoke-QualityStep 'development-before' (Join-Path $taskRepoRoot 'server/node_modules/.bin/tsx.cmd') @('tests/development-snapshot.ts') (Join-Path $taskRepoRoot 'server')
     $taskManifest.developmentBefore = (Get-Content (Join-Path $taskEvidenceRoot 'development-before.log') -Raw).Trim()
     if ($taskManifest.developmentBefore -notmatch '^[a-f0-9]{64}$') { throw 'Invalid development baseline fingerprint.' }
@@ -80,18 +81,30 @@ try {
         client = $taskClientResults.numPassedTests
         browser = $taskBrowserResults.stats.expected
     }
-    $taskManifest.status = 'passed'
+    # Main checks alone are not a release pass: preservation must also verify.
+    $taskManifest.status = 'checks-passed'
 } catch {
     $taskManifest.status = 'failed'
     throw
 } finally {
+    $taskManifest.preservationVerified = $false
     try {
         Invoke-QualityStep 'development-after' (Join-Path $taskRepoRoot 'server/node_modules/.bin/tsx.cmd') @('tests/development-snapshot.ts') (Join-Path $taskRepoRoot 'server')
         $taskManifest.developmentAfter = (Get-Content (Join-Path $taskEvidenceRoot 'development-after.log') -Raw).Trim()
+        if ($taskManifest.developmentBefore -notmatch '^[a-f0-9]{64}$' -or $taskManifest.developmentAfter -notmatch '^[a-f0-9]{64}$') {
+            throw 'Development preservation requires two valid fingerprints.'
+        }
         if ($taskManifest.developmentBefore -ne $taskManifest.developmentAfter) {
-            $taskManifest.status = 'failed-development-state-changed'
+            if ($taskManifest.status -eq 'checks-passed') { $taskManifest.status = 'failed-development-state-changed' }
             throw 'Development database/uploads changed during the gate; do not claim preservation.'
         }
+        $taskManifest.preservationVerified = $true
+        if ($taskManifest.status -eq 'checks-passed') { $taskManifest.status = 'passed' }
+    } catch {
+        # Keep an earlier main-step failure (and its retained exit code). Final
+        # snapshot/read/validation errors must never persist a passing manifest.
+        if ($taskManifest.status -in @('running', 'checks-passed')) { $taskManifest.status = 'failed-development-verification' }
+        throw
     } finally {
         $taskManifest.finishedAtUtc = [DateTimeOffset]::UtcNow.ToString('o')
         $taskManifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $taskEvidenceRoot 'manifest.json') -Encoding utf8

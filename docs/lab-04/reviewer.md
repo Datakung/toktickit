@@ -511,3 +511,29 @@ their blank-at-EOF Git whitespace rule is scoped out via `.gitattributes`.
 This publication record is documentation-only and does not claim a fresh run.
 No quality peer approval, staging/main merge, completed PDF or Project Done
 status exists yet. Issue #44 remains open for the remaining release gates.
+
+### PR #50 changes requested and corrected, October 11
+
+Phanuwit (`auto4496`) requested changes at exact head
+`95b6689f3245cc517dce32772343eb47cb3c53b1` at 00:26:18 Bangkok on 2026-10-11.
+Actual review [5480101784](https://github.com/Datakung/toktickit/pull/50#pullrequestreview-5480101784)
+reported one P2 [finding](https://github.com/Datakung/toktickit/pull/50#discussion_r4238547399):
+a failed final snapshot or unreadable final log could throw while still persisting
+`passed`. The reviewer reproduced that failure and independently passed the
+ordinary 298 server / 211 client / 49 browser run (2.7m, no skips/flaky/retries),
+both builds, Prisma validation, diff checks and four clean audits. Reviewer
+baseline/uploads matched and all 18 screenshot hashes matched; disposable
+reviewer targets and an empty migrated development stand-in were used, not the
+author's database. Review-only container substitutions/evidence routing were
+restored; no test deadline or assertion was changed.
+
+The author requested "Fix it". The agent reproduced the manifest bug, deferred
+success until valid matching fingerprints, caught final-verification errors,
+preserved earlier failures and added ten database-free parsed-production
+regressions. All ten pass; the full quality gate invokes them automatically.
+Both builds and the dirty-feature FinalMain refusal were checked. PostgreSQL
+was unreachable, so no fresh database-backed full gate or preservation digest
+is claimed. Existing candidate evidence was not overwritten; correction output
+and source digests are in `artifacts/lab-04/quality-gate/review-fix/`.
+This is the author's correction, not reviewer reapproval or a merge. The finding
+remains for the peer to recheck; #44/main/PDF/Project acceptance remain pending.

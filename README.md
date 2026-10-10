@@ -135,6 +135,12 @@ well as Tickets/actions/accounts/files. The gate fails on changed development
 state, failed/skipped/todo tests or flaky browser coverage. Browser retries are
 explicitly zero; review ports 5183/3100 do not reuse the development services.
 
+The gate also runs ten database-free finalization regression checks. Its report
+is marked `passed` only after two valid development fingerprints match; final
+snapshot/read failures are recorded as failures and never erase an earlier
+failed step. Run the checks alone with
+`pwsh -NoProfile -File scripts/tests/lab4-quality-gate.test.ps1`.
+
 After the peer-approved release is merged into a clean `main` checkout, rerun
 `./scripts/lab4-quality-gate.ps1 -FinalMain`. That mode refuses feature branches,
 dirty starting checkouts and main without the accepted dashboard increment.

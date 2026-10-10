@@ -61,6 +61,14 @@ implementation/evidence 15d8b38, original-log attributes d818986. Source/image
 fingerprints still match. The manifest remains the truthful precommit record;
 publication documentation is not a newly executed gate or peer acceptance.
 
+PR #50 subsequently received one P2 requested change at 95b6689: failed final
+preservation verification could still persist `passed`. The October 11 fix
+defers success and adds ten parsed-production regressions. The historical logs,
+manifest, images and original source hashes here are intentionally unchanged;
+the modified script's new provenance and verification limits are recorded in
+[review-fix/README.md](review-fix/README.md). Original gate hashes describe the
+original candidate, not the corrected script or a new final-main run.
+
 ## Remaining release gates
 
 - Peer-review the quality changes and merge them into lab4-staging.

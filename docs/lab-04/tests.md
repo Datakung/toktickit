@@ -32,6 +32,7 @@ status is implied by a branch pass.
 | API-10 | API | AC-12 | Additive Ticket/work-list filters match each dashboard predicate and retain existing defaults/errors | server/tests/lab-04/dashboard-drill-down.api.test.ts; dashboard-query.unit.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts | Passed: synchronized snapshot insert, inclusive performer boundaries/ties/prior cycles and auth guards; each card comparison lives in role API files |
 | API-11 | API/errors | AC-04,13 | Session/CSRF restrictions, protected resources and generic errors; service remains healthy after failure | server/tests/lab-04/actions-taken.api.test.ts; requester-dashboard.api.test.ts; staff-dashboard.api.test.ts; dashboard-drill-down.api.test.ts; safe-errors.api.test.ts | Existing guards pass; five wider safe-error/recovery cases pass on the release candidate; final main pending |
 | HARD-01 | Upload/proxy regression | AC-13,14,16 | Aborted multipart before async path assignment leaves no orphan; service stays healthy; default proxy trust is off and mapped unrelated addresses stay untrusted | server/tests/lab-04/upload-hardening.test.ts; proxy-trust-hardening.test.ts | Three candidate cases passed with patched dependencies |
+| GATE-01 | Release-evidence regression | AC-14,16 | Only valid matching final fingerprints permit passed; external snapshot/log-read/invalid/missing/mismatched fingerprints fail; earlier failures/exit codes persist | scripts/tests/lab4-quality-gate.test.ps1 | Ten database-free cases pass against parsed production finalization/step code; run automatically by the quality gate |
 | API-12 | API/numbering | AC-02,04,06,07,11,12 | Interleaved Ticket IDs, tied creation times, page 2, prior/cancelled work, filtered work/dashboard parity, preserved write/replay/audit IDs and forged-number rejection | server/tests/lab-04/action-numbering.api.test.ts | Passed: two cases in the complete 290-test server rerun |
 | UI-01 | Component | AC-02,03,05,06,13 | View-first/Edit/Close detail, direct Start/Complete/Cancel, return focus/discard, late-history protection, independent field/assignment/state saves, required feedback, input retention, exact retry key, earlier-success/later-failure feedback and saved-but-refresh-failed state | client/tests/lab-04/ActionsTaken.test.tsx | Passed: 44 Action component cases |
 | UI-02 | Component | AC-04,07,08,09,13 | Gate/history/reopen/read-only view, paging, advisory indication and safe conflict reload; labelled checklist colours exclude stale/unknown positive results; separate opening/progress stages and explicit target retain all valid transitions | client/tests/lab-04/TicketWorkflow.test.tsx | Passed: 32 workflow component cases after October 9 colour refinement |
@@ -939,3 +940,43 @@ in [PR #50](https://github.com/Datakung/toktickit/pull/50) to `lab4-staging`.
 Source/screenshot fingerprints were rechecked before publication and match the
 retained evidence. Publication documentation adds no product/test changes and
 does not turn the dirty-start candidate run into a clean-main or new test run.
+
+## PR #50 review correction, 2026-10-11
+
+Phanuwit requested changes at reviewed head 95b6689, review
+[5480101784](https://github.com/Datakung/toktickit/pull/50#pullrequestreview-5480101784).
+His independent ordinary run passed 298 server / 211 client / 49 Chromium cases,
+both builds, Prisma validation, four clean audits and unchanged reviewer
+development/upload fingerprints. His targets were disposable, including an
+empty migrated development stand-in, not the author's database. He reproduced
+one valid P2: a failed final snapshot/read could persist a `passed` manifest.
+
+The new standalone PowerShell regression parses the actual production main-check
+status assignment, `Invoke-QualityStep` function and finalization block. It uses
+external `.cmd` fixtures under verified unique OS-temp children and injects only
+the final log-read error. It never calls product/test/database/Docker commands
+or rewrites repository evidence. The initial run reproduced the bug (5/10 passed);
+after the fix, all 10 pass. Matching success, external exit 1, unreadable log,
+invalid final digest, missing baseline, changed state and earlier failures are
+covered. Retained exit codes/timestamps, preservation flags and restored working
+location are asserted. No extra dependency, test skip or deadline change.
+
+Main checks now yield `checks-passed`, not `passed`. Finalization validates both
+64-hex fingerprints, verifies equality, then permits `passed` only if the main
+checks also passed. Snapshot/read/validation errors persist
+`failed-development-verification`; a mismatch after otherwise passing checks
+persists `failed-development-state-changed`. Earlier failures retain `failed`
+and their original step records. `preservationVerified` is true only for an
+actually verified match. The full gate runs these regressions before its normal
+checks and retains their output.
+
+Both builds passed; the frontend's first attempt hit sandbox EPERM resolving
+main.tsx and passed after an authorized unsandboxed retry (Vite 1.04s).
+The dirty-feature `-FinalMain` guard still refuses before running or replacing
+evidence. A read-only live fingerprint attempt could not connect to PostgreSQL
+at localhost:5432. No container was started or development data migrated/reset.
+Therefore no new full database-backed gate, preservation hash, audit inventory,
+browser run, final-main or reviewer reapproval is claimed for this correction.
+Historical candidate reports/images/source fingerprints remain untouched;
+the changed gate/harness hashes and before/after regression logs are separate in
+[review-fix evidence](../../artifacts/lab-04/quality-gate/review-fix/README.md).

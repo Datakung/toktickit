@@ -290,6 +290,16 @@ quality PR. The agent published the verified candidate in
 the original test/provenance records and recorded publication separately from
 independent approval or final release. Issue #44 is not complete.
 
+## Review correction interaction (2026-10-11)
+
+After "He reviewed", the agent read the actual PR #50 requested-changes review
+and confirmed the final-snapshot manifest bug in the source. The author then
+said "Fix it". The agent reproduced the failure with parsed-production
+regressions, fixed success/failure handling, preserved earlier failures and added
+automatic gate coverage. Ten regression checks and both builds passed; the
+database was unreachable, so no new full gate or preservation hash was invented.
+The author's reflection below is unchanged by this coding interaction.
+
 ## My Reflection
 
 Supplied by the author on 2026-10-10; lightly edited for grammar without adding

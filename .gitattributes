@@ -1,2 +1,3 @@
 # Retain complete terminal evidence, including its original trailing blank lines.
 artifacts/lab-04/quality-gate/*.log whitespace=-blank-at-eof
+artifacts/lab-04/quality-gate/review-fix/*.log whitespace=-blank-at-eof

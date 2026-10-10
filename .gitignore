@@ -16,4 +16,5 @@ server/prisma/*.db
 # logs & OS
 *.log
 !artifacts/lab-04/quality-gate/*.log
+!artifacts/lab-04/quality-gate/review-fix/*.log
 .DS_Store
