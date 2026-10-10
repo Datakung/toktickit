@@ -1,0 +1,658 @@
+{
+  "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+  "startedAtUtc": "2026-10-10T19:48:17.026Z",
+  "environment": "guarded disposable E2E fixtures; no development writes",
+  "developmentBefore": "53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3",
+  "query": "SELECT id, status, \"requesterId\", \"ownerId\", \"itPriority\", \"updatedAt\", \"resolvedAt\", \"resolutionCycle\" FROM \"Ticket\"; SELECT id, \"ticketId\", cycle, state, \"assigneeId\", \"performedById\", \"performedAt\" FROM \"ActionTaken\"",
+  "comparisons": [
+    {
+      "role": "REQUESTER",
+      "actorId": 11,
+      "fixture": "dashboard.requester@example.test",
+      "asOf": "2026-10-10T19:48:18.465Z",
+      "recentFrom": "2026-10-03T19:48:18.465Z",
+      "counts": [
+        {
+          "metric": "activeTickets",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/tickets?statusGroup=active",
+          "passed": true
+        },
+        {
+          "metric": "waitingForMe",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/tickets?status=WAITING_FOR_REQUESTER",
+          "passed": true
+        },
+        {
+          "metric": "recentlyUpdated",
+          "api": 4,
+          "database": 4,
+          "drillDownTotal": 4,
+          "href": "/tickets?updatedSince=2026-10-03T19%3A48%3A18.465Z&updatedUntil=2026-10-10T19%3A48%3A18.465Z",
+          "passed": true
+        },
+        {
+          "metric": "recentlyResolved",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/tickets?status=RESOLVED&resolvedSince=2026-10-03T19%3A48%3A18.465Z&resolvedUntil=2026-10-10T19%3A48%3A18.465Z",
+          "passed": true
+        }
+      ],
+      "boundedListOrderPassed": true
+    },
+    {
+      "role": "REQUESTER",
+      "actorId": 12,
+      "fixture": "dashboard.empty@example.test",
+      "asOf": "2026-10-10T19:48:18.766Z",
+      "recentFrom": "2026-10-03T19:48:18.766Z",
+      "counts": [
+        {
+          "metric": "activeTickets",
+          "api": 0,
+          "database": 0,
+          "drillDownTotal": 0,
+          "href": "/tickets?statusGroup=active",
+          "passed": true
+        },
+        {
+          "metric": "waitingForMe",
+          "api": 0,
+          "database": 0,
+          "drillDownTotal": 0,
+          "href": "/tickets?status=WAITING_FOR_REQUESTER",
+          "passed": true
+        },
+        {
+          "metric": "recentlyUpdated",
+          "api": 0,
+          "database": 0,
+          "drillDownTotal": 0,
+          "href": "/tickets?updatedSince=2026-10-03T19%3A48%3A18.766Z&updatedUntil=2026-10-10T19%3A48%3A18.766Z",
+          "passed": true
+        },
+        {
+          "metric": "recentlyResolved",
+          "api": 0,
+          "database": 0,
+          "drillDownTotal": 0,
+          "href": "/tickets?status=RESOLVED&resolvedSince=2026-10-03T19%3A48%3A18.766Z&resolvedUntil=2026-10-10T19%3A48%3A18.766Z",
+          "passed": true
+        }
+      ],
+      "boundedListOrderPassed": true
+    },
+    {
+      "role": "IT_STAFF",
+      "actorId": 6,
+      "fixture": "mali.support@example.test",
+      "asOf": "2026-10-10T19:48:19.051Z",
+      "recentFrom": "2026-10-03T19:48:19.051Z",
+      "counts": [
+        {
+          "metric": "unassignedTickets",
+          "api": 7,
+          "database": 7,
+          "drillDownTotal": 7,
+          "href": "/staff/tickets?statusGroup=active&unassigned=true",
+          "passed": true
+        },
+        {
+          "metric": "myTickets",
+          "api": 5,
+          "database": 5,
+          "drillDownTotal": 5,
+          "href": "/staff/tickets?statusGroup=active&ownerId=6",
+          "passed": true
+        },
+        {
+          "metric": "myAssignedActions",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/actions?assignedTo=me&stateGroup=active",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.NEW",
+          "api": 6,
+          "database": 6,
+          "drillDownTotal": 6,
+          "href": "/staff/tickets?status=NEW",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.OPEN",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=OPEN",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.IN_PROGRESS",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/staff/tickets?status=IN_PROGRESS",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.WAITING_FOR_REQUESTER",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=WAITING_FOR_REQUESTER",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.RESOLVED",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=RESOLVED",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.CLOSED",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/staff/tickets?status=CLOSED",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.REOPENED",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/staff/tickets?status=REOPENED",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.CANCELLED",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=CANCELLED",
+          "passed": true
+        },
+        {
+          "metric": "priorityCounts.LOW",
+          "api": 4,
+          "database": 4,
+          "drillDownTotal": 4,
+          "href": "/staff/tickets?statusGroup=active&itPriority=LOW",
+          "passed": true
+        },
+        {
+          "metric": "priorityCounts.MEDIUM",
+          "api": 3,
+          "database": 3,
+          "drillDownTotal": 3,
+          "href": "/staff/tickets?statusGroup=active&itPriority=MEDIUM",
+          "passed": true
+        },
+        {
+          "metric": "priorityCounts.HIGH",
+          "api": 5,
+          "database": 5,
+          "drillDownTotal": 5,
+          "href": "/staff/tickets?statusGroup=active&itPriority=HIGH",
+          "passed": true
+        }
+      ],
+      "boundedListOrderPassed": true
+    },
+    {
+      "role": "ADMINISTRATOR",
+      "actorId": 10,
+      "fixture": "admin@example.test",
+      "asOf": "2026-10-10T19:48:19.436Z",
+      "recentFrom": "2026-10-03T19:48:19.436Z",
+      "counts": [
+        {
+          "metric": "unassignedTickets",
+          "api": 7,
+          "database": 7,
+          "drillDownTotal": 7,
+          "href": "/staff/tickets?statusGroup=active&unassigned=true",
+          "passed": true
+        },
+        {
+          "metric": "myTickets",
+          "api": 0,
+          "database": 0,
+          "drillDownTotal": 0,
+          "href": "/staff/tickets?statusGroup=active&ownerId=10",
+          "passed": true
+        },
+        {
+          "metric": "myAssignedActions",
+          "api": 0,
+          "database": 0,
+          "drillDownTotal": 0,
+          "href": "/staff/actions?assignedTo=me&stateGroup=active",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.NEW",
+          "api": 6,
+          "database": 6,
+          "drillDownTotal": 6,
+          "href": "/staff/tickets?status=NEW",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.OPEN",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=OPEN",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.IN_PROGRESS",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/staff/tickets?status=IN_PROGRESS",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.WAITING_FOR_REQUESTER",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=WAITING_FOR_REQUESTER",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.RESOLVED",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=RESOLVED",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.CLOSED",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/staff/tickets?status=CLOSED",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.REOPENED",
+          "api": 1,
+          "database": 1,
+          "drillDownTotal": 1,
+          "href": "/staff/tickets?status=REOPENED",
+          "passed": true
+        },
+        {
+          "metric": "statusCounts.CANCELLED",
+          "api": 2,
+          "database": 2,
+          "drillDownTotal": 2,
+          "href": "/staff/tickets?status=CANCELLED",
+          "passed": true
+        },
+        {
+          "metric": "priorityCounts.LOW",
+          "api": 4,
+          "database": 4,
+          "drillDownTotal": 4,
+          "href": "/staff/tickets?statusGroup=active&itPriority=LOW",
+          "passed": true
+        },
+        {
+          "metric": "priorityCounts.MEDIUM",
+          "api": 3,
+          "database": 3,
+          "drillDownTotal": 3,
+          "href": "/staff/tickets?statusGroup=active&itPriority=MEDIUM",
+          "passed": true
+        },
+        {
+          "metric": "priorityCounts.HIGH",
+          "api": 5,
+          "database": 5,
+          "drillDownTotal": 5,
+          "href": "/staff/tickets?statusGroup=active&itPriority=HIGH",
+          "passed": true
+        }
+      ],
+      "boundedListOrderPassed": true
+    }
+  ],
+  "browserAudit": [
+    {
+      "screen": "requester-dashboard-1440",
+      "width": 1440,
+      "route": "/dashboard",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/requester-dashboard-1440.png"
+    },
+    {
+      "screen": "requester-dashboard-768",
+      "width": 768,
+      "route": "/dashboard",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/requester-dashboard-768.png"
+    },
+    {
+      "screen": "requester-dashboard-390",
+      "width": 390,
+      "route": "/dashboard",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/requester-dashboard-390.png"
+    },
+    {
+      "screen": "requester-tickets-1440",
+      "width": 1440,
+      "route": "/tickets",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/requester-tickets-1440.png"
+    },
+    {
+      "screen": "requester-tickets-768",
+      "width": 768,
+      "route": "/tickets",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/requester-tickets-768.png"
+    },
+    {
+      "screen": "requester-tickets-390",
+      "width": 390,
+      "route": "/tickets",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/requester-tickets-390.png"
+    },
+    {
+      "screen": "requester-create-1440",
+      "width": 1440,
+      "route": "/tickets/new",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/requester-create-1440.png"
+    },
+    {
+      "screen": "requester-create-768",
+      "width": 768,
+      "route": "/tickets/new",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/requester-create-768.png"
+    },
+    {
+      "screen": "requester-create-390",
+      "width": 390,
+      "route": "/tickets/new",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/requester-create-390.png"
+    },
+    {
+      "fixture": "dashboard.requester@example.test",
+      "pageErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedSignedOutSessionProbes": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "url": "http://127.0.0.1:3100/api/auth/me",
+          "page": "http://127.0.0.1:5183/login"
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "url": "http://127.0.0.1:3100/api/auth/me",
+          "page": "http://127.0.0.1:5183/login"
+        }
+      ]
+    },
+    {
+      "screen": "staff-dashboard-1440",
+      "width": 1440,
+      "route": "/staff/dashboard",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/staff-dashboard-1440.png"
+    },
+    {
+      "screen": "staff-dashboard-768",
+      "width": 768,
+      "route": "/staff/dashboard",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/staff-dashboard-768.png"
+    },
+    {
+      "screen": "staff-dashboard-390",
+      "width": 390,
+      "route": "/staff/dashboard",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/staff-dashboard-390.png"
+    },
+    {
+      "screen": "staff-work-1440",
+      "width": 1440,
+      "route": "/staff/actions?assignedTo=me&stateGroup=active",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/staff-work-1440.png"
+    },
+    {
+      "screen": "staff-work-768",
+      "width": 768,
+      "route": "/staff/actions?assignedTo=me&stateGroup=active",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/staff-work-768.png"
+    },
+    {
+      "screen": "staff-work-390",
+      "width": 390,
+      "route": "/staff/actions?assignedTo=me&stateGroup=active",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/staff-work-390.png"
+    },
+    {
+      "screen": "staff-tickets-1440",
+      "width": 1440,
+      "route": "/staff/tickets",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/staff-tickets-1440.png"
+    },
+    {
+      "screen": "staff-tickets-768",
+      "width": 768,
+      "route": "/staff/tickets",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/staff-tickets-768.png"
+    },
+    {
+      "screen": "staff-tickets-390",
+      "width": 390,
+      "route": "/staff/tickets",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/staff-tickets-390.png"
+    },
+    {
+      "fixture": "mali.support@example.test",
+      "pageErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedSignedOutSessionProbes": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "url": "http://127.0.0.1:3100/api/auth/me",
+          "page": "http://127.0.0.1:5183/login"
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "url": "http://127.0.0.1:3100/api/auth/me",
+          "page": "http://127.0.0.1:5183/login"
+        }
+      ]
+    },
+    {
+      "screen": "admin-dashboard-1440",
+      "width": 1440,
+      "route": "/staff/dashboard",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/admin-dashboard-1440.png"
+    },
+    {
+      "screen": "admin-dashboard-768",
+      "width": 768,
+      "route": "/staff/dashboard",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/admin-dashboard-768.png"
+    },
+    {
+      "screen": "admin-dashboard-390",
+      "width": 390,
+      "route": "/staff/dashboard",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/admin-dashboard-390.png"
+    },
+    {
+      "screen": "admin-users-1440",
+      "width": 1440,
+      "route": "/admin/users",
+      "overflow": {
+        "root": 1440,
+        "body": 1440,
+        "viewport": 1440
+      },
+      "screenshot": "supplementary-screenshots/admin-users-1440.png"
+    },
+    {
+      "screen": "admin-users-768",
+      "width": 768,
+      "route": "/admin/users",
+      "overflow": {
+        "root": 768,
+        "body": 768,
+        "viewport": 768
+      },
+      "screenshot": "supplementary-screenshots/admin-users-768.png"
+    },
+    {
+      "screen": "admin-users-390",
+      "width": 390,
+      "route": "/admin/users",
+      "overflow": {
+        "root": 390,
+        "body": 390,
+        "viewport": 390
+      },
+      "screenshot": "supplementary-screenshots/admin-users-390.png"
+    },
+    {
+      "fixture": "admin@example.test",
+      "pageErrors": [],
+      "unexpectedConsoleErrors": [],
+      "expectedSignedOutSessionProbes": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "url": "http://127.0.0.1:3100/api/auth/me",
+          "page": "http://127.0.0.1:5183/login"
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+          "url": "http://127.0.0.1:3100/api/auth/me",
+          "page": "http://127.0.0.1:5183/login"
+        }
+      ]
+    }
+  ],
+  "status": "passed",
+  "developmentAfter": "53a3235133832dae4df2e5e1e40711f5b844796d78b2cbdd776185e1d1d62ab3",
+  "preservationVerified": true,
+  "finishedAtUtc": "2026-10-10T19:48:29.426Z"
+}

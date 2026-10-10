@@ -1,7 +1,9 @@
 # Lab 4 AI Use and Reflection
 
 Status: Actual interaction record through peer-accepted Issues #40-43 and the
-Issue #44 release-candidate work on 2026-10-10. Final release remains pending.
+Issue #44 release-candidate work on 2026-10-10 and author-authorized final-main
+verification on October 11. PR #50/#51 are peer-approved/merged and the complete
+main gate passed. Final evidence publication and author visual/PDF approval remain.
 
 Tool: OpenAI Codex desktop. On 2026-10-10 the author reported the selected model
 as "GPT-Sol 6.1". This is the author's selection record, not an independently
@@ -299,6 +301,20 @@ regressions, fixed success/failure handling, preserved earlier failures and adde
 automatic gate coverage. Ten regression checks and both builds passed; the
 database was unreachable, so no new full gate or preservation hash was invented.
 The author's reflection below is unchanged by this coding interaction.
+
+## Final verification continuation (2026-10-11)
+
+Final verification interaction, October 11: after the agent verified PR #51's
+approval/merge and reported premature Issue #44 closure, the author said
+"yeah do it" to reopening and final verification. The agent restored Started,
+preserved candidate evidence, ran the unchanged accepted clean-main gate, retained
+fresh screenshots and added a separate reproducible raw-row/dashboard comparison
+and healthy-screen audit. Its Category selector timeout and overly broad console
+assertion were corrected as harness issues with both original logs preserved;
+expected signed-out auth probes are narrowly identified. No application code,
+development records, model history or author reflection was changed. This is a
+supplementary interaction, not an eleventh selected key prompt. The nine-part PDF
+is a review copy until final author acceptance and evidence publication exist.
 
 ## My Reflection
 

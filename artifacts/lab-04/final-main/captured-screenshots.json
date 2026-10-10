@@ -1,0 +1,1538 @@
+[
+  {
+    "source": "client/test-results/lab-02-create-ticket-redir-7e049-initial-attachments-succeed-chromium/creation-success-1440.png",
+    "destination": "screenshots/lab-02-create-ticket-redir-7e049-initial-attachments-succeed-chromium/creation-success-1440.png",
+    "capturedAtUtc": "2026-10-10T19:41:47.4438846Z",
+    "sha256": "4b36ea4fe1a9422253147f6f22902025c1ab51b5c90b8bb2302065826f880ece",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-create-ticket-redir-7e049-initial-attachments-succeed-chromium/creation-success-390.png",
+    "destination": "screenshots/lab-02-create-ticket-redir-7e049-initial-attachments-succeed-chromium/creation-success-390.png",
+    "capturedAtUtc": "2026-10-10T19:41:47.6022355Z",
+    "sha256": "ea4dde8d5981121699e353f6049536f4bc731977658113f2817582fd2cb8f210",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-create-ticket-uploa-08942-cket-without-duplicating-it-chromium/creation-failure-1440.png",
+    "destination": "screenshots/lab-02-create-ticket-uploa-08942-cket-without-duplicating-it-chromium/creation-failure-1440.png",
+    "capturedAtUtc": "2026-10-10T19:41:50.2118281Z",
+    "sha256": "4d756051dfe6a5494f3a239989ad91233a80fdcb36475c2e6fe66b7daed1f1b3",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-create-ticket-uploa-08942-cket-without-duplicating-it-chromium/creation-failure-390.png",
+    "destination": "screenshots/lab-02-create-ticket-uploa-08942-cket-without-duplicating-it-chromium/creation-failure-390.png",
+    "capturedAtUtc": "2026-10-10T19:41:50.3581497Z",
+    "sha256": "9768a8aca5c90ec907710b5c0a58ad8b780246bb7d40f433cf146d598b6bb086",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/create-ticket/initial-desktop.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/create-ticket/initial-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:04.2211642Z",
+    "sha256": "fb169f6569192f8b5eaa3892d48a91b57f13ba6aa68ad360b3fb9c97aee3f3c2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/create-ticket/initial-mobile.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/create-ticket/initial-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:06.8209969Z",
+    "sha256": "1c1b74316c158d3e8b98a2c4a9070639ada213906eb11585cd1f8924b61c902b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/create-ticket/initial-tablet.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/create-ticket/initial-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:05.6217422Z",
+    "sha256": "e2c7f9bca3962491821ef6264672f938936695708a0018be6c0e380125d6c74f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/my-tickets/requester-a-desktop.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/my-tickets/requester-a-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:04.7673329Z",
+    "sha256": "d47627e25cc55ae2b0b0656dbdc6f617fc0a21f457708bbc40c73a0b3738e4d7",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/my-tickets/requester-a-mobile.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/my-tickets/requester-a-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:07.2945174Z",
+    "sha256": "352fb0c6b9cf967a20e2e050c48ec8eb7694410eecea9720ae0f1bbedfdb045b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/my-tickets/requester-a-tablet.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/my-tickets/requester-a-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:06.0782805Z",
+    "sha256": "b5a1c47b9691ef48c6b783b9162b246a9a987704b1a60e628735a9f071e9af32",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/ticket-detail/mobile.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/ticket-detail/mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:07.6113216Z",
+    "sha256": "9b9d7f6c0b551c28c81d172df397500587c41429437edcff0cfabb87a61fd898",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/ticket-detail/owned-desktop.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/ticket-detail/owned-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:05.2408924Z",
+    "sha256": "bc222fa1888dea6154ad23e171502398b8c68994184ebce4bd4aef2d78080ba4",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/ticket-detail/tablet.png",
+    "destination": "screenshots/lab-02-responsive-validate-eb992-tail-at-all-contract-widths-chromium/responsive-evidence/ticket-detail/tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:06.5017055Z",
+    "sha256": "3efad354797cd51375cf86a5edff621e071c24d43a6f4f18522de385f52dd1fe",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-admin-users-Adminis-2a428-t-390px-with-keyboard-focus-chromium/admin-390.png",
+    "destination": "screenshots/lab-03-admin-users-Adminis-2a428-t-390px-with-keyboard-focus-chromium/admin-390.png",
+    "capturedAtUtc": "2026-10-10T19:42:25.406627Z",
+    "sha256": "eab439c4b23303208d6a38985fc6f2e7b18ed618bab9f22ccec4774488bac6a4",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-admin-users-Adminis-a4ce0-t-768px-with-keyboard-focus-chromium/admin-768.png",
+    "destination": "screenshots/lab-03-admin-users-Adminis-a4ce0-t-768px-with-keyboard-focus-chromium/admin-768.png",
+    "capturedAtUtc": "2026-10-10T19:42:23.454802Z",
+    "sha256": "14dcf39be28c280b76e8739dd21696f7e7afb2290bde95eefe01bd7786a816de",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-admin-users-Adminis-b265f--1440px-with-keyboard-focus-chromium/admin-1440.png",
+    "destination": "screenshots/lab-03-admin-users-Adminis-b265f--1440px-with-keyboard-focus-chromium/admin-1440.png",
+    "capturedAtUtc": "2026-10-10T19:42:21.3897728Z",
+    "sha256": "b3ac67776aa13ac80e5e5fba821e3edeb6370eff59253e17f46729c4dc765a88",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/invalid-login-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/invalid-login-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:39.0782526Z",
+    "sha256": "5cf93e35439b0bff3bc069135b3c7685f4943b7e73dd2f1a25842cb84e1e0333",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:38.2136721Z",
+    "sha256": "0163edc977540c2d1beb9298d6c10bacb214b2a0bd8a9c1e6b9e3af4545fdfe5",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:38.69341Z",
+    "sha256": "db089c369e820a120bb178bb331ff9466402c8e5dcfe6ca30d1411673526717b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:38.47727Z",
+    "sha256": "affab3a076fa71a1b32ddd29a61e6ac6d2e2d7ff70e20701a40144df031c06a0",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/mandatory-change-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/mandatory-change-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:46.9080655Z",
+    "sha256": "25a7da1eef2e6d6a332ad3611bc1ac9e2ba415a1b17b3cb0b513e63cc83f2891",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/mandatory-change-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/mandatory-change-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:47.0831475Z",
+    "sha256": "d37d5b5f7b3bcc5c24876c48b87eeb0ca0428490b7361e1ade56224d1a6809a4",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/mandatory-change-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/mandatory-change-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:47.0031628Z",
+    "sha256": "2f1d7b8207f8e3eb49a102674c6b2354c3af8abffa3613fa3ae65ce16f40100f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:57.0947161Z",
+    "sha256": "fb169f6569192f8b5eaa3892d48a91b57f13ba6aa68ad360b3fb9c97aee3f3c2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:59.129135Z",
+    "sha256": "1c1b74316c158d3e8b98a2c4a9070639ada213906eb11585cd1f8924b61c902b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:58.1461083Z",
+    "sha256": "a250d9e0162f90635bcd197ab87f02e1222709379aeb2b111700006e4e237b7f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:56.7712486Z",
+    "sha256": "b8bfced40e9808bf7138bd62af3d000aff0431099f6a7bce1b0a175abd22b5ba",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:58.9221037Z",
+    "sha256": "2547f439f3312d379a4d0b7d7529d6374cb64cf46067e79f3135c4384d31a975",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:57.9138356Z",
+    "sha256": "9d3b2199f535d60bfd5910a240acba8fce66c64f0a7615403b962e707650497c",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:57.5634097Z",
+    "sha256": "6207129c87cad983a769fd925ca3bf63fdede0aef31dfe01cc9e81de08cde824",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:59.4922514Z",
+    "sha256": "7e883a68843d2e35bd88e620a0831e66686c8845379542d3cd2ff9062b34c22b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:58.5491716Z",
+    "sha256": "89935234df8dc79b2c306c251f07a165a189242fd668e1e05e69b9b36086290d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/resolution-indication-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/resolution-indication-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:59.7861979Z",
+    "sha256": "3bcdff118672c2510d8745baf2c0d3854355d283b23edea11a1168ca54a6f42b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/staff-access-denied-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/staff-access-denied-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:43:00.0001928Z",
+    "sha256": "c75fa89ba41e678af383d7b96f531956330c95f3ced4e29e7a247f55a5180898",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/ticket-detail-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/ticket-detail-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:57.4686173Z",
+    "sha256": "324637965daf354eda02753ea9c7041020eca0ef328d58418993885cf54faed5",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/ticket-detail-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/ticket-detail-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:59.4012334Z",
+    "sha256": "0c1e08839fa59c89d0066d4169d1bcf8f5d615c818867aa0e8e3d3273df526b2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/ticket-detail-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/ticket-detail-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:58.4411088Z",
+    "sha256": "02169bc3a8e9f8626c48cfaeacf0672c353fcbc2fe53b01edd53318645d3427e",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/filters-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/filters-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:48.7560242Z",
+    "sha256": "c2becf579f2aa3adaab12b205c74d324b0c23fbd4391b929dbfc89219721b2b6",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/filters-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/filters-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:49.7881523Z",
+    "sha256": "ba83a458d6abeb4dcd2b6f18bf10d3a012560db09cced04bc0a3ee37a2032a4d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/filters-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/filters-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:49.294618Z",
+    "sha256": "1d6123c76e6d5b5740d76db248f410ed0bee16860e805bc429b934bdacb0def8",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/no-results-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/no-results-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:51.1023456Z",
+    "sha256": "edb20998301507f7b618bd07fe1baa988e2d3b1da6c8137b54a40c5241cf1cae",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:48.6350585Z",
+    "sha256": "5f7c4f044144dcab033cf24b929434b409068d8cbf0ad4155b240e982544e88f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:49.6691618Z",
+    "sha256": "4215ffd91836b9232ff09a232be442e017f7e92f6e5eaec2d8933446c602f43d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:49.1711475Z",
+    "sha256": "87c454f4caec6038af619a1e18dd67ca2a66319777498a3e818420ac654dbd46",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/ticket-row-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/ticket-row-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:48.862255Z",
+    "sha256": "e16830bb7514217c5caea2fa3d76f82222dfa2ac686e6fe82624c84c43eee329",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/ticket-row-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/ticket-row-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:49.8988086Z",
+    "sha256": "e7298820c6178779713ea7a8588ee28e1a55c4f3d00beaa672f85e7f117ebe63",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/ticket-row-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/ticket-row-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:49.4226852Z",
+    "sha256": "237755075002f572fc239465599d70953206bd34fb97ce2e28978dd27ff75d66",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/detail-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/detail-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:54.5092415Z",
+    "sha256": "e510f8037ec70deb7bf0007a21f24e02a6917d5ffed8267fcb0591df08c0cba9",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/detail-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/detail-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.4035103Z",
+    "sha256": "fc3c4218b9bd555f7d5d466542bc65dce2fe653aa6e033d6dbe1e1bc00103088",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/detail-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/detail-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:54.9631206Z",
+    "sha256": "7e4919b553c3d0dfaf312fd757424f3fc244d59e8ae0154d1c712cb75331d1c1",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/internal-notes-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/internal-notes-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:54.8172554Z",
+    "sha256": "3cb426710dd415da6e0fd09a8c81e5b7dd8d4ddf1e2f0ea530a049d137bb8541",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/internal-notes-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/internal-notes-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.6732941Z",
+    "sha256": "80d85f245dd8eeacf2c9d8ce9dd3d1e150ac505e10e4b7a0fbe5531394031169",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/internal-notes-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/internal-notes-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.263027Z",
+    "sha256": "4a94ea43a3d9db12cb5553abf2109d0681a09da30f1f5f260d6eca3f163c3e13",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/operations-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/operations-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:54.627574Z",
+    "sha256": "1ff7c75d9154f7cb6e7fe4009e1573093236ba8404da8d973d5e52e107fbc878",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/operations-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/operations-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.5059875Z",
+    "sha256": "9bd761afcaa7ca8dca32a2fc76ea4807716b1bb2aa9fa103f2ef6d207310c82b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/operations-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/operations-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.0833225Z",
+    "sha256": "7481f9de93557661cb155c6511ee4667d3519145583d56848f4d8082b21623f4",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/public-comments-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/public-comments-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:54.7209248Z",
+    "sha256": "4fb375779933a1180f45f659410067806b4c72f9b8c2b70b0341334cb8f8049d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/public-comments-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/public-comments-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.5902819Z",
+    "sha256": "7e883a68843d2e35bd88e620a0831e66686c8845379542d3cd2ff9062b34c22b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/public-comments-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-ticket-detail/public-comments-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:55.1622658Z",
+    "sha256": "ef32a239717c9c85b55a2af2b90487874f8965309a924bff62f1b62434fe27d0",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:41.0144956Z",
+    "sha256": "9c56307e1e24556647170da94ee9409a459a5547356bbd134a1127f88ccfce9e",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-form-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-form-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:41.1458352Z",
+    "sha256": "0d01c8d5393ddc2423a9b61019254a7580f8e6d0a6347c321c0a3d8fef31dcd0",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-form-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-form-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:42.9877381Z",
+    "sha256": "3bb0a13d7e8e529abf052ceb6645427ae76a49282c5a15d933e81d75552b18e0",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-form-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-form-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:42.1918602Z",
+    "sha256": "d9b1fa9326b4257379d7d2e7eb6ef3c6d00dbfb56a5d84f8a81ea77e5f45276d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:42.8732679Z",
+    "sha256": "5cc611c1ce0774d940615064123c16ed6a3e07d543d672168a27942b8bbc5be7",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/create-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:42.0610736Z",
+    "sha256": "4cf0fe9ca26c7416dbe8dc5dc1cefd64a6a99cdeb69386eca46a40eb2e6e9fbf",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/duplicate-email-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/duplicate-email-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:45.5343872Z",
+    "sha256": "b6a6ae0d9ce975d2a86c18cb8dc9f39199104167521a18d44ddbd05bf142fdcb",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:40.6280771Z",
+    "sha256": "55034d17d348d457667e3babfa4ef405789814e96c35876376d09f7aa12eac00",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:42.5789629Z",
+    "sha256": "f406c89c545cd9c7918b6bb899701d5945807919836fb13c4684cf64a7f97d43",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:41.6211112Z",
+    "sha256": "2ff35891420a9c560c896b9a6777620c27d04ae32454e89a3b84c284792b902c",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-desktop.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:42:40.5040199Z",
+    "sha256": "55d49ee64cab336f1d586ca4cacff81ee72f724ce9278602b3dfc392f1c9d32a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-mobile.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-mobile.png",
+    "capturedAtUtc": "2026-10-10T19:42:42.4691606Z",
+    "sha256": "060ef7967a2d57feb7eae602ff67f2fe1f02a8d2ceedc4e2549cf0b73d463cf2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-tablet.png",
+    "destination": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-tablet.png",
+    "capturedAtUtc": "2026-10-10T19:42:41.4991724Z",
+    "sha256": "643cd1cec28d929488b012b94ad436cb22856c1dcdda940f22c99179938d764f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-staff-queue-Staff-q-9ce79-h-labels-and-keyboard-focus-chromium/staff-queue-390.png",
+    "destination": "screenshots/lab-03-staff-queue-Staff-q-9ce79-h-labels-and-keyboard-focus-chromium/staff-queue-390.png",
+    "capturedAtUtc": "2026-10-10T19:43:07.1482138Z",
+    "sha256": "412a632313df7aab13e5ac61c6bc8a98da8993694957701c6a5bee7a35a9f579",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-staff-queue-Staff-q-e5b12-h-labels-and-keyboard-focus-chromium/staff-queue-1440.png",
+    "destination": "screenshots/lab-03-staff-queue-Staff-q-e5b12-h-labels-and-keyboard-focus-chromium/staff-queue-1440.png",
+    "capturedAtUtc": "2026-10-10T19:43:03.8521984Z",
+    "sha256": "6ace7dfb14ee3544463dd7329723cff35daac8ab0e7e0483e0531028c678a75f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-staff-queue-Staff-q-f927f-h-labels-and-keyboard-focus-chromium/staff-queue-768.png",
+    "destination": "screenshots/lab-03-staff-queue-Staff-q-f927f-h-labels-and-keyboard-focus-chromium/staff-queue-768.png",
+    "capturedAtUtc": "2026-10-10T19:43:05.5484401Z",
+    "sha256": "291a2f873d69ae142f9521d6690d8b0f58e80ba699be098dd03427ae4e67d35e",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-staff-ticket-operat-062c7-without-horizontal-overflow-chromium/staff-ticket-detail-1440.png",
+    "destination": "screenshots/lab-03-staff-ticket-operat-062c7-without-horizontal-overflow-chromium/staff-ticket-detail-1440.png",
+    "capturedAtUtc": "2026-10-10T19:43:14.998313Z",
+    "sha256": "7e824bad7a049dbb4f033d80888adf2e502a094f86e7b8b2bb3a5a1e61ea6adc",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-staff-ticket-operat-08051-without-horizontal-overflow-chromium/staff-ticket-detail-390.png",
+    "destination": "screenshots/lab-03-staff-ticket-operat-08051-without-horizontal-overflow-chromium/staff-ticket-detail-390.png",
+    "capturedAtUtc": "2026-10-10T19:43:18.1150447Z",
+    "sha256": "90e1229f696394b1e1580ca8e393225b6fc322ea4329f0cef02e8a2a538511e4",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-03-staff-ticket-operat-91d45-without-horizontal-overflow-chromium/staff-ticket-detail-768.png",
+    "destination": "screenshots/lab-03-staff-ticket-operat-91d45-without-horizontal-overflow-chromium/staff-ticket-detail-768.png",
+    "capturedAtUtc": "2026-10-10T19:43:16.3582377Z",
+    "sha256": "364482a18425dd8148411f37366784563ac7fcda6a81554417e16fe1282f642c",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--3f221-es-explicit-conflict-reload-chromium/assignment-rejected-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--3f221-es-explicit-conflict-reload-chromium/assignment-rejected-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:44:10.8341343Z",
+    "sha256": "23a07eba70da9d81d85a07ebdb4dfd4931d29c6f1c0b7c6f29a9fdb7ce5b7645",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--3f221-es-explicit-conflict-reload-chromium/version-conflict-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--3f221-es-explicit-conflict-reload-chromium/version-conflict-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:44:11.2784528Z",
+    "sha256": "4927141ed42e00afc7cfb878b6f0fe594899db162444ee3b4a656a9aa1eb0d4d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/requester-history-1440.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/requester-history-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:04.7423321Z",
+    "sha256": "0026f8aeaf552e4bdd405691581d4ac048ba765884b38ca6e1ba9713935866cf",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/requester-history-390.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/requester-history-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:05.1068198Z",
+    "sha256": "510da8cf6d1e0f32d61facab397011c0e4061d27c89a82e8e6a6327ec40090c3",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/requester-history-768.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/requester-history-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:04.9332331Z",
+    "sha256": "6377e6f8348bb08e1c76ee174e171e121450039615a1f9d7643e3def2faa04e2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-1440.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-1440.png",
+    "capturedAtUtc": "2026-10-10T19:43:59.780499Z",
+    "sha256": "080262c95c45d46cf55f1fed747442c55f1afe63f709106b8a7c5aba33a52ae2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-390.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:02.1875259Z",
+    "sha256": "a1b420330b2747628609d4a511c431fbe3711c07bd90dc76e601937bade2b633",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-768.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:01.0076742Z",
+    "sha256": "fe08e999be92f8533fc218e41104aa0693c565939022f640fdd512d4e3d2eed9",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--894ba-ating-an-earlier-field-save-chromium/assignment-outcome-unknown-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--894ba-ating-an-earlier-field-save-chromium/assignment-outcome-unknown-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:43:52.7151671Z",
+    "sha256": "2e01c6ebdf3302bec3b0baf7f8a638cd27210d9c1b43655df53126814c1d659f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--894ba-ating-an-earlier-field-save-chromium/create-outcome-unknown-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--894ba-ating-an-earlier-field-save-chromium/create-outcome-unknown-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:43:48.415211Z",
+    "sha256": "74afaeade21dff51ffac379dd6fd1018613b40bef4360e631885ad4690eb5162",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--d70a2-cel-distinct-shared-actions-chromium/requester-readonly-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--d70a2-cel-distinct-shared-actions-chromium/requester-readonly-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:43:46.5126213Z",
+    "sha256": "5b47763a76e51c17a5b18b29733526585656ff65c78046514c5416586823cc7f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--d70a2-cel-distinct-shared-actions-chromium/staff-cancelled-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--d70a2-cel-distinct-shared-actions-chromium/staff-cancelled-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:43:43.9216759Z",
+    "sha256": "7cef8dfa1481cd1ef29bc2c7141b5d74e7d528ade7fcf4392a64885ff89d0e28",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-actions-taken-flow--d70a2-cel-distinct-shared-actions-chromium/staff-completed-correction-desktop.png",
+    "destination": "screenshots/lab-04-actions-taken-flow--d70a2-cel-distinct-shared-actions-chromium/staff-completed-correction-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:43:39.1137821Z",
+    "sha256": "c3651cd12b7b83fd9bc61d7ed51ebb3468ae144b779a61ea2903cb6161083ff3",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-empty-Re-eecf1-dback-without-leaked-counts-chromium/requester-empty-desktop.png",
+    "destination": "screenshots/lab-04-dashboards-empty-Re-eecf1-dback-without-leaked-counts-chromium/requester-empty-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:44:23.1594023Z",
+    "sha256": "d3ccfaf67ea9ef76265276f06a809b62274f953a47c8749e711def1c7044ef94",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-empty-Re-eecf1-dback-without-leaked-counts-chromium/requester-forbidden-desktop.png",
+    "destination": "screenshots/lab-04-dashboards-empty-Re-eecf1-dback-without-leaked-counts-chromium/requester-forbidden-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:44:23.2913451Z",
+    "sha256": "71b23dd637789d1a03f8c7a80c4014ddaf331fcdb9a49263ab7c1f88248babc8",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-1440.png",
+    "destination": "screenshots/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:17.7623705Z",
+    "sha256": "041525377cc73a63d4a10d32e4193a672519ff691d20af984841dafff54eb580",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-1920.png",
+    "destination": "screenshots/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-1920.png",
+    "capturedAtUtc": "2026-10-10T19:44:17.5944133Z",
+    "sha256": "69fdeb60c1fd65c7eaf4a4b3f1f3a90a23192668a7113f97fd19c7af5fbb09a1",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-390.png",
+    "destination": "screenshots/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:18.0618647Z",
+    "sha256": "5c42144fab6f7694e165870b2c462f0def775baeb452b96bfedca894a449a080",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-768.png",
+    "destination": "screenshots/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:17.9101618Z",
+    "sha256": "2c99835686042ddcf11ca796c062676bf7138b936bef6b05cbbac98d7d5d5e75",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-refresh-failed-390.png",
+    "destination": "screenshots/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-refresh-failed-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:18.4164302Z",
+    "sha256": "a47edadd33ebd9d17aefaf397cbb1ade70fdbf4d2d3abd60149612b86de33fdd",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/assigned-work-390.png",
+    "destination": "screenshots/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/assigned-work-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:20.3901912Z",
+    "sha256": "e57ef0aee8672106e90b20689e24789cc5857cf36fd2bf3492efdaedd431aeea",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-1440.png",
+    "destination": "screenshots/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:19.9695241Z",
+    "sha256": "1b3ff6a3e9dbfdb509bf4713a6ac48e6c4f0f58971ec3daea17cdb1b500a1800",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-1920.png",
+    "destination": "screenshots/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-1920.png",
+    "capturedAtUtc": "2026-10-10T19:44:19.8026305Z",
+    "sha256": "4d83255ded2fd122d1d9c016e4f3a10be318ca80d252fd19cc9cefe615b6f6ae",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-390.png",
+    "destination": "screenshots/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:20.1990478Z",
+    "sha256": "b7a0caba8eb86b6d1ea43763cd6d31a67a495c32e1d4e5d228fff9dbc9f7129d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-768.png",
+    "destination": "screenshots/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:20.0912474Z",
+    "sha256": "ca4e294445f53da36566ae76ab3bbdaa2a5f318ff87f9fc866bb7908d2f9990f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-Staff-me-e12a1-tion-for-admin-example-test-chromium/admin-work-desktop.png",
+    "destination": "screenshots/lab-04-dashboards-Staff-me-e12a1-tion-for-admin-example-test-chromium/admin-work-desktop.png",
+    "capturedAtUtc": "2026-10-10T19:44:22.0144598Z",
+    "sha256": "ecce69101470d39cffc0e9eb4373e3c7393666b998d835c5053f17434baaf4b4",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:28.8837498Z",
+    "sha256": "20a44265ef23012c7ce1be13c700260f39120935e80b83dd5923fd6de0c6849d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:29.1093174Z",
+    "sha256": "39788500fbb3c67b74f2ac8a4b2c16ca9c95ba392a751fba8d924351e6766a1f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-768.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:28.9944615Z",
+    "sha256": "919064ffff9770f2618ad99b635c0811e8f57bc2acbd2461214a59ba9c4b8614",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:28.3969727Z",
+    "sha256": "b47e4f9b377a811ed24cf57546bb95c4394aae16d387b374ce275c10cb31ddd1",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:28.6411836Z",
+    "sha256": "ae31a60b930ed7df838588e46184709238c2c3cc99935b5bb3ead2ab5e30e305",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-768.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:28.529974Z",
+    "sha256": "5ea39ad527ad8ff455a8f28cce193521fd297cbe8e8cc7d5135dd5d1618e9862",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:33.5714682Z",
+    "sha256": "dec51567fd454aeee519b682a51a1467e05f82bb22ea7e87ac4b589f1ead451c",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:33.8195849Z",
+    "sha256": "b168a78554497c9b42c4c21d795be318536e6be65fcb258abb41d75d6af53e07",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-768.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:33.7034353Z",
+    "sha256": "7f78ea4a02863b926f6e1841a70969e409ad00b92a09c34eeba6ab6ee2d15f04",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:30.285236Z",
+    "sha256": "cf4a9e161ff61e6c1f1caa2451466a8ea114296f230cd54cb8510ca3d520c93a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:30.5358636Z",
+    "sha256": "7bf0bac4d56970f6d73eef1e1f87e2cf00ad63ff846313f117f4de6e629390d2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-768.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:30.4181424Z",
+    "sha256": "4fe11d9fcab17bd51dbb1873ae8b5a07c03d00651e9a0cf1ea17f526e7d52124",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-progress-active-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-progress-active-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:27.9883685Z",
+    "sha256": "997375a247060fc1bf36d2c20d9a82878c639bb377c0322eabf5ae07974a338a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-progress-active-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-progress-active-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:28.1843901Z",
+    "sha256": "4f8611e36d054087cf2111da56d05b8f52d5a1ccda8910ead2c5a82b3a34267a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-progress-planned-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-progress-planned-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:26.1570279Z",
+    "sha256": "c140100539a2ea8792ceb122f6e1ecca99d709074ee3b1cc88f0455cb8dd230e",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-1150.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-1150.png",
+    "capturedAtUtc": "2026-10-10T19:44:24.6699476Z",
+    "sha256": "d42232ab95144ee5d34f8b14d207c4c77a857f7f05d2e6477945ce84c305526c",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:24.5546492Z",
+    "sha256": "98860d04de4c454d4cd5f190df97c440a52287e90ea07de9fc311814b4a9249a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-1920.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-1920.png",
+    "capturedAtUtc": "2026-10-10T19:44:24.4126094Z",
+    "sha256": "71fa1aada05cd24c670f74d69789dc896e0ef679bc056ef3a2fb3efaffe98a54",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:24.8842575Z",
+    "sha256": "b072a0ded84dd4b7f68cd11a43c567c2421864706877380e28949b3e514576c1",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-768.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/assigned-work-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:24.7995762Z",
+    "sha256": "839fe6c3f927e83a5cf3a30eabf9d85608e20b8fe8339741f7724ea5c5e15570",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1150.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1150.png",
+    "capturedAtUtc": "2026-10-10T19:44:25.3829658Z",
+    "sha256": "4fa0817592134cd449bbb30849ed6e603e45c2cf438a1e97348213cf57843537",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1440.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:25.2644365Z",
+    "sha256": "bcd040b97342acc91f68d915a5294e5347550e5613085d8b8f28e19bce9c927e",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1920.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1920.png",
+    "capturedAtUtc": "2026-10-10T19:44:25.1599334Z",
+    "sha256": "38ffe8a94c408f7fec6a46c2ad6aa6589886f15982254442f7e18a73ebe6c297",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-390.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:25.5609104Z",
+    "sha256": "a474a4f9af7c1240af9dce61ecc1d2f5e640eaf1c2ff53275cb46006c49ba3e0",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-768.png",
+    "destination": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:25.4743939Z",
+    "sha256": "0dc311355ff4e8a316f997d2b245e758804a591ba41cffa9221b85348e9be911",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:03.7324787Z",
+    "sha256": "905176f4a7ecca4f69d8751bd2023c1ecd47f2ee40e0d41ad3c5ac002a17b370",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:10.7088754Z",
+    "sha256": "cdbda3346c350cc2a3a644f10c016d86ea29db72a7279ebe3bb1e866dae0eb87",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:06.6774121Z",
+    "sha256": "f0be5d1825a1adaf5486412421ee92d53ca05b26dfa9e9e8aa81f247e0183323",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:03.0425987Z",
+    "sha256": "63cc2893a92b1c2035597b92917537d65a073486b38112c7cc7d33a3cb171884",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:09.5377706Z",
+    "sha256": "1c31eed0c8c5a8d06b5999ababb06029a3643f456d17ff02e04e2fb480665396",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:05.9844341Z",
+    "sha256": "9ebe3286b968c648cf0547d4a0a244d765ae31833f8a153f618f252de8dc63c5",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:02.5027435Z",
+    "sha256": "0cb790f297f6ec9f82c66937cacd7643db1cd074c4b40d7565fba14fbce228b2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:08.4746908Z",
+    "sha256": "e65a22e61843ec6165ffd02174b536174c4c0db9a5aa6329e02a630e6f36995b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:05.4603203Z",
+    "sha256": "db4779ddc92211a34b8ec238a86d09a49f6fb56dc8fccecf4ad7ae905e563b01",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-l-9c27d--and-history-read-can-retry-chromium/history-retry-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-l-9c27d--and-history-read-can-retry-chromium/history-retry-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:41.122125Z",
+    "sha256": "3116de6748e4fed55afd483fc08518c52040a51e594145dbef1b204f1cdbd504",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-l-9c27d--and-history-read-can-retry-chromium/status-outcome-unknown-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-l-9c27d--and-history-read-can-retry-chromium/status-outcome-unknown-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:40.6588931Z",
+    "sha256": "46cbfd7ef6a3d25031f21d4e3fbbee7fc33b7eff9589c83a732033e380ae1503",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-requester-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-requester-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:50.0925393Z",
+    "sha256": "67fdbe62719eae6d3d1c56731cd4d582cc55da4f2ffbf6bcb54c59e06209025d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-requester-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-requester-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:56.8733957Z",
+    "sha256": "b47ccf8f6550eda396815b0f3f076137f7836981022c16bb9e65a4d87f4a9d8b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-requester-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-requester-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:53.0161704Z",
+    "sha256": "2a8cadde179988145186ce54f47f137e9b8aad030d79dd5b0cfce85b69e73ee2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-1440.png",
+    "capturedAtUtc": "2026-10-10T19:44:38.453349Z",
+    "sha256": "cfcf0d0809ccd873f1dfcd5d1823c4765f02d1f79c49c52c4f0a3d1ce1c79a6a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-390.png",
+    "capturedAtUtc": "2026-10-10T19:44:45.3252259Z",
+    "sha256": "b72538d4ef14608c91ee3fdc6b5359d672fe10fb5d1e7a44531c3332255f0b3f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-768.png",
+    "capturedAtUtc": "2026-10-10T19:44:41.3191362Z",
+    "sha256": "45d95371d6c8b75098995de23899e0350a2975c4abe0e0e7cab4dd3f81becc4f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/checklist-blocked-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/checklist-blocked-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:19.580935Z",
+    "sha256": "6d0cee148b29adad4a74bcf974d95cbb0f23f71df35d0e7d4d029029cfd867cc",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/checklist-blocked-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/checklist-blocked-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:20.0589502Z",
+    "sha256": "0605fbdbde42c3615f15eddf361e3c455fbbe95c20b8f23af89822684cfd08b2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/checklist-blocked-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/checklist-blocked-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:19.8474563Z",
+    "sha256": "6db2c3d42c7658acd51d270ee4072b5e03e54f176b5427aec9b073773f968aea",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/opening-stage-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/opening-stage-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:17.6736487Z",
+    "sha256": "82c81e18b489a61fb4f0f44c18e8d0908dc76ad124d9259bdf641a4fcdfb4c94",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/opening-stage-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/opening-stage-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:18.9545063Z",
+    "sha256": "a5b1cd336077e6259a44646d308528443438a67bddbd6fc2894ae65562955d3a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/opening-stage-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/opening-stage-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:17.9060636Z",
+    "sha256": "e28a99b6c2fd95bf671d8cbd1777190347612d8917b4d4442e3f16cd173258cd",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:20.2604596Z",
+    "sha256": "e7fbb4da450e2d8194629c882ccf43003f031fc104961ea92e5e73e5248d955d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:21.4038131Z",
+    "sha256": "7a99ecc8e90ea63a6484832d26d6d3b3e050839e3e8cbbaa4d46ddbf0110d355",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:21.2705058Z",
+    "sha256": "18d5038710b8041895bbb88e03d2520ba4c01f65c762b853e23961282582bfb8",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:33.8228325Z",
+    "sha256": "c1ed50cc9a2229b7bc67b319949a64194f39807baff34bdf0a9d59378c8e015d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:35.1596678Z",
+    "sha256": "ec879758ba5f2b17da10391f51b542625176174a7af0b4209cc7981dc05aab9d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:34.3087676Z",
+    "sha256": "da09072ae393e3a6b622b1233fcb5b42c9ae6da159d63cf8f968d7e48607a63a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/later-page-blocker-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/later-page-blocker-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:29.2404916Z",
+    "sha256": "110f36ec8ea9d60eed3b504c492c1d2561ee95c4990ad1f377651115646d69e7",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/ready-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/ready-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:33.6940043Z",
+    "sha256": "8b996de0e63b47444472f27de56bb68ac0706d97a5fa06a95752e4bd04c66cc7",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/ready-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/ready-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:35.0561779Z",
+    "sha256": "e19039a3dafd520660c5e4563507b9154fb1afc6041c4f7de20f2041bb3d3b2d",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/ready-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/ready-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:34.1996892Z",
+    "sha256": "f4096338f540d2990ab6035468ad9b8aa4f80bc9771067607ef5a652ff06f681",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:36.3488317Z",
+    "sha256": "a24a1eae879884912d33975946e7879ab93748984e86687aabb9dbbb38a0e600",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:36.6218419Z",
+    "sha256": "c61ca55ded576b155d5bfe046fcf94191f2a58dca16ab0685f9b872f764828d5",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:36.4979122Z",
+    "sha256": "73c19bdf035386f6d845f604e2d1b035aa318088f136e9c3039e2ecba0f326a1",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/requester-history-1440.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/requester-history-1440.png",
+    "capturedAtUtc": "2026-10-10T19:45:37.6009924Z",
+    "sha256": "a14dde635b37452d71c37ece2ac6dfebea1f893f8930122750080f5883d1c334",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/requester-history-390.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/requester-history-390.png",
+    "capturedAtUtc": "2026-10-10T19:45:37.8449661Z",
+    "sha256": "cacc9f4b5769a44bb9c5905c88feb6e84894e531def7486dd00f7f4ebeb4eabb",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/requester-history-768.png",
+    "destination": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/requester-history-768.png",
+    "capturedAtUtc": "2026-10-10T19:45:37.7361965Z",
+    "sha256": "fb21333a45dd3c132d77053363375eccc75280977c225286ebaf2a9000faccfa",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/admin-dashboard-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:27.9892032Z",
+    "sha256": "820dff5fa17ac8943c04aa89a4dd8f10b1ecb6b59586d42f1aefe222321c4ac5",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/admin-dashboard-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:28.3976829Z",
+    "sha256": "a9899b75c9cbbb4a719442cc0ca4c077a1b425382d33bcafda8f39c8bc600854",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/admin-dashboard-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:28.1725984Z",
+    "sha256": "6829c1e265df684c9ddac0b7c610570003137f44244e26d53e2617c0f58cc0bd",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/admin-users-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:28.6133889Z",
+    "sha256": "6941a74a39bde4b63dafed280a00b3c937ef2b179770d603cd84672e1f9bbdad",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/admin-users-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:29.1849521Z",
+    "sha256": "999679d8d9b3eff50561ab933641ff1ebff906034ed312c4b47e8a21296de57b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/admin-users-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:28.9704506Z",
+    "sha256": "f97cb1041193928dab41e2b471f6bd03b22da80ab68cc8a68fed4c787b2b7166",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-create-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:23.1251784Z",
+    "sha256": "62b88db6b0f302e2362a325683590f15c123a536cc404b42939ea4c6b02a8256",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-create-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:23.4032241Z",
+    "sha256": "269b363bbd2cc27632b9b7e104dfa2ba8e1f0be7539489d227eb8bb15c3ccf76",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-create-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:23.2653776Z",
+    "sha256": "7961170dc806144a07be458523cd9e4ac2aac294406973c8f3853c108c786cf2",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-dashboard-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:22.0316127Z",
+    "sha256": "f8460e0f21c877e7d47f6ab417c65af31b15eb90d1b98b1a47540e3d79a4c057",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-dashboard-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:22.4134373Z",
+    "sha256": "7c47b0b5a45900bf86bd894326f95bc22b9da120c6b8cc536c92fb86460fc258",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-dashboard-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:22.2524085Z",
+    "sha256": "c60aa3665da85b7de5a107957e622be12af9cf998d760103a099ebd717f59f28",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-tickets-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:22.6041854Z",
+    "sha256": "d8bbdb2d585d3a21ed44d5d593f13d6e4bd16a049a0eedc6b2919277c58f3021",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-tickets-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:22.9483449Z",
+    "sha256": "ca2ed76cf219f427ef3785ff02d78a531341a252382743083709d359f739e365",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/requester-tickets-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:22.7792592Z",
+    "sha256": "ea096b06655155c95fc07c438dbf837e4a08533d57342c6c42a9b156aa923d6f",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-dashboard-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:24.7332761Z",
+    "sha256": "f6f73951c306c75971b91b642dfbd4d7a4688571f9b6e5c6cbe3faee07ea4592",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-dashboard-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:25.1153152Z",
+    "sha256": "ff04af299e34678fe6cff50a5b61f9f9542b0927e93024f934959c31137c14e9",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-dashboard-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:24.9323816Z",
+    "sha256": "a1f0b6a4def1340b92f5189d3860643b0051b80f1b2e34fa5f4a30948bdcd36b",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-tickets-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:26.0076845Z",
+    "sha256": "0374c4d0fd3c9c044c6f3c2962e6d36bf1d0626624be4968a97d9befb773b0e3",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-tickets-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:26.6555716Z",
+    "sha256": "54feee8464c6189911e6e68123f077cb33422c8dcc3b793c39d923b77dfce900",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-tickets-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:26.3222475Z",
+    "sha256": "b5dc632250b717411c2d235110d5798c7ee9f3e4a28b3504b2a81703765ecfce",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-work-1440.png",
+    "capturedAtUtc": "2026-10-10T19:48:25.2833874Z",
+    "sha256": "98860d04de4c454d4cd5f190df97c440a52287e90ea07de9fc311814b4a9249a",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-work-390.png",
+    "capturedAtUtc": "2026-10-10T19:48:25.7442251Z",
+    "sha256": "b072a0ded84dd4b7f68cd11a43c567c2421864706877380e28949b3e514576c1",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  },
+  {
+    "source": "scripts/lab4-final-main-parity.mts",
+    "destination": "supplementary-screenshots/staff-work-768.png",
+    "capturedAtUtc": "2026-10-10T19:48:25.5360485Z",
+    "sha256": "839fe6c3f927e83a5cf3a30eabf9d85608e20b8fe8339741f7724ea5c5e15570",
+    "revision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+    "authorFinalVisualAcceptance": false
+  }
+]

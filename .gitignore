@@ -17,4 +17,6 @@ server/prisma/*.db
 *.log
 !artifacts/lab-04/quality-gate/*.log
 !artifacts/lab-04/quality-gate/review-fix/*.log
+!artifacts/lab-04/final-main/*.log
+!artifacts/lab-04/final-main/gate/*.log
 .DS_Store
