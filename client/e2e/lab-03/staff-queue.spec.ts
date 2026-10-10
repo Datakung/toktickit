@@ -6,7 +6,8 @@ async function signInStaff(page: Page) {
   await page.getByLabel("Email", { exact: true }).fill("mali.support@example.test");
   await page.getByLabel("Password", { exact: true }).fill(E2E_PASSWORD);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(/\/staff\/tickets$/);
+  await expect(page).toHaveURL(/\/staff\/dashboard$/);
+  await page.getByRole("button", { name: "Ticket Queue", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Ticket Queue", exact: true })).toBeVisible();
 }
 

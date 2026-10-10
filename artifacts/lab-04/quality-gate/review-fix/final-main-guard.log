@@ -1,0 +1,5 @@
+Exception: C:\CPE\CPE334\MINE\toktickit\scripts\lab4-quality-gate.ps1:12
+Line |
+  12 |  … askDirty) { throw 'Final-main evidence requires a clean main checkout …
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Final-main evidence requires a clean main checkout.

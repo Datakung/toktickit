@@ -8,7 +8,8 @@ async function login(page: Page, email: string) {
   await page.getByLabel("Email", { exact: true }).fill(email);
   await page.getByLabel("Password", { exact: true }).fill(E2E_PASSWORD);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(email === "mali.support@example.test" ? /\/staff\/tickets$/ : /\/tickets$/);
+  await expect(page).toHaveURL(email === "mali.support@example.test" ? /\/staff\/dashboard$/ : /\/dashboard$/);
+  await page.goto(email === "mali.support@example.test" ? "/staff/tickets" : "/tickets");
 }
 
 async function openOperationsTicket(page: Page) {
@@ -33,8 +34,8 @@ test("Staff operates a Ticket and communicates without exposing Internal Notes",
   await page.getByRole("button", { name: "Save IT Priority" }).click();
   await expect(page.getByRole("status").filter({ hasText: "IT Priority saved" })).toBeVisible();
 
-  await page.getByLabel("Status", { exact: true }).selectOption("OPEN");
-  await page.getByRole("button", { name: "Save Status" }).click();
+  await page.getByLabel("Choose an action", { exact: true }).selectOption("OPEN");
+  await page.getByRole("button", { name: "Open Ticket", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Status saved" })).toBeVisible();
   await expect(page.getByText("Open", { exact: true }).first()).toBeVisible();
 

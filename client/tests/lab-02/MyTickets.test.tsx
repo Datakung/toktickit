@@ -132,7 +132,7 @@ describe("My Tickets", () => {
     await screen.findAllByText("Status fixture 0");
     const filter = screen.getByRole("combobox", { name: "Status filter" });
     expect(Array.from(filter.querySelectorAll("option")).map(option => option.textContent)).toEqual([
-      "All Statuses", "New", "Open", "In Progress", "Waiting for Requester", "Resolved", "Closed", "Reopened", "Cancelled",
+      "All Statuses", "Active Tickets", "New", "Open", "In Progress", "Waiting for Requester", "Resolved", "Closed", "Reopened", "Cancelled",
     ]);
     for (const status of statuses) expect(screen.getAllByText(api.statusLabel(status)).length).toBeGreaterThan(0);
   });

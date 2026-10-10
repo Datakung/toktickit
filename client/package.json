@@ -10,7 +10,11 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:evidence": "playwright test e2e/lab-02/responsive.spec.ts",
-    "test:e2e:lab3-evidence": "playwright test e2e/lab-03/release-evidence.spec.ts"
+    "test:e2e:lab3-evidence": "playwright test e2e/lab-03/release-evidence.spec.ts",
+    "test:e2e:lab4-actions-evidence": "playwright test e2e/lab-04/actions-taken-flow.spec.ts",
+    "test:e2e:lab4-workflow-evidence": "playwright test e2e/lab-04/ticket-resolution.spec.ts",
+    "test:e2e:review": "playwright test --config playwright.dashboard-review.config.ts",
+    "test:e2e:lab4-dashboard-evidence": "playwright test --config playwright.dashboard-review.config.ts e2e/lab-04/dashboards.spec.ts"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
@@ -27,7 +31,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
     "typescript": "^5.7.2",
-    "vite": "^6.0.5",
-    "vitest": "^2.1.8"
+    "vite": "^6.4.3",
+    "vitest": "^4.1.11"
   }
 }

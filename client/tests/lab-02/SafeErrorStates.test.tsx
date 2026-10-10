@@ -5,6 +5,9 @@ import * as api from "../../src/api.js";
 import { CreateTicketPage } from "../../src/CreateTicketPage.js";
 import { MyTicketsPage, defaultTicketListQuery } from "../../src/MyTicketsPage.js";
 import { TicketDetailPage } from "../../src/TicketDetailPage.js";
+import { emptyActionPage, requireMockedNetwork } from "../support/action-fixtures.js";
+
+requireMockedNetwork();
 
 const requester: api.DevelopmentRequester = {
   id: 1,
@@ -142,6 +145,7 @@ describe("release-wide safe and recoverable UI failures", () => {
   });
 
   it("retries detail metadata, upload, content, and removal without exposing internals", async () => {
+    vi.spyOn(api, "getActions").mockResolvedValue(emptyActionPage(1));
     vi.spyOn(api, "getPublicComments").mockResolvedValue({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 });
     vi.spyOn(api, "getTicket")
       .mockRejectedValueOnce(new api.ApiError(

@@ -44,7 +44,15 @@ export const resetAdminPassword = (id: number, input: { initialPassword: string;
 
 let csrfToken = "";
 export const AUTHENTICATION_LOST = "toktickit:authentication-lost";
-export function clearAuthentication() { csrfToken = ""; }
+export const ACTION_RETRY_PREFIX = "toktickit.action-retry:";
+export function clearAuthentication() {
+  csrfToken = "";
+  // Retry payloads contain only shared action fields, never credentials or Notes.
+  // Remove them when authentication is lost rather than retain another user's input.
+  try {
+    for (const key of Object.keys(sessionStorage)) if (key.startsWith(ACTION_RETRY_PREFIX)) sessionStorage.removeItem(key);
+  } catch { /* Storage may be disabled; authentication clearing must still work. */ }
+}
 export function isAuthenticationRequired(error: unknown): error is ApiError {
   return error instanceof ApiError && error.status === 401 && error.code === "AUTHENTICATION_REQUIRED";
 }
@@ -89,14 +97,15 @@ export interface AttachmentMetadata {
 export const ticketStatuses = ["NEW", "OPEN", "IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CLOSED", "REOPENED", "CANCELLED"] as const;
 export type TicketStatus = typeof ticketStatuses[number];
 export const statusLabel = (value: TicketStatus) => ({ NEW: "New", OPEN: "Open", IN_PROGRESS: "In Progress", WAITING_FOR_REQUESTER: "Waiting for Requester", RESOLVED: "Resolved", CLOSED: "Closed", REOPENED: "Reopened", CANCELLED: "Cancelled" })[value];
-export interface QueueQuery { q: string; categoryId: string; relatedSystemId: string; ownerId: string; unassigned: string; status: string; itPriority: string; sort: string; direction: string; page: number; pageSize: number }
+export interface DashboardListFilters { statusGroup?: string; updatedSince?: string; updatedUntil?: string; resolvedSince?: string; resolvedUntil?: string }
+export interface QueueQuery extends DashboardListFilters { q: string; categoryId: string; relatedSystemId: string; ownerId: string; unassigned: string; status: string; itPriority: string; sort: string; direction: string; page: number; pageSize: number }
 export interface QueueItem extends TicketListItem { requester: { id: number; displayName: string }; owner: { id: number; displayName: string } | null; version: number }
 export interface QueueResponse { items: QueueItem[]; page: number; pageSize: number; total: number; totalPages: number }
 export interface StaffOwner { id: number; displayName: string; role: UserRole }
 export function getStaffOwners(): Promise<{ items: StaffOwner[] }> { return getJson("/api/staff/owners"); }
 export function getStaffQueue(query: QueueQuery): Promise<QueueResponse> {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) if (value !== "") params.set(key, String(value));
+  for (const [key, value] of Object.entries(query)) if (value !== "" && value != null) params.set(key, String(value));
   return getJson(`/api/staff/tickets?${params}`);
 }
 export type TicketListSort = "updatedAt" | "createdAt" | "ticketNumber";
@@ -124,7 +133,10 @@ export interface TicketDetail extends TicketListItem {
   attachments: AttachmentMetadata[];
 }
 
-export interface StaffTicketDetail extends TicketDetail {}
+export interface StaffTicketDetail extends TicketDetail { resolutionCycle: number; resolvedAt: string | null }
+export interface WorkflowTransition { id: number; fromStatus: TicketStatus; toStatus: TicketStatus; cycle: number; ticketVersion: number; actor: { id: number; displayName: string }; createdAt: string }
+export interface WorkflowHistoryPage { items: WorkflowTransition[]; page: number; pageSize: number; total: number; totalPages: number }
+export const getWorkflowHistory = (ticketId: number, page = 1) => getJson<WorkflowHistoryPage>(`/api/tickets/${ticketId}/workflow-history?page=${page}&pageSize=20`);
 export interface CommunicationEntry { id: number; body: string; author: { id: number; displayName: string }; createdAt: string }
 export interface EntryPage { items: CommunicationEntry[]; page: number; pageSize: number; total: number; totalPages: number }
 
@@ -134,7 +146,7 @@ export interface AttachmentContent {
   mimeType: string;
 }
 
-export interface TicketListQuery {
+export interface TicketListQuery extends DashboardListFilters {
   search: string;
   categoryId: number | null;
   relatedSystemId: number | null;
@@ -213,7 +225,7 @@ export async function checkSystem(): Promise<SystemStatus> {
   };
 }
 
-async function getJson<T>(path: string): Promise<T> {
+export async function getJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { credentials: requestCredentials });
 
   return parseApiResponse<T>(response);
@@ -329,6 +341,7 @@ export async function getTickets(
     parameters.set("requestedPriority", query.requestedPriority);
   }
   if (query.status !== null) parameters.set("status", query.status);
+  for (const key of ["statusGroup", "updatedSince", "updatedUntil", "resolvedSince", "resolvedUntil"] as const) if (query[key]) parameters.set(key, query[key]!);
 
   const response = await fetch(`${API_URL}/api/tickets?${parameters.toString()}`, {
     credentials: requestCredentials,
@@ -428,4 +441,44 @@ export async function getStaffAttachmentContent(ticketId: number, attachmentId: 
   const response = await fetch(`${API_URL}/api/staff/tickets/${ticketId}/attachments/${attachmentId}/download`, { credentials: requestCredentials });
   if (!response.ok) await parseApiResponse<never>(response);
   return { blob: await response.blob(), filename: responseFilename(response), mimeType: response.headers.get("Content-Type")?.split(";")[0] ?? "application/octet-stream" };
+}
+
+export type ActionState = "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+export interface ActionFields {
+  actionAt: string; description: string; result: string;
+  followUpRequired: boolean; followUpNote: string; attachmentNotes: string;
+}
+export interface ActionTakenRecord extends ActionFields {
+  id: number; actionNumber: number; ticketId: number; cycle: number; state: ActionState;
+  assignee: { id: number; displayName: string } | null;
+  createdBy: { id: number; displayName: string };
+  performedBy: { id: number; displayName: string } | null;
+  performedAt: string | null; cancellationReason: string | null;
+  version: number; createdAt: string; updatedAt: string;
+}
+export interface ActionEvent {
+  id: number; actionId: number; kind: string; version: number;
+  actor: { id: number; displayName: string }; createdAt: string; reason: string | null;
+  before: Record<string, unknown> | null; after: Record<string, unknown>;
+}
+export interface ActionHistoryPage { items: ActionEvent[]; page: number; pageSize: number; total: number; totalPages: number }
+export interface ActionPage extends Omit<ActionHistoryPage, "items"> {
+  items: ActionTakenRecord[]; ticketVersion: number; currentCycle: number;
+  resolutionGate: { cycle: number; completedCount: number; unfinishedCount: number; outstandingFollowUpCount: number; meetsActionRequirements: boolean };
+}
+export interface ActionReceipt { actionId: number; eventId: number; actionVersion: number; ticketVersion: number; replayed: boolean }
+export type ActionWriteKind = "create" | "edit" | "assign" | "state";
+export type ActionWritePayload = { ticketVersion: number; requestId: string } & (
+  (ActionFields & { assigneeId: number | null }) |
+  (ActionFields & { version: number; changeReason: string }) |
+  { version: number; assigneeId: number | null } |
+  { version: number; state: ActionState; result: string; cancellationReason: string }
+);
+export const getActions = (ticketId: number, page = 1) => getJson<ActionPage>(`/api/tickets/${ticketId}/actions?page=${page}&pageSize=20`);
+export const getAction = (ticketId: number, actionId: number) => getJson<{ action: ActionTakenRecord; ticketVersion: number; currentCycle: number }>(`/api/tickets/${ticketId}/actions/${actionId}`);
+export const getActionHistory = (ticketId: number, actionId: number, page = 1) => getJson<ActionHistoryPage>(`/api/tickets/${ticketId}/actions/${actionId}/history?page=${page}&pageSize=20`);
+export const getActionAssignees = () => getJson<{ items: StaffOwner[] }>("/api/staff/action-assignees");
+export function writeAction(ticketId: number, kind: ActionWriteKind, actionId: number | null, payload: ActionWritePayload) {
+  const suffix = kind === "create" ? "" : `/${actionId}${kind === "assign" ? "/assignee" : kind === "state" ? "/state" : ""}`;
+  return jsonMutation<ActionReceipt>(`/api/staff/tickets/${ticketId}/actions${suffix}`, kind === "create" ? "POST" : "PATCH", payload);
 }

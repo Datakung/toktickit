@@ -11,7 +11,11 @@ export async function signIn(
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill(E2E_PASSWORD);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/tickets$/);
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.getByRole("heading", { name: "My Dashboard" })).toBeVisible();
+  // Existing list/workflow checks deliberately continue at their original destination.
+  await page.goto("/tickets");
+  await expect(page.getByRole("heading", { name: "My Tickets", exact: true })).toBeVisible();
 }
 
 export async function mockSignedInRequester(page: Page) {

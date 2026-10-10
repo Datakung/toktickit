@@ -1,5 +1,172 @@
 # TokTickIT
 
+## Lab 4 Actions Taken and Ticket workflow
+
+The next increment adds Actions Taken, the final Ticket workflow and Requester/
+Staff dashboards while preserving Labs 1-3. Phanuwit approved the corrected
+[contract PR #45](https://github.com/Datakung/toktickit/pull/45#pullrequestreview-5416186064)
+at `ff97405` and merged it into `lab4-staging` (`d32c8cf`) on 2026-10-05.
+[Issue #40](https://github.com/Datakung/toktickit/issues/40) was approved and merged
+by Phanuwit in [PR #46](https://github.com/Datakung/toktickit/pull/46), staging `a915812`.
+[Issue #41](https://github.com/Datakung/toktickit/issues/41) adds the action screens
+on `feature/41-actions-ui`, implementation `cd5aa76` and documentation `3addd43`,
+published in [PR #47](https://github.com/Datakung/toktickit/pull/47).
+The legacy fixture correction `0cf9e58` was [approved by Phanuwit](https://github.com/Datakung/toktickit/pull/47#pullrequestreview-5439057032)
+on 2026-10-07 and merged into staging as `f4da089`. Issue #41 is closed.
+Phanuwit [approved PR #48](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227)
+at `b7f6bb9` and merged Issue #42 into `lab4-staging` as `00fddc1` on 2026-10-09.
+Phanuwit [approved PR #49](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211)
+at `6dce864` and merged Issue #43 into `lab4-staging` as `4660ac6` on 2026-10-10.
+Issue #44 starts from that accepted integration point on `feature/44-quality-release`.
+Its local candidate is published in [PR #50](https://github.com/Datakung/toktickit/pull/50)
+against `lab4-staging`. Quality/release review and final-main acceptance remain pending.
+Feature PRs target `lab4-staging`, followed by a reviewed release to `main`.
+
+Action labels count separately within each Ticket: Action 1, Action 2, and so on.
+They continue across pages and resolution cycles. Internal record IDs in links
+and audit history remain unchanged; this refinement needs no migration or reset.
+
+Issue #42 adds whole-current-cycle resolution/cancellation checks, atomic formal
+transition history and fresh cycles on reopen. Staff see an authoritative
+checklist; Requesters see only their own read-only workflow history. Loading,
+stale summaries and uncertain saves never enable resolution. Feature captures
+are in [workflow evidence](artifacts/lab-04/screenshots/workflow/README.md).
+The checklist uses prominent headings and labelled green checks/red crosses.
+Actions open in view mode; eligible Staff click Edit action to reveal mutation
+controls. Saved details and audit history remain visible without opening the editor.
+Eligible actions also show a separate Action progress section with Start, Complete
+and Cancel; these do not require Edit action or save unsaved fields.
+Audit revisions show readable What changed values (or initial creation details).
+Original Before/After snapshots remain unchanged under collapsed Technical details.
+Close detail returns to the list; while editing, its label explicitly warns that
+unsaved changes will be discarded. Saved actions and history are never deleted.
+Regenerate deliberately with `npm --prefix client run test:e2e:lab4-workflow-evidence`;
+ordinary E2E writes only ignored outputs. No new migration is needed beyond #40.
+See [tests.md](docs/lab-04/tests.md) for the actual branch results and limitations.
+
+The 2026-10-09 author-requested creation refinement opens the saved Ticket Detail
+after creation and all initial uploads succeed. An upload failure instead keeps
+the form open with failure feedback and a link to retry files on the saved Ticket;
+it does not display creation success or create another Ticket.
+
+Staff Operations also separates the saved `Current status` from `Change status
+to`. Saving Open keeps Open visible, resets the proposed target and retains all
+four legal next statuses without automatically choosing one.
+
+The subsequent author-requested two-stage layout puts an `Open ticket` panel
+above Operations only while the Ticket is New (Open/Cancel remain available).
+After opening, a separate `Update ticket status` panel appears below Operations
+with every valid progress transition. A permanently Cancelled Ticket instead
+shows read-only status with no further transitions.
+
+- [Specification](docs/lab-04/specification.md): requirements, business rules,
+  role permissions, action lifecycle, resolution gate, data and dashboard calculations.
+- [API contract](docs/lab-04/api-spec.md) and [UI contract](docs/lab-04/ui-spec.md).
+- [Tests and results](docs/lab-04/tests.md): 16 acceptance criteria, 27 explicit cases
+  and clearly separated passed foundation/UI tests versus remaining planned work.
+- [Review record](docs/lab-04/reviewer.md) and [AI-use record](docs/lab-04/ai-use.md).
+
+Implementation Issues: [#40](https://github.com/Datakung/toktickit/issues/40) action
+foundation, [#41](https://github.com/Datakung/toktickit/issues/41) action UI,
+[#42](https://github.com/Datakung/toktickit/issues/42) Ticket workflow,
+[#43](https://github.com/Datakung/toktickit/issues/43) dashboards and
+[#44](https://github.com/Datakung/toktickit/issues/44) quality/release.
+
+Issue #40 adds paged owned action/history reads, Staff/Admin create/edit/assign/
+start/complete/cancel APIs, current-user work filters, whole-cycle checklist counts,
+immutable revisions and durable retry receipts. Creator and completing performer
+come from the session; assignment does not change the Ticket Owner. Separate
+field and assignment writes enforce parent/child versions and preserve earlier
+success. Account deactivation or a Requester role change safely unassigns active
+work while retaining completed performer history.
+
+The additive migration preserves existing records and supplies cycle fields;
+it does not invent historical work. The intentional demo seed creates eight
+status fixtures (`TKT-LAB4-SEED-01` through `08`), all three priorities, zero/one/
+multiple actions and a zero-Ticket Requester. Repeated seeds preserve edited
+records, credentials and events; initial credentials still need secure provisioning.
+Tests use guarded test targets, never development migrations or seeds.
+
+Verified 2026-10-05: 182 server tests (36 new foundation tests), 97 existing client
+tests, 31 existing browser scenarios, both builds and unchanged development
+database/uploads during E2E. Client production audit reports zero vulnerabilities;
+server audit reports one moderate Multer advisory, recorded for the release gate.
+These are the historical Issue #40 checks, not final-main release results.
+Issue #41 now supplies Staff create/edit/separate assignment/start/complete/cancel,
+actual-performer display, completed corrections, shared Requester read-only records,
+paged audit history and action deep links. Failed/unknown saves preserve input;
+only the original payload/key is retried after an unknown response. A confirmed
+save is never repeated just because its subsequent refresh failed.
+Verified locally 2026-10-06: 182 server tests, 130 client tests, 36 browser
+scenarios (including 5 new Action journeys), both builds and unchanged development
+database/uploads. Thirteen screenshots are feature evidence, not final release.
+Three-width feature captures live in [Actions evidence](artifacts/lab-04/screenshots/actions-taken/README.md).
+Current branch results and limitations are in [Lab 4 tests](docs/lab-04/tests.md).
+Those published Issue #41 checks did not include final Ticket gate enforcement.
+Issue #42's gate is peer-accepted. Issue #43 adds read-only Requester and Staff/Admin
+dashboards, genuine zero/loading/error states, captured seven-day ranges and matching
+URL-based Ticket/work-list links. Role home pages are `/dashboard` and
+`/staff/dashboard`; My Tickets, Create Ticket, Ticket Queue and Users remain available.
+Metrics come from one backend snapshot, never from a downloaded page of records.
+See [dashboard screenshots](artifacts/lab-04/screenshots/dashboards/README.md) and
+[current test evidence](docs/lab-04/tests.md). No new migration, dependency or
+development seed/reset is required. Issue #43 is peer-accepted; final-main
+evidence/submission (#44) remain pending.
+
+### Lab 4 release-candidate quality gate
+
+Issue #44 patches Multer to 2.4.0 and Express's resolved proxy-addr to 2.0.8,
+and updates the test tools to Vitest 4.1.11 / Vite 6.4.4. Install the checked-in
+locks with `npm --prefix server ci` and `npm --prefix client ci` when reviewing
+this branch. Node 22 LTS or 24 LTS is supported; this gate used Node 24.14.0.
+No schema migration or development reseed is part of this hardening.
+
+With the existing PostgreSQL container available and the guarded test/E2E
+targets configured, run from the repository root:
+
+```powershell
+./scripts/lab4-quality-gate.ps1
+```
+
+This retains per-case reports, logs, builds, schema validation and production/full
+audits under `artifacts/lab-04/quality-gate/`. The expanded read-only development
+fingerprint includes sessions, Comments, Internal Notes and migration history as
+well as Tickets/actions/accounts/files. The gate fails on changed development
+state, failed/skipped/todo tests or flaky browser coverage. Browser retries are
+explicitly zero; review ports 5183/3100 do not reuse the development services.
+
+The gate also runs ten database-free finalization regression checks. Its report
+is marked `passed` only after two valid development fingerprints match; final
+snapshot/read failures are recorded as failures and never erase an earlier
+failed step. Run the checks alone with
+`pwsh -NoProfile -File scripts/tests/lab4-quality-gate.test.ps1`.
+
+After the peer-approved release is merged into a clean `main` checkout, rerun
+`./scripts/lab4-quality-gate.ps1 -FinalMain`. That mode refuses feature branches,
+dirty starting checkouts and main without the accepted dashboard increment.
+A release-candidate pass does not close #44 or substitute for that final-main run.
+See [the quality-gate record](artifacts/lab-04/quality-gate/README.md) and
+[submission plan](docs/lab-04/submission-plan.md) for remaining evidence gates.
+
+Before running this branch against development, stop the API and take a verified
+database backup (and retain uploads). Then, from `server`, explicitly run:
+
+```powershell
+npx prisma validate
+npx prisma generate
+npx prisma migrate deploy
+npm run prisma:seed
+```
+
+Do not use `migrate reset`, `db push` or test URLs for your development setup.
+The migration/restore regression tests rehearse recovery in separate disposable
+databases, not against your development database. Sign in as Staff/Admin and open
+a Ticket from the Queue to use Actions Taken; its Requester sees read-only work.
+Run foundation API tests with `npm --prefix server test -- tests/lab-04` and UI
+tests with `npm --prefix client test -- tests/lab-04`. Deliberately refresh feature
+captures with `npm --prefix client run test:e2e:lab4-actions-evidence`; normal
+`test:e2e` writes only ignored output. Do not treat these as final-main captures.
+
 ## Lab 3 reviewed release
 
 Issues #25–#30 are closed and Done. Phanuwit approved and merged the quality

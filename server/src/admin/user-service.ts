@@ -3,6 +3,7 @@ import { getPrisma } from "../prisma.js";
 import { hashPassword } from "../auth/password.js";
 import type { AuthLocals } from "../auth/auth-middleware.js";
 import { exactBody, initialPassword, listQuery, UserError, userFields, version } from "./user-validation.js";
+import { unassignAccountWork } from "../actions/action-record.js";
 
 export const adminSelect = { id: true, displayName: true, email: true, role: true, isActive: true, mustChangePassword: true, version: true, createdAt: true, updatedAt: true } as const;
 // Future assignment operations must take this lock before checking owner eligibility.
@@ -52,7 +53,7 @@ export async function editUser(auth: AuthLocals, id: number, input: unknown) {
     const changedRole = target.role !== data.role;
     if (!data.isActive || changedRole) await tx.session.deleteMany({ where: { userId: id } });
     if (!data.isActive || data.role === "REQUESTER") {
-      await tx.ticket.updateMany({ where: { ownerId: id }, data: { ownerId: null, version: { increment: 1 }, updatedAt: new Date() } });
+      await unassignAccountWork(tx, id, auth.currentUser.id);
     }
     return tx.user.update({ where: { id }, data: { ...data, version: { increment: 1 } }, select: adminSelect });
   });

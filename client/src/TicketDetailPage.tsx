@@ -23,6 +23,8 @@ import {
 } from "./api.js";
 import { attachmentSelectionError } from "./CreateTicketPage.js";
 import { CommunicationPanel } from "./CommunicationPanel.js";
+import { ActionsTaken } from "./ActionsTaken.js";
+import { WorkflowHistory } from "./WorkflowHistory.js";
 
 type DetailState = "loading" | "ready" | "unavailable" | "error";
 type UploadState = "selected" | "uploading" | "failed";
@@ -118,11 +120,15 @@ export function TicketDetailPage({
   ticketId,
   onNavigate,
   onRequesterUnavailable,
+  linkedActionId,
+  creationConfirmed = false,
 }: {
   requester: DevelopmentRequester;
   ticketId: string;
   onNavigate: (path: string) => void;
   onRequesterUnavailable: () => void;
+  linkedActionId?: string | null;
+  creationConfirmed?: boolean;
 }) {
   const [detailState, setDetailState] = useState<DetailState>("loading");
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
@@ -399,9 +405,11 @@ export function TicketDetailPage({
     }
   }
 
+  const creationNotice = creationConfirmed && <p className="success-message" role="status">Ticket created successfully.</p>;
   if (detailState === "loading") {
     return (
       <section className="ticket-detail-page" aria-busy="true" aria-live="polite">
+        {creationNotice}
         <h1>Ticket Detail</h1><p>Loading Ticket Detail…</p>
       </section>
     );
@@ -410,6 +418,7 @@ export function TicketDetailPage({
   if (detailState === "unavailable") {
     return (
       <section className="ticket-detail-page">
+        {creationNotice}
         <a href="/tickets" onClick={followBack}>← Back to My Tickets</a>
         <div className="feedback-panel feedback-panel-error" role="alert">
           <h1>Ticket unavailable</h1>
@@ -422,6 +431,7 @@ export function TicketDetailPage({
   if (detailState === "error" || !ticket) {
     return (
       <section className="ticket-detail-page">
+        {creationNotice}
         <a href="/tickets" onClick={followBack}>← Back to My Tickets</a>
         <div className="feedback-panel feedback-panel-error" role="alert">
           <h1>Ticket Detail is unavailable</h1>
@@ -440,6 +450,7 @@ export function TicketDetailPage({
   return (
     <section className="ticket-detail-page" aria-labelledby="ticket-detail-title">
       <a className="back-link" href="/tickets" onClick={followBack}>← Back to My Tickets</a>
+      {creationNotice}
       <div className="ticket-detail-heading">
         <div>
           <p className="eyebrow">Requester Ticket Detail</p>
@@ -479,6 +490,8 @@ export function TicketDetailPage({
         {resolutionError&&<div className="feedback-panel feedback-panel-error" role="alert"><p>{resolutionError}</p>{resolutionError.toLowerCase().includes("changed")&&<button className="secondary-button" onClick={()=>void loadTicket()}>Reload Ticket</button>}</div>}
       </section>
 
+      <ActionsTaken ticket={ticket} staff={false} userId={requester.id} actorName={requester.displayName} linkedActionId={linkedActionId} />
+      <WorkflowHistory key={`${ticket.id}:${requester.id}`} ticketId={ticket.id} version={ticket.version} />
       <CommunicationPanel ticketId={ticket.id} kind="comments" />
 
       <section className="detail-panel attachment-section" aria-labelledby="attachments-title">

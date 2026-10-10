@@ -62,6 +62,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
   await capture(page, info, "authentication/invalid-login-desktop.png");
 
   await login(page, "admin@example.test");
+  await expect(page.getByRole("heading", { name: "Staff Dashboard" })).toBeVisible();
+  await page.getByRole("button", { name: "Users", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });
@@ -100,6 +102,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await login(page, "mali.support@example.test");
+  await expect(page.getByRole("heading", { name: "Staff Dashboard" })).toBeVisible();
+  await page.getByRole("button", { name: "Ticket Queue", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Ticket Queue", exact: true })).toBeVisible();
   await expect(page.locator(".queue-table tbody tr").first()).toBeVisible();
   for (const width of widths) {
@@ -133,8 +137,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
     await page.getByLabel("IT Priority", { exact: true }).selectOption("HIGH");
     await page.getByRole("button", { name: "Save IT Priority" }).click();
     await expect(page.getByRole("status").filter({ hasText: "IT Priority saved" })).toBeVisible();
-    await page.getByLabel("Status", { exact: true }).selectOption("OPEN");
-    await page.getByRole("button", { name: "Save Status" }).click();
+    await page.getByLabel("Choose an action", { exact: true }).selectOption("OPEN");
+    await page.getByRole("button", { name: "Open Ticket", exact: true }).click();
     await expect(page.getByRole("status").filter({ hasText: "Status saved" })).toBeVisible();
   } finally {
     releaseCommunication();
@@ -153,7 +157,7 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });
     await capture(page, info, `staff-ticket-detail/detail-${width.name}.png`);
-    await captureRegion(page.locator(".operation-grid"), info, `staff-ticket-detail/operations-${width.name}.png`);
+    await captureRegion(page.locator(".workflow-controls"), info, `staff-ticket-detail/operations-${width.name}.png`);
     await captureRegion(comments, info, `staff-ticket-detail/public-comments-${width.name}.png`);
     await captureRegion(notes, info, `staff-ticket-detail/internal-notes-${width.name}.png`);
   }
@@ -161,6 +165,8 @@ test("captures integrated Lab 3 role, workflow, feedback and responsive evidence
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await login(page, "anan.chaiyasit@example.test");
+  await expect(page.getByRole("heading", { name: "My Dashboard" })).toBeVisible();
+  await page.goto("/tickets");
   await expect(page.getByRole("heading", { name: "My Tickets" })).toBeVisible();
   for (const width of widths) {
     await page.setViewportSize({ width: width.width, height: width.height });

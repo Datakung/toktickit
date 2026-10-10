@@ -58,6 +58,8 @@ it("preserves IDs, ownership, removal metadata, timestamps and non-null prioriti
   execute(readFileSync("prisma/migrations/20260915090000_admin_assignment_safety/migration.sql", "utf8"));
   execute(readFileSync("prisma/migrations/20260916090000_staff_queue_statuses/migration.sql", "utf8"));
   execute(readFileSync("prisma/migrations/20260925090000_ticket_operations_communication/migration.sql", "utf8"));
+  // Keep the historical preservation assertions with the current generated client.
+  execute(readFileSync("prisma/migrations/20261005090000_actions_taken_foundation/migration.sql", "utf8"));
   const user = await fixture.user.findUniqueOrThrow({ where: { id: 1 } });
   expect(user).toMatchObject({ id: 1, displayName: "Preserved Person", isActive: false, role: "REQUESTER", passwordHash: null, mustChangePassword: true });
   expect(user.updatedAt.toISOString()).toBe("2026-01-02T00:00:00.000Z");

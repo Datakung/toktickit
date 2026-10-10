@@ -5,6 +5,7 @@ async function login(page: Page, email = "admin@example.test", password = E2E_PA
   await page.goto("/login"); await page.getByLabel("Email", { exact: true }).fill(email);
   await page.getByLabel("Password", { exact: true }).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  if (email === "admin@example.test") { await expect(page.getByRole("heading", { name: "Staff Dashboard", exact: true })).toBeVisible(); await page.getByRole("button", { name: "Users", exact: true }).click(); }
 }
 test("Admin creates, edits, deactivates, activates and resets a real account", async ({ page, browser }) => {
   await login(page); await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
@@ -21,7 +22,7 @@ test("Admin creates, edits, deactivates, activates and resets a real account", a
   await expect(page.getByRole("status").filter({ hasText: "Account saved" })).toBeVisible();
   const context = await browser.newContext(); const other = await context.newPage();
   try {
-    await other.goto("http://127.0.0.1:5173/login");
+    await other.goto(new URL("/login", page.url()).href);
     await login(other, "browser-person@admin-e2e.example.test");
     await expect(other.getByRole("alert")).toContainText("Email or password is incorrect");
     await page.getByLabel("Name or email").fill("Lab3 Updated Person");
@@ -42,7 +43,7 @@ test("Admin creates, edits, deactivates, activates and resets a real account", a
     await expect(page.getByRole("status").filter({ hasText: "Initial password reset" })).toBeVisible();
     await login(other, "browser-person@admin-e2e.example.test", "Reset-browser-password-2026");
     await expect(other.getByRole("heading", { name: "Change your password" })).toBeVisible();
-    await other.goto("http://127.0.0.1:5173/admin/users");
+    await other.goto(new URL("/admin/users", page.url()).href);
     await expect(other.getByRole("heading", { name: "Change your password" })).toBeVisible();
   } finally { await context.close(); }
 });

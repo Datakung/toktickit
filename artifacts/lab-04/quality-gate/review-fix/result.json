@@ -1,0 +1,32 @@
+{
+  "phase": "review-correction",
+  "reviewedHead": "95b6689f3245cc517dce32772343eb47cb3c53b1",
+  "reviewUrl": "https://github.com/Datakung/toktickit/pull/50#discussion_r4238547399",
+  "executedAtUtc": "2026-10-10T17:55:43.0898503+00:00",
+  "initialRegressions": {
+    "passed": 5,
+    "total": 10
+  },
+  "correctedRegressions": {
+    "passed": 10,
+    "total": 10
+  },
+  "harness": "Parsed production Invoke-QualityStep, main-check status assignment and finalization block; external temporary cmd fixture and final-read injection.",
+  "databaseUsedByHarness": false,
+  "historicalGateOverwritten": false,
+  "finalMain": false,
+  "sources": [
+    {
+      "path": "scripts/lab4-quality-gate.ps1",
+      "sha256": "ff0378c59ad0b46693f7e151428c273ed4c8e594d70b8009ee396bc34c90f4e7"
+    },
+    {
+      "path": "scripts/tests/lab4-quality-gate.test.ps1",
+      "sha256": "c449a33f2a11a705056e07b1c9a9945c1dfa0a4fd891c407031ef21a8da98130"
+    },
+    {
+      "path": "scripts/tests/fixtures/snapshot.cmd",
+      "sha256": "8b8068734bb8deb57061afd0c9e5d6cb3fe39bd6f3ddcee920dfdd80f7402357"
+    }
+  ]
+}

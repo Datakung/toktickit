@@ -173,6 +173,13 @@ export async function prepareE2EEnvironment() {
       updatedAt: fixedTime,
     }));
     await prisma.ticket.createMany({ data: queueTickets });
+    // Dashboard-only records: guarded disposable E2E target, no development seed.
+    const dashboardRequester = await prisma.user.create({ data: { displayName: "Dashboard Requester", email: "dashboard.requester@example.test", role: "REQUESTER", passwordHash, mustChangePassword: false } });
+    await prisma.user.create({ data: { displayName: "Empty Dashboard Requester", email: "dashboard.empty@example.test", role: "REQUESTER", passwordHash, mustChangePassword: false } });
+    for (const [index, status] of (["OPEN", "WAITING_FOR_REQUESTER", "RESOLVED", "CANCELLED"] as const).entries()) {
+      const dashboardTicket = await prisma.ticket.create({ data: { ticketNumber: `TKT-20261010-DASH0${index + 1}`, requesterId: dashboardRequester.id, categoryId: category.id, relatedSystemId: relatedSystem.id, summary: index === 0 ? "LongDashboardSummary".repeat(6) : `Dashboard fixture ${status}`, description: "Private dashboard fixture context", requestedPriority: "HIGH", itPriority: "HIGH", status, ownerId: index === 0 ? queueOwner.id : null, resolvedAt: status === "RESOLVED" ? new Date() : null } });
+      if (index < 3) await prisma.actionTaken.create({ data: { ticketId: dashboardTicket.id, cycle: 1, actionAt: new Date(), description: `Dashboard action ${index + 1}`, result: index === 2 ? "Verified service restored" : "", createdById: queueOwner.id, assigneeId: queueOwner.id, state: index === 2 ? "COMPLETED" : "PLANNED", performedById: index === 2 ? queueOwner.id : null, performedAt: index === 2 ? new Date() : null, followUpRequired: false, followUpNote: "", attachmentNotes: "" } });
+    }
     const operationsTicket = await prisma.ticket.findUniqueOrThrow({
       where: { ticketNumber: E2E_OPERATIONS_TICKET_NUMBER },
     });
@@ -198,11 +205,10 @@ export async function cleanupE2EEnvironment() {
   const { e2eUrl } = configureE2EEnvironment();
   const prisma = new PrismaClient({ datasources: { db: { url: e2eUrl } } });
   try {
-    await prisma.session.deleteMany();
-    await prisma.internalNote.deleteMany();
-    await prisma.publicComment.deleteMany();
-    await prisma.attachment.deleteMany();
-    await prisma.ticket.deleteMany();
+    // configureE2EEnvironment has proved this is an isolated E2E target.
+    // Cascading TRUNCATE also clears immutable action events/receipts. Product
+    // DELETE deliberately cannot remove these historical records.
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Session", "Ticket" RESTART IDENTITY CASCADE');
   } finally {
     await prisma.$disconnect();
     rmSync(e2eUploadRoot, { recursive: true, force: true });
@@ -250,12 +256,20 @@ export async function snapshotDevelopmentState() {
       prisma.$queryRaw`SELECT * FROM "Ticket" ORDER BY id`,
       prisma.attachment.findMany({ orderBy: { id: "asc" } }),
     ]);
+    const actionTables: Record<string, unknown> = {};
+    // A development schema may still precede Lab 4: fingerprint additive
+    // records when present, without migrating or otherwise changing it.
+    for (const table of ["Session", "PublicComment", "InternalNote", "ActionTaken", "ActionTakenEvent", "ActionWriteReceipt", "TicketTransitionEvent", "_prisma_migrations"]) {
+      const exists = await prisma.$queryRaw<Array<{ present: boolean }>>`SELECT to_regclass(${'"' + table + '"'}) IS NOT NULL AS present`;
+      if (exists[0]?.present) actionTables[table] = await prisma.$queryRawUnsafe(`SELECT * FROM "${table}" ORDER BY id`);
+    }
     const serialized = JSON.stringify({
       categories,
       systems,
       requesters,
       tickets,
       attachments,
+      actionTables,
       uploads: snapshotDevelopmentUploads(),
     });
     return createHash("sha256").update(serialized).digest("hex");

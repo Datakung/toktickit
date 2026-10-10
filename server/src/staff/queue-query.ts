@@ -1,9 +1,11 @@
 import { Prisma, RequestedPriority, TicketStatus } from "@prisma/client";
+import { dashboardFilterNames, parseDashboardFilters, dashboardFilterWhere } from "../dashboard/dashboard-query.js";
 export function parseQueueQuery(raw: Record<string, unknown>) {
   const fields: Record<string, string> = {};
-  const names = ["q", "categoryId", "relatedSystemId", "ownerId", "unassigned", "status", "itPriority", "sort", "direction", "page", "pageSize"];
+  const names = ["q", "categoryId", "relatedSystemId", "ownerId", "unassigned", "status", "itPriority", "sort", "direction", "page", "pageSize", ...dashboardFilterNames];
   for (const key of Object.keys(raw)) if (!names.includes(key) || typeof raw[key] !== "string") fields[key] = "Supply a supported parameter once as text.";
   const text = (key: string) => typeof raw[key] === "string" ? raw[key] as string : undefined;
+  const dashboardFilters = parseDashboardFilters(raw, fields);
   const integer = (key: string) => {
     const value = text(key);
     if (value === undefined) return undefined;
@@ -31,6 +33,7 @@ export function parseQueueQuery(raw: Record<string, unknown>) {
   const literal = q.replace(/[\\%_]/g, "\\$&");
   const where: Prisma.TicketWhereInput = {
     categoryId, relatedSystemId, status, itPriority,
+    ...dashboardFilterWhere(dashboardFilters),
     ...(ownerId !== undefined ? { ownerId } : unassigned === "true" ? { ownerId: null } : unassigned === "false" ? { ownerId: { not: null } } : {}),
     ...(q ? { OR: [{ ticketNumber: { contains: literal, mode: "insensitive" } }, { summary: { contains: literal, mode: "insensitive" } }] } : {}),
   };

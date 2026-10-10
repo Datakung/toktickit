@@ -39,6 +39,14 @@ const detail = {
 
 async function mockDetail(page: import("@playwright/test").Page) {
   await mockSignedInRequester(page);
+  await page.route("**/api/tickets/41/workflow-history**", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1 }) }));
+  // This is a fully mocked Ticket/session, so its new shared section must also
+  // be mocked; a real API correctly denies the absent mock session with 401.
+  await page.route("**/api/tickets/41/actions**", route => route.fulfill({
+    status: 200, contentType: "application/json",
+    body: JSON.stringify({ items: [], page: 1, pageSize: 20, total: 0, totalPages: 1,
+      ticketVersion: 1, currentCycle: 1, resolutionGate: { cycle: 1, completedCount: 0, unfinishedCount: 0, outstandingFollowUpCount: 0, meetsActionRequirements: false } }),
+  }));
   await page.route("**/api/tickets/41", (route) => route.fulfill({
     status: 200, contentType: "application/json", body: JSON.stringify({ data: detail }),
   }));
