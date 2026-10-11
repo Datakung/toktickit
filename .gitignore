@@ -20,3 +20,4 @@ server/prisma/*.db
 !artifacts/lab-04/final-main/*.log
 !artifacts/lab-04/final-main/gate/*.log
 .DS_Store
+__pycache__/

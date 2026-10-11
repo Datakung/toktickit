@@ -1,0 +1,27 @@
+{
+  "correctionRevision": "64df40b",
+  "applicationRevision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+  "policy": "utf8-crlf-to-lf-v1",
+  "unitTestsPassed": 17,
+  "actualSourcesExercisedPerEol": 68,
+  "actualSourcesIndividuallyModifiedAndRejectedInUnitTests": 68,
+  "fullCheckerCheckouts": [
+    { "coreAutocrlf": false, "lfFiles": 68, "crlfFiles": 0, "cleanBeforeRun": true, "exitCode": 0 },
+    { "coreAutocrlf": true, "lfFiles": 0, "crlfFiles": 68, "cleanBeforeRun": true, "exitCode": 0 }
+  ],
+  "actualWorkingFileModificationCheck": {
+    "scratchFile": "server/src/index.ts",
+    "change": "fallback port 3000 -> 3001",
+    "exitCode": 1,
+    "expectedAssertion": "Application source content differs from approved revision 0f169ea: server/src/index.ts",
+    "authorWorkingFilesEdited": false
+  },
+  "pdfSha256Unchanged": "8f1fda67585be5ecbf8670af2d0453d6bb51fcabbc5e5440cf5bcadf2fc17a99",
+  "embeddedFilesByteVerified": 17,
+  "freshGateDigestsVerified": 18,
+  "originalScreenshotDigestsVerified": 192,
+  "a4PortraitPagesVerified": 54,
+  "freshFullApplicationSuiteRun": false,
+  "reviewerReapprovalClaimed": false,
+  "issue44Closed": false
+}
