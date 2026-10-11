@@ -1,0 +1,32 @@
+[
+  {
+    "number": 44,
+    "state": "OPEN",
+    "title": "Complete the Lab 4 quality gate, evidence and release"
+  },
+  {
+    "number": 43,
+    "state": "CLOSED",
+    "title": "Implement Requester and IT Staff dashboards"
+  },
+  {
+    "number": 42,
+    "state": "CLOSED",
+    "title": "Enforce the final Ticket workflow and resolution gate"
+  },
+  {
+    "number": 41,
+    "state": "CLOSED",
+    "title": "Implement the Actions Taken Ticket Detail UI"
+  },
+  {
+    "number": 40,
+    "state": "CLOSED",
+    "title": "Implement the Actions Taken data and API foundation"
+  },
+  {
+    "number": 39,
+    "state": "CLOSED",
+    "title": "Define the Lab 4 engineering contract"
+  }
+]

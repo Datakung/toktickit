@@ -1,0 +1,82 @@
+
+> toktickit-client@1.0.0 test
+> vitest run --maxWorkers=2 --reporter=default --reporter=json --outputFile=../artifacts/lab-04/quality-gate/client-results.json
+
+
+ RUN  v4.1.11 C:/CPE/CPE334/MINE/toktickit/client
+
+ ✓ tests/lab-03/Login.test.tsx (12 tests) 7863ms
+     ✓ allows a normal REQUESTER to open and complete password change  1399ms
+     ✓ allows a normal IT_STAFF to open and complete password change  1407ms
+     ✓ allows a normal ADMINISTRATOR to open and complete password change  1341ms
+     ✓ shows login and clears the password after a safe failure  907ms
+     ✓ routes initial credentials only to mandatory password change  968ms
+     ✓ changes the password and enters the Requester workspace  1208ms
+ ✓ tests/lab-04/ActionsTaken.test.tsx (44 tests) 13219ms
+     ✓ confirms COMPLETED directly without editing or saving fields  749ms
+     ✓ confirms CANCELLED directly without editing or saving fields  746ms
+     ✓ recovers an uncertain direct completion with the same intent and no field editor  615ms
+     ✓ explicitly discards unsaved fields and assignment when closing an editor's detail  593ms
+     ✓ views saved details and audit history before explicitly opening the editor  459ms
+     ✓ returns to view mode when another action is chosen  441ms
+     ✓ returns a newly created action to view mode  370ms
+     ✓ keeps fields and assignment as independent saves  580ms
+     ✓ retries an unknown create with exactly the same payload and key  492ms
+     ✓ preserves field success and retries only an uncertain later assignment  431ms
+     ✓ retains a rejected assignment without resubmitting successful fields  355ms
+     ✓ refreshes a confirmed create without repeating it after read failure  435ms
+     ✓ blocks all writes after conflict until explicit authoritative reload  714ms
+     ✓ keeps fields unsaved when only assignment succeeds  452ms
+     ✓ confirms actual performer, requires Result and supports backing out  672ms
+     ✓ requires explicit cancellation confirmation and reason  723ms
+     ✓ does not leak a draft across users  435ms
+     ✓ recovers the same unknown intent after a full component reload  581ms
+ ✓ tests/lab-02/CreateTicket.test.tsx (9 tests) 7125ms
+     ✓ prevents repeated submission and presents the official Ticket Number  1417ms
+     ✓ preserves entered values when Ticket creation fails safely  1329ms
+     ✓ keeps the created Ticket when one initial file upload fails  1437ms
+     ✓ waits for every initial upload before confirming navigation  1361ms
+     ✓ does not redirect after leaving the form while creation is pending  1386ms
+ ✓ tests/lab-03/AdminUsers.test.tsx (8 tests) 3832ms
+     ✓ loads, searches by explicit submit and filters roles  605ms
+     ✓ retries a safe load failure and distinguishes no results  458ms
+     ✓ retains non-secret create input, clears failed passwords and shows field validation  944ms
+     ✓ requires explicit confirmation for resets, disables repeat submission and reports success  624ms
+     ✓ preserves a stale edit until explicit reload and uses the newly read version  494ms
+     ✓ invalidates the shell after resetting its own account  646ms
+ ✓ tests/lab-04/TicketWorkflow.test.tsx (32 tests) 3296ms
+   ✓ keeps saved status visible during and after opening, without choosing the following transition  341ms
+   ✓ keeps all writes blocked after an uncertain status save until explicit reload  355ms
+ ✓ tests/lab-02/SafeErrorStates.test.tsx (3 tests) 3302ms
+     ✓ recovers reference loading and preserves Create Ticket input across a safe retry  2056ms
+     ✓ retries detail metadata, upload, content, and removal without exposing internals  1137ms
+ ✓ tests/lab-02/AttachmentSection.test.tsx (10 tests) 2443ms
+     ✓ requires a valid reason and updates a removed item without deleting its metadata  1080ms
+     ✓ delegates an unavailable Requester during Attachment removal  512ms
+ ✓ tests/lab-02/MyTickets.test.tsx (8 tests) 1358ms
+     ✓ sends combined search, filter, sort, and pagination controls  643ms
+ ✓ tests/lab-03/CommunicationPagination.test.tsx (2 tests) 912ms
+     ✓ reaches entries after the first 20 and retains a new entry after remount  526ms
+     ✓ reaches entries after the first 20 and retains a new entry after remount  384ms
+ ✓ tests/lab-03/StaffTicketQueue.test.tsx (4 tests) 835ms
+     ✓ combines filters, resets page and clears controls  477ms
+ ✓ tests/lab-03/StaffTicketDetail.test.tsx (3 tests) 503ms
+ ✓ tests/lab-04/RequesterDashboard.test.tsx (4 tests) 425ms
+ ✓ tests/lab-02/RequesterTicketDetail.test.tsx (5 tests) 340ms
+ ✓ tests/lab-02/ui-foundation-style.test.tsx (2 tests) 261ms
+ ✓ tests/lab-04/StaffDashboard.test.tsx (6 tests) 224ms
+ ✓ tests/lab-03/StaffTicketNavigation.test.tsx (2 tests) 257ms
+ ✓ tests/lab-04/DashboardNavigation.test.tsx (13 tests) 226ms
+ ✓ tests/lab-03/RequesterCommunication.test.tsx (2 tests) 256ms
+ ✓ tests/lab-04/ActionHistoryChanges.test.tsx (6 tests) 120ms
+ ✓ tests/lab-01/App.test.tsx (4 tests) 75ms
+ ✓ tests/lab-03/session-expiry.test.tsx (7 tests) 11ms
+ ✓ tests/lab-04/ui-style.test.tsx (7 tests) 4ms
+ ✓ tests/lab-02/ui-style.test.tsx (18 tests) 4ms
+
+ Test Files  23 passed (23)
+      Tests  211 passed (211)
+   Start at  02:40:45
+   Duration  34.50s (transform 743ms, setup 2.20s, import 4.53s, tests 46.89s, environment 11.37s)
+
+JSON report written to C:/CPE/CPE334/MINE/toktickit/artifacts/lab-04/quality-gate/client-results.json

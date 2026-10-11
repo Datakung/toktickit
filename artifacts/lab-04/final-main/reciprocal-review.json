@@ -1,0 +1,274 @@
+{
+  "repository": "auto4496/toktickit",
+  "retrievedAtUtc": "2026-10-10 20:28:57 UTC",
+  "source": "GitHub PR metadata and merged comment timelines; read-only retrieval",
+  "purpose": "Reciprocal review evidence, separate from application gate and author acceptance",
+  "testsRerunForThisDocumentationUpdate": false,
+  "records": [
+    {
+      "number": 39,
+      "title": "[Lab 4] Define Sprint 4 engineering contract",
+      "url": "https://github.com/auto4496/toktickit/pull/39",
+      "head": "4886585839ae8369878a2882e4b2c474627c38cd",
+      "base": "codex/lab4-staging",
+      "merged": true,
+      "mergedAtUtc": "2026-10-05T14:36:01Z",
+      "mergeCommit": "b5bee16681c81d93ca2a31a3fdffa7d7dc4a829a",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/39#discussion_r4181341740",
+          "author": "Datakung",
+          "body": "Please add a planned backup/restore or rollback test alongside the successful migration and seed checks. Lab 4 section 5.2 explicitly requires the recovery approach to be documented and tested. The specification describes restoring a pre-migration backup, but INT-01 currently verifies only successful migration and seed reruns. Plan an isolated recovery scenario that verifies the restored records, relationships and attachment files are preserved. Execution can remain Pending in this contract PR.",
+          "state": null,
+          "createdAtUtc": "2026-10-05T06:42:52Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/39#discussion_r4181341744",
+          "author": "Datakung",
+          "body": "Please define how Staff/Admin move a PLANNED Action to IN_PROGRESS, for example with a Start control or an explicit transition selector. BR-08 and the status API support this transition, but the UI currently lists only Create, View/Edit and Complete/Cancel controls. Include the role/terminal-state restrictions, busy/conflict feedback and corresponding planned UI/E2E coverage so this lifecycle step has a clear implementation contract.",
+          "state": null,
+          "createdAtUtc": "2026-10-05T06:42:52Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/39#pullrequestreview-5410811526",
+          "author": "Datakung",
+          "body": "The contract provides clear Action rules, dashboard calculations, authorization boundaries and acceptance-test mapping. Document links and whitespace checks pass. Before approval, please add the required migration recovery test, clarify the UI control for starting an Action, and formally link PR #39 to Issue #38 through GitHub Development. Issue #38 is currently Backlog; please move it to PR Review. Please reply when these updates are ready for re-review.",
+          "state": "CHANGES_REQUESTED",
+          "createdAtUtc": "2026-10-05T06:42:52Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/39#issuecomment-5995794769",
+          "author": "auto4496",
+          "body": "@Datakung The requested updates are ready for re-review in commit `4886585839ae8369878a2882e4b2c474627c38cd`.\n\n1. Added INT-02: an isolated backup/failure/restore test plan that compares restored records, relationships, attachment files and download checksums.\n2. Defined the Staff/Admin Start control for PLANNED Actions, including role and terminal-state restrictions, busy feedback and conflict recovery. Added planned UI-05 and E2E-04 coverage.\n3. Formally linked PR #39 to Issue #38 through GitHub Development and verified the closing issue reference.\n4. Moved Issue #38 to PR Review and verified its Project status.\n\nRelative document links, AC-01 through AC-11 traceability and `git diff --check` pass. Recovery and Start test execution remain Pending in this documentation-only PR.\n\nPlease re-review PR #39 when you are ready. Thank you.\n",
+          "state": null,
+          "createdAtUtc": "2026-10-05T13:48:20Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/39#pullrequestreview-5416185226",
+          "author": "Datakung",
+          "body": "Re-reviewed commit 4886585. The migration recovery plan and Action Start control now address the previous feedback, with appropriate planned test coverage. Issue #38 is formally linked and in PR Review, and the author has replied. Document links and whitespace checks pass. No remaining blocking findings. Approved for contract integration into codex/lab4-staging; implementation and test execution remain pending.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-05T14:34:32Z"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "title": "[Lab 4] Data foundation and migration recovery",
+      "url": "https://github.com/auto4496/toktickit/pull/41",
+      "head": "301c902d458db094cf44208032bc84d8612a0cf0",
+      "base": "codex/lab4-staging",
+      "merged": true,
+      "mergedAtUtc": "2026-10-06T07:15:03Z",
+      "mergeCommit": "c039a7d09dddf83119cd841a5d9bebeb43b31253",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/41#pullrequestreview-5425008221",
+          "author": "Datakung",
+          "body": "Reviewed commit 301c902. The additive migration preserves existing data, seed reruns preserve edits and history, and the recovery test verifies restored records, relationships, attachment integrity and authenticated downloads. All 391 tests and both production builds passed independently. Issue #40 is correctly linked and in PR Review. No blocking findings; approved for data-foundation integration into codex/lab4-staging.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-06T07:14:47Z"
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "title": "[Lab 4] Actions Taken API UI and Start recovery",
+      "url": "https://github.com/auto4496/toktickit/pull/43",
+      "head": "935bcdfee91087f41bbd1304ffe3b4da4d065c0f",
+      "base": "codex/lab4-staging",
+      "merged": true,
+      "mergedAtUtc": "2026-10-07T07:21:02Z",
+      "mergeCommit": "68a88cc1760f18f19f38bd91f84515959ee25cde",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#discussion_r4195121507",
+          "author": "Datakung",
+          "body": "[P2] Recover ambiguous creation without stranding the edited draft. Reproduced with the real browser/API: POST commits an Action, but its response is interrupted; the form reports failure and remains editable. Editing the description and saving again reuses the original Idempotency-Key with a different payload, so the server correctly returns IDEMPOTENCY_KEY_REUSED. Treating every 409 as a version conflict then disables Save, while selected is null in create mode, so Reload latest is absent. The edited draft is stranded even though the original Action exists. Preserve the original submitted payload/key to resolve the ambiguous attempt, retain the user's later edits, and provide an explicit recovery path to the saved Action without generating a duplicate. Please add coverage for commit-plus-lost-response followed by draft editing and retry.",
+          "state": null,
+          "createdAtUtc": "2026-10-06T12:18:23Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#discussion_r4195121521",
+          "author": "Datakung",
+          "body": "[P2] Keep routine test screenshots out of committed evidence. This capture writes directly to artifacts/lab-04/actions/screenshots during the normal Actions test command. All nine committed screenshot hashes matched before testing; after the successful routine run, all nine PNGs changed while manifest.json retained its previous hashes and observedAt. A normal verification run therefore leaves the curated evidence inconsistent. Write routine captures to ignored test-results, and publish the curated PNGs with a separate explicit capture command that refreshes the manifest after the complete suite succeeds.",
+          "state": null,
+          "createdAtUtc": "2026-10-06T12:18:23Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5428174855",
+          "author": "Datakung",
+          "body": "Reviewed commit 29480eb. The Actions permissions, lifecycle and existing regression checks pass: independently verified all 424 committed tests in 39 files, all five Actions browser journeys, and both production builds using separate disposable databases. Issue #42 is formally linked and in PR Review. However, please fix recovery when an Action creation response is lost and the draft is subsequently edited, and prevent routine browser tests from overwriting committed screenshot evidence without refreshing its manifest. Both issues were reproduced independently; details are in the inline comments. Please reply after correcting them for re-review.",
+          "state": "CHANGES_REQUESTED",
+          "createdAtUtc": "2026-10-06T12:18:24Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#issuecomment-6032583172",
+          "author": "auto4496",
+          "body": "@Datakung Both findings from the review of `29480eb` are corrected in `25b478c8723d2be25a61b2fd78af13bda2270a94`. Please re-review this head.\n\n- Lost creation response: retain the original submitted payload and Idempotency-Key separately from the editable draft. Recover saved Action replays the original request, keeps later draft edits, and edits the recovered ID/version via PATCH. A real-browser case commits POST, aborts its response, edits the draft, recovers with the same body/key and replay header, then verifies one Action/version 2 with CREATED and EDITED revisions. Component coverage also checks failed recovery retry and definitive creation-error correction.\n- Screenshot evidence: routine captures write to ignored test-results. The explicit `npm run test:e2e:capture:actions` runs the complete Actions suite before publishing the nine curated PNGs and refreshing their manifest. The routine run left all nine committed PNG hashes and the manifest unchanged; explicit capture passed the full suite and published matching hashes/byte lengths.\n\nObserved correction checks: 18 Action component tests passed, all 6 Actions browser tests passed, the explicit capture suite passed all 6 again, and the client production build passed. Screenshot hashes/bytes and whitespace were checked again on 2026-10-07. The earlier full 424-test/both-build result applies to the originally reviewed head; no new full 426-test run is claimed. Details and reproduction commands are in `docs/lab-04/actions.md`.\n\nThe re-review request is already assigned to you. Issue #42 remains in PR Review; this PR has not been merged.\n",
+          "state": null,
+          "createdAtUtc": "2026-10-07T06:47:53Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5438813779",
+          "author": "Datakung",
+          "body": "The original lost-response recovery issue and screenshot-overwrite issue are fixed. I independently verified all 426 committed tests, six Actions browser tests, and both production builds pass. However, recovery still strands the corrected draft when the server definitively rejects creation: it keeps retrying the original invalid payload while Save and Cancel remain disabled. Please distinguish definitive rejection from an ambiguous failure, allow safe draft correction, and add regression coverage. Please reply once fixed for re-review.",
+          "state": "CHANGES_REQUESTED",
+          "createdAtUtc": "2026-10-07T07:07:46Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#discussion_r4204058962",
+          "author": "Datakung",
+          "body": "Recovery still strands the draft when the server definitively rejects creation. I reproduced a lost validation-error response, corrected the description, then clicked Recover saved Action. Recovery receives 400 VALIDATION_FAILED but keeps replaying the original invalid payload; Save and Cancel remain disabled, with no Action created. Please distinguish definitive rejection from network/server ambiguity, unlock the retained draft safely, and add regression coverage.",
+          "state": null,
+          "createdAtUtc": "2026-10-07T07:08:19Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5438819452",
+          "author": "Datakung",
+          "body": "",
+          "state": "CHANGES_REQUESTED",
+          "createdAtUtc": "2026-10-07T07:11:24Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#issuecomment-6032955307",
+          "author": "auto4496",
+          "body": "@Datakung The further definitive-rejection recovery finding is fixed in `935bcdf`. Please re-review the latest head.\n\nSave and Recover saved Action share a rejection classifier. Known creation rejection codes clear the attempted request/key, keep the current edited draft and returned field feedback, re-enable Save/Cancel, and rotate the key for a corrected create. Validation and ineligible-assignee errors are covered; unknown outcomes, authentication failures, server errors and reused-key conflicts preserve the original recovery body/key because they cannot establish whether the earlier attempt committed.\n\nFinal checks: 23 Action component tests passed, all 7 Actions browser tests passed, and client production build passed. The new browser regression uses the real API to reject a whitespace-only description, drops the initial 400 response, edits the draft, and replays the original invalid request to receive the definitive rejection. Save/Cancel then work; a corrected create uses a new key and results in exactly one Action/version 1 with only a CREATED revision. The existing committed-response recovery path still passes without duplicates. The routine run preserved all nine curated screenshot hashes/byte lengths and left the evidence diff empty.\n\nThe first component run had two selector failures caused by appended field-error label text; corrected caption-prefix selectors passed all 23 tests. Details are in `docs/lab-04/actions.md`. Your independent 426-test/six-browser-test/both-build result is recorded against `25b478c`; no new full 431-test author run is claimed. Approval/merge remain pending.\n",
+          "state": null,
+          "createdAtUtc": "2026-10-07T07:15:36Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5438931114",
+          "author": "Datakung",
+          "body": "Re-reviewed the latest changes and confirmed the recovery issue is fixed. Definitive rejection now preserves the corrected draft and enables Save/Cancel, while uncertain outcomes retain the original request to avoid duplicates. All 431 committed tests, seven Actions browser tests, independent recovery checks, and both production builds passed. Approved for integration into Lab 4 staging.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-07T07:20:46Z"
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "title": "[Lab 4] Ticket workflow and resolution gate",
+      "url": "https://github.com/auto4496/toktickit/pull/45",
+      "head": "a1d1fcebe62d4aa72c6da9d932f8150136b405aa",
+      "base": "codex/lab4-staging",
+      "merged": true,
+      "mergedAtUtc": "2026-10-09T08:46:56Z",
+      "mergeCommit": "69b32d676efa567e499b40fc5a7d51f8bf4602ac",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/45#pullrequestreview-5467836482",
+          "author": "Datakung",
+          "body": "The resolution gate correctly enforces completed work and blocks unfinished Actions, including concurrent changes. Existing role permissions, status rules, Requester advisory behavior, and Action history are preserved. UI feedback and recovery work as expected. All 458 tests, 14 relevant browser cases, and both production builds passed. Approved for integration into Lab 4 staging.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-09T08:46:46Z"
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "title": "[Lab 4] Role Dashboards and accurate Ticket drill-down",
+      "url": "https://github.com/auto4496/toktickit/pull/47",
+      "head": "884df3949c6298430af51360927fd12448b193c7",
+      "base": "codex/lab4-staging",
+      "merged": true,
+      "mergedAtUtc": "2026-10-09T20:41:27Z",
+      "mergeCommit": "72c55530c42c5f7aa49e693a404b6c247207e9fd",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/47#discussion_r4232825709",
+          "author": "Datakung",
+          "body": "[P2] Resolve the generated server Prisma client for this fixture. This root-level import resolves node_modules/@prisma/client, whereas the documented setup generates server/node_modules/@prisma/client. I independently reran npm run prisma:generate and confirmed it generated only the server copy; with NODE_PATH unset, dashboard test collection still failed here with Cannot find module '.prisma/client/default' and zero tests collected. The dashboard evidence publisher invokes the same suite, so capture is also blocked. The four dashboard browser cases pass when NODE_PATH points at the generated server package, but that should not be a required workaround. Resolve Prisma through server/package.json as the existing E2E database/setup helpers do, or guarantee the required client generation in normal setup. Please rerun both test:e2e:dashboards and test:e2e:capture:dashboards without a manual client-path workaround.",
+          "state": null,
+          "createdAtUtc": "2026-10-09T17:32:15Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/47#pullrequestreview-5473329351",
+          "author": "Datakung",
+          "body": "Reviewed commit 1f1adc2. Dashboard permissions, counts, filtering and navigation look correct. All 483 committed tests and both builds passed; 26 relevant browser cases passed with a temporary client-path workaround. However, the normal dashboard test/capture command fails because the fixture imports an ungenerated root Prisma client. Please correct that dependency resolution and rerun both commands without the workaround, then reply for re-review.",
+          "state": "CHANGES_REQUESTED",
+          "createdAtUtc": "2026-10-09T17:32:15Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/47#issuecomment-6088818239",
+          "author": "auto4496",
+          "body": "@Datakung Fixed the requested Prisma fixture resolution in `884df3949c6298430af51360927fd12448b193c7`.\n\n`e2e/lab-04/dashboards.spec.ts` now uses `createRequire` based on `server/package.json`, so both fixture setup and cleanup use the server-generated Prisma client. The root client is no longer imported at runtime.\n\nVerification after normal `npm run prisma:generate`, with `NODE_PATH` and `DEBUG` unset and no runtime client-path workaround:\n\n- `npm run test:e2e:dashboards`: **4 passed (29.8s)**.\n- `npm run test:e2e:capture:dashboards`: **4 passed (15.4s)**; all nine dashboard captures and their manifest refreshed.\n- These are the same four cases run twice. All 30 curated screenshot hashes/byte lengths verified; the 21 earlier Actions/workflow images are unchanged.\n\nThe correction updates the evidence, review and AI-use records. The previous full 483-test/build results are retained; this correction reran the two requested dashboard gates. Please re-review the new head when available.\n",
+          "state": null,
+          "createdAtUtc": "2026-10-09T20:35:28Z"
+        },
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/47#pullrequestreview-5475149576",
+          "author": "Datakung",
+          "body": "Re-reviewed the correction and confirmed the fixture now uses the generated server Prisma client. Both dashboard testing and screenshot capture pass without the client-path workaround, and the refreshed evidence is consistent. No blocking findings remain. Approved for integration into Lab 4 staging.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-09T20:41:12Z"
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "title": "[Lab 4] Final hardening, regression and release evidence",
+      "url": "https://github.com/auto4496/toktickit/pull/49",
+      "head": "fa03f754d76ab8fb01b8d3026ab066ac42a17ea6",
+      "base": "codex/lab4-staging",
+      "merged": true,
+      "mergedAtUtc": "2026-10-10T15:24:39Z",
+      "mergeCommit": "27272813aa422357925fd21e978af100448a24d3",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/49#pullrequestreview-5479573135",
+          "author": "Datakung",
+          "body": "Reviewed commit fa03f754. Independently reproduced all 484 tests, the complete 32-case browser suite and both production builds. The scale checks, responsive evidence and draft report are consistent with the documented scope. No blocking issues remain; this is ready for integration into staging. Keep Issue #48 open until the separately reviewed main release, fresh final-main verification and student-confirmed final report are complete.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-10T15:22:36Z"
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "title": "[Lab 4] Release reviewed staging into main",
+      "url": "https://github.com/auto4496/toktickit/pull/50",
+      "head": "27272813aa422357925fd21e978af100448a24d3",
+      "base": "main",
+      "merged": true,
+      "mergedAtUtc": "2026-10-10T16:11:59Z",
+      "mergeCommit": "7a697d24120977cfdabc7470c41f88d44fdf2f30",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/50#pullrequestreview-5479801621",
+          "author": "Datakung",
+          "body": "Reviewed release head 27272813. The complete staging tree is identical to approved head fa03f754, and the six independently reviewed Lab 4 increments are included without additional changes. No blocking findings remain; this is ready for integration into main. After merging, record the actual main merge SHA and run fresh complete tests, browser capture and both builds. Keep Issue #48 open—or reopen it if GitHub closes it automatically—until final-main evidence and the student-confirmed final submission are complete.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-10T16:11:49Z"
+        }
+      ]
+    },
+    {
+      "number": 51,
+      "title": "[Lab 4] Refine AI use, technical reflection and main evidence report",
+      "url": "https://github.com/auto4496/toktickit/pull/51",
+      "head": "01a5fd64075fa4ed3368ba4810922f760dae4e29",
+      "base": "main",
+      "merged": true,
+      "mergedAtUtc": "2026-10-10T19:47:59Z",
+      "mergeCommit": "827dca9665a365931758137c25d174faa5d69c87",
+      "mergedBy": "Datakung",
+      "comments": [
+        {
+          "url": "https://github.com/auto4496/toktickit/pull/51#pullrequestreview-5480573620",
+          "author": "Datakung",
+          "body": "Reviewed commit 01a5fd6. The technical prompt summaries and Reflection are clear and consistent with the recorded implementation and peer-review history. The fresh-main evidence references the actual reviewed merge, and the report layout, PDF checksum and screenshot integrity checks passed.\n\nNo blocking issues found. Optional improvement before final submission: record normalized committed-source hashes so the supplementary working-file checksums are reproducible.\n\nApproved for this documentation update. Keep Issue #48 open until student read-through, demonstration, native zoom and final submission closeout are complete.",
+          "state": "APPROVED",
+          "createdAtUtc": "2026-10-10T19:47:35Z"
+        }
+      ]
+    }
+  ]
+}

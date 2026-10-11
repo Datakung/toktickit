@@ -1,0 +1,274 @@
+[
+  {
+    "file": "server/src/app.ts",
+    "sha256": "051ad4b0f9a39b9c91d7e56a43979dacde5ce406bbb8d4c89dd381c9eb4c87f5"
+  },
+  {
+    "file": "server/src/index.ts",
+    "sha256": "6ee3fed22d5e993706a44738db4c385b42aabc27ca429607caf1e81682c6108c"
+  },
+  {
+    "file": "server/src/prisma.ts",
+    "sha256": "6ad959d9601456479916cbad8d682e02ba333999e3f499e0c363ff96dc0b698e"
+  },
+  {
+    "file": "server/src/actions/action-record.ts",
+    "sha256": "af4bb0bc6519465cefe09d6b700309513eba53415621cce2d79f906e94829d4a"
+  },
+  {
+    "file": "server/src/actions/action-routes.ts",
+    "sha256": "05e22721df819a292820f2a0c03152856b1c513a31131658244025a55f0136be"
+  },
+  {
+    "file": "server/src/actions/action-service.ts",
+    "sha256": "b7ff942cde5d28039be8c25c4ac2a9f61592359828f2324863e95c9801d110e4"
+  },
+  {
+    "file": "server/src/actions/action-validation.ts",
+    "sha256": "f24ca9337ff4d228a66933e207597748ad9d4773394f034b2924d15219a4cc9e"
+  },
+  {
+    "file": "server/src/admin/user-routes.ts",
+    "sha256": "151a57e48199a9660eec33f37951bd1d552d3d114fdebfb2868605c8131b1e5e"
+  },
+  {
+    "file": "server/src/admin/user-service.ts",
+    "sha256": "181399bc7be6c6cd11b0ec217c6b48b52f8d763d5deff8fddb2ded7b929eb55a"
+  },
+  {
+    "file": "server/src/admin/user-validation.ts",
+    "sha256": "5a60f175f5b6536ebb25361a4c2c6f948422b7b8653ed8f43c6a03ba30e80f8c"
+  },
+  {
+    "file": "server/src/attachments/attachment-download.ts",
+    "sha256": "d27eb6640691966078842c06b082c6eac8234a2217d3b07646b2981158ae618f"
+  },
+  {
+    "file": "server/src/attachments/attachment-metadata.ts",
+    "sha256": "3ddb9efb1d716425a1471b85a5b0f839d8cf66c839ed12a3bd8cf4a83707c3c4"
+  },
+  {
+    "file": "server/src/attachments/attachment-routes.ts",
+    "sha256": "dfe64ce453357f60112c90a59035055af1f44d507c35b63789de0b5f03e042aa"
+  },
+  {
+    "file": "server/src/attachments/attachment-validation.ts",
+    "sha256": "7891e0a932f80858cd1af3dda1fe0ecafc4ffeb6e41d2df33e5fedf72741aace"
+  },
+  {
+    "file": "server/src/auth/auth-middleware.ts",
+    "sha256": "51bfd121c40503cbc9ac4bec461f4b68ae68ea735737a4e0d977458fc14ff424"
+  },
+  {
+    "file": "server/src/auth/auth-routes.ts",
+    "sha256": "4d258873ad6d3efa921cab379be6c6da9f03dd2c885a819b93a4373cbe0ab7f6"
+  },
+  {
+    "file": "server/src/auth/login-throttle.ts",
+    "sha256": "998703b79b9097086485675734825dcf48280ec1119d2b9a815f143a39e90f58"
+  },
+  {
+    "file": "server/src/auth/password.ts",
+    "sha256": "bab13f68393f3e3f3822e5efc8bb396584deb320d864421ce54f47e5dc7309d7"
+  },
+  {
+    "file": "server/src/auth/provisioning.ts",
+    "sha256": "a9ada9c1e88138bf51aa36b9a97ac66489e467a1971e940f8bae878426a2955c"
+  },
+  {
+    "file": "server/src/auth/security.ts",
+    "sha256": "06e5132e6eb8826a66f6555ec421195f2c41bd1a55998aa7075deda7f2e5f1d3"
+  },
+  {
+    "file": "server/src/dashboard/dashboard-query.ts",
+    "sha256": "3a3301f2eabd4956ea31b162e984270f879c7c6d92f9a1c880ed66ad682176ed"
+  },
+  {
+    "file": "server/src/dashboard/dashboard-routes.ts",
+    "sha256": "823571ed053fd4cfd3e93d724d5502bd395b80a56eb7573dd162b2d7eada8529"
+  },
+  {
+    "file": "server/src/dashboard/dashboard-service.ts",
+    "sha256": "68aae7ebad129451eb7afbcaf82e21317449ae6a1dbaa7235d37d3e34b36d268"
+  },
+  {
+    "file": "server/src/middleware/development-requester-context.ts",
+    "sha256": "2497cf737552bd546e25168e153aacfbb5c0cc0c619bab7919fe7af81e88c3b2"
+  },
+  {
+    "file": "server/src/staff/queue-query.ts",
+    "sha256": "95440a26bd42ab754f26df84250f917d2e5bded554ce9a01ed113233922dbc46"
+  },
+  {
+    "file": "server/src/staff/queue-routes.ts",
+    "sha256": "606a7d61196841bbecd1dc67ac50579d2d089e5a348a7422deb7f218446ffd40"
+  },
+  {
+    "file": "server/src/staff/ticket-operations.ts",
+    "sha256": "6edf0a73009373eaede0109129fbc37fe4a46750e2fda34f90473f8d9b714df5"
+  },
+  {
+    "file": "server/src/tickets/communication.ts",
+    "sha256": "ba30da41ee468684f16cf932f41a70fb835f616f9ae5d5c2a33ce3bc6f1027b0"
+  },
+  {
+    "file": "server/src/tickets/ticket-list-query.ts",
+    "sha256": "e1f8f8629bc2375a1e081d82b5cfac63a5adf8c9cc5294440dc89df0a8edbedb"
+  },
+  {
+    "file": "server/src/tickets/ticket-number.ts",
+    "sha256": "99c8cba443991042d0c403ab938a71f8b5f5d80049f2ad6f2b77a3599096b7a4"
+  },
+  {
+    "file": "server/src/tickets/ticket-routes.ts",
+    "sha256": "ed4261293b61bb3d160493a9395e130ac769a513ac04a22a71f89fa8d23bd04d"
+  },
+  {
+    "file": "server/src/tickets/ticket-validation.ts",
+    "sha256": "fab6442c231813b9c19deb9fe4094394cc3c151c10b644234193f804507bac38"
+  },
+  {
+    "file": "server/src/tickets/workflow-routes.ts",
+    "sha256": "c833cba6635d5dd41614076d790e884ed16574f3ff4317001645868b815a2eba"
+  },
+  {
+    "file": "server/src/tickets/workflow-rules.ts",
+    "sha256": "9691a8e1c5fcb3d493cbce3f88805bd792e56d981b0544b1e64f1e744ef5443f"
+  },
+  {
+    "file": "server/prisma/provision-users.ts",
+    "sha256": "f7f3a813a1f3418c4596f4c954a4c835f4f3ed6b21686752d14350a02d21dd75"
+  },
+  {
+    "file": "server/prisma/schema.prisma",
+    "sha256": "667330dd790fcf42e47990abb6bc743f2e6c24775b35a16acc927d0c52d63585"
+  },
+  {
+    "file": "server/prisma/seed-lab4.ts",
+    "sha256": "ed8c3b8fa907f561c8722400792e58de247524c23bfb726fd9d8006c7fb05920"
+  },
+  {
+    "file": "server/prisma/seed.ts",
+    "sha256": "bf6d4499c4cc35ccef4037c6097372932205aae2acd731755260a6f4bd478ba6"
+  },
+  {
+    "file": "server/prisma/migrations/migration_lock.toml",
+    "sha256": "74a9137885ce73d3ff088d79d658f8066e05e680fb51c0800a290c91c0c01d48"
+  },
+  {
+    "file": "server/prisma/migrations/20260810073523_init/migration.sql",
+    "sha256": "c928c6e6a76ba1b9f40922000ce9aee4b9bd066c673500bbbb2e9234dbb447a8"
+  },
+  {
+    "file": "server/prisma/migrations/20260831064500_lab2_data_foundation/migration.sql",
+    "sha256": "d06c3df36f24b89d9de4b1277285256164f16353377827828faf9fd0ae76d5c3"
+  },
+  {
+    "file": "server/prisma/migrations/20260901090000_issue_13_ticket_description/migration.sql",
+    "sha256": "f4fb641807d36ec2de514e7aca1f25881a5f68f4f09ea4433056825809033e8e"
+  },
+  {
+    "file": "server/prisma/migrations/20260913143000_lab3_user_foundation/migration.sql",
+    "sha256": "e6a8ed5b3b90006e8ca761d94338e5b67dd840eeabd6fe46c851713dc7d3efad"
+  },
+  {
+    "file": "server/prisma/migrations/20260913150000_lab3_priority_required/migration.sql",
+    "sha256": "4ea15ed84fbe2b0873c5dbabef3c713cfbd7d111d1ddddc5c9720c37d4edcadf"
+  },
+  {
+    "file": "server/prisma/migrations/20260915090000_admin_assignment_safety/migration.sql",
+    "sha256": "22832882be255072bf65eb1b047dbf1eb553d0f8d25827d1cf73d007f08523ee"
+  },
+  {
+    "file": "server/prisma/migrations/20260916090000_staff_queue_statuses/migration.sql",
+    "sha256": "5119c9fd05d882d7fbcb7a2a23705bf5dc2c1ea1a6ccb9729f1335037cb76037"
+  },
+  {
+    "file": "server/prisma/migrations/20260925090000_ticket_operations_communication/migration.sql",
+    "sha256": "bcfa95e8c607167f4f7c085484b297a3071d5567e360bf950e06940ab575b516"
+  },
+  {
+    "file": "server/prisma/migrations/20261005090000_actions_taken_foundation/migration.sql",
+    "sha256": "97375b99fde161e0a11e9891b522fb1beb397a02aa7538c7722c0fe7cf70bb12"
+  },
+  {
+    "file": "client/src/ActionHistoryChanges.tsx",
+    "sha256": "8211e0dda1525b9b883ab7de9e47a77d7b82821fff30d4e4734718648a9fe53c"
+  },
+  {
+    "file": "client/src/ActionsTaken.tsx",
+    "sha256": "f4113bc42840f4d46b56808a4c1f47c11791f2f834e587d5c51c723168063d89"
+  },
+  {
+    "file": "client/src/AdminUsersPage.tsx",
+    "sha256": "9eefc13e34b9571ac769abcdc3b1ac827db68ea33d1e639fd46dbe580db183b7"
+  },
+  {
+    "file": "client/src/api.ts",
+    "sha256": "a9b2c71639d2a8f7b20b20bd1dc0fbfc8cc8601907428760a1fa185d5969f0a5"
+  },
+  {
+    "file": "client/src/app.css",
+    "sha256": "d4adcc102bfdb7c493e1be718d7ba8faeb784559c9f6fff38f37967c49c40b14"
+  },
+  {
+    "file": "client/src/App.tsx",
+    "sha256": "5bc884d7884bcccbc0da2b7af3fcff666baa95f4604972e71b17483d197d079e"
+  },
+  {
+    "file": "client/src/CommunicationPanel.tsx",
+    "sha256": "8ae83838be1ec2b847351631d46800a8c49336c449be6b94189c36ab9a69826a"
+  },
+  {
+    "file": "client/src/CreateTicketPage.tsx",
+    "sha256": "f516ac3e938089d89963a1407c714a6584cd28c420a9b6b89e9df682a75c0d10"
+  },
+  {
+    "file": "client/src/dashboard-api.ts",
+    "sha256": "c889251f637aafbf1f0fd352c09fc6cfbd0956244f8d7931b4cd0d196391164f"
+  },
+  {
+    "file": "client/src/DashboardPage.tsx",
+    "sha256": "d17ce7bd2c8d9027cfc5ed10532aab205d92475c984c37016c796049f91a9262"
+  },
+  {
+    "file": "client/src/list-url.ts",
+    "sha256": "849e49f627336233936bed44525741118df2eece37048127b8e7480ab7edf13f"
+  },
+  {
+    "file": "client/src/main.tsx",
+    "sha256": "1c18831d3684c706509f2d8cea0f0ee96397d930deb38617b0a73c9b59cae4b5"
+  },
+  {
+    "file": "client/src/MyTicketsPage.tsx",
+    "sha256": "9007479590f67a76d76f5ba43c2ac762cbf4d5b33bef6292c901f3bfbe269041"
+  },
+  {
+    "file": "client/src/ResolutionChecklist.tsx",
+    "sha256": "637c9d04729551bbf53296e6fc7333da014702b1f67064df1e61763c698da139"
+  },
+  {
+    "file": "client/src/StaffActionsPage.tsx",
+    "sha256": "b32d00c2b1f9140a7bb83dcc7a0d27d8c3aac86243d3432a752263a07d1bc903"
+  },
+  {
+    "file": "client/src/StaffTicketDetailPage.tsx",
+    "sha256": "ce509a378a7119cd143e039aad1d76d5ea251d52cbe942e4d46ee71b2c70dee1"
+  },
+  {
+    "file": "client/src/StaffTicketQueuePage.tsx",
+    "sha256": "41d8b100f98789e00a6a75f3f3c180e3e2c7c84be28e8fa6751f1aff535d0363"
+  },
+  {
+    "file": "client/src/TicketDetailPage.tsx",
+    "sha256": "45960263832c8dff65e7d227c9648927ada1679a872c4602ca257a162176f908"
+  },
+  {
+    "file": "client/src/vite-env.d.ts",
+    "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+  },
+  {
+    "file": "client/src/WorkflowHistory.tsx",
+    "sha256": "85c7e625b2c9232268a6c4ae19ab1251a736418cb11a7ba1d08ee9ee5f1050d0"
+  }
+]

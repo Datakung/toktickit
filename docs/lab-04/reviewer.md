@@ -4,9 +4,11 @@ Status: Contract and foundation accepted in PRs #45/#46. Phanuwit approved
 corrected Issue #41 head 0cf9e58 and merged PR #47 into lab4-staging as f4da089
 on 2026-10-07. He approved Issue #42 at b7f6bb9 and merged PR #48 as 00fddc1
 on 2026-10-09. He approved Issue #43 at 6dce864 and merged PR #49 as 4660ac6
-on 2026-10-10. Issue #44 is in local quality/release work from that merge;
-its own peer approval and final-main acceptance remain pending. No reciprocal
-review is claimed.
+on 2026-10-10. Corrected PR #50 and release PR #51 were subsequently approved
+and peer-merged. Clean main 0f169ea passed the final gate on 2026-10-11.
+Final evidence publication and author visual/PDF acceptance remain pending;
+#44 is reopened/Started, not Done. Reviews given by Datakung on eight Lab 4 PRs
+in auto4496/toktickit are verified and recorded below, separately from reviews received.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
 Expected peer: Phanuwit Butchari, 67070501070, GitHub auto4496.
@@ -29,7 +31,7 @@ by the author; the peer supplies actual review comments, approval and merge.
 | Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Corrected 0cf9e58; approval below | Merged f4da089; Issue closed |
 | Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | [#48](https://github.com/Datakung/toktickit/pull/48) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227) of b7f6bb9 | Merged 00fddc1 |
 | Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | [#49](https://github.com/Datakung/toktickit/pull/49) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211) of 6dce864 | Merged 4660ac6; Issue closed |
-| Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | Pending / lab4-staging, then main | Local candidate checks; peer release approval pending | Work started; not Done |
+| Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | [#50](https://github.com/Datakung/toktickit/pull/50) / lab4-staging; [#51](https://github.com/Datakung/toktickit/pull/51) / main | Actual approvals 5480214732 / 5480530699 | Merged 9b5d3a5 / 0f169ea; final evidence review remains |
 
 ## Contract review questions
 
@@ -165,7 +167,8 @@ and both builds. Those browser/backend checks were not repeated for this
 test-only correction; no all-182-backend/all-31-earlier-browser rerun is claimed. His approval covers #41, not workflow/dashboard/release.
 Peer merge followed at 07:35:15 UTC (14:35:15 Bangkok) as
 [f4da089](https://github.com/Datakung/toktickit/commit/f4da089686f77ad67cd9891143b62f26d15b6bf1).
-Issue #41 is closed. No reciprocal review is implied.
+Issue #41 is closed. This entry records review received; reviews given are recorded
+separately in the reciprocal-review section below.
 
 ## Issue #42 local review handoff
 
@@ -316,7 +319,7 @@ saves and exact-key recovery. Peer approval/merge, Issues #43/#44, final-main
 verification and the final author reflection remain pending. No new dependency
 audit is claimed; the recorded moderate Multer advisory remains tracked.
 
-## Final integration and reciprocal review
+## Final integration and author UI review
 
 ### Issue #43 Requester author review, October 10
 
@@ -492,8 +495,8 @@ guard refusal on the feature branch is recorded separately, not as main acceptan
 
 Record real feature/release approvals and merge commits, final-main checks and
 Project Done evidence after they exist. Keep the release Issue open until those
-checks finish. Record author reviews of the peer's actual project with direct links
-when performed; no reciprocal review has been recorded for this lab yet.
+checks finish. Reviews given on the peer's project were omitted from this earlier
+ledger; the verified reciprocal-review section below corrects that omission.
 
 ### Issue #44 authorized publication, October 10
 
@@ -537,3 +540,115 @@ is claimed. Existing candidate evidence was not overwritten; correction output
 and source digests are in `artifacts/lab-04/quality-gate/review-fix/`.
 This is the author's correction, not reviewer reapproval or a merge. The finding
 remains for the peer to recheck; #44/main/PDF/Project acceptance remain pending.
+
+### Actual reapproval, release and final-main verification, October 11
+
+Phanuwit (`auto4496`) [approved corrected PR #50](https://github.com/Datakung/toktickit/pull/50#pullrequestreview-5480214732)
+at exact head `f51796157dd1cc9b1c47f652213d40659f341bf5`, 01:01:29 Bangkok,
+and peer-merged it at 01:01:34 as `9b5d3a5454edc83dd82f29cb9a2c5f86818860b4`.
+He independently reran all ten gate regressions; the earlier full database-backed
+run remains historical, not a new run for that tree-identical correction.
+The author replied to the [P2 finding](https://github.com/Datakung/toktickit/pull/50#discussion_r4238547399)
+in [4238645798](https://github.com/Datakung/toktickit/pull/50#discussion_r4238645798).
+
+Phanuwit [approved release PR #51](https://github.com/Datakung/toktickit/pull/51#pullrequestreview-5480530699)
+at exact head `9b5d3a5`, 02:34:10 Bangkok, and peer-merged it at 02:34:13 as
+`0f169eaeca9bf00672c5c32884a1913c53b845d3`. He verified the accepted PRs #45-50,
+the unchanged corrected application tree and ten regressions; approval was not
+a claim that the author had already completed final-main/PDF acceptance.
+
+The reviewer identified premature author closure/Project Done at 02:16.
+With explicit author authorization, #44 was reopened at 02:38:08 and its card
+returned to Started. Actual snapshots show #39-43 closed/Done and #44 open/Started.
+Do not fabricate final all-Done evidence or imply the reviewer changed the card.
+
+The author's clean-main gate ran 02:39:09-02:45:43 Bangkok on October 11:
+298 server / 211 client / 49 Chromium tests, ten gate regressions, both builds,
+Prisma validation, four clean audits and whitespace checks passed. No required
+skips/todos/flaky retries. Both expanded development digests match; the corrected
+manifest records `preservationVerified: true` and only then `status: passed`.
+[Final evidence](../../artifacts/lab-04/final-main/README.md) and all original
+per-case results are separate from the unchanged candidate record.
+
+A separate 02:48:17-02:48:29 isolated supplementary run passed 36 metric comparisons
+against raw database rows and live drill-downs, bounded-list ordering, 24 healthy
+screen/width overflow checks and zero unexpected console/page errors. Two audit
+harness corrections (Category selector and expected signed-out session probes)
+are retained in original failure logs; no product fix or relaxed application
+assertion is claimed. Agent visual inspection, author acceptance and recorded
+reciprocal review remain distinct. Publication of this evidence follow-up and final author
+PDF/visual acceptance remain pending; #44 stays open/Started.
+
+## Reciprocal review - comments given on Phanuwit's project
+
+Reviewer: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
+Peer author: Phanuwit Butchari, 67070501070, GitHub auto4496.
+Peer repository: [auto4496/toktickit](https://github.com/auto4496/toktickit).
+
+Recorded on October 11 from the actual GitHub review submissions, inline comments,
+author replies and merged-PR metadata. All PR numbers in this section refer to
+the peer repository, not Datakung/toktickit. The dates below use Bangkok (UTC+07:00).
+Test totals describe what the linked historical reviews reported; this documentation
+update did not rerun the peer's tests or certify his final student submission.
+
+### Reviews given and outcomes
+
+| Peer PR / scope | Datakung review and approved head | Actual outcome |
+|---|---|---|
+| [#39 Contract](https://github.com/auto4496/toktickit/pull/39) | Changes requested: recovery test, Start control and Issue linkage. [Approved](https://github.com/auto4496/toktickit/pull/39#pullrequestreview-5416185226) 4886585, October 5, 21:34. | Merged b5bee16 into codex/lab4-staging; implementation/tests still pending at contract approval. |
+| [#41 Foundation](https://github.com/auto4496/toktickit/pull/41) | [Approved](https://github.com/auto4496/toktickit/pull/41#pullrequestreview-5425008221) 301c902, October 6, 14:14: preservation, repeat seed, real recovery; 391 tests and both builds reported passing. | Merged c039a7d into staging; no blocking findings. |
+| [#43 Actions](https://github.com/auto4496/toktickit/pull/43) | Two correction rounds: lost-response recovery, curated screenshot integrity and definitive rejection. [Approved](https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5438931114) 935bcdf, October 7, 14:20; 431 tests, seven browser cases and both builds reported passing. | Merged 68a88cc into staging after corrections. |
+| [#45 Workflow](https://github.com/auto4496/toktickit/pull/45) | [Approved](https://github.com/auto4496/toktickit/pull/45#pullrequestreview-5467836482) a1d1fce, October 9, 15:46: atomic resolution gate, role/status rules, history and recovery; 458 tests, 14 browser cases and both builds reported passing. | Merged 69b32d6 into staging; no blocking findings. |
+| [#47 Dashboards](https://github.com/auto4496/toktickit/pull/47) | Changes requested: resolve generated server Prisma client without a workaround. [Approved](https://github.com/auto4496/toktickit/pull/47#pullrequestreview-5475149576) 884df39, October 10, 03:41, after normal test/capture commands passed. | Merged 72c5553 into staging after correction. |
+| [#49 Hardening](https://github.com/auto4496/toktickit/pull/49) | [Approved](https://github.com/auto4496/toktickit/pull/49#pullrequestreview-5479573135) fa03f754, October 10, 22:22: 484 tests, full 32-case browser suite and both builds reported passing; scale/responsive/report evidence checked. | Merged 27272813 into staging; final-main/student acceptance remained separate. |
+| [#50 Main release](https://github.com/auto4496/toktickit/pull/50) | [Approved](https://github.com/auto4496/toktickit/pull/50#pullrequestreview-5479801621) 27272813, October 10, 23:11: tree identical to approved fa03f754; all six increments included. | Merged 7a697d2 into main; required fresh final-main evidence, not a claimed new test run. |
+| [#51 Report polish](https://github.com/auto4496/toktickit/pull/51) | [Approved](https://github.com/auto4496/toktickit/pull/51#pullrequestreview-5480573620) 01a5fd6, October 11, 02:47: technical prompt summaries, Reflection, actual-main reference and report integrity. | Merged 827dca9 into main; optional source-hash suggestion was not a blocker. |
+
+GitHub identifies Datakung as the merger of all eight PRs. These peer-repository
+merges must not be confused with auto4496's merges of this author's own PRs.
+Approvals of #49-51 explicitly retained the peer's Issue #48 final acceptance
+boundary; they did not authorize marking the student's final submission complete.
+
+### Findings, peer responses and re-review
+
+Contract #39: the [requested-changes review](https://github.com/auto4496/toktickit/pull/39#pullrequestreview-5410811526)
+identified a missing [backup/restore test plan](https://github.com/auto4496/toktickit/pull/39#discussion_r4181341740)
+and [explicit Start control](https://github.com/auto4496/toktickit/pull/39#discussion_r4181341744),
+plus formal Issue #38 linkage/PR Review status. In his
+[reply](https://github.com/auto4496/toktickit/pull/39#issuecomment-5995794769),
+Phanuwit identified correction 4886585: INT-02 restores records/relationships/files
+and checks downloads; the Start contract covers role/terminal/busy/conflict behavior
+with planned UI/E2E coverage; linkage/status were corrected. Datakung's linked
+approval confirms those documentation changes while leaving execution pending.
+
+Actions #43: the [first review](https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5428174855)
+reported that a [committed create with a lost response and later draft edits](https://github.com/auto4496/toktickit/pull/43#discussion_r4195121507)
+reused the key with a different payload and stranded the draft. It also found
+[routine tests overwriting curated PNGs without updating their manifest](https://github.com/auto4496/toktickit/pull/43#discussion_r4195121521).
+Phanuwit's [first reply](https://github.com/auto4496/toktickit/pull/43#issuecomment-6032583172)
+identified 25b478c: retain/replay the original payload/key, preserve later edits,
+recover the saved record without duplication, and separate ignored routine captures
+from explicit evidence publication. Re-review confirmed both corrections, but
+the [second finding](https://github.com/auto4496/toktickit/pull/43#discussion_r4204058962)
+showed definitive validation rejection still locked Save/Cancel into replaying an
+invalid request. In his [second reply](https://github.com/auto4496/toktickit/pull/43#issuecomment-6032955307),
+Phanuwit identified 935bcdf: known rejection unlocks the retained corrected draft
+with a fresh key; ambiguous outcomes retain the original recovery request.
+Datakung then approved after the historical 431-test/seven-browser verification.
+
+Dashboards #47: the [requested-changes review](https://github.com/auto4496/toktickit/pull/47#pullrequestreview-5473329351)
+and [inline finding](https://github.com/auto4496/toktickit/pull/47#discussion_r4232825709)
+showed normal test/capture collection failed because the fixture imported an
+ungenerated root Prisma client. The initial 483-test/26-browser/both-build results
+were explicitly qualified: browser tests used a temporary client-path workaround.
+Phanuwit's [reply](https://github.com/auto4496/toktickit/pull/47#issuecomment-6088818239)
+identified 884df39: resolve Prisma through server/package.json using createRequire.
+Both normal dashboard commands passed four cases each without the workaround;
+these are the same cases executed twice, not eight distinct tests. Datakung's
+approval confirms the fix and consistent refreshed evidence.
+
+Report #51: the linked approval includes an optional suggestion to record
+normalized committed-source hashes for reproducible supplementary checksums.
+It was not a requested-changes finding. No peer response or implementation of that
+optional suggestion is invented. Student read-through, demonstration, native-zoom
+review and final closeout remained separate from this documentation approval.

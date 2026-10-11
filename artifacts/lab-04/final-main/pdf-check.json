@@ -1,0 +1,610 @@
+{
+  "pdf": "C:\\CPE\\CPE334\\MINE\\toktickit\\output\\pdf\\TokTickIT-Lab4-Review.pdf",
+  "phase": "review-copy",
+  "pageFormat": "A4 portrait",
+  "pageSizePoints": [
+    595.2755905511812,
+    841.8897637795277
+  ],
+  "pages": 54,
+  "headingOrder": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ],
+  "links": [
+    "https://github.com/Datakung/toktickit",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/.gitignore",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/README.md",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/docs/lab-04/ai-use.md",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/docs/lab-04/api-spec.md",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/docs/lab-04/reviewer.md",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/docs/lab-04/specification.md",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/docs/lab-04/tests.md",
+    "https://github.com/Datakung/toktickit/blob/0f169eaeca9bf00672c5c32884a1913c53b845d3/docs/lab-04/ui-spec.md",
+    "https://github.com/Datakung/toktickit/issues/39",
+    "https://github.com/Datakung/toktickit/issues/40",
+    "https://github.com/Datakung/toktickit/issues/41",
+    "https://github.com/Datakung/toktickit/issues/42",
+    "https://github.com/Datakung/toktickit/issues/43",
+    "https://github.com/Datakung/toktickit/issues/44",
+    "https://github.com/Datakung/toktickit/pull/45",
+    "https://github.com/Datakung/toktickit/pull/45#pullrequestreview-5416186064",
+    "https://github.com/Datakung/toktickit/pull/46",
+    "https://github.com/Datakung/toktickit/pull/47",
+    "https://github.com/Datakung/toktickit/pull/48",
+    "https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227",
+    "https://github.com/Datakung/toktickit/pull/49",
+    "https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211",
+    "https://github.com/Datakung/toktickit/pull/50",
+    "https://github.com/Datakung/toktickit/pull/50#discussion_r4238547399",
+    "https://github.com/Datakung/toktickit/pull/50#discussion_r4238645798",
+    "https://github.com/Datakung/toktickit/pull/50#pullrequestreview-5480214732",
+    "https://github.com/Datakung/toktickit/pull/51",
+    "https://github.com/Datakung/toktickit/pull/51#pullrequestreview-5480530699",
+    "https://github.com/auto4496/toktickit",
+    "https://github.com/auto4496/toktickit/pull/39",
+    "https://github.com/auto4496/toktickit/pull/39#discussion_r4181341740",
+    "https://github.com/auto4496/toktickit/pull/39#discussion_r4181341744",
+    "https://github.com/auto4496/toktickit/pull/39#issuecomment-5995794769",
+    "https://github.com/auto4496/toktickit/pull/39#pullrequestreview-5410811526",
+    "https://github.com/auto4496/toktickit/pull/39#pullrequestreview-5416185226",
+    "https://github.com/auto4496/toktickit/pull/41",
+    "https://github.com/auto4496/toktickit/pull/41#pullrequestreview-5425008221",
+    "https://github.com/auto4496/toktickit/pull/43",
+    "https://github.com/auto4496/toktickit/pull/43#discussion_r4195121507",
+    "https://github.com/auto4496/toktickit/pull/43#discussion_r4195121521",
+    "https://github.com/auto4496/toktickit/pull/43#discussion_r4204058962",
+    "https://github.com/auto4496/toktickit/pull/43#issuecomment-6032583172",
+    "https://github.com/auto4496/toktickit/pull/43#issuecomment-6032955307",
+    "https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5428174855",
+    "https://github.com/auto4496/toktickit/pull/43#pullrequestreview-5438931114",
+    "https://github.com/auto4496/toktickit/pull/45",
+    "https://github.com/auto4496/toktickit/pull/45#pullrequestreview-5467836482",
+    "https://github.com/auto4496/toktickit/pull/47",
+    "https://github.com/auto4496/toktickit/pull/47#discussion_r4232825709",
+    "https://github.com/auto4496/toktickit/pull/47#issuecomment-6088818239",
+    "https://github.com/auto4496/toktickit/pull/47#pullrequestreview-5473329351",
+    "https://github.com/auto4496/toktickit/pull/47#pullrequestreview-5475149576",
+    "https://github.com/auto4496/toktickit/pull/49",
+    "https://github.com/auto4496/toktickit/pull/49#pullrequestreview-5479573135",
+    "https://github.com/auto4496/toktickit/pull/50",
+    "https://github.com/auto4496/toktickit/pull/50#pullrequestreview-5479801621",
+    "https://github.com/auto4496/toktickit/pull/51",
+    "https://github.com/auto4496/toktickit/pull/51#pullrequestreview-5480573620",
+    "https://github.com/users/Datakung/projects/1"
+  ],
+  "embeddedFiles": [
+    "ai-use.md",
+    "api-spec.md",
+    "browser-results.json",
+    "browser-tests.log",
+    "captured-screenshots.json",
+    "client-results.json",
+    "client-tests.log",
+    "dashboard-parity.json",
+    "gate-regressions.log",
+    "manifest.json",
+    "reviewer.md",
+    "server-results.json",
+    "server-tests.log",
+    "specification.md",
+    "tests.md",
+    "ui-spec.md",
+    "visual-checklist.md"
+  ],
+  "figures": [
+    {
+      "number": 1,
+      "file": "supplementary-screenshots/staff-dashboard-1440.png",
+      "crop": [
+        170,
+        180,
+        1270,
+        850
+      ],
+      "scale": 0.4675232641374374,
+      "body15pxEquivalentPt": 7.01
+    },
+    {
+      "number": 2,
+      "file": "supplementary-screenshots/staff-dashboard-768.png",
+      "crop": [
+        20,
+        180,
+        748,
+        1220
+      ],
+      "scale": 0.6153846153846154,
+      "body15pxEquivalentPt": 9.23
+    },
+    {
+      "number": 3,
+      "file": "supplementary-screenshots/staff-dashboard-390.png",
+      "crop": [
+        0,
+        600,
+        390,
+        1100
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 4,
+      "file": "supplementary-screenshots/staff-work-1440.png",
+      "crop": [
+        120,
+        190,
+        1320,
+        780
+      ],
+      "scale": 0.4285629921259843,
+      "body15pxEquivalentPt": 6.43
+    },
+    {
+      "number": 5,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-1440.png",
+      "crop": [
+        0,
+        0,
+        1050,
+        567
+      ],
+      "scale": 0.48978627671541064,
+      "body15pxEquivalentPt": 7.35
+    },
+    {
+      "number": 6,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-768.png",
+      "crop": [
+        0,
+        0,
+        678,
+        567
+      ],
+      "scale": 0.7585185701344854,
+      "body15pxEquivalentPt": 11.38
+    },
+    {
+      "number": 7,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-390.png",
+      "crop": [
+        0,
+        0,
+        320,
+        548
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 8,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-view-390.png",
+      "crop": [
+        0,
+        548,
+        320,
+        1096
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 9,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-1440.png",
+      "crop": [
+        0,
+        0,
+        1050,
+        667
+      ],
+      "scale": 0.48978627671541064,
+      "body15pxEquivalentPt": 7.35
+    },
+    {
+      "number": 10,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-768.png",
+      "crop": [
+        0,
+        0,
+        678,
+        690
+      ],
+      "scale": 0.7585185701344854,
+      "body15pxEquivalentPt": 11.38
+    },
+    {
+      "number": 11,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-edit-390.png",
+      "crop": [
+        0,
+        0,
+        320,
+        960
+      ],
+      "scale": 0.6458333333333334,
+      "body15pxEquivalentPt": 9.69
+    },
+    {
+      "number": 12,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-1440.png",
+      "crop": [
+        0,
+        0,
+        1050,
+        145
+      ],
+      "scale": 0.48978627671541064,
+      "body15pxEquivalentPt": 7.35
+    },
+    {
+      "number": 13,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-768.png",
+      "crop": [
+        0,
+        0,
+        678,
+        144
+      ],
+      "scale": 0.7585185701344854,
+      "body15pxEquivalentPt": 11.38
+    },
+    {
+      "number": 14,
+      "file": "screenshots/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-390.png",
+      "crop": [
+        0,
+        0,
+        320,
+        310
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 15,
+      "file": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-390.png",
+      "crop": [
+        0,
+        0,
+        320,
+        599
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 16,
+      "file": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-cancel-768.png",
+      "crop": [
+        0,
+        0,
+        678,
+        448
+      ],
+      "scale": 0.7585185701344854,
+      "body15pxEquivalentPt": 11.38
+    },
+    {
+      "number": 17,
+      "file": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-1440.png",
+      "crop": [
+        0,
+        0,
+        1050,
+        49
+      ],
+      "scale": 0.48978627671541064,
+      "body15pxEquivalentPt": 7.35
+    },
+    {
+      "number": 18,
+      "file": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-1440.png",
+      "crop": [
+        0,
+        0,
+        1100,
+        263
+      ],
+      "scale": 0.4675232641374374,
+      "body15pxEquivalentPt": 7.01
+    },
+    {
+      "number": 19,
+      "file": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-768.png",
+      "crop": [
+        0,
+        0,
+        728,
+        359
+      ],
+      "scale": 0.7064225144933807,
+      "body15pxEquivalentPt": 10.6
+    },
+    {
+      "number": 20,
+      "file": "screenshots/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-390.png",
+      "crop": [
+        0,
+        0,
+        358,
+        348
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 21,
+      "file": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-1440.png",
+      "crop": [
+        0,
+        0,
+        1100,
+        515
+      ],
+      "scale": 0.4675232641374374,
+      "body15pxEquivalentPt": 7.01
+    },
+    {
+      "number": 22,
+      "file": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-768.png",
+      "crop": [
+        0,
+        0,
+        728,
+        511
+      ],
+      "scale": 0.7064225144933807,
+      "body15pxEquivalentPt": 10.6
+    },
+    {
+      "number": 23,
+      "file": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-390.png",
+      "crop": [
+        0,
+        0,
+        358,
+        604
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 24,
+      "file": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/later-page-blocker-1440.png",
+      "crop": [
+        0,
+        0,
+        1100,
+        515
+      ],
+      "scale": 0.4675232641374374,
+      "body15pxEquivalentPt": 7.01
+    },
+    {
+      "number": 25,
+      "file": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-390.png",
+      "crop": [
+        0,
+        0,
+        358,
+        625
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 26,
+      "file": "screenshots/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/reopened-390.png",
+      "crop": [
+        0,
+        1136,
+        358,
+        1526
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 27,
+      "file": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-1440.png",
+      "crop": [
+        0,
+        0,
+        1018,
+        535
+      ],
+      "scale": 0.5051823089893724,
+      "body15pxEquivalentPt": 7.58
+    },
+    {
+      "number": 28,
+      "file": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-768.png",
+      "crop": [
+        0,
+        0,
+        646,
+        580
+      ],
+      "scale": 0.7960922454352649,
+      "body15pxEquivalentPt": 11.94
+    },
+    {
+      "number": 29,
+      "file": "screenshots/lab-04-ticket-resolution-r-47748-r-visibility-at-every-width-chromium/audit-readable-staff-390.png",
+      "crop": [
+        0,
+        0,
+        288,
+        766
+      ],
+      "scale": 0.8093994778067886,
+      "body15pxEquivalentPt": 12.14
+    },
+    {
+      "number": 30,
+      "file": "supplementary-screenshots/requester-dashboard-1440.png",
+      "crop": [
+        170,
+        180,
+        1270,
+        575
+      ],
+      "scale": 0.4675232641374374,
+      "body15pxEquivalentPt": 7.01
+    },
+    {
+      "number": 31,
+      "file": "supplementary-screenshots/requester-dashboard-1440.png",
+      "crop": [
+        170,
+        575,
+        1270,
+        1220
+      ],
+      "scale": 0.4675232641374374,
+      "body15pxEquivalentPt": 7.01
+    },
+    {
+      "number": 32,
+      "file": "supplementary-screenshots/requester-dashboard-768.png",
+      "crop": [
+        20,
+        180,
+        748,
+        720
+      ],
+      "scale": 0.7064225144933807,
+      "body15pxEquivalentPt": 10.6
+    },
+    {
+      "number": 33,
+      "file": "supplementary-screenshots/requester-dashboard-390.png",
+      "crop": [
+        0,
+        545,
+        390,
+        875
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 34,
+      "file": "supplementary-screenshots/requester-dashboard-390.png",
+      "crop": [
+        0,
+        877,
+        390,
+        1206
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 35,
+      "file": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/public-comments-mobile.png",
+      "crop": [
+        0,
+        0,
+        358,
+        539
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 36,
+      "file": "screenshots/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/user-row-mobile.png",
+      "crop": [
+        0,
+        0,
+        358,
+        416
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 37,
+      "file": "supplementary-screenshots/staff-work-768.png",
+      "crop": [
+        0,
+        180,
+        768,
+        445
+      ],
+      "scale": 0.6696296751968505,
+      "body15pxEquivalentPt": 10.04
+    },
+    {
+      "number": 38,
+      "file": "supplementary-screenshots/staff-work-768.png",
+      "crop": [
+        0,
+        452,
+        768,
+        780
+      ],
+      "scale": 0.6696296751968505,
+      "body15pxEquivalentPt": 10.04
+    },
+    {
+      "number": 39,
+      "file": "supplementary-screenshots/staff-work-390.png",
+      "crop": [
+        0,
+        310,
+        390,
+        650
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 40,
+      "file": "supplementary-screenshots/staff-work-390.png",
+      "crop": [
+        0,
+        665,
+        390,
+        1020
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 41,
+      "file": "supplementary-screenshots/requester-create-390.png",
+      "crop": [
+        0,
+        260,
+        390,
+        925
+      ],
+      "scale": 0.85,
+      "body15pxEquivalentPt": 12.75
+    },
+    {
+      "number": 42,
+      "file": "screenshots/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-768.png",
+      "crop": [
+        0,
+        0,
+        678,
+        49
+      ],
+      "scale": 0.7585185701344854,
+      "body15pxEquivalentPt": 11.38
+    }
+  ],
+  "authorFinalAcceptance": false,
+  "publishedEvidence": false
+}

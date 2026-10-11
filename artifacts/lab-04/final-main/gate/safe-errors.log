@@ -1,0 +1,26 @@
+
+> toktickit-server@1.0.0 test
+> vitest run tests/lab-04/safe-errors.api.test.ts --reporter=default
+
+
+ RUN  v4.1.11 C:/CPE/CPE334/MINE/toktickit/server
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "toktickit_test", schema "public" at "localhost:5432"
+
+9 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+ ✓ tests/lab-04/safe-errors.api.test.ts (5 tests) 2718ms
+   ✓ REQUESTER dashboard fails safely then recovers without fabricated totals  390ms
+   ✓ IT_STAFF dashboard fails safely then recovers without fabricated totals  341ms
+   ✓ ADMINISTRATOR dashboard fails safely then recovers without fabricated totals  370ms
+   ✓ failed action create returns a safe error with no partial write and retries exactly once  440ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  22:53:52
+   Duration  4.51s (transform 241ms, setup 0ms, import 886ms, tests 2.72s, environment 0ms)
+

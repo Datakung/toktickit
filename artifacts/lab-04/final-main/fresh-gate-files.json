@@ -1,0 +1,93 @@
+[
+  {
+    "file": "gate/manifest.json",
+    "exists": true,
+    "sha256": "f27e2b0ec3fda813404a456ced7096f2f5f769c848fb938be4d40ba755607ec0"
+  },
+  {
+    "file": "gate/server-results.json",
+    "exists": true,
+    "sha256": "10ba07cd16a5119d86df41c78755a652b6c125646f597a084ebcf4fe6956a7a8"
+  },
+  {
+    "file": "gate/client-results.json",
+    "exists": true,
+    "sha256": "6c041d670d9094376cfae0d3f460107ffd0cac1497e9bcf641aee66e6153a88a"
+  },
+  {
+    "file": "gate/browser-results.json",
+    "exists": true,
+    "sha256": "ce1a035ef10bc08c8a936031efc41aca8c3f2244ec6654b5fe866152401e88e1"
+  },
+  {
+    "file": "gate/gate-regressions.log",
+    "exists": true,
+    "sha256": "f99a0ec11508605dcd73eb0b3ffc50603d412904a6096535f684dac6e59b73e1"
+  },
+  {
+    "file": "gate/development-before.log",
+    "exists": true,
+    "sha256": "3ab0187480c5996228ac2551a1875456e92f5bce4da3ff509f7d7d083fc91928"
+  },
+  {
+    "file": "gate/server-tests.log",
+    "exists": true,
+    "sha256": "f17c091a09a42990427ff89dc4989e4d3f22198222e1b9a15e087481c66f81a6"
+  },
+  {
+    "file": "gate/client-tests.log",
+    "exists": true,
+    "sha256": "8622f00fcf5d78262cca9a6d93a0dc07ead0fd4a1105d5393da8ecd2bf7727fd"
+  },
+  {
+    "file": "gate/server-build.log",
+    "exists": true,
+    "sha256": "e73ec9ba3b7b26ed726ad55ff91840442a8a83b46b12b9b8d0ed80cb1a6b114e"
+  },
+  {
+    "file": "gate/client-build.log",
+    "exists": true,
+    "sha256": "94d4ab99eddec4c3f826ce25c599ac0e0aca964f4c4b180d729a2a9854ec916b"
+  },
+  {
+    "file": "gate/prisma-validate.log",
+    "exists": true,
+    "sha256": "776cc06a0ec7082ea6fb148ae0eafe4510d7e7f9b41a9a7edcc47f05d473a5e4"
+  },
+  {
+    "file": "gate/server-production-audit.log",
+    "exists": true,
+    "sha256": "c93f6166d56ebb93b5197f7c25936f035fa0db801623ab9ebd5bc9cbb9e01f75"
+  },
+  {
+    "file": "gate/server-full-audit.log",
+    "exists": true,
+    "sha256": "c93f6166d56ebb93b5197f7c25936f035fa0db801623ab9ebd5bc9cbb9e01f75"
+  },
+  {
+    "file": "gate/client-production-audit.log",
+    "exists": true,
+    "sha256": "f8311f0fc9f7611a6c978bf9437f6fb38f65b37c38fa149864ed3439be581685"
+  },
+  {
+    "file": "gate/client-full-audit.log",
+    "exists": true,
+    "sha256": "f8311f0fc9f7611a6c978bf9437f6fb38f65b37c38fa149864ed3439be581685"
+  },
+  {
+    "file": "gate/browser-tests.log",
+    "exists": true,
+    "sha256": "76bfd7614dd6ea7c8162685c65a0fec10a9792528b09c15adece8c5560044d80"
+  },
+  {
+    "file": "gate/diff-check.log",
+    "exists": false,
+    "sha256": null,
+    "reason": "The successful step emitted no output; use its manifest exit code."
+  },
+  {
+    "file": "gate/development-after.log",
+    "exists": true,
+    "sha256": "3ab0187480c5996228ac2551a1875456e92f5bce4da3ff509f7d7d083fc91928"
+  }
+]

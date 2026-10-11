@@ -1,5 +1,12 @@
 # Lab 4 API Contract
 
+Final verification, October 11: corrected PR #50 and release PR #51 were approved
+and peer-merged. Clean main 0f169ea passed full regression; a separate guarded
+fixture run compared 36 dashboard metrics against independently selected database
+rows and exact drill-down lists. This documentation/evidence follow-up changes
+no endpoint, payload, permission, schema or API behavior. See tests.md and the
+final-main evidence directory for actual run provenance and remaining acceptance.
+
 Status: Approved contract; foundations and Action UI accepted in PRs #46/#47.
 Issue #42 implements the Ticket status gates and shared workflow-history endpoint
 below on feature/42-ticket-workflow from f4da089, without a new schema migration.

@@ -8,7 +8,9 @@ version/cycle; loading, mixed snapshots and busy/unknown saves never mean ready.
 Lost status responses freeze writes until an explicit authoritative reload.
 Issue #42 screens were peer-approved in PR #48 and merged as 00fddc1. Dashboard
 screens (#43) were author-accepted and peer-approved/merged in PR #49 (4660ac6).
-Final-main evidence (#44) remains pending.
+Clean main 0f169ea passed the final gate and supplementary screen/query checks
+on October 11; fresh evidence is in artifacts/lab-04/final-main/. Final author
+visual/PDF acceptance and publication remain pending, not the executable gate.
 Business rules: [specification.md](specification.md); requests: [api-spec.md](api-spec.md).
 
 ## Navigation and routes
@@ -217,7 +219,7 @@ missing/mismatched actionId shows safe unavailable feedback, not a different act
 
 ## Responsive and accessibility rules
 
-Reuse green tokens and text-bearing status/priority badges. Body >=16px/helper
+Reuse green tokens and text-bearing status/priority badges. Approved compact workspace body 15px/helper
 >=14px, controls with >=44px touch targets, visible focus and semantic headings,
 table captions, labels, errors and buttons. Dashboard cards wrap; no color-only cues.
 At 1440px use compact card grids/tables; at 768px reduce columns/use readable cards;
@@ -233,6 +235,13 @@ needed for readable submission; record revision, seed/isolation and viewport.
 Routine E2E output stays ignored. Issue #41 also has explicitly generated feature
 captures in actions-taken, identified separately in that folder's README; these
 must be refreshed from final main in #44. The following full-release checks remain pending:
+
+Update October 11: the full gate and a separate healthy-screen audit now generated
+192 original final-revision images at these widths, retained under `final-main/`
+without overwriting historical feature captures. The checklist below preserves
+the original planned human acceptance scope; executable checks and representative
+agent visual QA passed, but the author's final review is still pending. The actual
+completed automated/agent checklist is in `final-main/visual-checklist.md`.
 
 - [ ] Major screens inspected at 1440/768/390px, including long/multiple action text.
 - [ ] Dashboard values and exact drill-down filters verified against independent queries.

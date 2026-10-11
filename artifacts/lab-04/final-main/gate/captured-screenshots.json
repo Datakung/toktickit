@@ -1,0 +1,136 @@
+{
+  "phase": "release-candidate",
+  "revision": "4660ac61b8609be19bc6d2e057b8516fa7fb74ce",
+  "workingTreeDirtyAtStart": true,
+  "gateStartedAtUtc": "2026-10-10T22:55:28.5571751+07:00",
+  "gateFinishedAtUtc": "2026-10-10T23:02:19.6585191+07:00",
+  "authorFinalVisualAcceptance": false,
+  "images": [
+    {
+      "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-1440.png",
+      "retained": "screenshots/staff-dashboard-1440.png",
+      "capturedAtUtc": "2026-10-10T16:00:46.3557376Z",
+      "sha256": "e03bd97a4bf75a1ad31bfa8e0fff74aba365dca30205ab3be6e1c4e086074660",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-390.png",
+      "retained": "screenshots/staff-dashboard-390.png",
+      "capturedAtUtc": "2026-10-10T16:00:46.5822209Z",
+      "sha256": "96d05e2b169fdc2e7521d86a3abd5be30d7eb8ca2871a07e6105c52bcd322868",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-1440.png",
+      "retained": "screenshots/requester-dashboard-1440.png",
+      "capturedAtUtc": "2026-10-10T16:00:43.4764847Z",
+      "sha256": "7ca0cf81b31327642081de7c4af649774238d10c75ac238ac77c53f2e94a7276",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/performed-work-1440.png",
+      "retained": "screenshots/performed-work-1440.png",
+      "capturedAtUtc": "2026-10-10T16:00:53.4141145Z",
+      "sha256": "8978e9cdd51a296bb81e239a90405132f517376dfa724f046634c3519c4f06a9",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-confirm-complete-390.png",
+      "retained": "screenshots/action-confirm-complete-390.png",
+      "capturedAtUtc": "2026-10-10T16:00:56.2298235Z",
+      "sha256": "ae31a60b930ed7df838588e46184709238c2c3cc99935b5bb3ead2ab5e30e305",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/authentication/login-desktop.png",
+      "retained": "screenshots/login-1440.png",
+      "capturedAtUtc": "2026-10-10T15:59:02.7408237Z",
+      "sha256": "0163edc977540c2d1beb9298d6c10bacb214b2a0bd8a9c1e6b9e3af4545fdfe5",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/create-ticket-mobile.png",
+      "retained": "screenshots/create-ticket-390.png",
+      "capturedAtUtc": "2026-10-10T15:59:20.0160738Z",
+      "sha256": "1c1b74316c158d3e8b98a2c4a9070639ada213906eb11585cd1f8924b61c902b",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/requester/my-tickets-desktop.png",
+      "retained": "screenshots/my-tickets-1440.png",
+      "capturedAtUtc": "2026-10-10T15:59:17.4142774Z",
+      "sha256": "f30c0f2abad81473b1ecd2c656f784ff19e8a57815c1145d34ae131623a31753",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/staff-queue/queue-mobile.png",
+      "retained": "screenshots/staff-queue-390.png",
+      "capturedAtUtc": "2026-10-10T15:59:11.6837418Z",
+      "sha256": "cb77a8059f9e506999ad4a0084e807659d4d94789d4b5d9ff492c3d2a3bab65a",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-03-release-evidence-ca-a766c-ack-and-responsive-evidence-chromium/lab3-evidence/user-management/users-desktop.png",
+      "retained": "screenshots/users-1440.png",
+      "capturedAtUtc": "2026-10-10T15:59:04.6980206Z",
+      "sha256": "55d49ee64cab336f1d586ca4cacff81ee72f724ce9278602b3dfc392f1c9d32a",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-ticket-resolution-w-dc6a3--only-history-at-all-widths-chromium/checklist-ready-1440.png",
+      "retained": "screenshots/checklist-ready-1440.png",
+      "capturedAtUtc": "2026-10-10T16:02:07.0620807Z",
+      "sha256": "c1ed50cc9a2229b7bc67b319949a64194f39807baff34bdf0a9d59378c8e015d",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-ticket-resolution-a-7d329-it-is-chosen-at-every-width-chromium/action-progress-390.png",
+      "retained": "screenshots/action-progress-390.png",
+      "capturedAtUtc": "2026-10-10T16:01:39.8392268Z",
+      "sha256": "1c31eed0c8c5a8d06b5999ababb06029a3643f456d17ff02e04e2fb480665396",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-Staff-me-332cb-r-mali-support-example-test-chromium/staff-768.png",
+      "retained": "screenshots/staff-dashboard-768.png",
+      "capturedAtUtc": "2026-10-10T16:00:46.4790425Z",
+      "sha256": "443c5dc56891cc759201819e210b8e8b61c3c0a7db6cf14ebd0acefdab5a8565",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-actions-taken-flow--47eb1-istories-fit-1440-768-390px-chromium/staff-active-1440.png",
+      "retained": "screenshots/actions-audit-1440.png",
+      "capturedAtUtc": "2026-10-10T16:00:22.2504785Z",
+      "sha256": "a30d0127c9bdacbcaa95f03e927252b9d9c6ee84910c317777e032b8e1a63504",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-ticket-resolution-s-f9911-id-Open-transition-retained-chromium/status-selection-768.png",
+      "retained": "screenshots/status-selection-768.png",
+      "capturedAtUtc": "2026-10-10T16:01:51.4427828Z",
+      "sha256": "18d5038710b8041895bbb88e03d2520ba4c01f65c762b853e23961282582bfb8",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-create-controls-1440.png",
+      "retained": "screenshots/action-create-controls-1440.png",
+      "capturedAtUtc": "2026-10-10T16:01:01.2880392Z",
+      "sha256": "dec51567fd454aeee519b682a51a1467e05f82bb22ea7e87ac4b589f1ead451c",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-work-lis-58de1-n-progress-controls-aligned-chromium/action-edit-controls-768.png",
+      "retained": "screenshots/action-edit-controls-768.png",
+      "capturedAtUtc": "2026-10-10T16:00:58.0872404Z",
+      "sha256": "4fe11d9fcab17bd51dbb1873ae8b5a07c03d00651e9a0cf1ea17f526e7d52124",
+      "agentInspected": true
+    },
+    {
+      "source": "client/test-results/lab-04-dashboards-Requeste-418b5-nd-Back-and-recover-refresh-chromium/requester-refresh-failed-390.png",
+      "retained": "screenshots/requester-refresh-failed-390.png",
+      "capturedAtUtc": "2026-10-10T16:00:44.2141168Z",
+      "sha256": "072cc2997ee287a9502766bab87a005d94c5cd14b03824311de031e8092a876d",
+      "agentInspected": true
+    }
+  ]
+}
