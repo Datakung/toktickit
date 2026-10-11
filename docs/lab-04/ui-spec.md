@@ -9,8 +9,10 @@ Lost status responses freeze writes until an explicit authoritative reload.
 Issue #42 screens were peer-approved in PR #48 and merged as 00fddc1. Dashboard
 screens (#43) were author-accepted and peer-approved/merged in PR #49 (4660ac6).
 Clean main 0f169ea passed the final gate and supplementary screen/query checks
-on October 11; fresh evidence is in artifacts/lab-04/final-main/. Final author
-visual/PDF acceptance and publication remain pending, not the executable gate.
+on October 11; fresh evidence is in artifacts/lab-04/final-main/. PR #52 published
+the reviewed evidence as main 72314d5. The author subsequently approved the report
+and authorized final assembly. Automated/agent visual checks, author report
+approval and a new manual demo are distinct; the latter is not claimed.
 Business rules: [specification.md](specification.md); requests: [api-spec.md](api-spec.md).
 
 ## Navigation and routes

@@ -6,8 +6,10 @@ on 2026-10-07. He approved Issue #42 at b7f6bb9 and merged PR #48 as 00fddc1
 on 2026-10-09. He approved Issue #43 at 6dce864 and merged PR #49 as 4660ac6
 on 2026-10-10. Corrected PR #50 and release PR #51 were subsequently approved
 and peer-merged. Clean main 0f169ea passed the final gate on 2026-10-11.
-Final evidence publication and author visual/PDF acceptance remain pending;
-#44 is reopened/Started, not Done. Reviews given by Datakung on eight Lab 4 PRs
+Evidence PR #52 was corrected, approved and peer-merged as main 72314d5.
+The author then approved the report and authorized final assembly on October 11.
+Current Issue/Project completion is recorded separately from earlier snapshots.
+Reviews given by Datakung on eight Lab 4 PRs
 in auto4496/toktickit are verified and recorded below, separately from reviews received.
 
 Author: Pitchai Chadchuangchot, 67070501068, GitHub Datakung.
@@ -31,7 +33,7 @@ by the author; the peer supplies actual review comments, approval and merge.
 | Action UI | [#41](https://github.com/Datakung/toktickit/issues/41) | [#47](https://github.com/Datakung/toktickit/pull/47) / lab4-staging | Corrected 0cf9e58; approval below | Merged f4da089; Issue closed |
 | Ticket workflow | [#42](https://github.com/Datakung/toktickit/issues/42) | [#48](https://github.com/Datakung/toktickit/pull/48) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/48#pullrequestreview-5472167227) of b7f6bb9 | Merged 00fddc1 |
 | Dashboards | [#43](https://github.com/Datakung/toktickit/issues/43) | [#49](https://github.com/Datakung/toktickit/pull/49) / lab4-staging | [auto4496 approval](https://github.com/Datakung/toktickit/pull/49#pullrequestreview-5479533211) of 6dce864 | Merged 4660ac6; Issue closed |
-| Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | [#50](https://github.com/Datakung/toktickit/pull/50) / lab4-staging; [#51](https://github.com/Datakung/toktickit/pull/51) / main | Actual approvals 5480214732 / 5480530699 | Merged 9b5d3a5 / 0f169ea; final evidence review remains |
+| Quality/release | [#44](https://github.com/Datakung/toktickit/issues/44) | [#50](https://github.com/Datakung/toktickit/pull/50) / lab4-staging; [#51](https://github.com/Datakung/toktickit/pull/51) / main; [#52](https://github.com/Datakung/toktickit/pull/52) / main | Actual approvals 5480214732 / 5480530699 / 5482676261 | Merged 9b5d3a5 / 0f169ea / 72314d5; author report approval recorded |
 
 ## Contract review questions
 
@@ -577,7 +579,32 @@ harness corrections (Category selector and expected signed-out session probes)
 are retained in original failure logs; no product fix or relaxed application
 assertion is claimed. Agent visual inspection, author acceptance and recorded
 reciprocal review remain distinct. Publication of this evidence follow-up and final author
-PDF/visual acceptance remain pending; #44 stays open/Started.
+PDF/visual acceptance remained pending at that earlier snapshot; #44 was open/Started.
+
+### Evidence PR #52 correction, reapproval and author report acceptance
+
+Phanuwit requested changes in [review 5482569222](https://github.com/Datakung/toktickit/pull/52#pullrequestreview-5482569222)
+at head fea0905. The [P2 finding](https://github.com/Datakung/toktickit/pull/52#discussion_r4240890309)
+showed that unchanged Windows CRLF application sources failed raw-byte hashes.
+The author authorized correction: compare UTF-8 CRLF-to-LF canonical actual
+working-file content against approved Git blobs, while retaining exact PDF,
+attachment, PNG and original evidence byte checks. The author responded in that
+review thread and pushed corrected head 27cf94d.
+
+Phanuwit [approved corrected head 27cf94d](https://github.com/Datakung/toktickit/pull/52#pullrequestreview-5482676261)
+on October 11 at 16:02:15 Bangkok, with no further actionable findings. He
+independently passed 17 focused tests and the complete checker in clean LF and
+CRLF checkouts, and confirmed a real source edit failed. The PDF digest and
+prior visual inspection were unchanged; this was not a new full application run.
+He peer-merged PR #52 at 16:02:30 as
+`72314d5814a874d528773ba328e5d54e871ca0ef`.
+
+The author subsequently asked whether the report was good enough. After the
+agent explained the remaining publication/acceptance/state updates, the author
+said "Go for it" to authorize finalization. Report acceptance is explicit;
+no new author-performed demo or screen-reader audit is inferred. The final PDF
+embeds current completion and actual Issue/Project snapshots, while preserving
+the original application gate revision and historical review records.
 
 ## Reciprocal review - comments given on Phanuwit's project
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-import json, re, html, hashlib
+import argparse, json, re, html, hashlib
 from datetime import datetime
 from PIL import Image as PILImage
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Flowable, KeepTogether
@@ -11,9 +11,30 @@ from pypdf import PdfReader, PdfWriter
 
 ROOT = Path(__file__).resolve().parents[1]
 EV = ROOT / 'artifacts/lab-04/final-main'
-OUT = ROOT / 'output/pdf/TokTickIT-Lab4-Review.pdf'
+parser = argparse.ArgumentParser(description='Build the final submission; the historical review PDF is immutable.')
+parser.add_argument('--submission', action='store_true', help='Assemble using actual author acceptance and publication records.')
+args = parser.parse_args()
+# The preserved PR #52 review copy is checked against exact historical Git
+# blobs. Rebuilding it from later maintained documents cannot reproduce that
+# snapshot. Refuse before creating directories or writing any artifact.
+if not args.submission:
+    parser.error('Historical review rebuild is retired; no artifacts were written. '
+                 'Use --submission to build the final report. Check the preserved '
+                 'review copy with check-lab4-review.py --record-path <separate-output-path>.')
+FINAL = args.submission
+META = EV/'submission' if FINAL else EV
+completion = json.loads((META/'completion.json').read_text()) if FINAL else None
+if FINAL:
+    assert completion['authorFinalAcceptance'] is True
+    assert completion['publication']['merged'] is True
+    assert completion['publication']['approvedHead'] == completion['reviewedEvidenceHead']
+    assert completion['publication']['mergedBy'] == 'auto4496'
+OUT = ROOT / ('output/pdf/TokTickIT-Lab4-Submission.pdf' if FINAL else 'output/pdf/TokTickIT-Lab4-Review.pdf')
 OUT.parent.mkdir(parents=True, exist_ok=True)
 REV = '0f169eaeca9bf00672c5c32884a1913c53b845d3'
+SOURCE_REV = completion['publishedEvidenceRevision'] if FINAL else REV
+PHASE = completion['phase'] if FINAL else 'review-copy'
+CURRENT_DOC = ROOT/'docs/lab-04/reviewer.md'
 BASE = 'https://github.com/Datakung/toktickit'
 manifest = json.loads((EV/'gate/manifest.json').read_text(encoding='utf-8-sig'))
 parity = json.loads((EV/'dashboard-parity.json').read_text())
@@ -36,7 +57,13 @@ def fmt(text):
     text = text.replace('✓','Pass').replace('×','Fail').replace('├','+').replace('└','+').replace('─','-').replace('│','|')
     text = html.escape(text)
     text = re.sub(r'\[([^\]]+)\]\((https?://[^)]+)\)',lambda m:f'<link href="{m.group(2)}" color="#006c46">{m.group(1)}</link>',text)
-    text = re.sub(r'\[([^\]]+)\]\((?!https?://)[^)]+\)',r'\1 (local evidence; publication pending)',text)
+    def local_link(match):
+        label, target = match.groups()
+        if not FINAL: return label+' (local evidence; publication pending)'
+        filename, _, anchor = html.unescape(target).partition('#')
+        path = (CURRENT_DOC.parent/filename).resolve().relative_to(ROOT).as_posix()
+        return f'<link href="{BASE}/blob/{SOURCE_REV}/{path}'+('#'+anchor if anchor else '')+f'" color="#006c46">{label}</link>'
+    text = re.sub(r'\[([^\]]+)\]\((?!https?://)([^)]+)\)',local_link,text)
     text = re.sub(r'`([^`]+)`',r'<font name="Courier">\1</font>',text)
     text = re.sub(r'\*\*([^*]+)\*\*',r'<b>\1</b>',text)
     return text
@@ -83,8 +110,13 @@ def md(text):
     flush()
 
 def source_doc(name, text):
+    global CURRENT_DOC
+    CURRENT_DOC = ROOT/'docs/lab-04'/name
     sub('Rendered '+name+' - selected current sections')
-    p(f'Full maintained document: [{name}]({BASE}/blob/{REV}/docs/lab-04/{name}). This local review copy renders current excerpts; the complete local Markdown is also embedded. Dated history is retained in the source, not repeated here. Publication of the follow-up is pending.','CaptionCopy')
+    if FINAL:
+        p(f'Published reviewed source: [{name}]({BASE}/blob/{SOURCE_REV}/docs/lab-04/{name}). The complete maintained Markdown is embedded, including the later author-approved closeout. Published-version links and current embedded closeout text are explicitly distinguished; dated history is retained in the attachment.','CaptionCopy')
+    else:
+        p(f'Full maintained document: [{name}]({BASE}/blob/{REV}/docs/lab-04/{name}). This local review copy renders current excerpts; the complete local Markdown is also embedded. Dated history is retained in the source, not repeated here. Publication of the follow-up is pending.','CaptionCopy')
     md(text)
 
 def doc(name): return (ROOT/'docs/lab-04'/name).read_text(encoding='utf-8')
@@ -170,24 +202,44 @@ def responsive_region(prefix,title,scope=None):
         else:figure(name,title+f' - {width}px',scope,maxheight=420)
 
 part(1,'Git use and engineering workflow')
-p('TokTickIT - Lab 4 review copy | 11 October 2026 | Pitchai Chadchuangchot, 67070501068. Peer: Phanuwit Butchari, 67070501070 (auto4496).')
-p('Application release is reviewed and verified. This PDF is NOT submission-ready: the evidence follow-up is local, final author visual/PDF acceptance is pending, and Issue #44 is open/Started. It deliberately does not manufacture an all-Done board. After acceptance/publication, refresh the real board and rebuild the submission copy.')
+if FINAL:
+    p('TokTickIT - Lab 4 final report | 11 October 2026 | Pitchai Chadchuangchot, 67070501068. Peer: Phanuwit Butchari, 67070501070 (auto4496).')
+    p('The application release passed the clean-main gate at 0f169ea. Phanuwit approved and merged the corrected evidence follow-up in PR #52, main 72314d5. The author approved the report and authorized finalization on October 11. The completion record distinguishes retained tests, agent visual checks and author report approval; it does not claim a new manual demo or screen-reader audit.')
+else:
+    p('TokTickIT - Lab 4 review copy | 11 October 2026 | Pitchai Chadchuangchot, 67070501068. Peer: Phanuwit Butchari, 67070501070 (auto4496).')
+    p('Application release is reviewed and verified. This PDF is NOT submission-ready: the evidence follow-up is local, final author visual/PDF acceptance is pending, and Issue #44 is open/Started. It deliberately does not manufacture an all-Done board. After acceptance/publication, refresh the real board and rebuild the submission copy.')
 p(f'[Repository]({BASE}) | [Release PR #51]({BASE}/pull/51) | [Project](https://github.com/users/Datakung/projects/1) | [Issue #44]({BASE}/issues/44)')
+if FINAL:
+    p(f'[Evidence PR #52]({BASE}/pull/52) | [Final peer approval]({completion["publication"]["approvalUrl"]}) | [Published final-main evidence]({BASE}/blob/{SOURCE_REV}/artifacts/lab-04/final-main/README.md)')
 table([['Feature -> lab4-staging','Peer merge'],['#45 contract / ff97405','d32c8cf'],['#46 foundation / 4795f38','a915812'],['#47 action UI / 0cf9e58','f4da089'],['#48 workflow / b7f6bb9','00fddc1'],['#49 dashboards / 6dce864','4660ac6'],['#50 quality correction / f517961','9b5d3a5'],['#51 lab4-staging -> main','0f169ea; 02:34:13 Bangkok, October 11']])
+if FINAL:
+    p('Evidence follow-up #52: approved 27cf94d at 16:02:15 Bangkok; peer-merged as 72314d5 at 16:02:30. This documentation/checker change did not alter the fully gated application.')
 sub('Actual issue/project snapshot')
-project=json.loads((EV/'project-state.json').read_text(encoding='utf-8-sig'))
-table([['Issue','Observed card','Acceptance boundary']]+[[str(r['issue']),r['status'],'Peer-accepted feature' if r['issue']!=44 else 'Reopened; final evidence/review remains'] for r in sorted(project,key=lambda r:r['issue'])],[80,120,AREA-200])
+project=json.loads((META/'project-state.json').read_text(encoding='utf-8-sig'))
+table([['Issue','Observed card','Acceptance boundary']]+[[str(r['issue']),r['status'],'Peer-accepted feature' if r['issue']!=44 else ('Author-approved closeout' if FINAL and PHASE == 'submission' else 'Closeout snapshot before final verification' if FINAL else 'Reopened; final evidence/review remains')] for r in sorted(project,key=lambda r:r['issue'])],[80,120,AREA-200])
+if FINAL:
+    p('Snapshot captured: '+completion['recordedAtUtc']+'. Complete retrieved Issue/Project records and author acceptance are embedded. '+('All six Issues are closed and their actual cards are Done.' if PHASE == 'submission' else 'Preflight copy: Issue #44 remains open/Started until PDF checks finish.'))
+if FINAL and PHASE == 'submission':
+    capture = completion['projectCapture']
+    board = META/capture['file']
+    assert hashlib.sha256(board.read_bytes()).hexdigest() == capture['sha256']
+    story.append(FigureContent('Actual Project board - Done (6)',
+        'October 11 closeout capture. Labelled excerpt (906, 218, 1263, 700) '
+        'shows Done count 6 and closed Issue #44 with merged PR #52. Full original '
+        'board PNG is embedded. Column description still says lab1-staging; '
+        'the actual Lab 4 release is main 0f169ea, not that historical label.',
+        Shot(board,(906,218,1263,700),.85),False))
 review=doc('reviewer.md')
 source_doc('reviewer.md',review.split('## Contract review questions')[0]+section(review,'### Actual reapproval, release and final-main verification, October 11'))
 sub('README, ignore rules and directory evidence')
-p(f'[README]({BASE}/blob/{REV}/README.md) documents setup, guarded test/E2E configuration, seed/migration instructions, builds and review ports. [.gitignore]({BASE}/blob/{REV}/.gitignore) excludes dependencies, secrets, builds, uploads and routine test output. Scoped exceptions retain intentional logs. The local follow-up adds final-main log exceptions only.')
+p(f'[README]({BASE}/blob/{SOURCE_REV}/README.md) documents setup, guarded test/E2E configuration, seed/migration instructions, builds and review ports. [.gitignore]({BASE}/blob/{SOURCE_REV}/.gitignore) excludes dependencies, secrets, builds, uploads and routine test output. Scoped exceptions retain intentional logs. '+('PR #52 published the final-main evidence and checker correction.' if FINAL else 'The local follow-up adds final-main log exceptions only.'))
 table([['Repository area','Purpose'],['client/src; client/tests/lab-01..04; client/e2e/lab-02..04','Role interfaces, component/style and browser regression'],['server/src; server/prisma/migrations; server/tests/lab-01..04','APIs, preserving schema and unit/integration/recovery tests'],['docs/lab-04/{specification,api-spec,ui-spec,tests,reviewer,ai-use}.md','Maintained engineering contract, traceability and actual review/AI record'],['artifacts/lab-04/{quality-gate,final-main,screenshots}; scripts/','Distinct historical/final evidence and reproducible guarded helpers']],[AREA*.48,AREA*.52])
 
 part(2,'Spec DD - reviewed engineering contract')
 p(f'The corrected contract ff97405 was [approved in PR #45]({BASE}/pull/45#pullrequestreview-5416186064) and merged as d32c8cf before the foundation/product PRs #46-50. The following renders the current normative contract, not the stakeholder handout verbatim.')
 spec=doc('specification.md')
 source_doc('specification.md',section(spec,'## 1. Sprint goal','## 12. Author-requested creation refinement'))
-p(f'Exact REST payloads, authorization/error precedence and receipts: [api-spec.md]({BASE}/blob/{REV}/docs/lab-04/api-spec.md). No final-evidence operation changed API or schema behavior.')
+p(f'Exact REST payloads, authorization/error precedence and receipts: [api-spec.md]({BASE}/blob/{SOURCE_REV}/docs/lab-04/api-spec.md). No final-evidence operation changed API or schema behavior.')
 
 part(3,'Test DD, traceability and final-main results')
 p('One uninterrupted run on clean main 0f169ea: 02:39:09-02:45:43 Bangkok, October 11. Original complete terminal logs and individual-case JSON reports are embedded in this one PDF as attachments; do not substitute earlier feature totals.')
@@ -262,29 +314,33 @@ part(9,'Zen Green, responsive and accessibility verification')
 ui=doc('ui-spec.md')
 source_doc('ui-spec.md',ui.split('## Requester dashboard')[0]+section(ui,'## Responsive and accessibility rules','## Planned evidence and checklist'))
 sub('Completed recorded verification - separate from final author acceptance')
-md((EV/'visual-checklist.md').read_text())
-p('The fresh 192-image index covers three-width major Lab 4 screens and earlier role screens. Original assets have hashes and timestamps. Figures are readable full regions or labelled excerpts, not miniature full-page thumbnails. Application behavior/style is unchanged from the reviewed release. PDF/source acceptance is still pending; do not mark this review copy as final submission.')
+CURRENT_DOC = EV/'visual-checklist.md'
+md((META/'visual-checklist.md').read_text())
+p('The fresh 192-image index covers three-width major Lab 4 screens and earlier role screens. Original assets have hashes and timestamps. Figures are readable full regions or labelled excerpts, not miniature full-page thumbnails. Application behavior/style is unchanged from the reviewed release. '+('Author report approval is recorded in the completion attachment. No new manual demo or formal accessibility certification is claimed.' if FINAL else 'PDF/source acceptance is still pending; do not mark this review copy as final submission.'))
 figure('staff-work-768.png','Responsive My Actions - tablet navigation','supplementary',(0,180,768,445),440)
 figure('staff-work-768.png','Responsive My Actions - tablet work card','supplementary',(0,452,768,780),440)
 figure('staff-work-390.png','Responsive My Actions - mobile navigation','supplementary',(0,310,390,650),440)
 figure('staff-work-390.png','Responsive My Actions - mobile work card','supplementary',(0,665,390,1020),440)
 figure('requester-create-390.png','Create Ticket - mobile context','supplementary',(0,260,390,925),440)
 figure('action-edit-controls-768.png','Aligned edit controls - tablet')
-sub('Required final acceptance and publication')
-p('Review this PDF and the fresh images. Publish the evidence follow-up through a reviewed PR; refresh actual final issue/project states after acceptance; rebuild the submission copy with working final-evidence links. Keep #44 open/Started until those checks genuinely finish. Actual reciprocal review is recorded in Answer Part 1, separately from author acceptance. No formal screen-reader certification is invented.')
+if not FINAL:
+    sub('Required final acceptance and publication')
+    p('Review this PDF and the fresh images. Publish the evidence follow-up through a reviewed PR; refresh actual final issue/project states after acceptance; rebuild the submission copy with working final-evidence links. Keep #44 open/Started until those checks genuinely finish. Actual reciprocal review is recorded in Answer Part 1, separately from author acceptance. No formal screen-reader certification is invented.')
 
 def footer(canvas,doc):
     canvas.saveState();canvas.setStrokeColor(colors.HexColor('#a7c7b9'));canvas.line(36,31,W-36,31)
     canvas.setFont('Helvetica',8);canvas.setFillColor(colors.HexColor('#47615a'))
-    canvas.drawString(36,18,'TokTickIT Lab 4 | REVIEW COPY | application '+REV[:7])
+    label = ('FINAL SUBMISSION' if PHASE == 'submission' else 'SUBMISSION PREFLIGHT') if FINAL else 'REVIEW COPY'
+    canvas.drawString(36,18,'TokTickIT Lab 4 | '+label+' | application '+REV[:7])
     canvas.drawRightString(W-36,18,str(doc.page));canvas.restoreState()
 
-temp=OUT.with_name('TokTickIT-Lab4-Review-unattached.pdf')
-SimpleDocTemplate(str(temp),pagesize=(W,H),leftMargin=36,rightMargin=36,topMargin=32,bottomMargin=42,title='TokTickIT Lab 4 - review copy',author='Pitchai Chadchuangchot').build(layout_figures(story),onFirstPage=footer,onLaterPages=footer)
+temp=OUT.with_name(OUT.stem+'-unattached.pdf')
+SimpleDocTemplate(str(temp),pagesize=(W,H),leftMargin=36,rightMargin=36,topMargin=32,bottomMargin=42,title='TokTickIT Lab 4 - '+PHASE,author='Pitchai Chadchuangchot').build(layout_figures(story),onFirstPage=footer,onLaterPages=footer)
 reader=PdfReader(temp);writer=PdfWriter();writer.clone_document_from_reader(reader)
 attachments=[EV/'gate'/name for name in ['manifest.json','server-tests.log','client-tests.log','browser-tests.log','gate-regressions.log','server-results.json','client-results.json','browser-results.json']]
-attachments += [EV/'dashboard-parity.json',EV/'captured-screenshots.json',EV/'visual-checklist.md']
+attachments += [EV/'dashboard-parity.json',EV/'captured-screenshots.json',META/'visual-checklist.md']
 attachments += [ROOT/'docs/lab-04'/name for name in ['specification.md','tests.md','ui-spec.md','api-spec.md','reviewer.md','ai-use.md']]
+if FINAL: attachments += [META/name for name in ['completion.json','issue-state.json','project-state.json','project-done.png']]
 for path in attachments: writer.add_attachment(path.name,path.read_bytes())
 with OUT.open('wb') as stream:writer.write(stream)
 temp.unlink()
@@ -294,5 +350,5 @@ uris=[a.get_object()['/A'].get('/URI') for page in check.pages for a in page.get
 assert all(str(uri).startswith('https://github.com/') for uri in uris)
 assert len(check.attachments)==len(attachments)
 assert '\u25a0' not in text
-(EV/'pdf-check.json').write_text(json.dumps({'pdf':str(OUT),'phase':'review-copy','pageFormat':'A4 portrait','pageSizePoints':[W,H],'pages':len(check.pages),'headingOrder':headings,'links':sorted(set(map(str,uris))),'embeddedFiles':sorted(check.attachments),'figures':figure_records,'authorFinalAcceptance':False,'publishedEvidence':False},indent=2))
+(META/'pdf-check.json').write_text(json.dumps({'pdf':str(OUT),'phase':PHASE,'pageFormat':'A4 portrait','pageSizePoints':[W,H],'pages':len(check.pages),'headingOrder':headings,'links':sorted(set(map(str,uris))),'embeddedFiles':sorted(check.attachments),'figures':figure_records,'authorFinalAcceptance':FINAL,'publishedEvidence':FINAL,'publishedEvidenceRevision':SOURCE_REV},indent=2))
 print(json.dumps({'pages':len(check.pages),'figures':len(figure_records),'links':len(uris),'attachments':len(check.attachments),'pdf':str(OUT)}))

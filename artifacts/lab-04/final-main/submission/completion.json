@@ -1,0 +1,200 @@
+{
+  "recordedAtUtc": "2026-10-11 09:30:57 UTC",
+  "applicationRevision": "0f169eaeca9bf00672c5c32884a1913c53b845d3",
+  "publishedEvidenceRevision": "72314d5814a874d528773ba328e5d54e871ca0ef",
+  "reviewedEvidenceHead": "27cf94d402f3662eb614daaa02042ba2607cb54c",
+  "publication": {
+    "pr": 52,
+    "url": "https://github.com/Datakung/toktickit/pull/52",
+    "merged": true,
+    "mergedAt": "2026-10-11T09:02:30Z",
+    "mergedBy": "auto4496",
+    "approvalUrl": "https://github.com/Datakung/toktickit/pull/52#pullrequestreview-5482676261",
+    "approvedAt": "2026-10-11T09:02:15Z",
+    "approvedHead": "27cf94d402f3662eb614daaa02042ba2607cb54c"
+  },
+  "authorFinalAcceptance": true,
+  "authorApproval": {
+    "author": "Pitchai Chadchuangchot",
+    "source": "Current conversation: author asked whether the report was good enough; after explanation of the remaining finalization, replied 'Go for it'.",
+    "scope": "Report approval and authorization to finalize submission and completion evidence.",
+    "freshManualDemoClaimed": false,
+    "manualScreenReaderAuditClaimed": false
+  },
+  "initialStates": {
+    "issues": [
+      {
+        "number": 39,
+        "state": "CLOSED",
+        "title": "Define the Lab 4 engineering contract",
+        "url": "https://github.com/Datakung/toktickit/issues/39",
+        "closedAt": "2026-10-05T14:37:56Z"
+      },
+      {
+        "number": 40,
+        "state": "CLOSED",
+        "title": "Implement the Actions Taken data and API foundation",
+        "url": "https://github.com/Datakung/toktickit/issues/40",
+        "closedAt": "2026-10-06T12:10:00Z"
+      },
+      {
+        "number": 41,
+        "state": "CLOSED",
+        "title": "Implement the Actions Taken Ticket Detail UI",
+        "url": "https://github.com/Datakung/toktickit/issues/41",
+        "closedAt": "2026-10-07T07:35:47Z"
+      },
+      {
+        "number": 42,
+        "state": "CLOSED",
+        "title": "Enforce the final Ticket workflow and resolution gate",
+        "url": "https://github.com/Datakung/toktickit/issues/42",
+        "closedAt": "2026-10-09T15:36:10Z"
+      },
+      {
+        "number": 43,
+        "state": "CLOSED",
+        "title": "Implement Requester and IT Staff dashboards",
+        "url": "https://github.com/Datakung/toktickit/issues/43",
+        "closedAt": "2026-10-10T15:13:20Z"
+      },
+      {
+        "number": 44,
+        "state": "OPEN",
+        "title": "Complete the Lab 4 quality gate, evidence and release",
+        "url": "https://github.com/Datakung/toktickit/issues/44",
+        "closedAt": null
+      }
+    ],
+    "project": [
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2oE",
+        "issue": 42,
+        "status": "Done",
+        "title": "Enforce the final Ticket workflow and resolution gate"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2gY",
+        "issue": 39,
+        "status": "Done",
+        "title": "Define the Lab 4 engineering contract"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2jg",
+        "issue": 40,
+        "status": "Done",
+        "title": "Implement the Actions Taken data and API foundation"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2ls",
+        "issue": 41,
+        "status": "Done",
+        "title": "Implement the Actions Taken Ticket Detail UI"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2qE",
+        "issue": 43,
+        "status": "Done",
+        "title": "Implement Requester and IT Staff dashboards"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2rY",
+        "issue": 44,
+        "status": "Started",
+        "title": "Complete the Lab 4 quality gate, evidence and release"
+      }
+    ]
+  },
+  "phase": "submission",
+  "submittedToCourse": false,
+  "finalStates": {
+    "issues": [
+      {
+        "number": 39,
+        "state": "CLOSED",
+        "title": "Define the Lab 4 engineering contract",
+        "url": "https://github.com/Datakung/toktickit/issues/39",
+        "closedAt": "2026-10-05T14:37:56Z"
+      },
+      {
+        "number": 40,
+        "state": "CLOSED",
+        "title": "Implement the Actions Taken data and API foundation",
+        "url": "https://github.com/Datakung/toktickit/issues/40",
+        "closedAt": "2026-10-06T12:10:00Z"
+      },
+      {
+        "number": 41,
+        "state": "CLOSED",
+        "title": "Implement the Actions Taken Ticket Detail UI",
+        "url": "https://github.com/Datakung/toktickit/issues/41",
+        "closedAt": "2026-10-07T07:35:47Z"
+      },
+      {
+        "number": 42,
+        "state": "CLOSED",
+        "title": "Enforce the final Ticket workflow and resolution gate",
+        "url": "https://github.com/Datakung/toktickit/issues/42",
+        "closedAt": "2026-10-09T15:36:10Z"
+      },
+      {
+        "number": 43,
+        "state": "CLOSED",
+        "title": "Implement Requester and IT Staff dashboards",
+        "url": "https://github.com/Datakung/toktickit/issues/43",
+        "closedAt": "2026-10-10T15:13:20Z"
+      },
+      {
+        "number": 44,
+        "state": "CLOSED",
+        "title": "Complete the Lab 4 quality gate, evidence and release",
+        "url": "https://github.com/Datakung/toktickit/issues/44",
+        "closedAt": "2026-10-11T09:30:32Z"
+      }
+    ],
+    "project": [
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2oE",
+        "issue": 42,
+        "status": "Done",
+        "title": "Enforce the final Ticket workflow and resolution gate"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2gY",
+        "issue": 39,
+        "status": "Done",
+        "title": "Define the Lab 4 engineering contract"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2jg",
+        "issue": 40,
+        "status": "Done",
+        "title": "Implement the Actions Taken data and API foundation"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2ls",
+        "issue": 41,
+        "status": "Done",
+        "title": "Implement the Actions Taken Ticket Detail UI"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2qE",
+        "issue": 43,
+        "status": "Done",
+        "title": "Implement Requester and IT Staff dashboards"
+      },
+      {
+        "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2rY",
+        "issue": 44,
+        "status": "Done",
+        "title": "Complete the Lab 4 quality gate, evidence and release"
+      }
+    ]
+  },
+  "projectCapture": {
+    "file": "project-done.png",
+    "sha256": "d96a405157f0bc457e7caebe51349c41e7c6b3ec32bd72296a1749f503eb3114",
+    "url": "https://github.com/users/Datakung/projects/1/views/1?filterQuery=created%3A2026-10-03",
+    "description": "Actual GitHub board: Done count 6 and closed Issue #44 with merged PR #52; lower cards visible. Default Done-column description is historical lab1-staging wording, not the Lab 4 release target."
+  }
+}

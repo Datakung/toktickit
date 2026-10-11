@@ -18,9 +18,15 @@ review ports 5183/3100; only guarded test/E2E fixtures were reset. Reproduce wit
 from the repository root. Signed-out `/api/auth/me` 401 probes are recorded,
 not confused with unexpected console errors.
 
-Issue #44 was reopened and returned to Started after premature closure/Done.
-Final author visual/PDF acceptance and publication of this evidence follow-up
-remain pending. The nine-part PDF is a review copy, not a completed submission.
+Issue #44 was reopened after premature closure/Done. The evidence follow-up was
+then [approved](https://github.com/Datakung/toktickit/pull/52#pullrequestreview-5482676261)
+and peer-merged in [PR #52](https://github.com/Datakung/toktickit/pull/52) as main
+`72314d5814a874d528773ba328e5d54e871ca0ef`. The author subsequently approved the
+report and authorized finalization. The final A4 portrait PDF is generated with
+`python scripts/build-lab4-review.py --submission` and checked with
+`python scripts/check-lab4-review.py --submission`; current closeout records are
+in `artifacts/lab-04/final-main/submission/`. The reviewed PDF and original gate
+evidence remain historical and unchanged. Course submission is not claimed.
 Older dated sections below are historical execution records, not current release status.
 
 ## Lab 4 Actions Taken and Ticket workflow

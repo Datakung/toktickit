@@ -14,9 +14,14 @@ responses, approvals and exact commits. Include the verified reviews given on
 auto4496/toktickit PRs #39/#41/#43/#45/#47/#49/#50/#51, separately from reviews
 received on this repository. Include README/.gitignore, directory structure
 and final Kanban Done.
-PRs #45-51 are approved/merged. Clean main 0f169ea passed the full gate on
-October 11. Final evidence publication and author visual/PDF acceptance remain;
-the local PDF must stay a review copy and show #44 open/Started honestly.
+PRs #45-52 are approved/merged. Clean application main 0f169ea passed the full
+gate on October 11; evidence PR #52 was peer-merged as 72314d5. The author approved
+the report and authorized finalization. On October 11 at 16:30:57 Bangkok, all
+six Issues #39-44 were verified closed and all six actual Project cards Done.
+The submission copy records this closeout separately; the original review PDF,
+gate, screenshots and earlier open/Started snapshots remain unchanged. Final
+assembly changes were local at that snapshot, before their separate publication/review PR. No course upload,
+new personal demo or formal screen-reader audit is claimed.
 
 ## Answer Part 2:
 
