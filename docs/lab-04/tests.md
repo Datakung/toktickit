@@ -4,7 +4,9 @@ Status: Contract and Issues #40-43 accepted in PRs #45-49. Issue #43 was approve
 at 6dce864 and merged as 4660ac6 on 2026-10-10. Corrected quality PR #50 and release
 PR #51 were peer-approved/merged. Clean main 0f169ea passed the complete gate on
 October 11, 02:39:09-02:45:43 Bangkok. Final evidence is retained separately under
-artifacts/lab-04/final-main/. Publication and author visual/PDF acceptance remain;
+artifacts/lab-04/final-main/. Evidence PR #52 is approved and merged as 72314d5;
+the author approved the report and authorized final assembly on October 11.
+No new full API/browser gate or manual author demo is claimed by this closeout;
 historical candidate counts/provenance below are not relabelled as main evidence.
 
 ## Latest final-main execution
@@ -45,15 +47,16 @@ and expected login-only 401 probes. No unexpected console/page errors or root/bo
 overflow. The two initial harness failures and their corrections are retained;
 no new product fix is implied. Both additional development fingerprints match.
 Screenshots: 168 full-gate and 24 supplementary original PNGs, indexed with digests.
-Agent visual QA and author acceptance are separate; author final acceptance and
-evidence publication remain pending. No blanket manual screen-reader audit claim.
+Agent visual QA and author report acceptance are separate. PR #52 published the
+evidence; the author subsequently authorized the final report. No blanket manual
+screen-reader audit or new personal demo claim is made.
 
 ## Planned executable coverage
 
 Paths are repository-relative. Every executable row below passed on clean main
 0f169ea on October 11. The retained individual-case reports provide exact current
-coverage; dated feature results below remain historical. Author final visual/PDF
-acceptance is a separate pending check, not an executable-test failure.
+coverage; dated feature results below remain historical. Author report approval
+is separately recorded in the final completion attachment, not inferred from tests.
 
 | Test ID | Type | AC | Scenario and expected result | Actual/planned file | Current status |
 |---|---|---|---|---|---|
@@ -83,14 +86,14 @@ acceptance is a separate pending check, not an executable-test failure.
 | UI-04 | Component | AC-11,12,13 | Staff/Admin metrics/work/safe states, meaningful zeroes and bounded lists | client/tests/lab-04/StaffDashboard.test.tsx | Passed on final main; individual-case reports retained |
 | UI-05 | Component | AC-12,13 | URL hydration, invalid query, reload/Back and stale responses after navigation | client/tests/lab-04/DashboardNavigation.test.tsx; dashboards.spec.ts browser | Passed on final main; individual-case reports retained |
 | UI-06 | Component | AC-04,07,13,15 | Changed-only audit fields, initial creation details, Yes/No, Bangkok dates, honest account IDs, escaped text and incomplete legacy snapshots without mutation | client/tests/lab-04/ActionHistoryChanges.test.tsx | Passed on final main; individual-case reports retained |
-| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx; client/e2e/lab-04/dashboards.spec.ts | Passed on final main; author final visual/PDF acceptance pending |
+| STYLE-01 | UI style | AC-15 | Reused tokens, labeled states and responsive rules where meaningful computed-style checks apply | client/tests/lab-04/ui-style.test.tsx; client/e2e/lab-04/dashboards.spec.ts | Passed on final main; author report approval recorded separately |
 | REG-01 | API regression | AC-14 | Real-session auth and earlier owned/file/Comment/Note/Staff/Admin flows with the approved new gate | server/tests/lab-01, lab-02 and lab-03 (existing executable files); dedicated final release coverage remains #44 | Passed on final main; individual-case reports retained |
 | PERF-01 | Performance smoke | AC-11,16 | Bounded query count/payload and measured dashboard smoke on representative seeded data | server/tests/lab-04/dashboard-performance.api.test.ts | Passed on final main; individual-case reports retained |
 | E2E-01 | Browser | AC-02-07,13,15 | Different actors create/assign/edit/start/complete/cancel multiple actions; independent edit then failed/uncertain assignment; Requester read-only and direct denial | client/e2e/lab-04/actions-taken-flow.spec.ts | Passed on final main; individual-case reports retained |
 | E2E-02 | Browser | AC-07-09,13,15 | Missing/active/follow-up work including later-page blockers prevents resolution/checklist readiness; corrected work resolves/closes; reopen needs new cycle; status stages, checklist colours/contrast, view-first/Edit and readable audit with exact original snapshots at three widths | client/e2e/lab-04/ticket-resolution.spec.ts | Passed on final main; individual-case reports retained |
 | E2E-03 | Browser | AC-10-13,15 | Both dashboards, current-user work, query parity, exact drill-down and zero/failure states | client/e2e/lab-04/dashboards.spec.ts | Passed on final main; individual-case reports retained |
 | E2E-04 | Browser/regression | AC-14,16 | Authentication/change/logout, Requester/file flows, communication/privacy and Admin safeguards remain valid | client/e2e/lab-02/requester-ticket-flow.spec.ts; lab-03/auth-review.spec.ts; admin-users.spec.ts; staff-ticket-operations.spec.ts; release-evidence.spec.ts, included by test:e2e:review | Passed on final main; individual-case reports retained |
-| EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | scripts/lab4-quality-gate.ps1; client/e2e/lab-03/release-evidence.spec.ts; client/e2e/lab-04/dashboards.spec.ts; client/e2e/lab-04/ticket-resolution.spec.ts | Passed on final main; author final visual/PDF acceptance pending |
+| EVID-01 | Browser/evidence | AC-10-16 | Deliberate final-main captures at three widths, query comparison and unchanged development state | scripts/lab4-quality-gate.ps1; client/e2e/lab-03/release-evidence.spec.ts; client/e2e/lab-04/dashboards.spec.ts; client/e2e/lab-04/ticket-resolution.spec.ts | Passed on final main; author report approval recorded separately |
 
 ### Issue #43 dashboard implementation and evidence (2026-10-10)
 

@@ -3,7 +3,10 @@
 Status: Actual interaction record through peer-accepted Issues #40-43 and the
 Issue #44 release-candidate work on 2026-10-10 and author-authorized final-main
 verification on October 11. PR #50/#51 are peer-approved/merged and the complete
-main gate passed. Final evidence publication and author visual/PDF approval remain.
+main gate passed. PR #52 published the approved evidence as main 72314d5.
+After asking whether the report was good enough, the author replied "Go for it"
+to authorize its finalization. This records report approval, not an invented
+new manual demo, model selection history or accessibility certification.
 
 Tool: OpenAI Codex desktop. On 2026-10-10 the author reported the selected model
 as "GPT-Sol 6.1". This is the author's selection record, not an independently

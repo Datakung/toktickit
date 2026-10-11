@@ -1,0 +1,44 @@
+[
+  {
+    "number": 39,
+    "state": "CLOSED",
+    "title": "Define the Lab 4 engineering contract",
+    "url": "https://github.com/Datakung/toktickit/issues/39",
+    "closedAt": "2026-10-05T14:37:56Z"
+  },
+  {
+    "number": 40,
+    "state": "CLOSED",
+    "title": "Implement the Actions Taken data and API foundation",
+    "url": "https://github.com/Datakung/toktickit/issues/40",
+    "closedAt": "2026-10-06T12:10:00Z"
+  },
+  {
+    "number": 41,
+    "state": "CLOSED",
+    "title": "Implement the Actions Taken Ticket Detail UI",
+    "url": "https://github.com/Datakung/toktickit/issues/41",
+    "closedAt": "2026-10-07T07:35:47Z"
+  },
+  {
+    "number": 42,
+    "state": "CLOSED",
+    "title": "Enforce the final Ticket workflow and resolution gate",
+    "url": "https://github.com/Datakung/toktickit/issues/42",
+    "closedAt": "2026-10-09T15:36:10Z"
+  },
+  {
+    "number": 43,
+    "state": "CLOSED",
+    "title": "Implement Requester and IT Staff dashboards",
+    "url": "https://github.com/Datakung/toktickit/issues/43",
+    "closedAt": "2026-10-10T15:13:20Z"
+  },
+  {
+    "number": 44,
+    "state": "CLOSED",
+    "title": "Complete the Lab 4 quality gate, evidence and release",
+    "url": "https://github.com/Datakung/toktickit/issues/44",
+    "closedAt": "2026-10-11T09:30:32Z"
+  }
+]

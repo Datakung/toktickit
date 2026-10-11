@@ -5,7 +5,9 @@ and peer-merged. Clean main 0f169ea passed full regression; a separate guarded
 fixture run compared 36 dashboard metrics against independently selected database
 rows and exact drill-down lists. This documentation/evidence follow-up changes
 no endpoint, payload, permission, schema or API behavior. See tests.md and the
-final-main evidence directory for actual run provenance and remaining acceptance.
+final-main evidence directory for actual run provenance. PR #52 was approved and
+merged as main 72314d5; the author subsequently authorized final report assembly.
+The closeout changes no API/application behavior and claims no new full gate.
 
 Status: Approved contract; foundations and Action UI accepted in PRs #46/#47.
 Issue #42 implements the Ticket status gates and shared workflow-history endpoint

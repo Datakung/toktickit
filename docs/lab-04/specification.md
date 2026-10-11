@@ -16,7 +16,10 @@ mockup controls do not override the approved role rules (no Staff Create Ticket)
 [tests.md](tests.md) records actual checks. Issue #43 is author-accepted and
 peer-merged. Corrected quality PR #50 and release PR #51 were peer-approved and
 merged; clean main 0f169ea passed the complete final gate on October 11.
-Final evidence publication and author visual/PDF acceptance remain pending.
+Evidence PR #52 was approved at 27cf94d and peer-merged as main 72314d5.
+The author approved the report and authorized final assembly on October 11.
+The final completion record distinguishes report approval from automated/agent
+checks; no new manual demo or screen-reader certification is claimed.
 Historical feature passes below are distinct from the latest final-main run.
 
 ## 1. Sprint goal
@@ -300,8 +303,9 @@ Issue #44 hardening changes compatible upload/proxy dependency versions and
 upgrades vulnerable test tooling. It does not change the schema, action numbering,
 authorization, business rules or development records. Its reproducible isolated
 gate retains all per-case results and distinguishes release-candidate checks from
-the required clean-main rerun. Peer release PR #51 is accepted and merged. Final
-author visual/PDF acceptance and final evidence publication remain pending.
+the required clean-main rerun. Peer release PR #51 and evidence PR #52 are
+accepted and merged. Author report acceptance is recorded separately in the
+final completion attachment; application semantics and source are unchanged.
 
 ## 9. Acceptance criteria
 
@@ -337,13 +341,13 @@ Every AC maps to planned tests in [tests.md](tests.md).
 - [x] Dashboard metrics match independent queries and drill-downs match counts.
 - [x] Earlier functionality regressed; full tests/builds pass and production audits reviewed.
 - [x] Isolated E2E confirms unchanged development database/uploads.
-- [ ] Final-main screenshots and accurate responsive/accessibility checklist inspected.
-- [ ] Runtime console errors, broken navigation, temporary placeholder content and
+- [x] Final-main screenshots and accurate responsive/accessibility checklist inspected.
+- [x] Runtime console errors, broken navigation, temporary placeholder content and
   unfinished controls audited; setup/migration/seed/test/demo instructions verified.
-- [ ] README and six Lab 4 docs contain real paths/results/review links/provenance.
-- [ ] Phanuwit approves/merges features into lab4-staging and release into main;
+- [x] README and six Lab 4 docs contain real paths/results/review links/provenance.
+- [x] Phanuwit approves/merges features into lab4-staging and release into main;
   final main rerun completes and all Issues reach Done after acceptance.
-- [ ] One readable linked PDF includes Answer Part 1-9 and author-reviewed reflection.
+- [x] One readable linked PDF includes Answer Part 1-9 and author-reviewed reflection.
 
 ## 11. Reviewed assumptions and engineering decisions
 
@@ -351,8 +355,9 @@ Latest #44 verification: clean main `0f169ea` passed 298 server / 211 client /
 49 Chromium cases, ten gate regressions, both builds, Prisma validation and four
 clean audits. Thirty-six supplementary raw-row/API/drill-down comparisons pass.
 This evidence follow-up does not change BR/FR/API/schema/index/numbering semantics.
-Final author visual/PDF acceptance, published documentation and actual all-Done
-closure evidence remain unfinished; unchecked completion items are intentional.
+Evidence publication was peer-approved/merged in PR #52. Author report approval
+and final assembly authorization are recorded in the final completion attachment.
+Issue/Project closeout is based on freshly retrieved states, not an invented board.
 
 The sheet's detailed field list does not fully specify action assignment/state,
 completion/cancellation or the resolution predicate, but its grading rubric asks

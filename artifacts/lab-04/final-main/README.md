@@ -59,14 +59,16 @@ assertion remain in `dashboard-parity-initial.log` and
 
 ## Acceptance boundary
 
-PR #50/#51 approvals/merges are actual peer evidence; see reviewer.md. #44 was
-prematurely closed/Done, then explicitly reopened/Started for this work.
-`issue-state.json` and `project-state.json` retain actual #39-44 states.
-Agent screenshot review and automated checks do not substitute for the author's
-final visual/PDF acceptance or a manual screen-reader certification. The local
-evidence/documentation follow-up is not yet published; the PDF is a review copy.
-Keep #44 open until final acceptance and publication, then refresh actual all-Done
-evidence and rebuild the submission copy. Reviews given by Datakung on eight
+PR #50/#51/#52 approvals and peer merges are actual evidence; see reviewer.md.
+#44 was prematurely closed/Done, then reopened/Started for the evidence work.
+The parent `issue-state.json` and `project-state.json` preserve that earlier
+snapshot. PR #52 published the corrected evidence as main 72314d5. Following
+the author's report approval and finalization authorization, #44 was closed
+on October 11 at 16:30:32 Bangkok. Fresh records retrieved at 16:30:57 verify
+all six Issues closed and all six Project cards Done; see `submission/`.
+Report approval is not a claim of a new personal demo or screen-reader audit.
+At the final-assembly snapshot, closeout changes were local before their separate publication/review PR;
+course submission is not claimed. Reviews given by Datakung on eight
 Lab 4 PRs in auto4496/toktickit are now verified in reviewer.md and rendered in
 Answer Part 1; historical peer test totals are not fresh runs for this report.
 `reciprocal-review.json` preserves the retrieved review comments, author replies,
@@ -100,6 +102,16 @@ intentionally produces a review copy; final closure/publication requires a genui
 updated record and regenerated submission copy, not changing a label alone.
 
 ## Application-source EOL policy (PR #52 correction)
+
+Final submission assembly is separate from the historical review copy. Use
+`python scripts/build-lab4-review.py --submission`, render and inspect every
+current page, then run `python scripts/check-lab4-review.py --submission
+--reviewed-render-dir <directory> --agent-review-confirmed`. The 21 embedded
+files add actual completion/Issue/Project records and the unmodified board PNG
+to the original attachment set. `submission/pdf-review.json` records final QA.
+The original parent review records and PDF are retained unchanged. The checker
+can validate that original PDF against published PR #52 documents using
+`--record-path <separate-path>` without rewriting its historical QA record.
 
 The historical `application-fingerprints.json` records the observed raw bytes and
 is not rewritten. For those application text files only, the checker uses policy

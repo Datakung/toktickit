@@ -1,0 +1,38 @@
+[
+  {
+    "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2oE",
+    "issue": 42,
+    "status": "Done",
+    "title": "Enforce the final Ticket workflow and resolution gate"
+  },
+  {
+    "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2gY",
+    "issue": 39,
+    "status": "Done",
+    "title": "Define the Lab 4 engineering contract"
+  },
+  {
+    "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2jg",
+    "issue": 40,
+    "status": "Done",
+    "title": "Implement the Actions Taken data and API foundation"
+  },
+  {
+    "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2ls",
+    "issue": 41,
+    "status": "Done",
+    "title": "Implement the Actions Taken Ticket Detail UI"
+  },
+  {
+    "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2qE",
+    "issue": 43,
+    "status": "Done",
+    "title": "Implement Requester and IT Staff dashboards"
+  },
+  {
+    "id": "PVTI_lAHOBmf9ms4Bf0G8zg-S2rY",
+    "issue": 44,
+    "status": "Done",
+    "title": "Complete the Lab 4 quality gate, evidence and release"
+  }
+]
