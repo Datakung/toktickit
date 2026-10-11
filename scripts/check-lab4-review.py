@@ -4,6 +4,7 @@ import argparse, hashlib, json, re, subprocess
 from datetime import datetime, timezone
 import pdfplumber
 from pypdf import PdfReader
+from lab4_source_fingerprints import SOURCE_HASH_POLICY, verify_application_sources
 
 root = Path(__file__).resolve().parents[1]
 evidence = root / 'artifacts/lab-04/final-main'
@@ -34,7 +35,7 @@ captures = load('captured-screenshots.json')
 assert len(captures) == 192
 for row in captures: assert digest(evidence/row['destination']) == row['sha256']
 application = load('application-fingerprints.json')
-for row in application: assert digest(root/row['file']) == row['sha256']
+canonical_application = verify_application_sources(root, manifest['revision'], application)
 pdf = root/'output/pdf/TokTickIT-Lab4-Review.pdf'
 reader = PdfReader(pdf)
 check = load('pdf-check.json')
@@ -101,7 +102,11 @@ record = {
     'pageFormat': 'A4 portrait', 'allPageSizesVerified': True,
     'partOrder': list('123456789'), 'embeddedFilesByteVerified': 17,
     'freshGateDigestsVerified': len(fresh), 'originalScreenshotDigestsVerified': 192,
-    'applicationFileDigestsVerified': len(application), 'textWithinPageBounds': True,
+    'applicationFileDigestsVerified': len(application),
+    'applicationSourceHashPolicy': SOURCE_HASH_POLICY,
+    'applicationCanonicalSha256': canonical_application,
+    'applicationWorkingFilesComparedWithReviewedGitBlobs': True,
+    'textWithinPageBounds': True,
     'sourceLinksExistInReviewedCommit': True,
     'peerReviewAndProjectLinks': 'Actual GitHub records separately inspected; not a network crawler claim',
     'reciprocalReviewPrsVerified': [r['number'] for r in reciprocal['records']],

@@ -98,3 +98,23 @@ current page, then run `python scripts/check-lab4-review.py`. Only supply
 all current rendered pages. A rebuild is not itself visual approval. This generator
 intentionally produces a review copy; final closure/publication requires a genuine
 updated record and regenerated submission copy, not changing a label alone.
+
+## Application-source EOL policy (PR #52 correction)
+
+The historical `application-fingerprints.json` records the observed raw bytes and
+is not rewritten. For those application text files only, the checker uses policy
+`utf8-crlf-to-lf-v1`: validate UTF-8 and replace CRLF with LF. Whitespace, lone CR,
+BOM, missing/extra final newlines and all other content remain significant.
+
+For every recorded path, the original fingerprint must match an LF/CRLF form of
+the exact approved Git blob at the manifest's application revision. The current
+working file's canonical hash must then match that blob's canonical hash. Reading
+only committed content would miss working edits, so both are checked. The generated
+`pdf-review.json` records all 68 canonical hashes and the policy/revision boundary.
+PDF, PNG, embedded-document and retained-evidence comparisons remain exact bytes;
+none uses source-text normalization. No application EOL settings or files changed.
+
+Regression command: `python -m unittest discover -s scripts -p test_lab4_source_fingerprints.py -v`.
+The 17 tests include all 68 approved files in LF and CRLF forms, real edits to each,
+recorded-hash tampering, whitespace/BOM/final-newline edits, and invalid text/paths.
+See `checker-review-fix.md` for the reviewer finding and actual reproduction record.
