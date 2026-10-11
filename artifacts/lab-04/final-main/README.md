@@ -93,13 +93,16 @@ page digests, verified A4 portrait dimensions on every page, heading order,
 byte-identical attachments, in-page text bounds and
 verified original evidence hashes. This remains agent QA, not author acceptance.
 
-Rebuild with `python scripts/build-lab4-review.py` from a Python environment with
-ReportLab, Pillow and pypdf. Render the resulting PDF using Poppler, inspect every
-current page, then run `python scripts/check-lab4-review.py`. Only supply
-`--reviewed-render-dir <directory> --agent-review-confirmed` after actually checking
-all current rendered pages. A rebuild is not itself visual approval. This generator
-intentionally produces a review copy; final closure/publication requires a genuine
-updated record and regenerated submission copy, not changing a label alone.
+The historical review copy is immutable. Its former default rebuild command is
+retired: `python scripts/build-lab4-review.py` without `--submission` exits with
+an explanation before creating directories or writing any PDF/metadata. Do not
+rebuild that snapshot from newer maintained documents. Validate the preserved
+copy with `python scripts/check-lab4-review.py --record-path <separate-output-path>`;
+its attachment expectations are the exact published PR #52 Git blobs.
+For supported final-report generation use the submission workflow below with
+ReportLab, Pillow and pypdf. A rebuild is not itself visual approval; only supply
+`--reviewed-render-dir <directory> --agent-review-confirmed` after inspecting every
+current rendered page.
 
 ## Application-source EOL policy (PR #52 correction)
 
@@ -130,3 +133,9 @@ Regression command: `python -m unittest discover -s scripts -p test_lab4_source_
 The 17 tests include all 68 approved files in LF and CRLF forms, real edits to each,
 recorded-hash tampering, whitespace/BOM/final-newline edits, and invalid text/paths.
 See `checker-review-fix.md` for the reviewer finding and actual reproduction record.
+
+PDF workflow regression command: `python -m unittest discover -s scripts -p
+test_lab4_pdf_workflows.py -v`. This uses an isolated local checkout, verifies
+default-build refusal before writes, checks the preserved historical copy, and
+rebuilds/checks the supported submission workflow together. See
+`review-builder-fix.md` for the PR #53 finding and correction evidence.

@@ -11,9 +11,16 @@ from pypdf import PdfReader, PdfWriter
 
 ROOT = Path(__file__).resolve().parents[1]
 EV = ROOT / 'artifacts/lab-04/final-main'
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description='Build the final submission; the historical review PDF is immutable.')
 parser.add_argument('--submission', action='store_true', help='Assemble using actual author acceptance and publication records.')
 args = parser.parse_args()
+# The preserved PR #52 review copy is checked against exact historical Git
+# blobs. Rebuilding it from later maintained documents cannot reproduce that
+# snapshot. Refuse before creating directories or writing any artifact.
+if not args.submission:
+    parser.error('Historical review rebuild is retired; no artifacts were written. '
+                 'Use --submission to build the final report. Check the preserved '
+                 'review copy with check-lab4-review.py --record-path <separate-output-path>.')
 FINAL = args.submission
 META = EV/'submission' if FINAL else EV
 completion = json.loads((META/'completion.json').read_text()) if FINAL else None

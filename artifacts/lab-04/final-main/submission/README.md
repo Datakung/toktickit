@@ -57,3 +57,14 @@ without altering its original QA record:
 ```text
 python scripts/check-lab4-review.py --record-path <separate-output-path>
 ```
+
+The old default review rebuild is retired. Running the builder without
+`--submission` fails before writing any artifact and points to the supported
+submission build and preserved-review check commands. This prevents newer
+documents from replacing the immutable PR #52 review snapshot.
+
+Run both supported workflows and no-write guard regressions together:
+
+```text
+python -m unittest discover -s scripts -p test_lab4_pdf_workflows.py -v
+```
